@@ -259,8 +259,45 @@ html, body {
 .ae-col-content {
   flex: 1; background: rgba(14,12,24,.22);
   display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  padding: 32px 32px 32px 40px;
+}
+
+/* ── jobb felső: widescreen kép 3:2 ── */
+.ae-top-panel {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  flex-shrink: 0;
+  position: relative; overflow: hidden;
+}
+.ae-top-panel img {
+  display: block; width: 100%; height: 100%;
+  object-fit: cover; object-position: center 45%;
+}
+/* alulra fade a separator felé */
+.ae-top-panel::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0; height: 35%;
+  background: linear-gradient(to top, rgba(10,8,20,.75) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+/* ── vízszintes elválasztó ── */
+.ae-h-sep {
+  height: 1px; flex-shrink: 0; position: relative;
+  background: linear-gradient(to right,
+    transparent 0%, rgba(201,156,90,.18) 15%,
+    rgba(201,156,90,.12) 50%, rgba(201,156,90,.18) 85%, transparent 100%);
+}
+.ae-h-sep::after {
+  content: '◈';
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 9px; color: var(--gold); opacity: .28;
+  background: #0a0814; padding: 0 8px; line-height: 1;
+}
+
+/* ── jobb alsó: tartalom ── */
+.ae-bottom-panel {
+  flex: 1; overflow: hidden; position: relative;
 }
 </style>
 </head>
@@ -339,8 +376,14 @@ html, body {
 
   <div class="ae-sep"></div>
 
-  <!-- jobb: maradék szélesség -->
-  <div class="ae-col ae-col-content"></div>
+  <!-- jobb: felső widescreen + alsó tartalom -->
+  <div class="ae-col ae-col-content">
+    <div class="ae-top-panel">
+      <img src="ae-s1-bg.png" alt="Null Meridian — scene">
+    </div>
+    <div class="ae-h-sep"></div>
+    <div class="ae-bottom-panel"></div>
+  </div>
 
 </div>
 
