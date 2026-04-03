@@ -336,6 +336,132 @@ html, body {
   .chip-icon      { font-size: 14px; }
 }
 
+/* ══════════════════════════════════════
+   GOLDEN RATIO LAYOUT  φ = 1.618
+   bal: 38.2% (φ⁻¹)  ·  jobb: 61.8% (φ)
+══════════════════════════════════════ */
+.ae-layout {
+  align-self: stretch;
+  min-height: calc(100vh - 44px);
+  display: grid;
+  grid-template-columns: 38.2fr 61.8fr;
+  gap: 0;
+}
+
+.ae-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 32px 24px;
+}
+
+.ae-col-img {
+  background: rgba(5,4,10,.72);
+  border-right: 1px solid rgba(201,156,90,.10);
+}
+
+.ae-col-content {
+  background: rgba(14,12,24,.28);
+  padding-right: 76px; /* event column clearance */
+}
+
+/* ratio annotation */
+.ae-ratio-tag {
+  position: absolute;
+  top: 16px; left: 50%;
+  transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+}
+.ae-ratio-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px; letter-spacing: .18em;
+  color: var(--gold); opacity: .28;
+}
+.ae-ratio-phi {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--muted); opacity: .20;
+}
+
+/* image panel placeholder */
+.ae-img-ph {
+  width: 78%;
+  aspect-ratio: 9 / 14;
+  max-height: 70vh;
+  border: 1px solid rgba(201,156,90,.13);
+  border-radius: 5px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: flex-end;
+  padding-bottom: 22px; gap: 5px;
+  position: relative;
+  background: linear-gradient(180deg, rgba(201,156,90,.02) 0%, rgba(201,156,90,.04) 100%);
+}
+/* subtle corner brackets */
+.ae-img-ph::before,
+.ae-img-ph::after {
+  content: '';
+  position: absolute;
+  width: 16px; height: 16px;
+  border-color: rgba(201,156,90,.22);
+  border-style: solid;
+}
+.ae-img-ph::before { top: 10px; left: 10px;  border-width: 1px 0 0 1px; }
+.ae-img-ph::after  { bottom: 10px; right: 10px; border-width: 0 1px 1px 0; }
+
+.ae-img-ph-icon  {
+  font-size: 22px; color: var(--gold); opacity: .14;
+  letter-spacing: 0;
+}
+.ae-img-ph-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--gold); opacity: .20;
+}
+
+/* content panel placeholder bars */
+.ae-content-ph {
+  display: flex; flex-direction: column; gap: 10px;
+  width: 100%; max-width: 440px;
+}
+.ae-content-ph-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--muted); opacity: .20; margin-bottom: 4px;
+}
+.ae-ph-bar {
+  height: 9px; border-radius: 2px;
+  background: rgba(184,176,198,.055);
+  border: 1px solid rgba(184,176,198,.06);
+}
+.ae-ph-bar.w100 { width: 100%; }
+.ae-ph-bar.w80  { width: 80%; }
+.ae-ph-bar.w58  { width: 58%; }
+.ae-ph-choice {
+  height: 34px; border-radius: 3px;
+  background: rgba(201,156,90,.04);
+  border: 1px solid rgba(201,156,90,.09);
+  width: 100%;
+}
+.ae-ph-spacer { height: 8px; }
+
+/* divider φ jelölő */
+.ae-phi-line {
+  position: absolute;
+  top: 0; right: 0; bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom,
+    transparent       0%,
+    rgba(201,156,90,.22) 15%,
+    rgba(201,156,90,.16) 50%,
+    rgba(201,156,90,.22) 85%,
+    transparent      100%
+  );
+  pointer-events: none;
+}
+
 /* ══ DEMO PAGE ══ */
 .demo-section { width: 100%; max-width: 580px; padding: 0 20px; }
 .demo-title   { font-size: 9px; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); opacity: .55; margin-bottom: 10px; }
@@ -416,6 +542,43 @@ html, body {
 <!-- ══ EVENT COLUMN — jobbra, lefelé süllyed ══ -->
 <div id="event-col" role="log" aria-live="polite" aria-label="Event timeline">
   <div id="event-col-track"></div>
+</div>
+
+<!-- ══ GOLDEN RATIO LAYOUT ══ -->
+<div class="ae-layout">
+
+  <!-- 38.2% · φ⁻¹ · image -->
+  <div class="ae-col ae-col-img">
+    <div class="ae-ratio-tag">
+      <span class="ae-ratio-num">38.2%</span>
+      <span class="ae-ratio-phi">φ⁻¹ · image panel</span>
+    </div>
+    <div class="ae-img-ph">
+      <span class="ae-img-ph-icon">◈</span>
+      <span class="ae-img-ph-label">character art</span>
+    </div>
+    <div class="ae-phi-line"></div>
+  </div>
+
+  <!-- 61.8% · φ · content -->
+  <div class="ae-col ae-col-content">
+    <div class="ae-ratio-tag">
+      <span class="ae-ratio-num">61.8%</span>
+      <span class="ae-ratio-phi">φ · content panel</span>
+    </div>
+    <div class="ae-content-ph">
+      <div class="ae-content-ph-label">dialogue</div>
+      <div class="ae-ph-bar w100"></div>
+      <div class="ae-ph-bar w80"></div>
+      <div class="ae-ph-bar w58"></div>
+      <div class="ae-ph-spacer"></div>
+      <div class="ae-content-ph-label">choices</div>
+      <div class="ae-ph-choice"></div>
+      <div class="ae-ph-choice"></div>
+      <div class="ae-ph-choice"></div>
+    </div>
+  </div>
+
 </div>
 
 <!-- ══ DEMO ══ -->
