@@ -305,24 +305,116 @@ html, body {
 .ae-stat.harm  .ae-stat-icon { color: var(--cyan);    }
 .ae-stat.dice  .ae-stat-icon { color: var(--purple2); }
 
-/* ── jobb felső: widescreen kép 3:2 ── */
-.ae-top-panel {
-  width: 100%;
-  aspect-ratio: 3 / 2;
-  flex-shrink: 0;
+/* ── scene frame: dual-state (image ↔ dialogue) ── */
+.ae-scene-frame {
+  flex: 1;
   position: relative; overflow: hidden;
+  background: #000;
 }
-.ae-top-panel img {
+/* top corner brackets */
+.ae-scene-frame::before,
+.ae-scene-frame::after {
+  content: ''; position: absolute;
+  width: 20px; height: 20px;
+  border-color: rgba(201,156,90,.22); border-style: solid;
+  z-index: 5; pointer-events: none;
+}
+.ae-scene-frame::before { top: 14px; left: 14px;  border-width: 1px 0 0 1px; }
+.ae-scene-frame::after  { top: 14px; right: 14px; border-width: 1px 1px 0 0; }
+
+/* image layer */
+.ae-sf-image {
+  position: absolute; inset: 0;
+  transition: opacity .50s ease;
+}
+.ae-sf-image img {
   display: block; width: 100%; height: 100%;
   object-fit: cover; object-position: center 45%;
 }
-/* alulra fade a separator felé */
-.ae-top-panel::after {
+.ae-sf-image::after {
   content: '';
-  position: absolute; bottom: 0; left: 0; right: 0; height: 35%;
-  background: linear-gradient(to top, rgba(10,8,20,.75) 0%, transparent 100%);
+  position: absolute; bottom: 0; left: 0; right: 0; height: 40%;
+  background: linear-gradient(to top, rgba(5,4,10,.80) 0%, transparent 100%);
   pointer-events: none;
 }
+.ae-scene-frame.is-dialogue .ae-sf-image { opacity: .06; }
+
+/* dialogue layer */
+.ae-sf-dialogue {
+  position: absolute; inset: 0;
+  opacity: 0; pointer-events: none;
+  transition: opacity .40s ease .18s;
+  display: flex; flex-direction: column;
+  justify-content: flex-end;
+  padding: 36px 40px 32px;
+  background: linear-gradient(to top,
+    rgba(5,4,10,.94) 0%, rgba(5,4,10,.65) 45%, transparent 100%);
+}
+.ae-scene-frame.is-dialogue .ae-sf-dialogue {
+  opacity: 1; pointer-events: all;
+}
+
+/* speaker */
+.ae-sf-speaker-row {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 16px;
+}
+.ae-sf-speaker-glyph {
+  font-size: 10px; color: var(--gold); opacity: .55; flex-shrink: 0;
+}
+.ae-sf-speaker-name {
+  font-family: 'Cinzel', serif;
+  font-size: 18px; font-weight: 700; letter-spacing: .06em;
+  color: var(--gold2); opacity: .92; line-height: 1; flex-shrink: 0;
+}
+.ae-sf-speaker-line {
+  flex: 1; height: 1px;
+  background: linear-gradient(to right, rgba(201,156,90,.30), transparent);
+}
+
+/* dialogue text */
+.ae-sf-text {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 14px; line-height: 1.85; letter-spacing: .01em;
+  color: var(--text); opacity: .78;
+  margin-bottom: 24px; max-width: 560px;
+}
+
+/* choices */
+.ae-sf-choices { display: flex; flex-direction: column; gap: 7px; }
+.ae-choice {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 16px;
+  border: 1px solid rgba(201,156,90,.11); border-radius: 3px;
+  background: rgba(5,4,10,.55);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  cursor: pointer;
+  transition: background .2s, border-color .2s;
+  max-width: 480px;
+}
+.ae-choice:hover {
+  background: rgba(201,156,90,.08);
+  border-color: rgba(201,156,90,.22);
+}
+.ae-choice-arrow { color: var(--gold); opacity: .50; font-size: 9px; flex-shrink: 0; }
+.ae-choice-text {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px; letter-spacing: .04em;
+  color: var(--text); opacity: .70; line-height: 1;
+}
+
+/* demo toggle */
+.ae-sf-toggle {
+  position: absolute; bottom: 14px; right: 14px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--muted); opacity: .28;
+  background: none; border: 1px solid rgba(184,176,198,.10);
+  border-radius: 2px; padding: 5px 10px;
+  cursor: pointer; z-index: 10;
+  transition: opacity .2s, border-color .2s;
+}
+.ae-sf-toggle:hover { opacity: .55; border-color: rgba(184,176,198,.25); }
 
 /* ── vízszintes elválasztó ── */
 .ae-h-sep {
@@ -339,10 +431,21 @@ html, body {
   background: #0a0814; padding: 0 8px; line-height: 1;
 }
 
-/* ── jobb alsó: tartalom ── */
+/* ── bottom panel ── */
 .ae-bottom-panel {
-  flex: 1; overflow: hidden; position: relative;
+  height: 80px; flex-shrink: 0;
+  background: rgba(5,4,10,.60);
+  position: relative; overflow: hidden;
 }
+.ae-bottom-panel::before,
+.ae-bottom-panel::after {
+  content: ''; position: absolute;
+  width: 12px; height: 12px;
+  border-color: rgba(201,156,90,.18); border-style: solid;
+  z-index: 2; pointer-events: none;
+}
+.ae-bottom-panel::before { top: 10px; left: 14px;  border-width: 1px 0 0 1px; }
+.ae-bottom-panel::after  { top: 10px; right: 14px; border-width: 1px 1px 0 0; }
 </style>
 </head>
 <body>
@@ -447,17 +550,46 @@ html, body {
     </div>
   </div>
 
-  <!-- jobb: felső widescreen + alsó tartalom -->
+  <!-- jobb: scene frame + bottom panel -->
   <div class="ae-col ae-col-content">
-    <div class="ae-top-panel">
-      <img src="ae-s1-bg.png" alt="Null Meridian — scene">
+
+    <div class="ae-scene-frame" id="scene-frame">
+
+      <!-- image layer -->
+      <div class="ae-sf-image">
+        <img src="ae-s1-bg.png" alt="Null Meridian — scene">
+      </div>
+
+      <!-- dialogue layer -->
+      <div class="ae-sf-dialogue">
+        <div class="ae-sf-speaker-row">
+          <span class="ae-sf-speaker-glyph">◈</span>
+          <span class="ae-sf-speaker-name">Rook</span>
+          <div class="ae-sf-speaker-line"></div>
+        </div>
+        <p class="ae-sf-text">The platform hums beneath your feet, a low vibration you feel more than hear. Somewhere in the darkness, something watches. You are not alone here.</p>
+        <div class="ae-sf-choices">
+          <div class="ae-choice"><span class="ae-choice-arrow">▶</span><span class="ae-choice-text">Approach the glowing platform</span></div>
+          <div class="ae-choice"><span class="ae-choice-arrow">▶</span><span class="ae-choice-text">Stay back and observe</span></div>
+          <div class="ae-choice"><span class="ae-choice-arrow">▶</span><span class="ae-choice-text">Check your pockets</span></div>
+        </div>
+      </div>
+
+      <button class="ae-sf-toggle" onclick="toggleScene()">image · text</button>
     </div>
+
     <div class="ae-h-sep"></div>
     <div class="ae-bottom-panel"></div>
+
   </div>
 
 </div>
 
 
+<script>
+function toggleScene() {
+  document.getElementById('scene-frame').classList.toggle('is-dialogue');
+}
+</script>
 </body>
 </html>
