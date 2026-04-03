@@ -337,15 +337,14 @@ html, body {
 }
 
 /* ══════════════════════════════════════
-   GOLDEN RATIO LAYOUT  φ = 1.618
-   bal: 38.2% (φ⁻¹)  ·  jobb: 61.8% (φ)
+   LAYOUT  ·  bal: kép 2:3, jobb: maradék
+   bal szélesség = (100vh - 44px) × 2/3
 ══════════════════════════════════════ */
 .ae-layout {
   align-self: stretch;
-  min-height: calc(100vh - 44px);
-  display: grid;
-  grid-template-columns: 38.2fr 61.8fr;
-  gap: 0;
+  height: calc(100vh - 44px);
+  display: flex;
+  flex-direction: row;
 }
 
 .ae-col {
@@ -355,17 +354,27 @@ html, body {
   justify-content: center;
   position: relative;
   overflow: hidden;
-  padding: 32px 24px;
 }
 
 .ae-col-img {
-  background: rgba(5,4,10,.72);
-  border-right: 1px solid rgba(201,156,90,.10);
+  /* 2:3 natív arány: szélesség = magasság × 2/3 */
+  width: calc((100vh - 44px) * 2 / 3);
+  flex-shrink: 0;
+  background: #000;
+}
+
+.ae-col-img img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
 }
 
 .ae-col-content {
+  flex: 1;
   background: rgba(14,12,24,.28);
-  padding-right: 76px; /* event column clearance */
+  padding: 32px 80px 32px 48px; /* right: event col clearance */
 }
 
 /* ratio annotation */
@@ -547,25 +556,13 @@ html, body {
 <!-- ══ GOLDEN RATIO LAYOUT ══ -->
 <div class="ae-layout">
 
-  <!-- 38.2% · φ⁻¹ · image -->
+  <!-- bal: kép 2:3, tölti a teljes magasságot -->
   <div class="ae-col ae-col-img">
-    <div class="ae-ratio-tag">
-      <span class="ae-ratio-num">38.2%</span>
-      <span class="ae-ratio-phi">φ⁻¹ · image panel</span>
-    </div>
-    <div class="ae-img-ph">
-      <span class="ae-img-ph-icon">◈</span>
-      <span class="ae-img-ph-label">character art</span>
-    </div>
-    <div class="ae-phi-line"></div>
+    <img src="ae-s1-waking.png" alt="Waking — Null Meridian">
   </div>
 
-  <!-- 61.8% · φ · content -->
+  <!-- jobb: maradék szélesség -->
   <div class="ae-col ae-col-content">
-    <div class="ae-ratio-tag">
-      <span class="ae-ratio-num">61.8%</span>
-      <span class="ae-ratio-phi">φ · content panel</span>
-    </div>
     <div class="ae-content-ph">
       <div class="ae-content-ph-label">dialogue</div>
       <div class="ae-ph-bar w100"></div>
