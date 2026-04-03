@@ -22,12 +22,12 @@ html, body {
   font-family: 'IBM Plex Mono', monospace;
   min-height: 100vh;
   display: flex; flex-direction: column; align-items: center;
-  padding-top: 84px; gap: 48px;
+  /* topbar 44px + strip 40px + 12px buffer */
+  padding-top: 96px; gap: 48px;
 }
 
 /* ══════════════════════════════════════
    TOP BAR  ·  44px fixed
-   Grid: [breadcrumb 1fr] [title auto] [menu 1fr]
 ══════════════════════════════════════ */
 .topbar {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
@@ -43,10 +43,7 @@ html, body {
 }
 
 /* ── LEFT: breadcrumb ── */
-.bc {
-  display: flex; align-items: center;
-  overflow: visible; min-width: 0;
-}
+.bc { display: flex; align-items: center; overflow: visible; min-width: 0; }
 .bc-seg {
   display: flex; align-items: center;
   padding: 0 9px; height: 44px;
@@ -83,10 +80,7 @@ html, body {
   background: linear-gradient(to right, transparent, var(--gold), transparent);
   opacity: .45;
 }
-.bc-sep {
-  font-size: 9px; color: var(--gold); opacity: .18;
-  flex-shrink: 0; padding: 0 1px; user-select: none;
-}
+.bc-sep { font-size: 9px; color: var(--gold); opacity: .18; flex-shrink: 0; padding: 0 1px; user-select: none; }
 
 /* ── DROPDOWN ── */
 .bc-dropdown {
@@ -110,7 +104,6 @@ html, body {
 }
 .dd-item:hover   { background: rgba(201,156,90,.06); }
 .dd-item.current { background: rgba(201,156,90,.04); }
-
 .dd-id {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 9px; letter-spacing: .11em; text-transform: uppercase;
@@ -118,16 +111,13 @@ html, body {
 }
 .dd-item.current .dd-id { opacity: .88; }
 .dd-item.locked  .dd-id { opacity: .20; }
-
 .dd-name {
   font-family: 'Cinzel', serif; font-size: 12px; font-weight: 700;
   letter-spacing: .03em; color: var(--muted); opacity: .58;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  max-width: 160px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 160px;
 }
 .dd-item.current .dd-name { color: var(--gold2); opacity: .90; }
 .dd-item.locked  .dd-name { opacity: .20; }
-
 .dd-dot {
   width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; margin-left: auto;
   background: rgba(184,176,198,.12); border: 1px solid rgba(184,176,198,.18);
@@ -136,7 +126,7 @@ html, body {
 .dd-item.current .dd-dot { background: var(--gold); border-color: var(--gold); box-shadow: 0 0 6px rgba(201,156,90,.5); }
 .dd-div { height: 1px; background: rgba(201,156,90,.06); margin: 3px 0; }
 
-/* ── CENTER: situation title ── */
+/* ── CENTER ── */
 .topbar-center {
   display: flex; flex-direction: column; align-items: center;
   gap: 2px; pointer-events: none; padding: 0 16px;
@@ -147,8 +137,7 @@ html, body {
   font-size: 15px; font-weight: 700; letter-spacing: .07em;
   color: var(--text); opacity: .88; line-height: 1;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  max-width: 340px;
-  transition: color .35s, text-shadow .35s, opacity .35s;
+  max-width: 340px; transition: color .35s, text-shadow .35s, opacity .35s;
 }
 .tc-mood {
   font-family: 'IBM Plex Mono', monospace;
@@ -161,15 +150,13 @@ html, body {
 .topbar.mood-danger .tc-title { color: var(--ember); opacity: .94; text-shadow: 0 0 18px rgba(255,123,92,.28); }
 .topbar.mood-danger .tc-mood  { color: var(--ember); opacity: .55; }
 
-/* ── RIGHT: hamburger ── */
+/* ── RIGHT ── */
 .topbar-right { display: flex; align-items: center; justify-content: flex-end; }
 .hamburger {
   width: 36px; height: 36px;
-  display: flex; flex-direction: column;
-  align-items: flex-end; justify-content: center;
+  display: flex; flex-direction: column; align-items: flex-end; justify-content: center;
   gap: 5px; background: none; border: none;
-  border-radius: 4px; padding: 8px 6px;
-  cursor: pointer; transition: background .2s;
+  border-radius: 4px; padding: 8px 6px; cursor: pointer; transition: background .2s;
 }
 .hamburger:hover { background: rgba(184,176,198,.06); }
 .hamburger span {
@@ -180,132 +167,159 @@ html, body {
 .hamburger span:nth-child(1) { width: 18px; }
 .hamburger span:nth-child(2) { width: 14px; }
 .hamburger span:nth-child(3) { width: 10px; }
-.hamburger:hover span                { opacity: .78; }
-.hamburger:hover span:nth-child(2)   { width: 18px; }
-.hamburger:hover span:nth-child(3)   { width: 18px; }
+.hamburger:hover span              { opacity: .78; }
+.hamburger:hover span:nth-child(2) { width: 18px; }
+.hamburger:hover span:nth-child(3) { width: 18px; }
 .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); width: 18px; opacity: .88; }
 .hamburger.open span:nth-child(2) { opacity: 0; width: 18px; }
 .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); width: 18px; opacity: .88; }
 
 /* ══ MOBILE ══ */
-@media (max-width: 768px) {
-  .tc-title { max-width: 220px; }
-  .bc-name  { max-width: 100px; }
-}
-@media (max-width: 640px) {
-  .tc-title { font-size: 12px; max-width: 160px; letter-spacing: .04em; }
-  .tc-mood  { display: none; }
-}
+@media (max-width: 768px) { .tc-title { max-width: 220px; } .bc-name { max-width: 100px; } }
+@media (max-width: 640px) { .tc-title { font-size: 12px; max-width: 160px; letter-spacing: .04em; } .tc-mood { display: none; } }
 @media (max-width: 480px) {
-  .bc-seg.canto   .bc-name,
-  .bc-seg.episode .bc-name { display: none; }
-  .bc-seg.canto   .bc-label,
-  .bc-seg.episode .bc-label { font-size: 9px; letter-spacing: .10em; }
+  .bc-seg.canto .bc-name, .bc-seg.episode .bc-name { display: none; }
+  .bc-seg.canto .bc-label, .bc-seg.episode .bc-label { font-size: 9px; letter-spacing: .10em; }
   .tc-title { max-width: 100px; }
 }
 
 /* ══ ACCESSIBILITY ══ */
 @media (prefers-contrast: more) {
-  .bc-label { opacity: .88; letter-spacing: .06em; }
-  .bc-name  { opacity: .88; }
-  .tc-title { opacity: 1.0; }
-  .tc-mood  { opacity: .75; }
-  .dd-id    { opacity: .82; }
-  .dd-name  { opacity: .88; }
+  .bc-label { opacity: .88; } .bc-name { opacity: .88; }
+  .tc-title { opacity: 1; }   .tc-mood { opacity: .75; }
+  .dd-id    { opacity: .82; } .dd-name { opacity: .88; }
   .hamburger span { opacity: .80; }
-  .topbar   { border-bottom-color: rgba(201,156,90,.35); }
+  .topbar { border-bottom-color: rgba(201,156,90,.35); }
   .event-chip { opacity: 1 !important; }
 }
-.bc-seg:focus-visible     { outline: 1px solid rgba(201,156,90,.45); outline-offset: -2px; }
-.hamburger:focus-visible  { outline: 1px solid rgba(184,176,198,.45); outline-offset: 2px; }
+.bc-seg:focus-visible    { outline: 1px solid rgba(201,156,90,.45); outline-offset: -2px; }
+.hamburger:focus-visible { outline: 1px solid rgba(184,176,198,.45); outline-offset: 2px; }
 
 /* ══════════════════════════════════════
-   EVENT TIMELINE STRIP  ·  28px fixed, top: 44px
-   Chip flow L→R, newest right, fade-mask left
+   EVENT TIMELINE STRIP  ·  40px fixed, top: 44px
+   Tile-shaped chips, nearly square, pop-in animation
 ══════════════════════════════════════ */
 #event-strip {
   position: fixed;
   top: 44px; left: 0; right: 0;
-  height: 28px; z-index: 90;
-  background: rgba(5,4,10,.94);
-  border-bottom: 1px solid rgba(201,156,90,.10);
+  height: 40px; z-index: 90;
+  background: rgba(5,4,10,.90);
+  border-bottom: 1px solid rgba(184,176,198,.05);
   overflow: hidden;
 }
 
-/* left fade mask — shows history exists */
+/* left fade — history indicator */
 #event-strip::before {
   content: '';
   position: absolute; top: 0; left: 0;
-  width: 56px; height: 100%;
+  width: 52px; height: 100%;
   background: linear-gradient(to right,
-    rgba(5,4,10,.97) 0%,
-    rgba(5,4,10,.52) 55%,
+    rgba(5,4,10,.95) 0%,
+    rgba(5,4,10,.40) 60%,
     transparent 100%);
   z-index: 2; pointer-events: none;
 }
 
 .strip-track {
   display: flex; flex-direction: row; align-items: center;
-  gap: 4px; height: 100%; padding: 0 8px;
+  gap: 5px; height: 100%; padding: 0 10px;
   overflow-x: auto; overflow-y: hidden;
   scroll-behavior: smooth;
   scrollbar-width: none; -ms-overflow-style: none;
 }
 .strip-track::-webkit-scrollbar { display: none; }
 
-/* ── chip base ── */
+/* ── tile chip ──
+   Nearly square: 42px wide × 32px tall in a 40px strip (4px top/bottom breathing).
+   Stacked layout: icon (top) + label/value (bottom).
+   Soft background fill, minimal border, card shadow.
+══════════════════════════════════════ */
 @keyframes chip-enter {
-  from { opacity: 0; transform: translateX(14px); }
-  to   { opacity: 1; transform: translateX(0); }
+  from { opacity: 0; transform: scale(.78) translateY(4px); }
+  to   { opacity: 1; transform: scale(1)   translateY(0); }
 }
 
 .event-chip {
-  display: inline-flex; flex-shrink: 0;
-  align-items: center; gap: 4px;
-  height: 20px; padding: 0 7px;
-  border-radius: 3px; border: 1px solid transparent;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  gap: 2px;
+  width: 42px;
+  height: 32px;
+  border-radius: 5px;
+  border: 1px solid transparent;
   font-family: 'IBM Plex Mono', monospace;
-  white-space: nowrap; cursor: default;
+  cursor: default;
+  /* card shadow — depth without harsh outline */
+  box-shadow: 0 2px 6px rgba(0,0,0,.32), inset 0 1px 0 rgba(255,255,255,.05);
   animation: chip-enter .22s cubic-bezier(.22,1,.36,1) both;
-  transition: opacity .15s;
+  transition: opacity .15s, transform .15s;
 }
-.event-chip:hover { opacity: .70; }
+.event-chip:hover { opacity: .80; transform: scale(1.06); }
 
-.chip-icon  { font-size: 9px; line-height: 1; flex-shrink: 0; }
-.chip-label { font-size: 8px; letter-spacing: .09em; text-transform: uppercase; line-height: 1; opacity: .58; }
-.chip-val   { font-size: 9px; font-weight: 500; line-height: 1; opacity: .88; }
+/* icon: large, the primary identifier */
+.chip-icon {
+  font-size: 14px;
+  line-height: 1;
+  opacity: .80;
+}
 
-/* ── DICE ─────── purple tón */
-.ev-nat20 { background: rgba(163,139,207,.16); border-color: rgba(163,139,207,.55); color: #a38bcf; }
-.ev-nat1  { background: rgba(255,123,92,.14);  border-color: rgba(255,123,92,.50);  color: #ff7b5c; }
-.ev-roll  { background: rgba(184,176,198,.08); border-color: rgba(184,176,198,.26); color: #b8b0c6; }
-.ev-save  { background: rgba(40,189,216,.10);  border-color: rgba(40,189,216,.38);  color: #28bdd8; }
-.ev-savef { background: rgba(255,123,92,.12);  border-color: rgba(255,123,92,.42);  color: #ff7b5c; }
+/* secondary: label or value — small, below icon, nearly hidden */
+.chip-label,
+.chip-val {
+  font-size: 7px;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  line-height: 1;
+  opacity: .46;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 38px;
+}
+.chip-val { opacity: .62; font-weight: 500; }
 
-/* ── COMBAT ──── gold/ember tón */
-.ev-hit   { background: rgba(201,156,90,.13);  border-color: rgba(201,156,90,.46);  color: #c99c5a; }
-.ev-miss  { background: rgba(184,176,198,.06); border-color: rgba(184,176,198,.19); color: #b8b0c6; }
-.ev-kill  { background: rgba(255,123,92,.17);  border-color: rgba(255,123,92,.62);  color: #ff7b5c;
-            box-shadow: 0 0 8px rgba(255,123,92,.16); }
-.ev-ko    { background: rgba(163,139,207,.10); border-color: rgba(163,139,207,.36); color: #a38bcf; }
+/* ── soft type colors — background tint is the identity, not the border ── */
 
-/* ── CHOICE ──── mixed kategória-logika */
-.ev-violence { background: rgba(255,123,92,.11); border-color: rgba(255,123,92,.40); color: #ff7b5c; }
-.ev-mercy    { background: rgba(40,189,216,.10);  border-color: rgba(40,189,216,.36); color: #28bdd8; }
-.ev-deceive  { background: rgba(163,139,207,.10); border-color: rgba(163,139,207,.36); color: #a38bcf; }
-.ev-explore  { background: rgba(230,207,161,.09); border-color: rgba(230,207,161,.34); color: #e6cfa1; }
+/* DICE */
+.ev-nat20 {
+  background: rgba(163,139,207,.14); border-color: rgba(163,139,207,.14); color: #a38bcf;
+  box-shadow: 0 2px 8px rgba(163,139,207,.12), 0 1px 3px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.06);
+}
+.ev-nat1  { background: rgba(255,123,92,.12);  border-color: rgba(255,123,92,.14);  color: #ff7b5c; }
+.ev-roll  { background: rgba(184,176,198,.08); border-color: rgba(184,176,198,.11); color: #b8b0c6; }
+.ev-save  { background: rgba(40,189,216,.10);  border-color: rgba(40,189,216,.12);  color: #28bdd8; }
+.ev-savef { background: rgba(255,123,92,.11);  border-color: rgba(255,123,92,.13);  color: #ff7b5c; }
 
-/* ── STORY ───── cyan/gold tón */
-.ev-revived  { background: rgba(40,189,216,.12);  border-color: rgba(40,189,216,.44); color: #28bdd8; }
-.ev-failed   { background: rgba(255,123,92,.12);  border-color: rgba(255,123,92,.42); color: #ff7b5c; }
-.ev-unlocked { background: rgba(201,156,90,.13);  border-color: rgba(201,156,90,.46); color: #c99c5a; }
-.ev-found    { background: rgba(230,207,161,.10);  border-color: rgba(230,207,161,.38); color: #e6cfa1; }
+/* COMBAT */
+.ev-hit   { background: rgba(201,156,90,.11);  border-color: rgba(201,156,90,.14);  color: #c99c5a; }
+.ev-miss  { background: rgba(184,176,198,.06); border-color: rgba(184,176,198,.09); color: #b8b0c6; }
+.ev-kill  {
+  background: rgba(255,123,92,.15); border-color: rgba(255,123,92,.20); color: #ff7b5c;
+  box-shadow: 0 2px 10px rgba(255,123,92,.18), 0 1px 3px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.05);
+}
+.ev-ko    { background: rgba(163,139,207,.10); border-color: rgba(163,139,207,.12); color: #a38bcf; }
 
-/* mobile: label el, icon+val marad */
+/* CHOICE */
+.ev-violence { background: rgba(255,123,92,.11); border-color: rgba(255,123,92,.13); color: #ff7b5c; }
+.ev-mercy    { background: rgba(40,189,216,.09);  border-color: rgba(40,189,216,.11); color: #28bdd8; }
+.ev-deceive  { background: rgba(163,139,207,.10); border-color: rgba(163,139,207,.12); color: #a38bcf; }
+.ev-explore  { background: rgba(230,207,161,.08); border-color: rgba(230,207,161,.11); color: #e6cfa1; }
+
+/* STORY */
+.ev-revived  { background: rgba(40,189,216,.10);  border-color: rgba(40,189,216,.13); color: #28bdd8; }
+.ev-failed   { background: rgba(255,123,92,.11);  border-color: rgba(255,123,92,.13); color: #ff7b5c; }
+.ev-unlocked { background: rgba(201,156,90,.12);  border-color: rgba(201,156,90,.15); color: #c99c5a; }
+.ev-found    { background: rgba(230,207,161,.09);  border-color: rgba(230,207,161,.12); color: #e6cfa1; }
+
+/* mobile: scale down slightly */
 @media (max-width: 480px) {
-  .chip-label { display: none; }
-  .chip-icon  { font-size: 10px; }
-  .event-chip { padding: 0 5px; gap: 2px; }
+  #event-strip { height: 36px; }
+  .event-chip  { width: 36px; height: 28px; }
+  .chip-icon   { font-size: 12px; }
+  .chip-label, .chip-val { font-size: 6px; }
 }
 
 /* ══ DEMO PAGE ══ */
@@ -326,27 +340,6 @@ html, body {
   transition: opacity .2s, border-color .2s, color .2s;
 }
 .tb-btn:hover { opacity: .85; border-color: rgba(184,176,198,.30); color: var(--text); }
-
-/* chip preview in demo buttons */
-.tb-btn.ev-nat20  { color: #a38bcf; border-color: rgba(163,139,207,.28); opacity: .55; }
-.tb-btn.ev-nat1   { color: #ff7b5c; border-color: rgba(255,123,92,.28);  opacity: .55; }
-.tb-btn.ev-roll   { color: #b8b0c6; border-color: rgba(184,176,198,.22); opacity: .55; }
-.tb-btn.ev-save   { color: #28bdd8; border-color: rgba(40,189,216,.28);  opacity: .55; }
-.tb-btn.ev-savef  { color: #ff7b5c; border-color: rgba(255,123,92,.28);  opacity: .55; }
-.tb-btn.ev-hit    { color: #c99c5a; border-color: rgba(201,156,90,.28);  opacity: .55; }
-.tb-btn.ev-miss   { color: #b8b0c6; border-color: rgba(184,176,198,.20); opacity: .55; }
-.tb-btn.ev-kill   { color: #ff7b5c; border-color: rgba(255,123,92,.40);  opacity: .60; }
-.tb-btn.ev-ko     { color: #a38bcf; border-color: rgba(163,139,207,.28); opacity: .55; }
-.tb-btn.ev-violence { color: #ff7b5c; border-color: rgba(255,123,92,.28); opacity: .55; }
-.tb-btn.ev-mercy    { color: #28bdd8; border-color: rgba(40,189,216,.28); opacity: .55; }
-.tb-btn.ev-deceive  { color: #a38bcf; border-color: rgba(163,139,207,.28);opacity: .55; }
-.tb-btn.ev-explore  { color: #e6cfa1; border-color: rgba(230,207,161,.28);opacity: .55; }
-.tb-btn.ev-revived  { color: #28bdd8; border-color: rgba(40,189,216,.30); opacity: .55; }
-.tb-btn.ev-failed   { color: #ff7b5c; border-color: rgba(255,123,92,.28); opacity: .55; }
-.tb-btn.ev-unlocked { color: #c99c5a; border-color: rgba(201,156,90,.30); opacity: .55; }
-.tb-btn.ev-found    { color: #e6cfa1; border-color: rgba(230,207,161,.28);opacity: .55; }
-
-/* contrast reference table */
 .contrast-table {
   width: 100%; border-collapse: collapse; font-size: 10px;
   color: rgba(184,176,198,.6); margin-top: 10px;
@@ -354,24 +347,20 @@ html, body {
 .contrast-table th {
   text-align: left; padding: 5px 8px;
   font-size: 8px; letter-spacing: .14em; text-transform: uppercase;
-  color: var(--gold); opacity: .5; border-bottom: 1px solid rgba(201,156,90,.08);
-  font-weight: 400;
+  color: var(--gold); opacity: .5; border-bottom: 1px solid rgba(201,156,90,.08); font-weight: 400;
 }
 .contrast-table td {
   padding: 6px 8px; border-bottom: 1px solid rgba(184,176,198,.04);
   font-family: 'IBM Plex Mono', monospace;
 }
 .contrast-table td:first-child { color: rgba(184,176,198,.5); font-size: 9px; }
-.pass-aa  { color: #7bc98c; }
-.pass-aaa { color: #5bb870; }
-.fail     { color: #ff7b5c; }
+.pass-aa { color: #7bc98c; } .pass-aaa { color: #5bb870; }
 </style>
 </head>
 <body>
 
 <!-- ══ TOP BAR ══ -->
 <div class="topbar mood-safe" id="topbar">
-
   <div class="bc">
     <div class="bc-seg canto" tabindex="0">
       <div class="bc-inner">
@@ -379,21 +368,9 @@ html, body {
         <span class="bc-name">The Red Line</span>
       </div>
       <div class="bc-dropdown">
-        <div class="dd-item current">
-          <span class="dd-id">C&middot;I</span>
-          <span class="dd-name">The Red Line</span>
-          <span class="dd-dot current"></span>
-        </div>
-        <div class="dd-item locked">
-          <span class="dd-id">C&middot;II</span>
-          <span class="dd-name">The Broken Earth</span>
-          <span class="dd-dot"></span>
-        </div>
-        <div class="dd-item locked">
-          <span class="dd-id">C&middot;III</span>
-          <span class="dd-name">The Contract</span>
-          <span class="dd-dot"></span>
-        </div>
+        <div class="dd-item current"><span class="dd-id">C&middot;I</span><span class="dd-name">The Red Line</span><span class="dd-dot current"></span></div>
+        <div class="dd-item locked"><span class="dd-id">C&middot;II</span><span class="dd-name">The Broken Earth</span><span class="dd-dot"></span></div>
+        <div class="dd-item locked"><span class="dd-id">C&middot;III</span><span class="dd-name">The Contract</span><span class="dd-dot"></span></div>
       </div>
     </div>
     <span class="bc-sep">&#x203a;</span>
@@ -403,21 +380,9 @@ html, body {
         <span class="bc-name">Null Meridian</span>
       </div>
       <div class="bc-dropdown">
-        <div class="dd-item current">
-          <span class="dd-id">EP.1</span>
-          <span class="dd-name">Null Meridian</span>
-          <span class="dd-dot current"></span>
-        </div>
-        <div class="dd-item locked">
-          <span class="dd-id">EP.2</span>
-          <span class="dd-name">Boarding the Red Line</span>
-          <span class="dd-dot"></span>
-        </div>
-        <div class="dd-item locked">
-          <span class="dd-id">EP.3</span>
-          <span class="dd-name">The Sundown Saloon</span>
-          <span class="dd-dot"></span>
-        </div>
+        <div class="dd-item current"><span class="dd-id">EP.1</span><span class="dd-name">Null Meridian</span><span class="dd-dot current"></span></div>
+        <div class="dd-item locked"><span class="dd-id">EP.2</span><span class="dd-name">Boarding the Red Line</span><span class="dd-dot"></span></div>
+        <div class="dd-item locked"><span class="dd-id">EP.3</span><span class="dd-name">The Sundown Saloon</span><span class="dd-dot"></span></div>
       </div>
     </div>
     <span class="bc-sep">&#x203a;</span>
@@ -427,37 +392,13 @@ html, body {
         <span class="bc-name">Waking</span>
       </div>
       <div class="bc-dropdown">
-        <div class="dd-item done">
-          <span class="dd-id">PRO</span>
-          <span class="dd-name">The Null Meridian</span>
-          <span class="dd-dot done"></span>
-        </div>
+        <div class="dd-item done"><span class="dd-id">PRO</span><span class="dd-name">The Null Meridian</span><span class="dd-dot done"></span></div>
         <div class="dd-div"></div>
-        <div class="dd-item current">
-          <span class="dd-id">A1</span>
-          <span class="dd-name">Waking</span>
-          <span class="dd-dot current"></span>
-        </div>
-        <div class="dd-item locked">
-          <span class="dd-id">A2</span>
-          <span class="dd-name">Obelisk, Clock &amp; Postcards</span>
-          <span class="dd-dot"></span>
-        </div>
-        <div class="dd-item locked">
-          <span class="dd-id">A3</span>
-          <span class="dd-name">Train Arrival &amp; Boarding</span>
-          <span class="dd-dot"></span>
-        </div>
-        <div class="dd-item locked">
-          <span class="dd-id">A4</span>
-          <span class="dd-name">Gossip Car &amp; Golden Tickets</span>
-          <span class="dd-dot"></span>
-        </div>
-        <div class="dd-item locked">
-          <span class="dd-id">A5</span>
-          <span class="dd-name">Sundown Saloon</span>
-          <span class="dd-dot"></span>
-        </div>
+        <div class="dd-item current"><span class="dd-id">A1</span><span class="dd-name">Waking</span><span class="dd-dot current"></span></div>
+        <div class="dd-item locked"><span class="dd-id">A2</span><span class="dd-name">Obelisk, Clock &amp; Postcards</span><span class="dd-dot"></span></div>
+        <div class="dd-item locked"><span class="dd-id">A3</span><span class="dd-name">Train Arrival &amp; Boarding</span><span class="dd-dot"></span></div>
+        <div class="dd-item locked"><span class="dd-id">A4</span><span class="dd-name">Gossip Car &amp; Golden Tickets</span><span class="dd-dot"></span></div>
+        <div class="dd-item locked"><span class="dd-id">A5</span><span class="dd-name">Sundown Saloon</span><span class="dd-dot"></span></div>
       </div>
     </div>
   </div>
@@ -481,47 +422,47 @@ html, body {
 
 <!-- ══ DEMO ══ -->
 <div class="demo-section">
-  <div class="demo-title">Event Strip &mdash; kattints, ad event-et</div>
+  <div class="demo-title">Event Strip &mdash; kattints</div>
   <div class="demo-variants">
 
     <div class="demo-bar-wrap">
       <div class="demo-bar-label">Dice</div>
       <div class="demo-btns">
-        <button class="tb-btn ev-nat20"   onclick="addEvent('nat20')">★ CRIT</button>
-        <button class="tb-btn ev-nat1"    onclick="addEvent('nat1')">✕ FUMBLE</button>
-        <button class="tb-btn ev-roll"    onclick="addEvent('roll', rnd(20))">◎ ROLL</button>
-        <button class="tb-btn ev-save"    onclick="addEvent('dc-save','pass')">◈ SAVE PASS</button>
-        <button class="tb-btn ev-savef"   onclick="addEvent('dc-save','fail')">◇ SAVE FAIL</button>
+        <button class="tb-btn" onclick="addEvent('nat20')">★ CRIT</button>
+        <button class="tb-btn" onclick="addEvent('nat1')">✕ FUMBLE</button>
+        <button class="tb-btn" onclick="addEvent('roll', rnd(20))">◎ ROLL</button>
+        <button class="tb-btn" onclick="addEvent('dc-save','pass')">◈ SAVE PASS</button>
+        <button class="tb-btn" onclick="addEvent('dc-save','fail')">◇ SAVE FAIL</button>
       </div>
     </div>
 
     <div class="demo-bar-wrap">
       <div class="demo-bar-label">Combat</div>
       <div class="demo-btns">
-        <button class="tb-btn ev-hit"     onclick="addEvent('attack-hit','Grul')">▲ HIT</button>
-        <button class="tb-btn ev-miss"    onclick="addEvent('attack-miss')">△ MISS</button>
-        <button class="tb-btn ev-kill"    onclick="addEvent('kill','Guard')">◆ KILL</button>
-        <button class="tb-btn ev-ko"      onclick="addEvent('ko')">● K.O.</button>
+        <button class="tb-btn" onclick="addEvent('attack-hit','Grul')">▲ HIT</button>
+        <button class="tb-btn" onclick="addEvent('attack-miss')">△ MISS</button>
+        <button class="tb-btn" onclick="addEvent('kill','Guard')">◆ KILL</button>
+        <button class="tb-btn" onclick="addEvent('ko')">● K.O.</button>
       </div>
     </div>
 
     <div class="demo-bar-wrap">
       <div class="demo-bar-label">Choice</div>
       <div class="demo-btns">
-        <button class="tb-btn ev-violence" onclick="addEvent('chosen-violence')">⊗ VIOLENCE</button>
-        <button class="tb-btn ev-mercy"    onclick="addEvent('chosen-mercy')">○ MERCY</button>
-        <button class="tb-btn ev-deceive"  onclick="addEvent('chosen-deceive')">◐ DECEIVE</button>
-        <button class="tb-btn ev-explore"  onclick="addEvent('chosen-explore')">◉ EXPLORE</button>
+        <button class="tb-btn" onclick="addEvent('chosen-violence')">⊗ VIOLENCE</button>
+        <button class="tb-btn" onclick="addEvent('chosen-mercy')">○ MERCY</button>
+        <button class="tb-btn" onclick="addEvent('chosen-deceive')">◐ DECEIVE</button>
+        <button class="tb-btn" onclick="addEvent('chosen-explore')">◉ EXPLORE</button>
       </div>
     </div>
 
     <div class="demo-bar-wrap">
       <div class="demo-bar-label">Story</div>
       <div class="demo-btns">
-        <button class="tb-btn ev-revived"  onclick="addEvent('revived')">↑ REVIVED</button>
-        <button class="tb-btn ev-failed"   onclick="addEvent('failed','Quest')">▼ FAILED</button>
-        <button class="tb-btn ev-unlocked" onclick="addEvent('unlocked')">✦ UNLOCKED</button>
-        <button class="tb-btn ev-found"    onclick="addEvent('found','Map')">◇ FOUND</button>
+        <button class="tb-btn" onclick="addEvent('revived')">↑ REVIVED</button>
+        <button class="tb-btn" onclick="addEvent('failed','Quest')">▼ FAILED</button>
+        <button class="tb-btn" onclick="addEvent('unlocked')">✦ UNLOCKED</button>
+        <button class="tb-btn" onclick="addEvent('found','Map')">◇ FOUND</button>
       </div>
     </div>
 
@@ -555,13 +496,13 @@ html, body {
         <button class="tb-btn" onclick="setBar('Bandit Ambush','Combat &middot; Deadly','danger')">Bandit Ambush</button>
         <button class="tb-btn" onclick="setBar('Chaos Surge &mdash; Unstable','Timed &middot; Deadly','danger')">Chaos Surge</button>
         <button class="tb-btn" onclick="setBar('Engine Room on Fire','Timed &middot; Deadly','danger')">Engine Fire</button>
-        <button class="tb-btn" onclick="setBar('Devil\'s Mercy &mdash; Final Print','Deadly &middot; Last Chance','danger')">Devil&apos;s Mercy</button>
+        <button class="tb-btn" onclick="setBar('Devil\'s Mercy','Deadly &middot; Last Chance','danger')">Devil&apos;s Mercy</button>
       </div>
     </div>
     <div class="demo-bar-wrap">
       <div class="demo-bar-label">Adversarial</div>
       <div class="demo-btns">
-        <button class="tb-btn" onclick="setBar('The Last Train to the End of All Known Worlds','Very Long Title &middot; Overflow','safe')">Nagyon hossz&uacute;</button>
+        <button class="tb-btn" onclick="setBar('The Last Train to the End of All Known Worlds','Long &middot; Overflow','safe')">Nagyon hossz&uacute;</button>
         <button class="tb-btn" onclick="setBar('X','A','safe')">Nagyon r&ouml;vid</button>
         <button class="tb-btn" onclick="document.body.style.zoom='1.5'">Zoom 150%</button>
         <button class="tb-btn" onclick="document.body.style.zoom='1.0'">Reset zoom</button>
@@ -573,16 +514,13 @@ html, body {
 <div class="demo-section" style="padding-bottom:48px">
   <div class="demo-title">Kontraszt referencia</div>
   <table class="contrast-table">
-    <thead>
-      <tr><th>Elem</th><th>Méret</th><th>Opacity</th><th>Kontraszt</th><th>WCAG</th></tr>
-    </thead>
+    <thead><tr><th>Elem</th><th>Méret</th><th>Opacity</th><th>Kontraszt</th><th>WCAG</th></tr></thead>
     <tbody>
       <tr><td>.bc-label</td><td>9px</td><td>.50</td><td>~5.0:1</td><td class="pass-aa">AA ✓</td></tr>
       <tr><td>.bc-name</td><td>13px</td><td>.56</td><td>~6.0:1</td><td class="pass-aaa">AAA ✓</td></tr>
       <tr><td>.tc-title</td><td>15px</td><td>.88</td><td>~17:1</td><td class="pass-aaa">AAA ✓</td></tr>
-      <tr><td>.tc-mood</td><td>9px</td><td>.48</td><td>~4.9:1</td><td class="pass-aa">AA ✓</td></tr>
-      <tr><td>.chip-label</td><td>8px</td><td>.58</td><td>~5.4:1</td><td class="pass-aa">AA ✓</td></tr>
-      <tr><td>.chip-val</td><td>9px</td><td>.88</td><td>~8.8:1</td><td class="pass-aaa">AAA ✓</td></tr>
+      <tr><td>.chip-icon</td><td>14px</td><td>.80</td><td>~8–16:1</td><td class="pass-aaa">AAA ✓</td></tr>
+      <tr><td>.chip-val</td><td>7px</td><td>.62</td><td>~5.8:1</td><td class="pass-aa">AA ✓</td></tr>
     </tbody>
   </table>
 </div>
@@ -598,22 +536,22 @@ function setBar(title, mood, type) {
 
 // ── event strip ──
 var EVENT_CONFIG = {
-  'nat20':          { cls: 'ev-nat20',   icon: '★', label: 'CRIT'     },
-  'nat1':           { cls: 'ev-nat1',    icon: '✕', label: 'FUMBLE'   },
-  'roll':           { cls: 'ev-roll',    icon: '◎', label: 'ROLL'     },
-  'dc-save':        { cls: 'ev-save',    icon: '◈', label: 'SAVE'     }, // dynamic
-  'attack-hit':     { cls: 'ev-hit',     icon: '▲', label: 'HIT'      },
-  'attack-miss':    { cls: 'ev-miss',    icon: '△', label: 'MISS'     },
-  'kill':           { cls: 'ev-kill',    icon: '◆', label: 'KILL'     },
-  'ko':             { cls: 'ev-ko',      icon: '●', label: 'K.O.'     },
-  'chosen-violence':{ cls: 'ev-violence',icon: '⊗', label: 'VIOLENCE' },
-  'chosen-mercy':   { cls: 'ev-mercy',   icon: '○', label: 'MERCY'    },
-  'chosen-deceive': { cls: 'ev-deceive', icon: '◐', label: 'DECEIVE'  },
-  'chosen-explore': { cls: 'ev-explore', icon: '◉', label: 'EXPLORE'  },
-  'revived':        { cls: 'ev-revived', icon: '↑', label: 'REVIVED'  },
-  'failed':         { cls: 'ev-failed',  icon: '▼', label: 'FAILED'   },
-  'unlocked':       { cls: 'ev-unlocked',icon: '✦', label: 'UNLOCKED' },
-  'found':          { cls: 'ev-found',   icon: '◇', label: 'FOUND'    },
+  'nat20':           { cls: 'ev-nat20',   icon: '★', label: 'CRIT'    },
+  'nat1':            { cls: 'ev-nat1',    icon: '✕', label: 'FUMBLE'  },
+  'roll':            { cls: 'ev-roll',    icon: '◎', label: 'ROLL'    },
+  'dc-save':         { cls: 'ev-save',    icon: '◈', label: 'SAVE'    }, // dynamic
+  'attack-hit':      { cls: 'ev-hit',     icon: '▲', label: 'HIT'     },
+  'attack-miss':     { cls: 'ev-miss',    icon: '△', label: 'MISS'    },
+  'kill':            { cls: 'ev-kill',    icon: '◆', label: 'KILL'    },
+  'ko':              { cls: 'ev-ko',      icon: '●', label: 'K.O.'    },
+  'chosen-violence': { cls: 'ev-violence',icon: '⊗', label: 'RAGE'    },
+  'chosen-mercy':    { cls: 'ev-mercy',   icon: '○', label: 'MERCY'   },
+  'chosen-deceive':  { cls: 'ev-deceive', icon: '◐', label: 'LIED'    },
+  'chosen-explore':  { cls: 'ev-explore', icon: '◉', label: 'EXPL'    },
+  'revived':         { cls: 'ev-revived', icon: '↑', label: 'LIVE'    },
+  'failed':          { cls: 'ev-failed',  icon: '▼', label: 'FAIL'    },
+  'unlocked':        { cls: 'ev-unlocked',icon: '✦', label: 'OPEN'    },
+  'found':           { cls: 'ev-found',   icon: '◇', label: 'FOUND'   },
 };
 var MAX_EVENTS = 80;
 var PRUNE_TO   = 60;
@@ -623,14 +561,11 @@ function rnd(n) { return Math.floor(Math.random() * n) + 1; }
 function addEvent(type, val) {
   var track = document.getElementById('strip-track');
   if (!track) return;
-
-  // prune oldest when over limit
   var chips = track.querySelectorAll('.event-chip');
   if (chips.length >= MAX_EVENTS) {
     var cut = chips.length - PRUNE_TO + 1;
     for (var i = 0; i < cut; i++) chips[i].remove();
   }
-
   var chip = buildChip(type, val !== undefined ? val : null);
   if (!chip) return;
   track.appendChild(chip);
@@ -645,17 +580,26 @@ function buildChip(type, val) {
 
   var cls   = cfg.cls;
   var icon  = cfg.icon;
-  var label = cfg.label;
+  // secondary text: value if given, otherwise label
+  var secondary    = cfg.label;
+  var secondaryCls = 'chip-label';
+
   var displayVal = (val !== null && val !== undefined)
-    ? String(val).slice(0, 8).toUpperCase()
+    ? String(val).slice(0, 5).toUpperCase()
     : null;
 
-  // dc-save: dynamically flip class/icon/value
+  if (displayVal) {
+    secondary    = displayVal;
+    secondaryCls = 'chip-val';
+  }
+
+  // dc-save: dynamic class + icon
   if (type === 'dc-save') {
-    var isPass = (String(val).toLowerCase() === 'pass');
-    cls        = isPass ? 'ev-save'  : 'ev-savef';
-    icon       = isPass ? '◈'        : '◇';
-    displayVal = isPass ? 'PASS'     : 'FAIL';
+    var isPass = (String(val || '').toLowerCase() === 'pass');
+    cls          = isPass ? 'ev-save'  : 'ev-savef';
+    icon         = isPass ? '◈'        : '◇';
+    secondary    = isPass ? 'PASS'     : 'FAIL';
+    secondaryCls = 'chip-val';
   }
 
   var chip = document.createElement('div');
@@ -666,22 +610,15 @@ function buildChip(type, val) {
   ic.textContent = icon;
   chip.appendChild(ic);
 
-  var lb = document.createElement('span');
-  lb.className = 'chip-label';
-  lb.textContent = label;
-  chip.appendChild(lb);
-
-  if (displayVal) {
-    var vl = document.createElement('span');
-    vl.className = 'chip-val';
-    vl.textContent = displayVal;
-    chip.appendChild(vl);
-  }
+  var sec = document.createElement('span');
+  sec.className = secondaryCls;
+  sec.textContent = secondary;
+  chip.appendChild(sec);
 
   return chip;
 }
 
-// demo sequence — rövid narratív encounter
+// demo sequence
 var DEMO_SEQ = [
   ['chosen-explore', null],
   ['roll', 14],
@@ -699,7 +636,6 @@ var DEMO_SEQ = [
   ['unlocked', null],
   ['found', 'Map'],
 ];
-
 function demoSeq() {
   var i = 0;
   function next() {
@@ -711,7 +647,6 @@ function demoSeq() {
   next();
 }
 
-// spam — overflow + auto-scroll stress test
 var SPAM_POOL = [
   ['nat20',null],['nat1',null],['roll',rnd(20)],['roll',rnd(20)],
   ['attack-hit','Grul'],['attack-miss',null],['kill','Guard'],['ko',null],
