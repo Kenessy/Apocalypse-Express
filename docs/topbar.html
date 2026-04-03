@@ -261,54 +261,49 @@ html, body {
   display: flex; flex-direction: column;
 }
 
-/* ── stat strip ── */
-.ae-stat-strip {
-  height: 54px;
-  flex-shrink: 0;
-  display: flex; align-items: center;
-  background: rgba(5,4,10,.94);
-  border-bottom: 1px solid rgba(201,156,90,.09);
-  padding: 0 6px;
-  overflow: hidden;
+/* ── vertikális stat bar ── */
+.ae-stat-bar {
+  width: 64px; flex-shrink: 0;
+  display: flex; flex-direction: column;
+  justify-content: space-evenly; align-items: center;
+  background: rgba(5,4,10,.92);
+  border-left:  1px solid rgba(201,156,90,.09);
+  border-right: 1px solid rgba(201,156,90,.09);
+  z-index: 2;
 }
 .ae-stat {
-  display: flex; align-items: center; gap: 8px;
-  padding: 0 18px; height: 100%;
-  border-right: 1px solid rgba(184,176,198,.06);
-  flex-shrink: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 5px; width: 100%;
+  padding: 10px 0;
+  position: relative;
 }
-.ae-stat:last-child { border-right: none; }
+.ae-stat::after {
+  content: '';
+  position: absolute; bottom: 0; left: 18px; right: 18px;
+  height: 1px; background: rgba(184,176,198,.06);
+}
+.ae-stat:last-child::after { display: none; }
 .ae-stat-icon {
-  font-size: 13px; line-height: 1;
-  opacity: .45; flex-shrink: 0;
-}
-.ae-stat-body {
-  display: flex; flex-direction: column; gap: 4px;
-}
-.ae-stat-lbl {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 7px; letter-spacing: .20em; text-transform: uppercase;
-  color: var(--muted); opacity: .28; line-height: 1;
+  font-size: 14px; line-height: 1; opacity: .42;
 }
 .ae-stat-val {
   font-family: 'IBM Plex Mono', monospace;
-  font-size: 11px; font-weight: 500; letter-spacing: .04em;
-  line-height: 1; color: var(--text); opacity: .65;
+  font-size: 10px; font-weight: 500; letter-spacing: .03em;
+  line-height: 1; color: var(--text); opacity: .60;
 }
-/* pip-bar */
-.ae-pips { display: flex; gap: 3px; align-items: center; }
-.ae-pip {
-  width: 6px; height: 6px; border-radius: 50%;
-  border: 1px solid currentColor; opacity: .20;
+.ae-stat-lbl {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 7px; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--muted); opacity: .26; line-height: 1;
 }
-.ae-pip.on { opacity: .55; background: currentColor; }
 
-/* color variants — all muted to fit the palette */
-.ae-stat.gold  .ae-stat-icon, .ae-stat.gold  .ae-stat-val { color: var(--gold2); }
-.ae-stat.hp    .ae-stat-icon, .ae-stat.hp    .ae-pip      { color: var(--ember); }
-.ae-stat.chaos .ae-stat-icon, .ae-stat.chaos .ae-pip      { color: var(--ember); }
-.ae-stat.harm  .ae-stat-icon, .ae-stat.harm  .ae-pip      { color: var(--cyan);  }
-.ae-stat.dice  .ae-stat-icon, .ae-stat.dice  .ae-stat-val { color: var(--purple2); }
+/* color variants */
+.ae-stat.gold  .ae-stat-icon { color: var(--gold2);   }
+.ae-stat.hp    .ae-stat-icon { color: var(--ember);   }
+.ae-stat.chaos .ae-stat-icon { color: var(--ember);   }
+.ae-stat.harm  .ae-stat-icon { color: var(--cyan);    }
+.ae-stat.dice  .ae-stat-icon { color: var(--purple2); }
 
 /* ── jobb felső: widescreen kép 3:2 ── */
 .ae-top-panel {
@@ -423,61 +418,37 @@ html, body {
     </div>
   </div>
 
-  <div class="ae-sep"></div>
-
-  <!-- jobb: stat strip + felső widescreen + alsó tartalom -->
-  <div class="ae-col ae-col-content">
-
-    <div class="ae-stat-strip">
-      <div class="ae-stat gold">
-        <span class="ae-stat-icon">◈</span>
-        <div class="ae-stat-body">
-          <span class="ae-stat-lbl">gold</span>
-          <span class="ae-stat-val">1,240</span>
-        </div>
-      </div>
-      <div class="ae-stat hp">
-        <span class="ae-stat-icon">●</span>
-        <div class="ae-stat-body">
-          <span class="ae-stat-lbl">HP</span>
-          <div class="ae-pips">
-            <span class="ae-pip on"></span><span class="ae-pip on"></span><span class="ae-pip on"></span>
-            <span class="ae-pip on"></span><span class="ae-pip on"></span><span class="ae-pip on"></span>
-            <span class="ae-pip on"></span><span class="ae-pip on"></span>
-            <span class="ae-pip"></span><span class="ae-pip"></span>
-          </div>
-        </div>
-      </div>
-      <div class="ae-stat chaos">
-        <span class="ae-stat-icon">◉</span>
-        <div class="ae-stat-body">
-          <span class="ae-stat-lbl">Chaos</span>
-          <div class="ae-pips">
-            <span class="ae-pip on"></span><span class="ae-pip on"></span><span class="ae-pip on"></span>
-            <span class="ae-pip"></span><span class="ae-pip"></span>
-          </div>
-        </div>
-      </div>
-      <div class="ae-stat harm">
-        <span class="ae-stat-icon">○</span>
-        <div class="ae-stat-body">
-          <span class="ae-stat-lbl">Harmony</span>
-          <div class="ae-pips">
-            <span class="ae-pip on"></span><span class="ae-pip on"></span><span class="ae-pip on"></span>
-            <span class="ae-pip on"></span><span class="ae-pip on"></span><span class="ae-pip on"></span>
-            <span class="ae-pip"></span><span class="ae-pip"></span><span class="ae-pip"></span><span class="ae-pip"></span>
-          </div>
-        </div>
-      </div>
-      <div class="ae-stat dice">
-        <span class="ae-stat-icon">◎</span>
-        <div class="ae-stat-body">
-          <span class="ae-stat-lbl">Chaos Die</span>
-          <span class="ae-stat-val">d6 +2</span>
-        </div>
-      </div>
+  <!-- vertikális stat bar a két kép között -->
+  <div class="ae-stat-bar">
+    <div class="ae-stat gold">
+      <span class="ae-stat-icon">◈</span>
+      <span class="ae-stat-val">1,240</span>
+      <span class="ae-stat-lbl">gold</span>
     </div>
+    <div class="ae-stat hp">
+      <span class="ae-stat-icon">●</span>
+      <span class="ae-stat-val">8/10</span>
+      <span class="ae-stat-lbl">HP</span>
+    </div>
+    <div class="ae-stat chaos">
+      <span class="ae-stat-icon">◉</span>
+      <span class="ae-stat-val">3/5</span>
+      <span class="ae-stat-lbl">Chaos</span>
+    </div>
+    <div class="ae-stat harm">
+      <span class="ae-stat-icon">○</span>
+      <span class="ae-stat-val">6/10</span>
+      <span class="ae-stat-lbl">Harmony</span>
+    </div>
+    <div class="ae-stat dice">
+      <span class="ae-stat-icon">◎</span>
+      <span class="ae-stat-val">d6+2</span>
+      <span class="ae-stat-lbl">chaos die</span>
+    </div>
+  </div>
 
+  <!-- jobb: felső widescreen + alsó tartalom -->
+  <div class="ae-col ae-col-content">
     <div class="ae-top-panel">
       <img src="ae-s1-bg.png" alt="Null Meridian — scene">
     </div>
