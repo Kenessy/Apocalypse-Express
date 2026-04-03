@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AE Design Mockup</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Inter:wght@300;400;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --void:    #05040a;
+  --surface: #0d0f1a;
+  --purple:  #4c2b70;
+  --purple2: #a38bcf;
+  --gold:    #c99c5a;
+  --gold2:   #e6cfa1;
+  --cyan:    #28bdd8;
+  --ember:   #ff7b5c;
+  --text:    #f8f5f0;
+  --muted:   #b8b0c6;
+  --prose:   #c2bcc8;
+}
+html, body { width:100%; height:100%; background:var(--void); color:var(--text); font-family:'Inter',sans-serif; overflow:hidden; }
+
+/* ── STATS BAR ── */
+#stats {
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  height:38px;
+  background:rgba(5,4,10,.96);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(201,156,90,.07);
+  display:flex; align-items:center; padding:0 0; gap:0;
+}
+.s-seg { display:flex; align-items:center; gap:7px; padding:0 14px; height:100%; }
+.s-seg + .s-seg { border-left:1px solid rgba(184,176,198,.08); }
+.s-key { font-family:'IBM Plex Mono',monospace; font-size:8px; letter-spacing:.2em; text-transform:uppercase; color:var(--gold); opacity:.5; }
+.hp-bar { display:flex; gap:2px; }
+.hp-pip { width:9px; height:11px; background:rgba(201,156,90,.55); border:1px solid rgba(201,156,90,.35); }
+.hp-pip.dmg { background:rgba(255,123,92,.45); border-color:rgba(255,123,92,.3); }
+.hp-pip.empty { background:rgba(184,176,198,.06); border-color:rgba(184,176,198,.08); }
+.s-val { font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--gold2); opacity:.7; }
+.s-badge { font-family:'IBM Plex Mono',monospace; font-size:7px; letter-spacing:.14em; text-transform:uppercase; background:rgba(76,43,112,.3); border:1px solid rgba(163,139,207,.2); color:var(--purple2); padding:2px 8px; border-radius:2px; }
+.s-badge.ember { color:var(--ember); border-color:rgba(255,123,92,.3); background:rgba(255,123,92,.08); }
+.s-spacer { flex:1; }
+.s-btn { font-family:'IBM Plex Mono',monospace; font-size:8px; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); opacity:.4; background:none; border:1px solid rgba(184,176,198,.12); border-radius:3px; padding:4px 12px; cursor:pointer; transition:opacity .3s, border-color .3s; margin-right:6px; }
+.s-btn:hover { opacity:.8; border-color:rgba(184,176,198,.3); }
+
+/* ── ROOT ── */
+#root { display:flex; width:100%; height:100%; padding-top:38px; }
+
+/* ── SIDEBAR ── */
+#sidebar {
+  width:200px; flex-shrink:0;
+  background:rgba(5,4,10,.65);
+  border-right:1px solid rgba(201,156,90,.07);
+  display:flex; flex-direction:column; overflow:hidden;
+}
+
+/* portrait */
+#portrait-wrap {
+  flex-shrink:0; width:100%; aspect-ratio:2/3; max-height:42%;
+  overflow:hidden; background:#08060f; position:relative;
+}
+.portrait-bg {
+  position:absolute; inset:0;
+  background:
+    radial-gradient(ellipse 70% 80% at 50% 60%, rgba(76,43,112,.2), transparent 70%),
+    repeating-linear-gradient(0deg, rgba(163,139,207,.015) 0, rgba(163,139,207,.015) 1px, transparent 1px, transparent 36px),
+    repeating-linear-gradient(90deg, rgba(163,139,207,.015) 0, rgba(163,139,207,.015) 1px, transparent 1px, transparent 36px);
+  display:flex; align-items:center; justify-content:center;
+}
+.portrait-silhouette {
+  width:52px; height:90px;
+  background:rgba(163,139,207,.08);
+  border:1px solid rgba(163,139,207,.12);
+  border-radius:26px 26px 12px 12px;
+  box-shadow:0 0 30px rgba(76,43,112,.2);
+}
+.portrait-fade {
+  position:absolute; bottom:0; left:0; right:0; height:55%;
+  background:linear-gradient(to top, rgba(5,4,10,.97), transparent);
+}
+.portrait-info { position:absolute; bottom:0; left:0; right:0; padding:12px 13px 10px; }
+.p-name { font-family:'Cinzel',serif; font-size:12px; font-weight:700; letter-spacing:.05em; color:var(--text); opacity:.85; }
+.p-sub { font-family:'IBM Plex Mono',monospace; font-size:7px; letter-spacing:.15em; text-transform:uppercase; color:var(--gold); opacity:.45; margin-top:3px; }
+.p-anno { position:absolute; top:8px; left:10px; font-family:'IBM Plex Mono',monospace; font-size:8px; letter-spacing:.1em; text-transform:uppercase; color:rgba(40,189,216,.6); }
+
+/* char stats */
+#char-stats {
+  flex-shrink:0; padding:10px 13px;
+  border-bottom:1px solid rgba(184,176,198,.05);
+  display:flex; flex-direction:column; gap:7px;
+}
+.cs-row { display:flex; justify-content:space-between; align-items:center; }
+.cs-key { font-family:'IBM Plex Mono',monospace; font-size:7px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); opacity:.4; }
+.cs-val { font-family:'Cinzel',serif; font-size:10px; font-weight:700; color:var(--purple2); opacity:.7; }
+.cs-pips { display:flex; gap:3px; }
+.cs-pip { width:7px; height:7px; border-radius:50%; background:rgba(163,139,207,.12); border:1px solid rgba(163,139,207,.18); }
+.cs-pip.on { background:var(--purple2); border-color:var(--purple2); opacity:.6; }
+.cs-debt { font-family:'Cinzel',serif; font-size:22px; font-weight:900; color:var(--ember); opacity:.65; }
+
+/* timeline */
+#timeline { flex:1; overflow-y:auto; padding:12px 13px 8px; scrollbar-width:none; }
+#timeline::-webkit-scrollbar { display:none; }
+.tl-head { font-family:'IBM Plex Mono',monospace; font-size:7px; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); opacity:.28; margin-bottom:12px; }
+.tl-track { position:relative; padding-left:19px; }
+.tl-track::before { content:''; position:absolute; left:5px; top:6px; bottom:6px; width:1px; background:linear-gradient(to bottom, var(--gold) 0%, rgba(201,156,90,.08) 55%, transparent 100%); }
+.tl-node { position:relative; margin-bottom:14px; cursor:pointer; }
+.tl-dot { position:absolute; left:-19px; top:4px; width:10px; height:10px; border-radius:50%; background:rgba(184,176,198,.08); border:1px solid rgba(184,176,198,.18); transition:background .3s, box-shadow .3s; }
+.tl-node.done .tl-dot { background:rgba(184,176,198,.38); border-color:rgba(184,176,198,.38); }
+.tl-node.active .tl-dot { background:var(--gold); border-color:var(--gold); box-shadow:0 0 8px rgba(201,156,90,.5); }
+.tl-node:hover .tl-dot { border-color:var(--purple2); }
+.tl-id { font-family:'IBM Plex Mono',monospace; font-size:7px; letter-spacing:.15em; text-transform:uppercase; color:var(--gold); opacity:.35; margin-bottom:2px; }
+.tl-node.active .tl-id { opacity:.8; }
+.tl-lbl { font-family:'Cinzel',serif; font-size:10px; font-weight:700; letter-spacing:.03em; color:var(--muted); opacity:.45; line-height:1.3; }
+.tl-node.done .tl-lbl   { opacity:.28; }
+.tl-node.active .tl-lbl { color:var(--text); opacity:.8; }
+.tl-node:hover .tl-lbl  { opacity:.7; }
+
+/* cargo mini */
+#cargo-mini {
+  flex-shrink:0; margin:4px 13px 12px;
+  border:1px solid rgba(201,156,90,.09); border-radius:3px; padding:8px 10px;
+  cursor:pointer; transition:border-color .3s, background .3s;
+  background:rgba(5,4,10,.4);
+}
+#cargo-mini:hover { border-color:rgba(201,156,90,.25); background:rgba(201,156,90,.05); }
+.cm-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:7px; }
+.cm-lbl { font-family:'IBM Plex Mono',monospace; font-size:7px; letter-spacing:.18em; text-transform:uppercase; color:var(--gold); opacity:.45; }
+.cm-slots { display:grid; grid-template-columns:repeat(4,1fr); gap:4px; }
+.cm-slot { aspect-ratio:1; border:1px solid rgba(184,176,198,.07); border-radius:2px; background:rgba(184,176,198,.02); }
+.cm-slot.has { background:rgba(201,156,90,.18); border-color:rgba(201,156,90,.28); }
+
+/* ── MAIN ── */
+#main { flex:1; min-width:0; display:flex; flex-direction:column; overflow:hidden; }
+
+/* scene image */
+#scene-wrap {
+  flex-shrink:0; position:relative;
+  height:40%; overflow:hidden; background:#02010a;
+}
+.img-layer {
+  position:absolute; inset:0;
+  opacity:0; transition:opacity .55s ease;
+  display:flex; align-items:center; justify-content:center;
+}
+.img-layer.on { opacity:1; }
+
+/* default */
+#il-default {
+  background:
+    radial-gradient(ellipse 65% 45% at 50% 55%, rgba(76,43,112,.38), transparent 65%),
+    radial-gradient(ellipse 25% 18% at 50% 92%, rgba(201,156,90,.14), transparent 50%),
+    #02010a;
+}
+.rail { position:absolute; bottom:0; width:2px; height:58%; background:linear-gradient(to top, rgba(201,156,90,.55), transparent); }
+.rail.l { left:calc(50% - 88px); }
+.rail.r { right:calc(50% - 88px); }
+.orb { position:absolute; bottom:28%; left:50%; transform:translateX(-50%); width:56px; height:56px; border-radius:50%; background:radial-gradient(rgba(201,156,90,.22), transparent 70%); box-shadow:0 0 40px rgba(201,156,90,.18); animation:orb 4s ease-in-out infinite; }
+@keyframes orb { 0%,100%{opacity:.5;transform:translateX(-50%) scale(1);} 50%{opacity:.95;transform:translateX(-50%) scale(1.12);} }
+.plat { position:absolute; bottom:24%; left:50%; transform:translateX(-50%); width:38%; height:1px; background:linear-gradient(to right, transparent, rgba(201,156,90,.45) 30%, rgba(201,156,90,.45) 70%, transparent); }
+
+#il-look { background:radial-gradient(ellipse 55% 75% at 50% 50%, rgba(163,139,207,.22), transparent 70%), #040311; }
+.flicker { width:28px; height:58px; border:1px solid rgba(163,139,207,.28); border-radius:14px 14px 7px 7px; box-shadow:0 0 28px rgba(163,139,207,.14); animation:flick 2.2s ease-in-out infinite; }
+@keyframes flick { 0%,100%{opacity:.4;transform:scaleX(1);} 35%{opacity:.85;transform:scaleX(.88);} 65%{opacity:.5;transform:scaleX(1.06);} }
+
+#il-edge { background:radial-gradient(ellipse 100% 35% at 50% 100%, rgba(201,156,90,.1), transparent 60%), #02010a; }
+.red-rim { position:absolute; bottom:32%; left:12%; right:12%; height:2px; background:rgba(255,70,70,.55); box-shadow:0 0 12px rgba(255,70,70,.3); animation:rim 3s ease-in-out infinite; }
+@keyframes rim { 0%,100%{opacity:.55;} 50%{opacity:1;} }
+
+#il-call { background:radial-gradient(ellipse 45% 55% at 50% 42%, rgba(40,189,216,.14), transparent 62%), #02010a; }
+.wave { position:absolute; top:30%; left:50%; transform:translateX(-50%); width:50px; height:50px; border-radius:50%; border:1px solid rgba(40,189,216,.22); animation:rip 2.5s ease-out infinite; }
+.wave:nth-child(2){animation-delay:.83s;} .wave:nth-child(3){animation-delay:1.66s;}
+@keyframes rip { 0%{transform:translateX(-50%) scale(.4);opacity:.8;} 100%{transform:translateX(-50%) scale(3.2);opacity:0;} }
+
+#il-memory { background:radial-gradient(ellipse 50% 55% at 50% 50%, rgba(163,139,207,.1), transparent 70%), #030210; }
+#il-ability { background:radial-gradient(ellipse 40% 45% at 50% 50%, rgba(255,123,92,.1), transparent 62%), #04020c; }
+.fizzle { font-size:38px; opacity:.14; filter:blur(1px); color:var(--ember); animation:fiz 1.8s ease-in-out infinite; }
+@keyframes fiz { 0%,100%{opacity:.12;} 50%{opacity:.28;} }
+
+#il-scan {
+  background:
+    repeating-linear-gradient(0deg, rgba(201,156,90,.025) 0, rgba(201,156,90,.025) 1px, transparent 1px, transparent 55px),
+    radial-gradient(ellipse 90% 28% at 50% 100%, rgba(201,156,90,.08), transparent 55%),
+    #02010a;
+}
+.scan-rail { position:absolute; bottom:0; width:1px; background:linear-gradient(to top, rgba(201,156,90,.65), transparent); animation:sr 2.4s ease-out forwards; }
+.scan-rail.l { left:calc(50% - 108px); }
+.scan-rail.r { right:calc(50% - 108px); }
+@keyframes sr { from{height:0;opacity:0;} to{height:48%;opacity:1;} }
+
+/* header on scene */
+#sh {
+  position:absolute; top:0; left:0; right:0; z-index:5;
+  padding:12px 18px;
+  display:flex; justify-content:space-between; align-items:flex-start;
+  background:linear-gradient(to bottom, rgba(2,1,10,.62) 0%, transparent 100%);
+}
+.sh-ch { font-family:'IBM Plex Mono',monospace; font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:var(--gold); opacity:.4; }
+.sh-ti { font-family:'Cinzel',serif; font-size:15px; font-weight:700; color:var(--text); opacity:.72; letter-spacing:.04em; margin-top:3px; transition:opacity .4s; }
+.sh-pill { font-family:'IBM Plex Mono',monospace; font-size:8px; letter-spacing:.18em; text-transform:uppercase; color:var(--ember); background:rgba(255,123,92,.08); border:1px solid rgba(255,123,92,.2); border-radius:999px; padding:3px 10px; opacity:.75; align-self:flex-start; }
+
+/* bottom gradient on scene */
+#scene-wrap::after { content:''; position:absolute; bottom:0; left:0; right:0; height:38%; background:linear-gradient(to bottom, transparent, rgba(5,4,10,.98)); pointer-events:none; z-index:4; }
+
+/* annotation cyan label */
+.anno { position:absolute; z-index:20; font-family:'IBM Plex Mono',monospace; font-size:8px; letter-spacing:.12em; text-transform:uppercase; color:rgba(40,189,216,.65); display:flex; align-items:center; gap:5px; pointer-events:none; }
+.anno::before { content:''; width:14px; height:1px; background:rgba(40,189,216,.45); flex-shrink:0; }
+
+/* ── CONTENT ── */
+#content { flex:1; min-height:0; display:flex; flex-direction:column; background:var(--surface); }
+
+#story { flex:1; min-height:0; overflow-y:auto; padding:16px 22px 10px; font-size:14px; line-height:1.82; color:var(--prose); }
+#story p { margin-bottom:.85em; }
+#story em { color:var(--text); font-style:italic; }
+.n-pill { display:inline-block; margin-bottom:11px; font-family:'IBM Plex Mono',monospace; font-size:8px; letter-spacing:.2em; text-transform:uppercase; color:var(--ember); border:1px solid rgba(255,123,92,.2); background:rgba(255,123,92,.06); padding:3px 10px; border-radius:999px; }
+
+.cdiv { height:1px; flex-shrink:0; background:linear-gradient(to right, transparent 5%, rgba(201,156,90,.07) 30%, rgba(201,156,90,.14) 50%, rgba(201,156,90,.07) 70%, transparent 95%); }
+
+/* choices */
+#choices { flex-shrink:0; padding:12px 18px 14px; background:rgba(5,4,10,.35); }
+.c-head { font-family:'IBM Plex Mono',monospace; font-size:7px; letter-spacing:.22em; text-transform:uppercase; color:var(--muted); opacity:.25; margin-bottom:9px; }
+.c-row { display:flex; gap:7px; overflow-x:auto; padding-bottom:2px; scrollbar-width:none; }
+.c-row::-webkit-scrollbar { display:none; }
+
+/* choice card */
+.cc {
+  flex-shrink:0; width:132px;
+  background:rgba(5,4,10,.72); border:1px solid rgba(163,139,207,.15);
+  border-radius:4px; overflow:hidden; cursor:pointer; position:relative;
+  transition:border-color .32s, box-shadow .32s, transform .14s;
+}
+.cc:hover { border-color:rgba(163,139,207,.5); box-shadow:0 0 18px rgba(76,43,112,.28); transform:translateY(-2px); }
+.cc:active { transform:translateY(0) scale(.97); }
+/* thumb — square */
+.cc-thumb {
+  width:100%; aspect-ratio:1; position:relative; overflow:hidden;
+  background:#060410; display:flex; align-items:center; justify-content:center;
+}
+.cc-thumb-bg { position:absolute; inset:0; opacity:.22; transition:opacity .32s; display:flex; align-items:center; justify-content:center; font-size:26px; }
+.cc:hover .cc-thumb-bg { opacity:.55; }
+.cc-icon { position:absolute; bottom:5px; right:6px; font-size:13px; color:var(--purple2); opacity:.38; transition:opacity .32s; }
+.cc:hover .cc-icon { opacity:.8; }
+/* kocka annotation */
+.cc-anno { position:absolute; top:4px; left:5px; font-family:'IBM Plex Mono',monospace; font-size:7px; letter-spacing:.1em; text-transform:uppercase; color:rgba(40,189,216,.5); pointer-events:none; }
+/* body */
+.cc-body { padding:8px 9px 9px; }
+.cc-type { font-family:'IBM Plex Mono',monospace; font-size:7px; letter-spacing:.18em; text-transform:uppercase; color:var(--purple2); opacity:.38; margin-bottom:5px; }
+.cc-lbl { font-family:'Cinzel',serif; font-size:10px; font-weight:700; letter-spacing:.04em; color:var(--muted); line-height:1.35; transition:color .22s; }
+.cc:hover .cc-lbl { color:var(--text); }
+/* visited */
+.cc.v { opacity:.46; }
+.cc.v::after { content:'&#x2713;'; position:absolute; top:6px; right:7px; font-size:9px; color:var(--purple2); opacity:.55; }
+/* decide */
+.cc.decide { border-color:rgba(201,156,90,.2); animation:pc 3s ease-in-out infinite; }
+@keyframes pc { 0%,100%{box-shadow:0 0 0 rgba(201,156,90,0);} 50%{box-shadow:0 0 14px rgba(201,156,90,.1);} }
+.cc.decide:hover { border-color:rgba(201,156,90,.55); box-shadow:0 0 24px rgba(201,156,90,.2); }
+.cc.decide .cc-type { color:var(--gold); }
+.cc.decide .cc-icon { color:var(--gold); }
+</style>
+</head>
+<body>
+
+<!-- STATS BAR -->
+<div id="stats">
+  <div class="s-seg">
+    <span class="s-key">HP</span>
+    <div class="hp-bar">
+      <div class="hp-pip"></div><div class="hp-pip"></div><div class="hp-pip"></div>
+      <div class="hp-pip dmg"></div><div class="hp-pip empty"></div>
+    </div>
+  </div>
+  <div class="s-seg"><span class="s-key">Soul Debt</span><span class="s-val">2</span></div>
+  <div class="s-seg"><span class="s-key">Index</span><span class="s-badge">Boiler</span></div>
+  <div class="s-seg"><span class="s-key">Print</span><span class="s-badge ember">Sparkplug Ready</span></div>
+  <div class="s-spacer"></div>
+  <div class="s-seg">
+    <button class="s-btn">&#x2b21; Cargo</button>
+    <button class="s-btn">&#x2630; Menu</button>
+  </div>
+</div>
+
+<div id="root">
+
+  <!-- SIDEBAR -->
+  <div id="sidebar">
+    <div id="portrait-wrap">
+      <div class="portrait-bg">
+        <div class="portrait-silhouette"></div>
+      </div>
+      <div class="portrait-fade"></div>
+      <div class="portrait-info">
+        <div class="p-name">Character Name</div>
+        <div class="p-sub">Boiler &middot; Level 1</div>
+      </div>
+      <div class="p-anno">&#x25c8; PORTRAIT (2:3)</div>
+    </div>
+
+    <div id="char-stats">
+      <div class="cs-row"><span class="cs-key">Body Tag</span><span class="cs-val">[FLESH]</span></div>
+      <div class="cs-row">
+        <span class="cs-key">Strain</span>
+        <div class="cs-pips"><div class="cs-pip on"></div><div class="cs-pip"></div><div class="cs-pip"></div></div>
+      </div>
+      <div class="cs-row"><span class="cs-key">Soul Debt</span><span class="cs-debt">2</span></div>
+    </div>
+
+    <div id="timeline">
+      <div class="tl-head">Story Progress</div>
+      <div class="tl-track">
+        <div class="tl-node done"><div class="tl-dot"></div><div class="tl-id">PROLOGUE</div><div class="tl-lbl">The Null Meridian</div></div>
+        <div class="tl-node active"><div class="tl-dot"></div><div class="tl-id">A1</div><div class="tl-lbl">Waking</div></div>
+        <div class="tl-node"><div class="tl-dot"></div><div class="tl-id">A2</div><div class="tl-lbl">Obelisk, Clock &amp; Postcards</div></div>
+        <div class="tl-node"><div class="tl-dot"></div><div class="tl-id">A3</div><div class="tl-lbl">Train Arrival &amp; Boarding</div></div>
+        <div class="tl-node"><div class="tl-dot"></div><div class="tl-id">A4</div><div class="tl-lbl">Gossip Car &amp; Golden Tickets</div></div>
+        <div class="tl-node"><div class="tl-dot"></div><div class="tl-id">A5</div><div class="tl-lbl">Sundown Saloon</div></div>
+      </div>
+    </div>
+
+    <div id="cargo-mini">
+      <div class="cm-head"><span class="cm-lbl">&#x2b21; Cargo Pockets</span></div>
+      <div class="cm-slots">
+        <div class="cm-slot has"></div><div class="cm-slot"></div>
+        <div class="cm-slot"></div><div class="cm-slot"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div id="main">
+
+    <!-- scene image -->
+    <div id="scene-wrap">
+      <div class="img-layer on" id="il-default">
+        <div class="orb"></div>
+        <div class="rail l"></div><div class="rail r"></div>
+        <div class="plat"></div>
+      </div>
+      <div class="img-layer" id="il-look"><div class="flicker"></div></div>
+      <div class="img-layer" id="il-edge"><div class="red-rim"></div></div>
+      <div class="img-layer" id="il-call"><div class="wave"></div><div class="wave"></div><div class="wave"></div></div>
+      <div class="img-layer" id="il-memory"><span style="font-family:'Cinzel',serif;font-size:26px;color:rgba(163,139,207,.2);letter-spacing:.1em;">&mdash; &nbsp; &mdash;</span></div>
+      <div class="img-layer" id="il-ability"><span class="fizzle">&#x2726;</span></div>
+      <div class="img-layer" id="il-scan"><div class="scan-rail l"></div><div class="scan-rail r"></div></div>
+
+      <div id="sh">
+        <div>
+          <div class="sh-ch">CHAPTER A &middot; NULL MERIDIAN</div>
+          <div class="sh-ti" id="sh-title">Waking</div>
+        </div>
+        <div class="sh-pill">READ ALOUD</div>
+      </div>
+
+      <div class="anno" style="bottom:46%;right:16px;flex-direction:row-reverse;">
+        LYING/LANDSCAPE &mdash; hover preview
+        <span style="width:14px;height:1px;background:rgba(40,189,216,.45);display:inline-block;"></span>
+      </div>
+    </div>
+
+    <!-- story + choices -->
+    <div id="content">
+      <div id="story">
+        <span class="n-pill">READ ALOUD</span>
+        <p>Cold nothing gives way to stone under your hands.</p>
+        <p>A circular platform hangs in open dark, its edge traced by a dull red glow. Around you, a few blurred shapes shudder and drag themselves upright &mdash; bodies half-formed, as if something is still deciding what you&rsquo;re all supposed to be.</p>
+        <p>You are not breathing. You have no heartbeat. But you are, somehow, <em>aware</em>.</p>
+      </div>
+
+      <div class="cdiv"></div>
+
+      <div id="choices">
+        <div class="c-head">What do you do?</div>
+        <div class="c-row">
+
+          <div class="cc v" data-img="look">
+            <div class="cc-thumb">
+              <div class="cc-thumb-bg">&#x25a1;</div>
+              <span class="cc-icon">&#x25c8;</span>
+              <span class="cc-anno">KOCKA</span>
+            </div>
+            <div class="cc-body"><div class="cc-type">Explore</div><div class="cc-lbl">Look at yourself</div></div>
+          </div>
+
+          <div class="cc" data-img="edge">
+            <div class="cc-thumb"><div class="cc-thumb-bg">&#x25a1;</div><span class="cc-icon">&#x25c9;</span></div>
+            <div class="cc-body"><div class="cc-type">Explore</div><div class="cc-lbl">Walk to the edge</div></div>
+          </div>
+
+          <div class="cc" data-img="call">
+            <div class="cc-thumb"><div class="cc-thumb-bg">&#x25a1;</div><span class="cc-icon">&#x25ce;</span></div>
+            <div class="cc-body"><div class="cc-type">Explore</div><div class="cc-lbl">Call into the dark</div></div>
+          </div>
+
+          <div class="cc" data-img="memory">
+            <div class="cc-thumb"><div class="cc-thumb-bg">&#x25a1;</div><span class="cc-icon">&#x25c7;</span></div>
+            <div class="cc-body"><div class="cc-type">Explore</div><div class="cc-lbl">Search your memories</div></div>
+          </div>
+
+          <div class="cc" data-img="ability">
+            <div class="cc-thumb"><div class="cc-thumb-bg">&#x25a1;</div><span class="cc-icon">&#x2726;</span></div>
+            <div class="cc-body"><div class="cc-type">Explore</div><div class="cc-lbl">Reach for your abilities</div></div>
+          </div>
+
+          <div class="cc" data-img="scan">
+            <div class="cc-thumb"><div class="cc-thumb-bg">&#x25a1;</div><span class="cc-icon">&#x25d0;</span></div>
+            <div class="cc-body"><div class="cc-type">Explore</div><div class="cc-lbl">Scan the void</div></div>
+          </div>
+
+          <div class="cc decide" data-img="default">
+            <div class="cc-thumb"><div class="cc-thumb-bg">&#x25a1;</div><span class="cc-icon">&#x2605;</span></div>
+            <div class="cc-body"><div class="cc-type">Decide</div><div class="cc-lbl">Something has arrived</div></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+var titles = { default:'Waking', look:'Form', edge:'The Rim', call:'Contact', memory:'Memory', ability:'Dormant', scan:'The Line' };
+var cards  = document.querySelectorAll('.cc[data-img]');
+var layers = document.querySelectorAll('.img-layer');
+var titleEl = document.getElementById('sh-title');
+
+function show(id) {
+  layers.forEach(function(l){ l.classList.remove('on'); });
+  var el = document.getElementById('il-'+id);
+  if (el) el.classList.add('on');
+  titleEl.textContent = titles[id] || 'Waking';
+}
+
+cards.forEach(function(c){
+  var img = c.getAttribute('data-img');
+  c.addEventListener('mouseenter', function(){ show(img); });
+  c.addEventListener('mouseleave', function(){ show('default'); });
+});
+</script>
+</body>
+</html>
