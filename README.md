@@ -2,7 +2,7 @@
 
 A cinematic, industrial-arcane narrative RPG about dead souls, infernal railways, frozen time, and a second life purchased on Lucifer's schedule.
 
-**[→ View the project site](https://kenessy.github.io/Kenessy/)**
+**[→ View the project site](https://kenessy.github.io/Apocalypse-Express/)**
 
 ---
 
@@ -33,7 +33,7 @@ Apocalypse Express is a tabletop RPG campaign built on a D&D 5e (2014) foundatio
 
 ## Links
 
-- [Project site (GitHub Pages)](https://kenessy.github.io/Kenessy/)
-- [Database](https://github.com/Kenessy/Kenessy/tree/Apocalypse-Express-DnD-Game/Database)
-- [Player Rulebook](https://github.com/Kenessy/Kenessy/blob/Apocalypse-Express-DnD-Game/Database/Compiled/Player%20Rulebook.md)
-- [GM Operations Manual](https://github.com/Kenessy/Kenessy/blob/Apocalypse-Express-DnD-Game/Database/Compiled/GM%20Operations%20Manual.md)
+- [Project site (GitHub Pages)](https://kenessy.github.io/Apocalypse-Express/)
+- [Database](https://github.com/Kenessy/Apocalypse-Express/tree/main/Database)
+- [Player Rulebook](https://github.com/Kenessy/Apocalypse-Express/blob/main/Database/Compiled/Player%20Rulebook.md)
+- [GM Operations Manual](https://github.com/Kenessy/Apocalypse-Express/blob/main/Database/Compiled/GM%20Operations%20Manual.md)
