@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AE · Top Bar + Event Strip Demo</title>
+<title>AE · Top Bar + Event Column Demo</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -22,8 +22,7 @@ html, body {
   font-family: 'IBM Plex Mono', monospace;
   min-height: 100vh;
   display: flex; flex-direction: column; align-items: center;
-  /* topbar 44px + strip 40px + 12px buffer */
-  padding-top: 96px; gap: 48px;
+  padding-top: 60px; gap: 48px;
 }
 
 /* ══════════════════════════════════════
@@ -42,7 +41,6 @@ html, body {
   padding: 0 12px; gap: 0;
 }
 
-/* ── LEFT: breadcrumb ── */
 .bc { display: flex; align-items: center; overflow: visible; min-width: 0; }
 .bc-seg {
   display: flex; align-items: center;
@@ -82,10 +80,8 @@ html, body {
 }
 .bc-sep { font-size: 9px; color: var(--gold); opacity: .18; flex-shrink: 0; padding: 0 1px; user-select: none; }
 
-/* ── DROPDOWN ── */
 .bc-dropdown {
-  position: absolute; top: 100%; left: 0;
-  min-width: 220px;
+  position: absolute; top: 100%; left: 0; min-width: 220px;
   background: rgba(5,4,10,.99);
   border: 1px solid rgba(201,156,90,.11);
   border-radius: 4px; padding: 5px 0;
@@ -126,7 +122,6 @@ html, body {
 .dd-item.current .dd-dot { background: var(--gold); border-color: var(--gold); box-shadow: 0 0 6px rgba(201,156,90,.5); }
 .dd-div { height: 1px; background: rgba(201,156,90,.06); margin: 3px 0; }
 
-/* ── CENTER ── */
 .topbar-center {
   display: flex; flex-direction: column; align-items: center;
   gap: 2px; pointer-events: none; padding: 0 16px;
@@ -150,7 +145,6 @@ html, body {
 .topbar.mood-danger .tc-title { color: var(--ember); opacity: .94; text-shadow: 0 0 18px rgba(255,123,92,.28); }
 .topbar.mood-danger .tc-mood  { color: var(--ember); opacity: .55; }
 
-/* ── RIGHT ── */
 .topbar-right { display: flex; align-items: center; justify-content: flex-end; }
 .hamburger {
   width: 36px; height: 36px;
@@ -187,86 +181,104 @@ html, body {
 @media (prefers-contrast: more) {
   .bc-label { opacity: .88; } .bc-name { opacity: .88; }
   .tc-title { opacity: 1; }   .tc-mood { opacity: .75; }
-  .dd-id    { opacity: .82; } .dd-name { opacity: .88; }
+  .dd-id { opacity: .82; }    .dd-name { opacity: .88; }
   .hamburger span { opacity: .80; }
   .topbar { border-bottom-color: rgba(201,156,90,.35); }
-  .event-chip { opacity: 1 !important; }
 }
 .bc-seg:focus-visible    { outline: 1px solid rgba(201,156,90,.45); outline-offset: -2px; }
 .hamburger:focus-visible { outline: 1px solid rgba(184,176,198,.45); outline-offset: 2px; }
 
 /* ══════════════════════════════════════
-   EVENT TIMELINE STRIP  ·  40px fixed, top: 44px
-   Tile-shaped chips, nearly square, pop-in animation
+   EVENT COLUMN  ·  jobboldali süllyedő tile-oszlop
+   Legújabb tile felül jelenik meg, régiek lefelé szorulnak.
+   Bottom fade-out amikor kiszorulnak az oszlopból.
 ══════════════════════════════════════ */
-#event-strip {
+#event-col {
   position: fixed;
-  top: 44px; left: 0; right: 0;
-  height: 40px; z-index: 90;
-  background: rgba(5,4,10,.90);
-  border-bottom: 1px solid rgba(184,176,198,.05);
+  top: 52px;           /* közvetlenül a topbar alatt */
+  right: 12px;
+  width: 54px;
+  /* alul fade-ki a kilógó tile-okat */
+  max-height: calc(100vh - 70px);
   overflow: hidden;
+  z-index: 90;
+  pointer-events: none;  /* nem blokkolja a game content kattintást */
+  /* bottom fade mask */
+  mask-image: linear-gradient(
+    to bottom,
+    black 0%,
+    black 70%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    black 0%,
+    black 70%,
+    transparent 100%
+  );
 }
 
-/* left fade — history indicator */
-#event-strip::before {
-  content: '';
-  position: absolute; top: 0; left: 0;
-  width: 52px; height: 100%;
-  background: linear-gradient(to right,
-    rgba(5,4,10,.95) 0%,
-    rgba(5,4,10,.40) 60%,
-    transparent 100%);
-  z-index: 2; pointer-events: none;
+/* belső track — a tile-ok itt sorakoznak */
+#event-col-track {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 4px 4px 0;
+  /* push-down smooth: amikor új tile kerül elé,
+     a container height nő és a régiek le csúsznak */
+  transition: padding .001s; /* force repaint */
 }
-
-.strip-track {
-  display: flex; flex-direction: row; align-items: center;
-  gap: 5px; height: 100%; padding: 0 10px;
-  overflow-x: auto; overflow-y: hidden;
-  scroll-behavior: smooth;
-  scrollbar-width: none; -ms-overflow-style: none;
-}
-.strip-track::-webkit-scrollbar { display: none; }
 
 /* ── tile chip ──
-   Nearly square: 42px wide × 32px tall in a 40px strip (4px top/bottom breathing).
-   Stacked layout: icon (top) + label/value (bottom).
-   Soft background fill, minimal border, card shadow.
+   46×46px négyzet, icon felül, label/val alul.
+   Slides in from the right when added.
 ══════════════════════════════════════ */
-@keyframes chip-enter {
-  from { opacity: 0; transform: scale(.78) translateY(4px); }
-  to   { opacity: 1; transform: scale(1)   translateY(0); }
+@keyframes tile-enter {
+  0%   { opacity: 0; transform: translateX(22px) scale(.80); }
+  60%  { opacity: 1; transform: translateX(-3px) scale(1.02); }
+  100% { opacity: 1; transform: translateX(0)   scale(1); }
+}
+
+@keyframes tile-exit {
+  to { opacity: 0; transform: translateX(18px) scale(.82); }
 }
 
 .event-chip {
-  display: inline-flex;
+  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  gap: 2px;
-  width: 42px;
-  height: 32px;
-  border-radius: 5px;
+  gap: 3px;
+  width: 46px;
+  height: 46px;
+  border-radius: 6px;
   border: 1px solid transparent;
   font-family: 'IBM Plex Mono', monospace;
   cursor: default;
-  /* card shadow — depth without harsh outline */
-  box-shadow: 0 2px 6px rgba(0,0,0,.32), inset 0 1px 0 rgba(255,255,255,.05);
-  animation: chip-enter .22s cubic-bezier(.22,1,.36,1) both;
-  transition: opacity .15s, transform .15s;
+  pointer-events: auto;  /* tile-ok hover-ölhetők */
+  /* card depth */
+  box-shadow:
+    0 2px 8px rgba(0,0,0,.35),
+    0 1px 0  rgba(0,0,0,.5),
+    inset 0 1px 0 rgba(255,255,255,.05);
+  animation: tile-enter .28s cubic-bezier(.22,1,.36,1) both;
+  transition: opacity .18s, transform .18s;
 }
-.event-chip:hover { opacity: .80; transform: scale(1.06); }
+.event-chip:hover {
+  opacity: .82;
+  transform: scale(1.08) translateX(-2px);
+}
+.event-chip.chip-exit {
+  animation: tile-exit .22s ease forwards;
+}
 
-/* icon: large, the primary identifier */
 .chip-icon {
-  font-size: 14px;
+  font-size: 17px;
   line-height: 1;
-  opacity: .80;
+  opacity: .82;
 }
 
-/* secondary: label or value — small, below icon, nearly hidden */
 .chip-label,
 .chip-val {
   font-size: 7px;
@@ -277,60 +289,61 @@ html, body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 38px;
+  max-width: 40px;
+  text-align: center;
 }
-.chip-val { opacity: .62; font-weight: 500; }
+.chip-val { opacity: .66; font-weight: 500; }
 
-/* ── soft type colors — background tint is the identity, not the border ── */
+/* ── tile type colors — soft background tint, nearly invisible border ── */
+/* default shadow for most */
+.event-chip { box-shadow: 0 3px 8px rgba(0,0,0,.38), 0 1px 0 rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.05); }
 
 /* DICE */
 .ev-nat20 {
-  background: rgba(163,139,207,.14); border-color: rgba(163,139,207,.14); color: #a38bcf;
-  box-shadow: 0 2px 8px rgba(163,139,207,.12), 0 1px 3px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.06);
+  background: rgba(163,139,207,.15); border-color: rgba(163,139,207,.15); color: #a38bcf;
+  box-shadow: 0 3px 10px rgba(163,139,207,.14), 0 1px 0 rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.07);
 }
-.ev-nat1  { background: rgba(255,123,92,.12);  border-color: rgba(255,123,92,.14);  color: #ff7b5c; }
+.ev-nat1  { background: rgba(255,123,92,.13);  border-color: rgba(255,123,92,.14);  color: #ff7b5c; }
 .ev-roll  { background: rgba(184,176,198,.08); border-color: rgba(184,176,198,.11); color: #b8b0c6; }
-.ev-save  { background: rgba(40,189,216,.10);  border-color: rgba(40,189,216,.12);  color: #28bdd8; }
-.ev-savef { background: rgba(255,123,92,.11);  border-color: rgba(255,123,92,.13);  color: #ff7b5c; }
+.ev-save  { background: rgba(40,189,216,.11);  border-color: rgba(40,189,216,.13);  color: #28bdd8; }
+.ev-savef { background: rgba(255,123,92,.12);  border-color: rgba(255,123,92,.13);  color: #ff7b5c; }
 
 /* COMBAT */
-.ev-hit   { background: rgba(201,156,90,.11);  border-color: rgba(201,156,90,.14);  color: #c99c5a; }
+.ev-hit   { background: rgba(201,156,90,.12);  border-color: rgba(201,156,90,.14);  color: #c99c5a; }
 .ev-miss  { background: rgba(184,176,198,.06); border-color: rgba(184,176,198,.09); color: #b8b0c6; }
 .ev-kill  {
-  background: rgba(255,123,92,.15); border-color: rgba(255,123,92,.20); color: #ff7b5c;
-  box-shadow: 0 2px 10px rgba(255,123,92,.18), 0 1px 3px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.05);
+  background: rgba(255,123,92,.16); border-color: rgba(255,123,92,.20); color: #ff7b5c;
+  box-shadow: 0 3px 12px rgba(255,123,92,.20), 0 1px 0 rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.06);
 }
 .ev-ko    { background: rgba(163,139,207,.10); border-color: rgba(163,139,207,.12); color: #a38bcf; }
 
 /* CHOICE */
-.ev-violence { background: rgba(255,123,92,.11); border-color: rgba(255,123,92,.13); color: #ff7b5c; }
-.ev-mercy    { background: rgba(40,189,216,.09);  border-color: rgba(40,189,216,.11); color: #28bdd8; }
+.ev-violence { background: rgba(255,123,92,.12); border-color: rgba(255,123,92,.13); color: #ff7b5c; }
+.ev-mercy    { background: rgba(40,189,216,.10);  border-color: rgba(40,189,216,.12); color: #28bdd8; }
 .ev-deceive  { background: rgba(163,139,207,.10); border-color: rgba(163,139,207,.12); color: #a38bcf; }
 .ev-explore  { background: rgba(230,207,161,.08); border-color: rgba(230,207,161,.11); color: #e6cfa1; }
 
 /* STORY */
-.ev-revived  { background: rgba(40,189,216,.10);  border-color: rgba(40,189,216,.13); color: #28bdd8; }
-.ev-failed   { background: rgba(255,123,92,.11);  border-color: rgba(255,123,92,.13); color: #ff7b5c; }
+.ev-revived  { background: rgba(40,189,216,.11);  border-color: rgba(40,189,216,.13); color: #28bdd8; }
+.ev-failed   { background: rgba(255,123,92,.12);  border-color: rgba(255,123,92,.13); color: #ff7b5c; }
 .ev-unlocked { background: rgba(201,156,90,.12);  border-color: rgba(201,156,90,.15); color: #c99c5a; }
 .ev-found    { background: rgba(230,207,161,.09);  border-color: rgba(230,207,161,.12); color: #e6cfa1; }
 
-/* mobile: scale down slightly */
+/* mobile: kisebb oszlop */
 @media (max-width: 480px) {
-  #event-strip { height: 36px; }
-  .event-chip  { width: 36px; height: 28px; }
-  .chip-icon   { font-size: 12px; }
-  .chip-label, .chip-val { font-size: 6px; }
+  #event-col      { width: 46px; right: 6px; }
+  .event-chip     { width: 38px; height: 38px; }
+  .chip-icon      { font-size: 14px; }
 }
 
 /* ══ DEMO PAGE ══ */
-.demo-section { width: 100%; max-width: 640px; padding: 0 20px; }
+.demo-section { width: 100%; max-width: 580px; padding: 0 20px; }
 .demo-title   { font-size: 9px; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); opacity: .55; margin-bottom: 10px; }
 .demo-note    { font-size: 11px; line-height: 1.7; color: rgba(184,176,198,.50); }
-.demo-note code { background: rgba(201,156,90,.08); border: 1px solid rgba(201,156,90,.15); border-radius: 2px; padding: 1px 5px; font-size: 10px; color: var(--gold2); }
 .demo-variants { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
-.demo-bar-wrap { border: 1px solid rgba(184,176,198,.07); border-radius: 4px; overflow: hidden; }
+.demo-bar-wrap  { border: 1px solid rgba(184,176,198,.07); border-radius: 4px; overflow: hidden; }
 .demo-bar-label { font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); opacity: .38; padding: 7px 12px 5px; background: rgba(5,4,10,.4); border-bottom: 1px solid rgba(184,176,198,.04); }
-.demo-btns { padding: 10px 12px; background: rgba(5,4,10,.3); display: flex; gap: 7px; flex-wrap: wrap; }
+.demo-btns      { padding: 10px 12px; background: rgba(5,4,10,.3); display: flex; gap: 7px; flex-wrap: wrap; }
 .tb-btn {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 9px; letter-spacing: .12em; text-transform: uppercase;
@@ -340,21 +353,6 @@ html, body {
   transition: opacity .2s, border-color .2s, color .2s;
 }
 .tb-btn:hover { opacity: .85; border-color: rgba(184,176,198,.30); color: var(--text); }
-.contrast-table {
-  width: 100%; border-collapse: collapse; font-size: 10px;
-  color: rgba(184,176,198,.6); margin-top: 10px;
-}
-.contrast-table th {
-  text-align: left; padding: 5px 8px;
-  font-size: 8px; letter-spacing: .14em; text-transform: uppercase;
-  color: var(--gold); opacity: .5; border-bottom: 1px solid rgba(201,156,90,.08); font-weight: 400;
-}
-.contrast-table td {
-  padding: 6px 8px; border-bottom: 1px solid rgba(184,176,198,.04);
-  font-family: 'IBM Plex Mono', monospace;
-}
-.contrast-table td:first-child { color: rgba(184,176,198,.5); font-size: 9px; }
-.pass-aa { color: #7bc98c; } .pass-aaa { color: #5bb870; }
 </style>
 </head>
 <body>
@@ -415,14 +413,14 @@ html, body {
   </div>
 </div>
 
-<!-- ══ EVENT TIMELINE STRIP ══ -->
-<div id="event-strip" role="log" aria-live="polite" aria-label="Event timeline">
-  <div class="strip-track" id="strip-track"></div>
+<!-- ══ EVENT COLUMN — jobbra, lefelé süllyed ══ -->
+<div id="event-col" role="log" aria-live="polite" aria-label="Event timeline">
+  <div id="event-col-track"></div>
 </div>
 
 <!-- ══ DEMO ══ -->
 <div class="demo-section">
-  <div class="demo-title">Event Strip &mdash; kattints</div>
+  <div class="demo-title">Event Column &mdash; kattints</div>
   <div class="demo-variants">
 
     <div class="demo-bar-wrap">
@@ -471,7 +469,7 @@ html, body {
       <div class="demo-btns">
         <button class="tb-btn" onclick="demoSeq()">Demo Sequence</button>
         <button class="tb-btn" onclick="spamEvents()">Spam ×20</button>
-        <button class="tb-btn" onclick="clearStrip()">Clear</button>
+        <button class="tb-btn" onclick="clearCol()">Clear</button>
       </div>
     </div>
 
@@ -479,51 +477,21 @@ html, body {
 </div>
 
 <div class="demo-section">
-  <div class="demo-title">Situation title &mdash; kattints</div>
+  <div class="demo-title">Topbar mood &mdash; kattints</div>
   <div class="demo-variants">
     <div class="demo-bar-wrap">
-      <div class="demo-bar-label">Safe / Explore</div>
       <div class="demo-btns">
-        <button class="tb-btn" onclick="setBar('Waking in the Null Meridian','Safe &middot; Explore','safe')">Null Meridian</button>
-        <button class="tb-btn" onclick="setBar('Campfire at the Wreck','Rest &middot; Safe','safe')">Campfire</button>
-        <button class="tb-btn" onclick="setBar('Sundown Saloon','Social &middot; Explore','safe')">Saloon</button>
-        <button class="tb-btn" onclick="setBar('Boarding the Red Line','Discovery &middot; Safe','safe')">Boarding</button>
-      </div>
-    </div>
-    <div class="demo-bar-wrap">
-      <div class="demo-bar-label">Danger / Combat</div>
-      <div class="demo-btns">
-        <button class="tb-btn" onclick="setBar('Bandit Ambush','Combat &middot; Deadly','danger')">Bandit Ambush</button>
-        <button class="tb-btn" onclick="setBar('Chaos Surge &mdash; Unstable','Timed &middot; Deadly','danger')">Chaos Surge</button>
-        <button class="tb-btn" onclick="setBar('Engine Room on Fire','Timed &middot; Deadly','danger')">Engine Fire</button>
-        <button class="tb-btn" onclick="setBar('Devil\'s Mercy','Deadly &middot; Last Chance','danger')">Devil&apos;s Mercy</button>
-      </div>
-    </div>
-    <div class="demo-bar-wrap">
-      <div class="demo-bar-label">Adversarial</div>
-      <div class="demo-btns">
-        <button class="tb-btn" onclick="setBar('The Last Train to the End of All Known Worlds','Long &middot; Overflow','safe')">Nagyon hossz&uacute;</button>
-        <button class="tb-btn" onclick="setBar('X','A','safe')">Nagyon r&ouml;vid</button>
+        <button class="tb-btn" onclick="setBar('Waking in the Null Meridian','Safe &middot; Explore','safe')">Safe</button>
+        <button class="tb-btn" onclick="setBar('Bandit Ambush','Combat &middot; Deadly','danger')">Danger</button>
+        <button class="tb-btn" onclick="setBar('The Last Train to the End of All Known Worlds','Long &middot; Test','safe')">Long title</button>
         <button class="tb-btn" onclick="document.body.style.zoom='1.5'">Zoom 150%</button>
-        <button class="tb-btn" onclick="document.body.style.zoom='1.0'">Reset zoom</button>
+        <button class="tb-btn" onclick="document.body.style.zoom='1.0'">Reset</button>
       </div>
     </div>
   </div>
 </div>
 
-<div class="demo-section" style="padding-bottom:48px">
-  <div class="demo-title">Kontraszt referencia</div>
-  <table class="contrast-table">
-    <thead><tr><th>Elem</th><th>Méret</th><th>Opacity</th><th>Kontraszt</th><th>WCAG</th></tr></thead>
-    <tbody>
-      <tr><td>.bc-label</td><td>9px</td><td>.50</td><td>~5.0:1</td><td class="pass-aa">AA ✓</td></tr>
-      <tr><td>.bc-name</td><td>13px</td><td>.56</td><td>~6.0:1</td><td class="pass-aaa">AAA ✓</td></tr>
-      <tr><td>.tc-title</td><td>15px</td><td>.88</td><td>~17:1</td><td class="pass-aaa">AAA ✓</td></tr>
-      <tr><td>.chip-icon</td><td>14px</td><td>.80</td><td>~8–16:1</td><td class="pass-aaa">AAA ✓</td></tr>
-      <tr><td>.chip-val</td><td>7px</td><td>.62</td><td>~5.8:1</td><td class="pass-aa">AA ✓</td></tr>
-    </tbody>
-  </table>
-</div>
+<div class="demo-section" style="padding-bottom:80px"></div>
 
 <script>
 // ── topbar ──
@@ -534,68 +502,72 @@ function setBar(title, mood, type) {
   bar.className = 'topbar mood-' + type;
 }
 
-// ── event strip ──
+// ── event column ──
 var EVENT_CONFIG = {
-  'nat20':           { cls: 'ev-nat20',   icon: '★', label: 'CRIT'    },
-  'nat1':            { cls: 'ev-nat1',    icon: '✕', label: 'FUMBLE'  },
-  'roll':            { cls: 'ev-roll',    icon: '◎', label: 'ROLL'    },
-  'dc-save':         { cls: 'ev-save',    icon: '◈', label: 'SAVE'    }, // dynamic
-  'attack-hit':      { cls: 'ev-hit',     icon: '▲', label: 'HIT'     },
-  'attack-miss':     { cls: 'ev-miss',    icon: '△', label: 'MISS'    },
-  'kill':            { cls: 'ev-kill',    icon: '◆', label: 'KILL'    },
-  'ko':              { cls: 'ev-ko',      icon: '●', label: 'K.O.'    },
-  'chosen-violence': { cls: 'ev-violence',icon: '⊗', label: 'RAGE'    },
-  'chosen-mercy':    { cls: 'ev-mercy',   icon: '○', label: 'MERCY'   },
-  'chosen-deceive':  { cls: 'ev-deceive', icon: '◐', label: 'LIED'    },
-  'chosen-explore':  { cls: 'ev-explore', icon: '◉', label: 'EXPL'    },
-  'revived':         { cls: 'ev-revived', icon: '↑', label: 'LIVE'    },
-  'failed':          { cls: 'ev-failed',  icon: '▼', label: 'FAIL'    },
-  'unlocked':        { cls: 'ev-unlocked',icon: '✦', label: 'OPEN'    },
-  'found':           { cls: 'ev-found',   icon: '◇', label: 'FOUND'   },
+  'nat20':           { cls: 'ev-nat20',   icon: '★', label: 'CRIT'   },
+  'nat1':            { cls: 'ev-nat1',    icon: '✕', label: 'FUMBLE' },
+  'roll':            { cls: 'ev-roll',    icon: '◎', label: 'ROLL'   },
+  'dc-save':         { cls: 'ev-save',    icon: '◈', label: 'SAVE'   }, // dynamic
+  'attack-hit':      { cls: 'ev-hit',     icon: '▲', label: 'HIT'    },
+  'attack-miss':     { cls: 'ev-miss',    icon: '△', label: 'MISS'   },
+  'kill':            { cls: 'ev-kill',    icon: '◆', label: 'KILL'   },
+  'ko':              { cls: 'ev-ko',      icon: '●', label: 'K.O.'   },
+  'chosen-violence': { cls: 'ev-violence',icon: '⊗', label: 'RAGE'   },
+  'chosen-mercy':    { cls: 'ev-mercy',   icon: '○', label: 'MERCY'  },
+  'chosen-deceive':  { cls: 'ev-deceive', icon: '◐', label: 'LIED'   },
+  'chosen-explore':  { cls: 'ev-explore', icon: '◉', label: 'EXPL'   },
+  'revived':         { cls: 'ev-revived', icon: '↑', label: 'LIVE'   },
+  'failed':          { cls: 'ev-failed',  icon: '▼', label: 'FAIL'   },
+  'unlocked':        { cls: 'ev-unlocked',icon: '✦', label: 'OPEN'   },
+  'found':           { cls: 'ev-found',   icon: '◇', label: 'FOUND'  },
 };
-var MAX_EVENTS = 80;
-var PRUNE_TO   = 60;
+
+var MAX_VISIBLE = 14;  // max tiles in column at once
 
 function rnd(n) { return Math.floor(Math.random() * n) + 1; }
 
 function addEvent(type, val) {
-  var track = document.getElementById('strip-track');
+  var track = document.getElementById('event-col-track');
   if (!track) return;
-  var chips = track.querySelectorAll('.event-chip');
-  if (chips.length >= MAX_EVENTS) {
-    var cut = chips.length - PRUNE_TO + 1;
-    for (var i = 0; i < cut; i++) chips[i].remove();
-  }
+
   var chip = buildChip(type, val !== undefined ? val : null);
   if (!chip) return;
-  track.appendChild(chip);
-  requestAnimationFrame(function() {
-    track.scrollTo({ left: track.scrollWidth, behavior: 'smooth' });
-  });
+
+  // prepend — newest always at top
+  track.insertBefore(chip, track.firstChild);
+
+  // prune oldest (bottom) tile if over limit
+  var chips = track.querySelectorAll('.event-chip');
+  if (chips.length > MAX_VISIBLE) {
+    var oldest = chips[chips.length - 1];
+    oldest.classList.add('chip-exit');
+    setTimeout(function() {
+      if (oldest.parentNode) oldest.remove();
+    }, 220);
+  }
 }
 
 function buildChip(type, val) {
   var cfg = EVENT_CONFIG[type];
   if (!cfg) return null;
 
-  var cls   = cfg.cls;
-  var icon  = cfg.icon;
-  // secondary text: value if given, otherwise label
+  var cls          = cfg.cls;
+  var icon         = cfg.icon;
   var secondary    = cfg.label;
   var secondaryCls = 'chip-label';
 
+  // value overrides label as secondary text
   var displayVal = (val !== null && val !== undefined)
     ? String(val).slice(0, 5).toUpperCase()
     : null;
-
   if (displayVal) {
     secondary    = displayVal;
     secondaryCls = 'chip-val';
   }
 
-  // dc-save: dynamic class + icon
+  // dc-save: dynamic
   if (type === 'dc-save') {
-    var isPass = (String(val || '').toLowerCase() === 'pass');
+    var isPass   = (String(val || '').toLowerCase() === 'pass');
     cls          = isPass ? 'ev-save'  : 'ev-savef';
     icon         = isPass ? '◈'        : '◇';
     secondary    = isPass ? 'PASS'     : 'FAIL';
@@ -618,7 +590,7 @@ function buildChip(type, val) {
   return chip;
 }
 
-// demo sequence
+// demo sequence — rövid narratív encounter
 var DEMO_SEQ = [
   ['chosen-explore', null],
   ['roll', 14],
@@ -642,11 +614,12 @@ function demoSeq() {
     if (i >= DEMO_SEQ.length) return;
     var ev = DEMO_SEQ[i++];
     addEvent(ev[0], ev[1]);
-    setTimeout(next, 460);
+    setTimeout(next, 420);
   }
   next();
 }
 
+// spam — stresstest
 var SPAM_POOL = [
   ['nat20',null],['nat1',null],['roll',rnd(20)],['roll',rnd(20)],
   ['attack-hit','Grul'],['attack-miss',null],['kill','Guard'],['ko',null],
@@ -660,13 +633,13 @@ function spamEvents() {
     var ev = SPAM_POOL[Math.floor(Math.random() * SPAM_POOL.length)];
     addEvent(ev[0], ev[1]);
     i++;
-    setTimeout(next, 85);
+    setTimeout(next, 110);
   }
   next();
 }
 
-function clearStrip() {
-  document.getElementById('strip-track').innerHTML = '';
+function clearCol() {
+  document.getElementById('event-col-track').innerHTML = '';
 }
 </script>
 </body>
