@@ -20,326 +20,274 @@ html, body {
   background: #0e0c18;
   font-family: 'IBM Plex Mono', monospace;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 80px;
-  gap: 48px;
+  display: flex; flex-direction: column; align-items: center;
+  padding-top: 80px; gap: 48px;
 }
 
 /* ══════════════════════════════════════
    TOP BAR
+   Grid: [breadcrumb 1fr] [title auto] [menu 1fr]
+   → center is always truly centered, never overlaps sides
 ══════════════════════════════════════ */
 .topbar {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 100;
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   height: 44px;
   background: rgba(5,4,10,.97);
   backdrop-filter: blur(16px) saturate(.8);
   -webkit-backdrop-filter: blur(16px) saturate(.8);
   border-bottom: 1px solid rgba(201,156,90,.08);
-  display: flex;
+  /* 3-col grid: sides take equal space, center is content-sized */
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  padding: 0 16px;
+  padding: 0 12px;
   gap: 0;
 }
 
-/* breadcrumb */
+/* ── LEFT: breadcrumb ── */
 .bc {
-  display: flex;
-  align-items: center;
-  gap: 0;
-  flex: 1;
+  display: flex; align-items: center;
+  /* overflow: visible so dropdowns aren't clipped */
+  overflow: visible;
   min-width: 0;
-  overflow: hidden;
 }
 
-/* single breadcrumb segment */
 .bc-seg {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 10px;
-  border-radius: 3px;
-  cursor: pointer;
-  position: relative;
-  flex-shrink: 0;
-  transition: background .22s;
-  text-decoration: none;
+  display: flex; align-items: center;
+  padding: 0 9px; height: 44px;
+  border-radius: 3px; cursor: pointer;
+  position: relative; flex-shrink: 0;
+  transition: background .2s;
+  /* ensure dropdown escapes any ancestor clip */
+  isolation: isolate;
 }
-.bc-seg:hover {
-  background: rgba(201,156,90,.06);
-}
+.bc-seg:hover    { background: rgba(201,156,90,.055); }
+.bc-seg.active   { background: rgba(201,156,90,.04); }
 
-/* label above name (tiny) */
+.bc-inner { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+
 .bc-label {
   font-family: 'IBM Plex Mono', monospace;
-  font-size: 7px;
-  letter-spacing: .22em;
-  text-transform: uppercase;
-  color: var(--gold);
-  opacity: .38;
-  display: block;
-  line-height: 1;
-  margin-bottom: 2px;
-  transition: opacity .22s;
+  font-size: 7px; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--gold); opacity: .35; line-height: 1;
+  transition: opacity .2s; white-space: nowrap;
 }
-.bc-seg:hover .bc-label { opacity: .7; }
-.bc-seg.active .bc-label { opacity: .65; color: var(--gold); }
+.bc-seg:hover .bc-label { opacity: .65; }
+.bc-seg.active .bc-label { opacity: .6; }
 
-/* name */
 .bc-name {
   font-family: 'Cinzel', serif;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: .04em;
-  color: var(--muted);
-  opacity: .45;
-  white-space: nowrap;
-  transition: color .22s, opacity .22s;
-  line-height: 1;
+  font-size: 11px; font-weight: 700; letter-spacing: .04em;
+  color: var(--muted); opacity: .42; line-height: 1;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  max-width: 130px;
+  transition: color .2s, opacity .2s;
 }
-.bc-seg:hover .bc-name { color: var(--text); opacity: .75; }
+.bc-seg:hover .bc-name  { color: var(--text); opacity: .78; }
 .bc-seg.active .bc-name { color: var(--gold2); opacity: .9; }
 
-/* active underline glow */
+/* gold underline on active scene */
 .bc-seg.active::after {
   content: '';
-  position: absolute;
-  bottom: 2px; left: 10px; right: 10px;
-  height: 1px;
+  position: absolute; bottom: 5px; left: 9px; right: 9px; height: 1px;
   background: linear-gradient(to right, transparent, var(--gold), transparent);
-  opacity: .5;
+  opacity: .45;
 }
 
 /* separator */
 .bc-sep {
-  font-size: 10px;
-  color: var(--gold);
-  opacity: .18;
-  flex-shrink: 0;
-  padding: 0 2px;
-  user-select: none;
-  letter-spacing: 0;
+  font-size: 9px; color: var(--gold); opacity: .16;
+  flex-shrink: 0; padding: 0 1px; user-select: none;
 }
 
-/* ── CENTER TITLE ── */
-.topbar-center {
+/* ── DROPDOWN ── */
+.bc-dropdown {
   position: absolute;
-  left: 50%; top: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  pointer-events: none;
-  white-space: nowrap;
+  top: 100%; left: 0;
+  min-width: 210px;
+  background: rgba(5,4,10,.99);
+  border: 1px solid rgba(201,156,90,.11);
+  border-radius: 4px; padding: 6px 0;
+  /* above everything, escape grid/flex clips */
+  z-index: 9999;
+  opacity: 0; pointer-events: none;
+  transform: translateY(-4px);
+  transition: opacity .18s ease, transform .18s ease;
+  box-shadow: 0 10px 36px rgba(0,0,0,.7), 0 0 0 1px rgba(201,156,90,.04);
 }
-.tc-situation {
+/* show on hover or keyboard focus */
+.bc-seg:hover    .bc-dropdown { opacity: 1; pointer-events: all; transform: translateY(0); }
+.bc-seg:focus-within .bc-dropdown { opacity: 1; pointer-events: all; transform: translateY(0); }
+
+.dd-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 6px 13px; cursor: pointer;
+  transition: background .16s;
+}
+.dd-item:hover   { background: rgba(201,156,90,.06); }
+.dd-item.current { background: rgba(201,156,90,.04); }
+
+.dd-id {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 7px; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--gold); opacity: .45; flex-shrink: 0; width: 30px;
+}
+.dd-item.current .dd-id { opacity: .85; }
+.dd-item.locked  .dd-id { opacity: .18; }
+
+.dd-name {
+  font-family: 'Cinzel', serif; font-size: 10px; font-weight: 700;
+  letter-spacing: .03em; color: var(--muted); opacity: .45;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  max-width: 160px;
+}
+.dd-item.current .dd-name { color: var(--gold2); opacity: .88; }
+.dd-item.locked  .dd-name { opacity: .18; }
+
+.dd-dot {
+  width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; margin-left: auto;
+  background: rgba(184,176,198,.12); border: 1px solid rgba(184,176,198,.18);
+}
+.dd-item.done    .dd-dot { background: rgba(184,176,198,.38); border-color: rgba(184,176,198,.38); }
+.dd-item.current .dd-dot { background: var(--gold); border-color: var(--gold); box-shadow: 0 0 6px rgba(201,156,90,.5); }
+
+.dd-div { height: 1px; background: rgba(201,156,90,.06); margin: 4px 0; }
+
+/* ── CENTER: situation title ── */
+.topbar-center {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 2px; pointer-events: none;
+  padding: 0 16px;
+  min-width: 0; overflow: hidden;
+}
+.tc-title {
   font-family: 'Cinzel', serif;
-  font-size: 15px;
-  font-weight: 700;
-  letter-spacing: .08em;
-  color: var(--text);
-  opacity: .88;
-  line-height: 1;
-  transition: opacity .4s ease;
+  font-size: 14px; font-weight: 700; letter-spacing: .07em;
+  color: var(--text); opacity: .86; line-height: 1;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  max-width: 340px;
+  transition: color .35s, text-shadow .35s, opacity .35s;
 }
 .tc-mood {
   font-family: 'IBM Plex Mono', monospace;
-  font-size: 7px;
-  letter-spacing: .24em;
-  text-transform: uppercase;
-  color: var(--gold);
-  opacity: .38;
-  line-height: 1;
-}
-/* mood color variants */
-.topbar.mood-danger .tc-situation { color: var(--ember); text-shadow: 0 0 20px rgba(255,123,92,.3); }
-.topbar.mood-danger .tc-mood      { color: var(--ember); }
-.topbar.mood-safe   .tc-situation { color: var(--gold2); }
-.topbar.mood-safe   .tc-mood      { color: var(--gold); }
-
-/* hide center on very narrow screens */
-@media (max-width: 600px) { .topbar-center { display: none; } }
-
-/* right side */
-.topbar-right {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-shrink: 0;
-}
-
-.tb-btn {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 8px;
-  letter-spacing: .18em;
-  text-transform: uppercase;
-  color: var(--muted);
-  opacity: .35;
-  background: none;
-  border: 1px solid rgba(184,176,198,.1);
-  border-radius: 3px;
-  padding: 5px 11px;
-  cursor: pointer;
-  transition: opacity .22s, border-color .22s, color .22s;
+  font-size: 7px; letter-spacing: .24em; text-transform: uppercase;
+  color: var(--gold); opacity: .35; line-height: 1;
   white-space: nowrap;
+  transition: color .35s, opacity .35s;
 }
-.tb-btn:hover { opacity: .75; border-color: rgba(184,176,198,.28); color: var(--text); }
 
-/* ── DROPDOWN panel (hidden by default) ── */
-.bc-dropdown {
-  position: absolute;
-  top: calc(100% + 6px);
-  left: 0;
-  min-width: 200px;
-  background: rgba(5,4,10,.98);
-  border: 1px solid rgba(201,156,90,.12);
-  border-radius: 4px;
-  padding: 8px 0;
-  z-index: 200;
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(-6px);
-  transition: opacity .2s ease, transform .2s ease;
-  box-shadow: 0 8px 32px rgba(0,0,0,.6);
+/* mood tints */
+.topbar.mood-safe   .tc-title { color: var(--gold2); opacity: .9; }
+.topbar.mood-safe   .tc-mood  { color: var(--gold); opacity: .5; }
+.topbar.mood-danger .tc-title { color: var(--ember); opacity: .92; text-shadow: 0 0 18px rgba(255,123,92,.28); }
+.topbar.mood-danger .tc-mood  { color: var(--ember); opacity: .5; }
+
+/* ── RIGHT: hamburger ── */
+.topbar-right {
+  display: flex; align-items: center; justify-content: flex-end;
 }
-.bc-seg:hover .bc-dropdown,
-.bc-seg:focus-within .bc-dropdown {
-  opacity: 1;
-  pointer-events: all;
-  transform: translateY(0);
-}
-.dd-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 7px 14px;
+
+/* CSS-drawn 3-line hamburger */
+.hamburger {
+  width: 36px; height: 36px;
+  display: flex; flex-direction: column;
+  align-items: flex-end; justify-content: center;
+  gap: 5px;
+  background: none; border: none;
+  border-radius: 4px; padding: 8px 6px;
   cursor: pointer;
-  transition: background .18s;
+  transition: background .2s;
 }
-.dd-item:hover { background: rgba(201,156,90,.06); }
-.dd-item.current { background: rgba(201,156,90,.04); }
-.dd-id {
-  font-size: 7px; letter-spacing: .18em; text-transform: uppercase;
-  color: var(--gold); opacity: .5; flex-shrink: 0; width: 28px;
-}
-.dd-item.current .dd-id { opacity: .85; }
-.dd-name {
-  font-family: 'Cinzel', serif;
-  font-size: 10px; font-weight: 700; letter-spacing: .03em;
-  color: var(--muted); opacity: .5;
-}
-.dd-item.current .dd-name { color: var(--gold2); opacity: .85; }
-.dd-item.locked .dd-name { opacity: .2; }
-.dd-item.locked .dd-id   { opacity: .2; }
-.dd-dot {
-  width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0;
-  background: rgba(184,176,198,.15); border: 1px solid rgba(184,176,198,.2);
-  margin-left: auto;
-}
-.dd-item.done   .dd-dot { background: rgba(184,176,198,.4); border-color: rgba(184,176,198,.4); }
-.dd-item.current .dd-dot { background: var(--gold); border-color: var(--gold); box-shadow: 0 0 6px rgba(201,156,90,.5); }
+.hamburger:hover { background: rgba(184,176,198,.06); }
 
-/* divider inside dropdown */
-.dd-div { height: 1px; background: rgba(201,156,90,.06); margin: 5px 0; }
+.hamburger span {
+  display: block; height: 1.5px;
+  background: var(--muted); opacity: .38; border-radius: 1px;
+  transition: opacity .2s, width .2s, transform .2s;
+}
+.hamburger span:nth-child(1) { width: 18px; }
+.hamburger span:nth-child(2) { width: 14px; }
+.hamburger span:nth-child(3) { width: 10px; }
 
-/* ══════════════════════════════════════
-   MOBILE (< 520px): compact form
-══════════════════════════════════════ */
-@media (max-width: 520px) {
-  .bc-seg { padding: 4px 7px; }
-  .bc-label { display: none; }
-  .bc-name { font-size: 10px; }
-  /* hide canto + ep names, keep IDs only on very small */
+.hamburger:hover span         { opacity: .75; }
+.hamburger:hover span:nth-child(2) { width: 18px; }
+.hamburger:hover span:nth-child(3) { width: 18px; }
+
+/* open state (JS toggles .open) */
+.hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); width: 18px; opacity: .85; }
+.hamburger.open span:nth-child(2) { opacity: 0; width: 18px; }
+.hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); width: 18px; opacity: .85; }
+
+/* ══ MOBILE ══ */
+@media (max-width: 640px) {
+  .topbar-center { display: none; }
+}
+@media (max-width: 480px) {
   .bc-seg.canto .bc-name,
   .bc-seg.episode .bc-name { display: none; }
-  .bc-seg.canto  .bc-label,
-  .bc-seg.episode .bc-label { display: block; font-size: 8px; letter-spacing: .14em; }
+  .bc-seg.canto .bc-label,
+  .bc-seg.episode .bc-label { font-size: 9px; letter-spacing: .14em; }
 }
 
-/* ══════════════════════════════════════
-   DEMO PAGE CONTENT
-══════════════════════════════════════ */
-.demo-section {
-  width: 100%; max-width: 640px;
-  padding: 0 20px;
-}
-.demo-title {
-  font-size: 9px; letter-spacing: .22em; text-transform: uppercase;
-  color: var(--gold); opacity: .5; margin-bottom: 10px;
-}
-.demo-note {
-  font-size: 11px; line-height: 1.7; color: rgba(184,176,198,.45);
-}
-.demo-note code {
-  background: rgba(201,156,90,.08); border: 1px solid rgba(201,156,90,.15);
-  border-radius: 2px; padding: 1px 5px; font-size: 10px; color: var(--gold2);
-}
-.demo-variants { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
-.demo-bar-wrap {
-  border: 1px solid rgba(184,176,198,.07);
-  border-radius: 4px;
-  overflow: hidden;
-}
-.demo-bar-label {
+/* ══ DEMO PAGE ══ */
+.demo-section { width: 100%; max-width: 640px; padding: 0 20px; }
+.demo-title { font-size: 9px; letter-spacing: .22em; text-transform: uppercase; color: var(--gold); opacity: .5; margin-bottom: 10px; }
+.demo-note  { font-size: 11px; line-height: 1.7; color: rgba(184,176,198,.45); }
+.demo-note code { background: rgba(201,156,90,.08); border: 1px solid rgba(201,156,90,.15); border-radius: 2px; padding: 1px 5px; font-size: 10px; color: var(--gold2); }
+.demo-variants { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
+.demo-bar-wrap { border: 1px solid rgba(184,176,198,.07); border-radius: 4px; overflow: hidden; }
+.demo-bar-label { font-size: 8px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); opacity: .3; padding: 6px 12px 4px; background: rgba(5,4,10,.4); border-bottom: 1px solid rgba(184,176,198,.04); }
+.demo-btns { padding: 10px 12px; background: rgba(5,4,10,.3); display: flex; gap: 7px; flex-wrap: wrap; }
+.tb-btn {
+  font-family: 'IBM Plex Mono', monospace;
   font-size: 8px; letter-spacing: .16em; text-transform: uppercase;
-  color: var(--muted); opacity: .3; padding: 6px 12px 4px;
-  background: rgba(5,4,10,.4);
-  border-bottom: 1px solid rgba(184,176,198,.04);
+  color: var(--muted); opacity: .4; background: none;
+  border: 1px solid rgba(184,176,198,.1); border-radius: 3px;
+  padding: 5px 11px; cursor: pointer;
+  transition: opacity .2s, border-color .2s, color .2s;
 }
-.placeholder-area {
-  background: rgba(5,4,10,.3);
-  height: 120px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 9px; letter-spacing: .15em; text-transform: uppercase;
-  color: rgba(184,176,198,.2);
-}
+.tb-btn:hover { opacity: .8; border-color: rgba(184,176,198,.28); color: var(--text); }
 </style>
 </head>
 <body>
 
-<!-- ══ THE TOP BAR ══ -->
-<div class="topbar">
+<!-- ══ TOP BAR ══ -->
+<div class="topbar mood-safe" id="topbar">
+
+  <!-- LEFT: breadcrumb -->
   <div class="bc">
 
-    <!-- CANTO -->
     <div class="bc-seg canto" tabindex="0">
-      <div>
+      <div class="bc-inner">
         <span class="bc-label">Canto I</span>
         <span class="bc-name">The Red Line</span>
       </div>
-      <!-- dropdown: cantos list -->
       <div class="bc-dropdown">
         <div class="dd-item current">
-          <span class="dd-id">C·I</span>
+          <span class="dd-id">C&middot;I</span>
           <span class="dd-name">The Red Line</span>
           <span class="dd-dot current"></span>
         </div>
         <div class="dd-item locked">
-          <span class="dd-id">C·II</span>
+          <span class="dd-id">C&middot;II</span>
           <span class="dd-name">The Broken Earth</span>
           <span class="dd-dot"></span>
         </div>
         <div class="dd-item locked">
-          <span class="dd-id">C·III</span>
+          <span class="dd-id">C&middot;III</span>
           <span class="dd-name">The Contract</span>
           <span class="dd-dot"></span>
         </div>
       </div>
     </div>
 
-    <span class="bc-sep">›</span>
+    <span class="bc-sep">&#x203a;</span>
 
-    <!-- EPISODE -->
     <div class="bc-seg episode" tabindex="0">
-      <div>
+      <div class="bc-inner">
         <span class="bc-label">Episode 1</span>
         <span class="bc-name">Null Meridian</span>
       </div>
-      <!-- dropdown: episodes in this canto -->
       <div class="bc-dropdown">
         <div class="dd-item current">
           <span class="dd-id">EP.1</span>
@@ -359,15 +307,13 @@ html, body {
       </div>
     </div>
 
-    <span class="bc-sep">›</span>
+    <span class="bc-sep">&#x203a;</span>
 
-    <!-- SCENE — active -->
     <div class="bc-seg scene active" tabindex="0">
-      <div>
+      <div class="bc-inner">
         <span class="bc-label">Scene A1</span>
         <span class="bc-name">Waking</span>
       </div>
-      <!-- dropdown: scenes in this episode -->
       <div class="bc-dropdown">
         <div class="dd-item done">
           <span class="dd-id">PRO</span>
@@ -405,49 +351,62 @@ html, body {
 
   </div>
 
-  <!-- center situation title -->
+  <!-- CENTER: situation title -->
   <div class="topbar-center">
-    <span class="tc-situation" id="tc-title">Waking in the Null Meridian</span>
-    <span class="tc-mood" id="tc-mood">Safe &middot; Explore</span>
+    <span class="tc-title" id="tc-title">Waking in the Null Meridian</span>
+    <span class="tc-mood"  id="tc-mood">Safe &middot; Explore</span>
   </div>
 
-  <!-- right controls -->
+  <!-- RIGHT: hamburger -->
   <div class="topbar-right">
-    <button class="tb-btn">&#x2630;&nbsp; Menu</button>
+    <button class="hamburger" id="hamburger" onclick="this.classList.toggle('open')" aria-label="Menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
   </div>
+
 </div>
 
-<!-- ══ DEMO PAGE ══ -->
+<!-- ══ DEMO ══ -->
 <div class="demo-section">
-  <div class="demo-title">Top Bar · Component Demo</div>
+  <div class="demo-title">Top Bar &middot; Component Demo</div>
   <div class="demo-note">
-    Hover each breadcrumb segment to see the dropdown.<br>
-    Structure: <code>Canto</code> › <code>Episode</code> › <code>Scene</code><br>
-    Active scene highlighted in gold. Locked items dimmed.
+    Hover breadcrumb segments &rarr; dropdown.<br>
+    Hamburger jobbra: kattints &rarr; X-re v&aacute;lt.<br>
+    Center cím: mindig pontosan k&ouml;z&eacute;pen, grid-del (nem absolute).
   </div>
 </div>
 
 <div class="demo-section">
-  <div class="demo-title">Situation title váltó — kattints</div>
+  <div class="demo-title">Situation title &mdash; kattints</div>
   <div class="demo-variants">
 
     <div class="demo-bar-wrap">
       <div class="demo-bar-label">Safe / Explore</div>
-      <div style="padding:10px 12px;background:rgba(5,4,10,.3);display:flex;gap:8px;flex-wrap:wrap;">
-        <button class="tb-btn" onclick="setScene('Waking in the Null Meridian','Safe · Explore','safe')">Null Meridian</button>
-        <button class="tb-btn" onclick="setScene('Campfire at the Wreck','Rest · Safe','safe')">Campfire</button>
-        <button class="tb-btn" onclick="setScene('Sundown Saloon','Social · Explore','safe')">Saloon</button>
-        <button class="tb-btn" onclick="setScene('Boarding the Red Line','Discovery · Safe','safe')">Boarding</button>
+      <div class="demo-btns">
+        <button class="tb-btn" onclick="set('Waking in the Null Meridian','Safe &middot; Explore','safe')">Null Meridian</button>
+        <button class="tb-btn" onclick="set('Campfire at the Wreck','Rest &middot; Safe','safe')">Campfire</button>
+        <button class="tb-btn" onclick="set('Sundown Saloon','Social &middot; Explore','safe')">Saloon</button>
+        <button class="tb-btn" onclick="set('Boarding the Red Line','Discovery &middot; Safe','safe')">Boarding</button>
       </div>
     </div>
 
     <div class="demo-bar-wrap">
       <div class="demo-bar-label">Danger / Combat</div>
-      <div style="padding:10px 12px;background:rgba(5,4,10,.3);display:flex;gap:8px;flex-wrap:wrap;">
-        <button class="tb-btn" onclick="setScene('Bandit Ambush','Combat · Deadly','danger')">Bandit Ambush</button>
-        <button class="tb-btn" onclick="setScene('Chaos Surge — Unstable','Timed · Deadly','danger')">Chaos Surge</button>
-        <button class="tb-btn" onclick="setScene('Engine Room on Fire','Timed · Deadly','danger')">Fire</button>
-        <button class="tb-btn" onclick="setScene('Devil\'s Mercy — Final Print','Deadly · Last Chance','danger')">Devil's Mercy</button>
+      <div class="demo-btns">
+        <button class="tb-btn" onclick="set('Bandit Ambush','Combat &middot; Deadly','danger')">Bandit Ambush</button>
+        <button class="tb-btn" onclick="set('Chaos Surge &mdash; Unstable','Timed &middot; Deadly','danger')">Chaos Surge</button>
+        <button class="tb-btn" onclick="set('Engine Room on Fire','Timed &middot; Deadly','danger')">Engine Fire</button>
+        <button class="tb-btn" onclick="set('Devil\'s Mercy &mdash; Final Print','Deadly &middot; Last Chance','danger')">Devil&apos;s Mercy</button>
+      </div>
+    </div>
+
+    <div class="demo-bar-wrap">
+      <div class="demo-bar-label">Adversarial: extr&eacute;m hossz&uacute; c&iacute;m</div>
+      <div class="demo-btns">
+        <button class="tb-btn" onclick="set('The Last Train to the End of All Known Worlds','Very Long Title Test','safe')">Nagyon hossz&uacute;</button>
+        <button class="tb-btn" onclick="set('X','A','safe')">Nagyon r&ouml;vid</button>
       </div>
     </div>
 
@@ -455,13 +414,12 @@ html, body {
 </div>
 
 <script>
-var bar = document.querySelector('.topbar');
-function setScene(title, mood, type) {
-  document.getElementById('tc-title').textContent = title;
-  document.getElementById('tc-mood').textContent  = mood;
+var bar = document.getElementById('topbar');
+function set(title, mood, type) {
+  document.getElementById('tc-title').innerHTML = title;
+  document.getElementById('tc-mood').innerHTML  = mood;
   bar.className = 'topbar mood-' + type;
 }
 </script>
-
 </body>
 </html>
