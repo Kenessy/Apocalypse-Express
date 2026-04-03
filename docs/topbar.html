@@ -124,6 +124,46 @@ html, body {
   letter-spacing: 0;
 }
 
+/* ── CENTER TITLE ── */
+.topbar-center {
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.tc-situation {
+  font-family: 'Cinzel', serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  color: var(--text);
+  opacity: .88;
+  line-height: 1;
+  transition: opacity .4s ease;
+}
+.tc-mood {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 7px;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: .38;
+  line-height: 1;
+}
+/* mood color variants */
+.topbar.mood-danger .tc-situation { color: var(--ember); text-shadow: 0 0 20px rgba(255,123,92,.3); }
+.topbar.mood-danger .tc-mood      { color: var(--ember); }
+.topbar.mood-safe   .tc-situation { color: var(--gold2); }
+.topbar.mood-safe   .tc-mood      { color: var(--gold); }
+
+/* hide center on very narrow screens */
+@media (max-width: 600px) { .topbar-center { display: none; } }
+
 /* right side */
 .topbar-right {
   display: flex;
@@ -365,6 +405,12 @@ html, body {
 
   </div>
 
+  <!-- center situation title -->
+  <div class="topbar-center">
+    <span class="tc-situation" id="tc-title">Waking in the Null Meridian</span>
+    <span class="tc-mood" id="tc-mood">Safe &middot; Explore</span>
+  </div>
+
   <!-- right controls -->
   <div class="topbar-right">
     <button class="tb-btn">&#x2630;&nbsp; Menu</button>
@@ -382,9 +428,40 @@ html, body {
 </div>
 
 <div class="demo-section">
-  <div class="demo-title">Context az oldalon belül</div>
-  <div class="placeholder-area">[ játék tartalma ide jön ]</div>
+  <div class="demo-title">Situation title váltó — kattints</div>
+  <div class="demo-variants">
+
+    <div class="demo-bar-wrap">
+      <div class="demo-bar-label">Safe / Explore</div>
+      <div style="padding:10px 12px;background:rgba(5,4,10,.3);display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="tb-btn" onclick="setScene('Waking in the Null Meridian','Safe · Explore','safe')">Null Meridian</button>
+        <button class="tb-btn" onclick="setScene('Campfire at the Wreck','Rest · Safe','safe')">Campfire</button>
+        <button class="tb-btn" onclick="setScene('Sundown Saloon','Social · Explore','safe')">Saloon</button>
+        <button class="tb-btn" onclick="setScene('Boarding the Red Line','Discovery · Safe','safe')">Boarding</button>
+      </div>
+    </div>
+
+    <div class="demo-bar-wrap">
+      <div class="demo-bar-label">Danger / Combat</div>
+      <div style="padding:10px 12px;background:rgba(5,4,10,.3);display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="tb-btn" onclick="setScene('Bandit Ambush','Combat · Deadly','danger')">Bandit Ambush</button>
+        <button class="tb-btn" onclick="setScene('Chaos Surge — Unstable','Timed · Deadly','danger')">Chaos Surge</button>
+        <button class="tb-btn" onclick="setScene('Engine Room on Fire','Timed · Deadly','danger')">Fire</button>
+        <button class="tb-btn" onclick="setScene('Devil\'s Mercy — Final Print','Deadly · Last Chance','danger')">Devil's Mercy</button>
+      </div>
+    </div>
+
+  </div>
 </div>
+
+<script>
+var bar = document.querySelector('.topbar');
+function setScene(title, mood, type) {
+  document.getElementById('tc-title').textContent = title;
+  document.getElementById('tc-mood').textContent  = mood;
+  bar.className = 'topbar mood-' + type;
+}
+</script>
 
 </body>
 </html>
