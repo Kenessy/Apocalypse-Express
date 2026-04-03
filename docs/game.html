@@ -1,0 +1,644 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Apocalypse Express · Play</title>
+  <meta name="description" content="Scene A1 — Waking in the Null Meridian">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Inter:wght@300;400;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --void:    #05040a;
+      --surface: #0b0e16;
+      --purple:  #4c2b70;
+      --purple2: #a38bcf;
+      --gold:    #c99c5a;
+      --gold2:   #e6cfa1;
+      --cyan:    #28bdd8;
+      --ember:   #ff7b5c;
+      --text:    #f8f5f0;
+      --muted:   #b8b0c6;
+      --prose:   #c2bcc8;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--void);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      overflow: hidden;
+    }
+
+    /* ══ STATS BAR ══ */
+    #stats-bar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+      height: 40px;
+      background: rgba(5,4,10,.94);
+      backdrop-filter: blur(12px) saturate(.7);
+      -webkit-backdrop-filter: blur(12px) saturate(.7);
+      border-bottom: 1px solid rgba(201,156,90,.08);
+      display: flex; align-items: center;
+      padding: 0 16px; gap: 10px;
+    }
+    .stat-group { display: flex; align-items: center; gap: 6px; }
+    .stat-lbl {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 8px; letter-spacing: .2em; text-transform: uppercase;
+      color: var(--gold); opacity: .5;
+    }
+    .stat-offline {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 7px; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--muted); opacity: .25;
+    }
+    .stat-sep { width: 1px; height: 16px; background: rgba(184,176,198,.1); margin: 0 4px; }
+    .stat-val { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); opacity: .35; }
+    .stat-spacer { flex: 1; }
+    .inv-btn {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 8px; letter-spacing: .18em; text-transform: uppercase;
+      color: var(--muted); opacity: .35; background: none;
+      border: 1px solid rgba(184,176,198,.12); border-radius: 3px;
+      padding: 4px 10px; cursor: pointer;
+      transition: opacity .3s, border-color .3s, color .3s;
+    }
+    .inv-btn:hover { opacity: .75; border-color: rgba(184,176,198,.3); color: var(--text); }
+
+    /* ══ SCENE LAYOUT ══ */
+    #game { width: 100%; height: 100%; position: relative; }
+
+    .scene-layout {
+      display: flex; flex-direction: column;
+      width: 100%; height: 100%;
+      padding-top: 40px;
+      background: #02010a;
+    }
+
+    /* art panel */
+    .scene-art {
+      flex-shrink: 0; height: 36vh; min-height: 140px;
+      background: url('assets/img/a1-null-meridian.webp') center 30% / cover no-repeat;
+      position: relative;
+    }
+    .scene-art::after {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(to bottom, rgba(2,1,10,.55) 0%, rgba(2,1,10,.05) 30%, transparent 55%, rgba(2,1,10,.97) 100%),
+        linear-gradient(to right,  rgba(2,1,10,.30) 0%, transparent 20%, transparent 80%, rgba(2,1,10,.30) 100%);
+    }
+
+    /* header on art */
+    .scene-header {
+      position: absolute; top: 0; left: 0; right: 0; z-index: 5;
+      display: flex; justify-content: space-between; align-items: flex-start;
+      padding: 14px 18px 0;
+    }
+    .scene-chapter {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px; letter-spacing: .2em; text-transform: uppercase;
+      color: var(--gold); opacity: .4;
+    }
+    .scene-title {
+      font-family: 'Cinzel', serif; font-size: 15px; font-weight: 700;
+      color: var(--text); opacity: .7; letter-spacing: .04em; margin-top: 4px;
+    }
+    .scene-pips { display: flex; gap: 6px; align-items: center; padding-top: 4px; }
+    .scene-pip {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: rgba(184,176,198,.12); border: 1px solid rgba(184,176,198,.18);
+      transition: background .4s, border-color .4s, box-shadow .4s;
+    }
+    .scene-pip.done { background: rgba(184,176,198,.35); border-color: rgba(184,176,198,.35); }
+    .scene-pip.unlock { background: var(--gold); border-color: var(--gold); opacity: .7; box-shadow: 0 0 7px rgba(201,156,90,.35); }
+
+    /* divider */
+    .scene-divider {
+      flex-shrink: 0; height: 1px; position: relative;
+      background: linear-gradient(to right, transparent 5%, rgba(201,156,90,.12) 20%, rgba(201,156,90,.28) 50%, rgba(201,156,90,.12) 80%, transparent 95%);
+    }
+    .expand-btn {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+      z-index: 10; width: 28px; height: 28px; background: #02010a;
+      border: 1px solid rgba(201,156,90,.22); border-radius: 6px;
+      color: var(--gold); font-size: 11px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      opacity: .4; transition: opacity .3s, border-color .3s;
+    }
+    .expand-btn:hover { opacity: .8; border-color: rgba(201,156,90,.5); }
+
+    /* scrollable body */
+    .scene-body {
+      flex: 1; min-height: 0; overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 22px 20px 0;
+      display: flex; flex-direction: column; align-items: center;
+      mask-image: linear-gradient(to bottom, transparent 0%, black 14px, black 100%);
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 14px, black 100%);
+    }
+
+    /* narrator tag */
+    .narrator-tag { width: 100%; max-width: 580px; margin-bottom: 14px; }
+    .narrator-label {
+      display: inline-block;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 8px; letter-spacing: .2em; text-transform: uppercase;
+      color: var(--ember);
+      border: 1px solid rgba(255,123,92,.2); background: rgba(255,123,92,.06);
+      padding: 3px 10px; border-radius: 999px; opacity: .75;
+    }
+
+    /* story text */
+    .scene-text { max-width: 580px; width: 100%; font-size: 15px; line-height: 1.82; color: var(--prose); }
+    .scene-text p {
+      margin-bottom: 1em;
+      opacity: 0; transform: translateY(7px);
+      transition: opacity .55s ease, transform .55s ease;
+    }
+    .scene-text p.vis { opacity: 1; transform: translateY(0); }
+    .scene-text em { color: var(--text); font-style: italic; }
+
+    /* emotion picker */
+    .emotion-q {
+      max-width: 580px; width: 100%;
+      font-family: 'Cinzel', serif; font-size: 13px; font-style: italic;
+      color: var(--gold2); opacity: 0; text-align: center;
+      margin: 6px 0 14px; transition: opacity .5s ease;
+    }
+    .emotion-q.vis { opacity: .8; }
+    .emotion-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 8px; max-width: 380px; width: 100%;
+      margin: 0 auto 20px; opacity: 0; transition: opacity .5s ease;
+    }
+    .emotion-grid.vis { opacity: 1; }
+    .emotion-btn {
+      background: rgba(5,4,10,.75); border: 1px solid rgba(163,139,207,.15);
+      border-radius: 4px; padding: 11px 8px;
+      font-family: 'Cinzel', serif; font-size: 11px; font-weight: 700;
+      letter-spacing: .06em; text-transform: uppercase; color: var(--muted); cursor: pointer;
+      transition: border-color .3s, background .3s, color .3s;
+    }
+    .emotion-btn:hover { border-color: rgba(163,139,207,.44); background: rgba(76,43,112,.2); color: var(--text); }
+
+    /* choices */
+    .scene-choices { width: 100%; max-width: 580px; margin-top: 20px; flex-shrink: 0; opacity: 0; transition: opacity .55s ease; }
+    .scene-choices.vis { opacity: 1; }
+    .choices-lbl {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 8px; letter-spacing: .22em; text-transform: uppercase;
+      color: var(--muted); opacity: .28; margin-bottom: 10px; text-align: center;
+    }
+    .choices-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    @media (max-width: 400px) { .choices-grid { grid-template-columns: 1fr; } }
+
+    .choice-card {
+      background: rgba(5,4,10,.65); border: 1px solid rgba(163,139,207,.18);
+      border-radius: 4px; padding: 14px 12px 12px;
+      cursor: pointer; text-align: left; position: relative; overflow: hidden;
+      transition: border-color .3s, background .3s, box-shadow .3s, transform .15s;
+    }
+    .choice-card::before {
+      content: ''; position: absolute; inset: 4px;
+      border: 1px solid rgba(163,139,207,.06); border-radius: 2px; pointer-events: none;
+    }
+    .choice-card:hover { border-color: rgba(163,139,207,.44); background: rgba(76,43,112,.18); box-shadow: 0 0 22px rgba(76,43,112,.2); }
+    .choice-card:active { transform: scale(.97); }
+    .choice-card.done { opacity: .48; }
+    .choice-card.done::after {
+      content: '✓'; position: absolute; top: 8px; right: 9px;
+      font-size: 9px; color: var(--purple2); opacity: .55;
+    }
+    .choice-card.decide { border-color: rgba(201,156,90,.2); animation: pulse-decide 3s ease-in-out infinite; }
+    .choice-card.decide::before { border-color: rgba(201,156,90,.07); }
+    .choice-card.decide:hover { border-color: rgba(201,156,90,.55); background: rgba(201,156,90,.1); box-shadow: 0 0 28px rgba(201,156,90,.18); }
+    @keyframes pulse-decide {
+      0%,100% { box-shadow: 0 0 0 rgba(201,156,90,0); }
+      50%      { box-shadow: 0 0 14px rgba(201,156,90,.1); }
+    }
+
+    .c-icon { display: block; font-size: 15px; opacity: .45; margin-bottom: 9px; color: var(--purple2); }
+    .choice-card.decide .c-icon { color: var(--gold); }
+    .c-type { font-family: 'IBM Plex Mono', monospace; font-size: 7px; letter-spacing: .2em; text-transform: uppercase; color: var(--purple2); opacity: .4; margin-bottom: 7px; }
+    .choice-card.decide .c-type { color: var(--gold); }
+    .c-label { font-family: 'Cinzel', serif; font-size: 11px; font-weight: 700; letter-spacing: .05em; color: var(--muted); line-height: 1.4; }
+    .choice-card:hover .c-label { color: var(--text); }
+    .choice-card:hover .c-icon  { opacity: .82; }
+
+    /* back button */
+    .back-btn {
+      display: none; margin: 22px auto 0;
+      background: none; border: 1px solid rgba(184,176,198,.1); border-radius: 3px;
+      padding: 9px 20px;
+      font-family: 'IBM Plex Mono', monospace; font-size: 8px; letter-spacing: .18em; text-transform: uppercase;
+      color: var(--muted); opacity: .38; cursor: pointer;
+      transition: opacity .3s, border-color .3s, color .3s;
+    }
+    .back-btn:hover { opacity: .8; border-color: rgba(184,176,198,.3); color: var(--text); }
+    .back-btn.vis { display: flex; align-items: center; gap: 6px; }
+
+    /* footer */
+    .scene-footer {
+      flex-shrink: 0;
+      padding: 28px 0 calc(20px + env(safe-area-inset-bottom,0px));
+      text-align: center;
+      font-family: 'IBM Plex Mono', monospace; font-size: 7px; letter-spacing: .18em; text-transform: uppercase;
+      color: var(--muted); opacity: .13;
+    }
+
+    /* fullscreen */
+    .scene-layout.fs .scene-art,
+    .scene-layout.fs .scene-divider { display: none; }
+    .scene-layout.fs .scene-body    { padding-top: 14px; mask-image: none; -webkit-mask-image: none; }
+    .scene-layout.fs .scene-choices { display: none; }
+    .scene-layout.fs .scene-footer  { display: none; }
+    .scene-layout.fs .scene-close   { display: flex; }
+
+    .scene-close {
+      display: none; flex-shrink: 0;
+      align-items: center; justify-content: center; gap: 7px;
+      padding: 18px 0 calc(18px + env(safe-area-inset-bottom,0px));
+      background: none; border: none; cursor: pointer;
+      font-family: 'IBM Plex Mono', monospace; font-size: 8px; letter-spacing: .18em; text-transform: uppercase;
+      color: var(--gold); opacity: .35; transition: opacity .3s;
+    }
+    .scene-close:hover { opacity: .7; }
+
+    /* ══ INVENTORY DRAWER ══ */
+    #inv-drawer {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
+      background: rgba(5,4,10,.97);
+      border-top: 1px solid rgba(201,156,90,.1);
+      padding: 18px 20px calc(18px + env(safe-area-inset-bottom,0px));
+      transform: translateY(100%);
+      transition: transform .35s cubic-bezier(.4,0,.2,1);
+    }
+    #inv-drawer.open { transform: translateY(0); }
+    .inv-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .inv-title { font-family: 'Cinzel', serif; font-size: 13px; font-weight: 700; letter-spacing: .07em; color: var(--gold2); opacity: .65; }
+    .inv-x { background: none; border: none; color: var(--muted); opacity: .4; cursor: pointer; font-size: 14px; padding: 4px; transition: opacity .3s; }
+    .inv-x:hover { opacity: .8; }
+    .inv-status { font-family: 'IBM Plex Mono', monospace; font-size: 8px; letter-spacing: .18em; text-transform: uppercase; color: var(--ember); opacity: .38; margin-bottom: 14px; }
+    .inv-slots { display: grid; grid-template-columns: repeat(6,1fr); gap: 6px; }
+    .inv-slot { aspect-ratio: 1; background: rgba(184,176,198,.025); border: 1px solid rgba(184,176,198,.06); border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 16px; opacity: .18; color: var(--muted); }
+
+    /* ══ TRANSITION OVERLAY ══ */
+    #overlay { position: fixed; inset: 0; z-index: 400; background: var(--void); opacity: 0; pointer-events: none; transition: opacity .4s ease; }
+    #overlay.on { opacity: 1; pointer-events: all; }
+  </style>
+</head>
+<body>
+
+<div id="overlay"></div>
+
+<div id="game">
+
+  <!-- STATS BAR -->
+  <div id="stats-bar">
+    <div class="stat-group">
+      <span class="stat-lbl">HP</span>
+      <span class="stat-offline">OFFLINE · NULL MERIDIAN</span>
+    </div>
+    <div class="stat-sep"></div>
+    <div class="stat-group">
+      <span class="stat-lbl">SD</span>
+      <span class="stat-val">—</span>
+    </div>
+    <div class="stat-spacer"></div>
+    <button class="inv-btn" onclick="toggleInv()">&#x2b21; CARGO</button>
+  </div>
+
+  <!-- SCENE LAYOUT -->
+  <div class="scene-layout" id="sl">
+
+    <div class="scene-art" id="art">
+      <div class="scene-header">
+        <div>
+          <div class="scene-chapter" id="s-chapter">CHAPTER A &middot; NULL MERIDIAN</div>
+          <div class="scene-title"   id="s-title">Waking</div>
+        </div>
+        <div class="scene-pips" id="s-pips"></div>
+      </div>
+    </div>
+
+    <div class="scene-divider">
+      <button class="expand-btn" onclick="toggleFS()" title="Reader mode">&#x229f;</button>
+    </div>
+
+    <div class="scene-body" id="s-body">
+
+      <div class="narrator-tag" id="n-tag">
+        <span class="narrator-label" id="n-label">READ ALOUD</span>
+      </div>
+
+      <div class="scene-text" id="s-text"></div>
+
+      <div class="emotion-q"    id="e-q">At the end, you were mostly &mdash;</div>
+      <div class="emotion-grid" id="e-grid">
+        <button class="emotion-btn" onclick="pickEmotion('angry')">Angry</button>
+        <button class="emotion-btn" onclick="pickEmotion('exhausted')">Exhausted</button>
+        <button class="emotion-btn" onclick="pickEmotion('resigned')">Resigned</button>
+        <button class="emotion-btn" onclick="pickEmotion('hopeful')">Hopeful</button>
+      </div>
+
+      <div class="scene-choices" id="s-choices">
+        <div class="choices-lbl" id="c-lbl">WHAT DO YOU DO?</div>
+        <div class="choices-grid" id="c-grid"></div>
+      </div>
+
+      <button class="back-btn" id="back-btn" onclick="goBack()">&#x2190; RETURN</button>
+
+      <div class="scene-footer">APOCALYPSE EXPRESS &middot; SCENE A1 &middot; ALPHA BUILD</div>
+    </div>
+
+    <button class="scene-close" onclick="toggleFS()">&#x25b2; CLOSE READER</button>
+
+  </div>
+
+  <!-- INVENTORY -->
+  <div id="inv-drawer">
+    <div class="inv-head">
+      <span class="inv-title">Cargo Pockets</span>
+      <button class="inv-x" onclick="toggleInv()">&#x2715;</button>
+    </div>
+    <div class="inv-status">DORMANT &mdash; Board the Train to unlock</div>
+    <div class="inv-slots">
+      <div class="inv-slot">&#x25a1;</div><div class="inv-slot">&#x25a1;</div>
+      <div class="inv-slot">&#x25a1;</div><div class="inv-slot">&#x25a1;</div>
+      <div class="inv-slot">&#x25a1;</div><div class="inv-slot">&#x25a1;</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ── STORY DATA ── */
+var S = {
+  start: {
+    id:'start', chapter:'CHAPTER A \u00b7 NULL MERIDIAN', title:'Waking',
+    narrator:'READ ALOUD',
+    text:[
+      'Cold nothing gives way to stone under your hands.',
+      'A circular platform hangs in open dark, its edge traced by a dull red glow. Around you, a few blurred shapes shudder and drag themselves upright \u2014 bodies half-formed, as if something is still deciding what you\u2019re all supposed to be.',
+      'You are not breathing. You have no heartbeat. But you are, somehow, <em>aware</em>.'
+    ],
+    choices:[
+      {id:'look',    icon:'\u25c8', type:'EXPLORE', label:'Look at yourself'},
+      {id:'edge',    icon:'\u25c9', type:'EXPLORE', label:'Walk to the edge'},
+      {id:'call',    icon:'\u25ce', type:'EXPLORE', label:'Call into the dark'},
+      {id:'memory',  icon:'\u25c7', type:'EXPLORE', label:'Search your memories'},
+      {id:'ability', icon:'\u2726', type:'EXPLORE', label:'Reach for your abilities'},
+      {id:'scan',    icon:'\u25d0', type:'EXPLORE', label:'Scan the void'}
+    ]
+  },
+  look:{
+    id:'look', title:'Form',
+    text:[
+      'You focus on your hands.',
+      'Your outline <em>flickers</em> \u2014 the self you remember, something stronger, something less. When you hold the right shape in mind it leans that way for a heartbeat, then blurs back into a generic shadow.',
+      'You reach toward another silhouette. Your fingers find cold, thick air. Not skin. Not nothing. Something in between.',
+      'You are a soul. The body is still being decided.'
+    ], back:'start'
+  },
+  edge:{
+    id:'edge', title:'The Rim',
+    text:[
+      'You walk toward the red glow.',
+      'Each step pushes against invisible resistance \u2014 the rim stays both close and unreachable. You step off anyway.',
+      'A single cold lurch into open dark. Then stone, exactly where you started.',
+      'Across the platform one of the shapes startles. From their angle you simply <em>blinked</em> from rim to centre. There was no fall. There was no <em>away</em>.',
+      'Space has made its opinion clear.'
+    ], back:'start'
+  },
+  call:{
+    id:'call', title:'Contact',
+    text:[
+      '\u201cHello?\u201d',
+      'Your voice carries <em>too cleanly</em>. Every syllable rings back from no direction, half a second late \u2014 the void politely returning what you threw at it.',
+      'The shapes look up. When they answer their voices sound normal. Contact between you is real.',
+      'Whatever is out there is not.',
+      'Beneath the silence the slow mechanical rhythm tightens for a moment \u2014 something <em>noticing</em> \u2014 then relaxes. It does not speak.'
+    ], back:'start'
+  },
+  memory:{
+    id:'memory', title:'Memory',
+    text:[
+      'You reach for your name.',
+      'There is a shape where it was. The letters will not resolve.',
+      'What comes through instead is <em>feeling</em> \u2014 the texture of your last moment. Not the scene. Just the colour of how it ended.'
+    ], emotion:true, back:'start'
+  },
+  ability:{
+    id:'ability', title:'Dormant',
+    text:[
+      'You reach for whatever it was you could do.',
+      'Something starts to gather \u2014 words, sigils, the tension before a storm. Muscle memory stirs. Then it <em>dissolves</em>, like the scene will not hold the weight of it.',
+      'A faint outline remains for a heartbeat: glow, sparks, the ghost of intent. Then nothing.',
+      'No cost. No backlash. No resource spent.',
+      'Whatever fuels that is somewhere else. Waiting for a body you do not have yet.'
+    ], back:'start'
+  },
+  scan:{
+    id:'scan', title:'The Line',
+    text:[
+      'You go still and look <em>harder</em>.',
+      'The void stays blank for a long time.',
+      'Then \u2014 on the edge of perception \u2014 two parallel lines of red, impossibly distant, like rails curving away into nothing. When you blink they are gone.',
+      'The mechanical rhythm sharpens. <em>Counting.</em> Or approaching.',
+      'You cannot tell if seconds or minutes are passing. You suspect the distinction may not apply here.',
+      'Something is coming.'
+    ], back:'start', unlock:true
+  },
+  obelisk:{
+    id:'obelisk', chapter:'CHAPTER A \u00b7 NULL MERIDIAN', title:'The Obelisk',
+    narrator:'READ ALOUD',
+    text:[
+      'The rhythm shifts.',
+      'A shape rises from the platform \u2014 you are certain it was not there before. An obelisk, perhaps, or something that has decided to look like one. Black stone. Engraved with marks you almost recognise.',
+      'Beside it: a clock with no hands.',
+      'Below the clock, face-down on the stone \u2014 a postcard.',
+      'The void has not changed. But something inside it has made an <em>appointment</em>.'
+    ],
+    choices:[{id:'end', icon:'\u2192', type:'DECIDE', label:'Approach the obelisk', decide:true}]
+  },
+  end:{
+    id:'end', title:'To Be Continued',
+    text:[
+      '<em>Scene A2 \u2014 Obelisk, Clock &amp; Postcards</em>',
+      'This scene is coming soon.'
+    ], final:true
+  }
+};
+
+var EMOTIONS = {
+  angry:     {label:'Anger',       text:'At the end you were <em>angry</em>. The kind that does not finish. You carried it past the threshold and here you are, still holding it.'},
+  exhausted: {label:'Exhaustion',  text:'At the end you were <em>exhausted</em>. The relief of stopping. Whatever it cost you had been paying it too long.'},
+  resigned:  {label:'Resignation', text:'At the end you were <em>resigned</em>. Not peace \u2014 something older and colder. You had known it was coming for a while.'},
+  hopeful:   {label:'Hope',        text:'At the end you were somehow <em>hopeful</em>. For something past the end of it. Strange, being here. You were right that there was something.'}
+};
+
+var EXPLORE_IDS = ['look','edge','call','memory','ability','scan'];
+
+/* ── STATE ── */
+var G = { cur:'start', hist:[], visited:{}, unlocked:false, emotionDone:false };
+
+/* ── NAVIGATE ── */
+function go(id, push) {
+  if (push === undefined) push = true;
+  if (push && G.cur !== id) G.hist.push(G.cur);
+  var ov = document.getElementById('overlay');
+  ov.classList.add('on');
+  setTimeout(function(){ G.cur = id; render(id); ov.classList.remove('on'); }, 320);
+}
+function goBack() { go(G.hist.pop() || 'start', false); }
+
+/* ── RENDER ── */
+function render(id) {
+  var node = S[id];
+  if (!node) return;
+
+  // mark visited
+  if (EXPLORE_IDS.indexOf(id) !== -1) {
+    G.visited[id] = true;
+    if (id === 'scan' || Object.keys(G.visited).length >= 3) G.unlocked = true;
+  }
+
+  // header
+  document.getElementById('s-chapter').textContent = node.chapter || 'CHAPTER A \u00b7 NULL MERIDIAN';
+  document.getElementById('s-title').textContent   = node.title || '';
+
+  buildPips(id);
+
+  // narrator
+  var ntag = document.getElementById('n-tag');
+  if (node.narrator) {
+    ntag.style.display = 'block';
+    document.getElementById('n-label').textContent = node.narrator;
+  } else { ntag.style.display = 'none'; }
+
+  buildText(node.text || []);
+
+  // emotion
+  var eq = document.getElementById('e-q');
+  var eg = document.getElementById('e-grid');
+  if (node.emotion && !G.emotionDone) {
+    eq.style.display = 'block'; eg.style.display = 'grid';
+    var d = (node.text.length * 190) + 600;
+    setTimeout(function(){ eq.classList.add('vis'); eg.classList.add('vis'); }, d);
+  } else {
+    eq.style.display = 'none'; eg.style.display = 'none';
+    eq.classList.remove('vis'); eg.classList.remove('vis');
+  }
+
+  buildChoices(node);
+  document.getElementById('s-body').scrollTop = 0;
+}
+
+function buildPips(id) {
+  var c = document.getElementById('s-pips');
+  c.innerHTML = '';
+  if (id !== 'start') return;
+  EXPLORE_IDS.forEach(function(eid){
+    var p = document.createElement('div');
+    p.className = 'scene-pip' + (G.visited[eid] ? ' done' : '');
+    c.appendChild(p);
+  });
+  var tp = document.createElement('div');
+  tp.className = 'scene-pip' + (G.unlocked ? ' unlock' : '');
+  c.appendChild(tp);
+}
+
+function buildText(lines) {
+  var c = document.getElementById('s-text');
+  c.innerHTML = '';
+  lines.forEach(function(line, i){
+    var p = document.createElement('p');
+    p.innerHTML = line;
+    c.appendChild(p);
+    setTimeout(function(){ p.classList.add('vis'); }, 80 + i * 190);
+  });
+}
+
+function buildChoices(node) {
+  var sc   = document.getElementById('s-choices');
+  var grid = document.getElementById('c-grid');
+  var lbl  = document.getElementById('c-lbl');
+  var back = document.getElementById('back-btn');
+
+  sc.classList.remove('vis');
+  back.classList.remove('vis');
+
+  if (node.choices && node.choices.length) {
+    lbl.style.display = 'block';
+    grid.innerHTML = '';
+
+    var list = node.choices.slice();
+    if (node.id === 'start' && G.unlocked) {
+      list.push({id:'obelisk', icon:'\u2605', type:'DECIDE', label:'Something has arrived', decide:true});
+    }
+
+    list.forEach(function(ch){
+      var btn = document.createElement('button');
+      btn.className = 'choice-card'
+        + (ch.decide ? ' decide' : '')
+        + (G.visited[ch.id] && !ch.decide ? ' done' : '');
+      btn.innerHTML = '<span class="c-icon">' + ch.icon + '</span>'
+        + '<div class="c-type">' + ch.type + '</div>'
+        + '<div class="c-label">' + ch.label + '</div>';
+      (function(cid){ btn.onclick = function(){ go(cid); }; })(ch.id);
+      grid.appendChild(btn);
+    });
+
+    var d = (node.text ? node.text.length * 190 + 350 : 350);
+    setTimeout(function(){ sc.classList.add('vis'); }, d);
+
+  } else if (node.back) {
+    lbl.style.display = 'none';
+    grid.innerHTML = '';
+    var d2 = (node.text ? node.text.length * 190 + 450 : 450);
+    setTimeout(function(){ back.classList.add('vis'); }, d2);
+
+  } else {
+    lbl.style.display = 'none';
+    grid.innerHTML = '';
+  }
+}
+
+/* ── EMOTION ── */
+function pickEmotion(key) {
+  G.emotionDone = true;
+  var e = EMOTIONS[key];
+
+  var eq = document.getElementById('e-q');
+  var eg = document.getElementById('e-grid');
+  eq.classList.remove('vis'); eg.classList.remove('vis');
+
+  setTimeout(function(){
+    eq.style.display = 'none'; eg.style.display = 'none';
+
+    var c = document.getElementById('s-text');
+    var p = document.createElement('p');
+    p.innerHTML = e.text;
+    p.style.color = 'var(--gold2)';
+    p.style.fontStyle = 'italic';
+    c.appendChild(p);
+    setTimeout(function(){ p.classList.add('vis'); }, 80);
+
+    setTimeout(function(){ document.getElementById('back-btn').classList.add('vis'); }, 600);
+    document.getElementById('s-title').textContent = e.label;
+  }, 380);
+}
+
+/* ── UI ── */
+function toggleInv() { document.getElementById('inv-drawer').classList.toggle('open'); }
+function toggleFS()  { document.getElementById('sl').classList.toggle('fs'); }
+
+/* ── INIT ── */
+document.addEventListener('DOMContentLoaded', function(){ render('start'); });
+</script>
+</body>
+</html>
