@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AE · Top Bar Demo</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --void:    #05040a;
+  --gold:    #c99c5a;
+  --gold2:   #e6cfa1;
+  --purple2: #a38bcf;
+  --ember:   #ff7b5c;
+  --text:    #f8f5f0;
+  --muted:   #b8b0c6;
+}
+html, body {
+  background: #0e0c18;
+  font-family: 'IBM Plex Mono', monospace;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 80px;
+  gap: 48px;
+}
+
+/* ══════════════════════════════════════
+   TOP BAR
+══════════════════════════════════════ */
+.topbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  height: 44px;
+  background: rgba(5,4,10,.97);
+  backdrop-filter: blur(16px) saturate(.8);
+  -webkit-backdrop-filter: blur(16px) saturate(.8);
+  border-bottom: 1px solid rgba(201,156,90,.08);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 0;
+}
+
+/* breadcrumb */
+.bc {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* single breadcrumb segment */
+.bc-seg {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+  transition: background .22s;
+  text-decoration: none;
+}
+.bc-seg:hover {
+  background: rgba(201,156,90,.06);
+}
+
+/* label above name (tiny) */
+.bc-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 7px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: .38;
+  display: block;
+  line-height: 1;
+  margin-bottom: 2px;
+  transition: opacity .22s;
+}
+.bc-seg:hover .bc-label { opacity: .7; }
+.bc-seg.active .bc-label { opacity: .65; color: var(--gold); }
+
+/* name */
+.bc-name {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  color: var(--muted);
+  opacity: .45;
+  white-space: nowrap;
+  transition: color .22s, opacity .22s;
+  line-height: 1;
+}
+.bc-seg:hover .bc-name { color: var(--text); opacity: .75; }
+.bc-seg.active .bc-name { color: var(--gold2); opacity: .9; }
+
+/* active underline glow */
+.bc-seg.active::after {
+  content: '';
+  position: absolute;
+  bottom: 2px; left: 10px; right: 10px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--gold), transparent);
+  opacity: .5;
+}
+
+/* separator */
+.bc-sep {
+  font-size: 10px;
+  color: var(--gold);
+  opacity: .18;
+  flex-shrink: 0;
+  padding: 0 2px;
+  user-select: none;
+  letter-spacing: 0;
+}
+
+/* right side */
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.tb-btn {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  opacity: .35;
+  background: none;
+  border: 1px solid rgba(184,176,198,.1);
+  border-radius: 3px;
+  padding: 5px 11px;
+  cursor: pointer;
+  transition: opacity .22s, border-color .22s, color .22s;
+  white-space: nowrap;
+}
+.tb-btn:hover { opacity: .75; border-color: rgba(184,176,198,.28); color: var(--text); }
+
+/* ── DROPDOWN panel (hidden by default) ── */
+.bc-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  min-width: 200px;
+  background: rgba(5,4,10,.98);
+  border: 1px solid rgba(201,156,90,.12);
+  border-radius: 4px;
+  padding: 8px 0;
+  z-index: 200;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-6px);
+  transition: opacity .2s ease, transform .2s ease;
+  box-shadow: 0 8px 32px rgba(0,0,0,.6);
+}
+.bc-seg:hover .bc-dropdown,
+.bc-seg:focus-within .bc-dropdown {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateY(0);
+}
+.dd-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 14px;
+  cursor: pointer;
+  transition: background .18s;
+}
+.dd-item:hover { background: rgba(201,156,90,.06); }
+.dd-item.current { background: rgba(201,156,90,.04); }
+.dd-id {
+  font-size: 7px; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--gold); opacity: .5; flex-shrink: 0; width: 28px;
+}
+.dd-item.current .dd-id { opacity: .85; }
+.dd-name {
+  font-family: 'Cinzel', serif;
+  font-size: 10px; font-weight: 700; letter-spacing: .03em;
+  color: var(--muted); opacity: .5;
+}
+.dd-item.current .dd-name { color: var(--gold2); opacity: .85; }
+.dd-item.locked .dd-name { opacity: .2; }
+.dd-item.locked .dd-id   { opacity: .2; }
+.dd-dot {
+  width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0;
+  background: rgba(184,176,198,.15); border: 1px solid rgba(184,176,198,.2);
+  margin-left: auto;
+}
+.dd-item.done   .dd-dot { background: rgba(184,176,198,.4); border-color: rgba(184,176,198,.4); }
+.dd-item.current .dd-dot { background: var(--gold); border-color: var(--gold); box-shadow: 0 0 6px rgba(201,156,90,.5); }
+
+/* divider inside dropdown */
+.dd-div { height: 1px; background: rgba(201,156,90,.06); margin: 5px 0; }
+
+/* ══════════════════════════════════════
+   MOBILE (< 520px): compact form
+══════════════════════════════════════ */
+@media (max-width: 520px) {
+  .bc-seg { padding: 4px 7px; }
+  .bc-label { display: none; }
+  .bc-name { font-size: 10px; }
+  /* hide canto + ep names, keep IDs only on very small */
+  .bc-seg.canto .bc-name,
+  .bc-seg.episode .bc-name { display: none; }
+  .bc-seg.canto  .bc-label,
+  .bc-seg.episode .bc-label { display: block; font-size: 8px; letter-spacing: .14em; }
+}
+
+/* ══════════════════════════════════════
+   DEMO PAGE CONTENT
+══════════════════════════════════════ */
+.demo-section {
+  width: 100%; max-width: 640px;
+  padding: 0 20px;
+}
+.demo-title {
+  font-size: 9px; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--gold); opacity: .5; margin-bottom: 10px;
+}
+.demo-note {
+  font-size: 11px; line-height: 1.7; color: rgba(184,176,198,.45);
+}
+.demo-note code {
+  background: rgba(201,156,90,.08); border: 1px solid rgba(201,156,90,.15);
+  border-radius: 2px; padding: 1px 5px; font-size: 10px; color: var(--gold2);
+}
+.demo-variants { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+.demo-bar-wrap {
+  border: 1px solid rgba(184,176,198,.07);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.demo-bar-label {
+  font-size: 8px; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--muted); opacity: .3; padding: 6px 12px 4px;
+  background: rgba(5,4,10,.4);
+  border-bottom: 1px solid rgba(184,176,198,.04);
+}
+.placeholder-area {
+  background: rgba(5,4,10,.3);
+  height: 120px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; letter-spacing: .15em; text-transform: uppercase;
+  color: rgba(184,176,198,.2);
+}
+</style>
+</head>
+<body>
+
+<!-- ══ THE TOP BAR ══ -->
+<div class="topbar">
+  <div class="bc">
+
+    <!-- CANTO -->
+    <div class="bc-seg canto" tabindex="0">
+      <div>
+        <span class="bc-label">Canto I</span>
+        <span class="bc-name">The Red Line</span>
+      </div>
+      <!-- dropdown: cantos list -->
+      <div class="bc-dropdown">
+        <div class="dd-item current">
+          <span class="dd-id">C·I</span>
+          <span class="dd-name">The Red Line</span>
+          <span class="dd-dot current"></span>
+        </div>
+        <div class="dd-item locked">
+          <span class="dd-id">C·II</span>
+          <span class="dd-name">The Broken Earth</span>
+          <span class="dd-dot"></span>
+        </div>
+        <div class="dd-item locked">
+          <span class="dd-id">C·III</span>
+          <span class="dd-name">The Contract</span>
+          <span class="dd-dot"></span>
+        </div>
+      </div>
+    </div>
+
+    <span class="bc-sep">›</span>
+
+    <!-- EPISODE -->
+    <div class="bc-seg episode" tabindex="0">
+      <div>
+        <span class="bc-label">Episode 1</span>
+        <span class="bc-name">Null Meridian</span>
+      </div>
+      <!-- dropdown: episodes in this canto -->
+      <div class="bc-dropdown">
+        <div class="dd-item current">
+          <span class="dd-id">EP.1</span>
+          <span class="dd-name">Null Meridian</span>
+          <span class="dd-dot current"></span>
+        </div>
+        <div class="dd-item locked">
+          <span class="dd-id">EP.2</span>
+          <span class="dd-name">Boarding the Red Line</span>
+          <span class="dd-dot"></span>
+        </div>
+        <div class="dd-item locked">
+          <span class="dd-id">EP.3</span>
+          <span class="dd-name">The Sundown Saloon</span>
+          <span class="dd-dot"></span>
+        </div>
+      </div>
+    </div>
+
+    <span class="bc-sep">›</span>
+
+    <!-- SCENE — active -->
+    <div class="bc-seg scene active" tabindex="0">
+      <div>
+        <span class="bc-label">Scene A1</span>
+        <span class="bc-name">Waking</span>
+      </div>
+      <!-- dropdown: scenes in this episode -->
+      <div class="bc-dropdown">
+        <div class="dd-item done">
+          <span class="dd-id">PRO</span>
+          <span class="dd-name">The Null Meridian</span>
+          <span class="dd-dot done"></span>
+        </div>
+        <div class="dd-div"></div>
+        <div class="dd-item current">
+          <span class="dd-id">A1</span>
+          <span class="dd-name">Waking</span>
+          <span class="dd-dot current"></span>
+        </div>
+        <div class="dd-item locked">
+          <span class="dd-id">A2</span>
+          <span class="dd-name">Obelisk, Clock &amp; Postcards</span>
+          <span class="dd-dot"></span>
+        </div>
+        <div class="dd-item locked">
+          <span class="dd-id">A3</span>
+          <span class="dd-name">Train Arrival &amp; Boarding</span>
+          <span class="dd-dot"></span>
+        </div>
+        <div class="dd-item locked">
+          <span class="dd-id">A4</span>
+          <span class="dd-name">Gossip Car &amp; Golden Tickets</span>
+          <span class="dd-dot"></span>
+        </div>
+        <div class="dd-item locked">
+          <span class="dd-id">A5</span>
+          <span class="dd-name">Sundown Saloon</span>
+          <span class="dd-dot"></span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- right controls -->
+  <div class="topbar-right">
+    <button class="tb-btn">&#x2630;&nbsp; Menu</button>
+  </div>
+</div>
+
+<!-- ══ DEMO PAGE ══ -->
+<div class="demo-section">
+  <div class="demo-title">Top Bar · Component Demo</div>
+  <div class="demo-note">
+    Hover each breadcrumb segment to see the dropdown.<br>
+    Structure: <code>Canto</code> › <code>Episode</code> › <code>Scene</code><br>
+    Active scene highlighted in gold. Locked items dimmed.
+  </div>
+</div>
+
+<div class="demo-section">
+  <div class="demo-title">Context az oldalon belül</div>
+  <div class="placeholder-area">[ játék tartalma ide jön ]</div>
+</div>
+
+</body>
+</html>
