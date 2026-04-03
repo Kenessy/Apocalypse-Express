@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AE · Top Bar Demo</title>
+<title>AE · Top Bar + Event Strip Demo</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -11,6 +11,7 @@
   --void:    #05040a;
   --gold:    #c99c5a;
   --gold2:   #e6cfa1;
+  --cyan:    #28bdd8;
   --purple2: #a38bcf;
   --ember:   #ff7b5c;
   --text:    #f8f5f0;
@@ -21,13 +22,12 @@ html, body {
   font-family: 'IBM Plex Mono', monospace;
   min-height: 100vh;
   display: flex; flex-direction: column; align-items: center;
-  padding-top: 80px; gap: 48px;
+  padding-top: 84px; gap: 48px;
 }
 
 /* ══════════════════════════════════════
-   TOP BAR
+   TOP BAR  ·  44px fixed
    Grid: [breadcrumb 1fr] [title auto] [menu 1fr]
-   → center is always truly centered, never overlaps sides
 ══════════════════════════════════════ */
 .topbar {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
@@ -39,63 +39,50 @@ html, body {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  padding: 0 12px;
-  gap: 0;
+  padding: 0 12px; gap: 0;
 }
 
 /* ── LEFT: breadcrumb ── */
 .bc {
   display: flex; align-items: center;
-  overflow: visible; /* dropdowns must escape */
-  min-width: 0;
+  overflow: visible; min-width: 0;
 }
-
 .bc-seg {
   display: flex; align-items: center;
   padding: 0 9px; height: 44px;
   border-radius: 3px; cursor: pointer;
   position: relative; flex-shrink: 0;
-  transition: background .2s;
-  isolation: isolate;
+  transition: background .2s; isolation: isolate;
 }
 .bc-seg:hover  { background: rgba(201,156,90,.055); }
 .bc-seg.active { background: rgba(201,156,90,.04); }
-
 .bc-inner { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 
-/* bc-label: was 7px/.35/.22em → sub-pixel, ~3.7:1 contrast (WCAG FAIL)
-   Fix: 9px/.50/.13em → ~5.0:1 contrast, IBM Plex Mono readable minimum */
 .bc-label {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 9px; letter-spacing: .13em; text-transform: uppercase;
   color: var(--gold); opacity: .50; line-height: 1;
   transition: opacity .2s; white-space: nowrap;
 }
-.bc-seg:hover .bc-label { opacity: .72; }
+.bc-seg:hover .bc-label  { opacity: .72; }
 .bc-seg.active .bc-label { opacity: .65; }
 
-/* bc-name: was 11px/.42 → Cinzel hairlines pixelate below 13px, contrast ~4.2:1
-   Fix: 13px/.56 → ~6.0:1 contrast, Cinzel hairlines stable at 13px+ */
 .bc-name {
   font-family: 'Cinzel', serif;
   font-size: 13px; font-weight: 700; letter-spacing: .04em;
   color: var(--muted); opacity: .56; line-height: 1;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  max-width: 130px;
-  transition: color .2s, opacity .2s;
+  max-width: 130px; transition: color .2s, opacity .2s;
 }
 .bc-seg:hover .bc-name  { color: var(--text); opacity: .82; }
 .bc-seg.active .bc-name { color: var(--gold2); opacity: .92; }
 
-/* gold underline on active scene */
 .bc-seg.active::after {
   content: '';
   position: absolute; bottom: 5px; left: 9px; right: 9px; height: 1px;
   background: linear-gradient(to right, transparent, var(--gold), transparent);
   opacity: .45;
 }
-
-/* separator */
 .bc-sep {
   font-size: 9px; color: var(--gold); opacity: .18;
   flex-shrink: 0; padding: 0 1px; user-select: none;
@@ -103,34 +90,27 @@ html, body {
 
 /* ── DROPDOWN ── */
 .bc-dropdown {
-  position: absolute;
-  top: 100%; left: 0;
+  position: absolute; top: 100%; left: 0;
   min-width: 220px;
   background: rgba(5,4,10,.99);
   border: 1px solid rgba(201,156,90,.11);
   border-radius: 4px; padding: 5px 0;
-  z-index: 9999;
-  opacity: 0; pointer-events: none;
+  z-index: 9999; opacity: 0; pointer-events: none;
   transform: translateY(-4px);
   transition: opacity .18s ease, transform .18s ease;
   box-shadow: 0 10px 36px rgba(0,0,0,.7), 0 0 0 1px rgba(201,156,90,.04);
 }
-.bc-seg:hover      .bc-dropdown { opacity: 1; pointer-events: all; transform: translateY(0); }
+.bc-seg:hover        .bc-dropdown { opacity: 1; pointer-events: all; transform: translateY(0); }
 .bc-seg:focus-within .bc-dropdown { opacity: 1; pointer-events: all; transform: translateY(0); }
 
-/* dd-item: was padding 6px 13px → touch target only ~24px (WCAG 2.5.8 min)
-   Fix: 9px 14px → ~30px, acceptable for secondary nav */
 .dd-item {
   display: flex; align-items: center; gap: 10px;
   padding: 9px 14px; cursor: pointer;
-  transition: background .16s;
-  min-height: 30px;
+  transition: background .16s; min-height: 30px;
 }
 .dd-item:hover   { background: rgba(201,156,90,.06); }
 .dd-item.current { background: rgba(201,156,90,.04); }
 
-/* dd-id: was 7px/.45/.18em → ~4.6:1 but letter-spacing 1.26px on 7px chars = broken
-   Fix: 9px/.55/.11em → ~5.5:1, letter-spacing 0.99px = stable */
 .dd-id {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 9px; letter-spacing: .11em; text-transform: uppercase;
@@ -139,8 +119,6 @@ html, body {
 .dd-item.current .dd-id { opacity: .88; }
 .dd-item.locked  .dd-id { opacity: .20; }
 
-/* dd-name: was 10px/.45 → Cinzel hairlines lost below 12px, ~4.6:1 contrast
-   Fix: 12px/.58 → ~6.2:1, hairlines visible, meets WCAG AA */
 .dd-name {
   font-family: 'Cinzel', serif; font-size: 12px; font-weight: 700;
   letter-spacing: .03em; color: var(--muted); opacity: .58;
@@ -156,18 +134,14 @@ html, body {
 }
 .dd-item.done    .dd-dot { background: rgba(184,176,198,.38); border-color: rgba(184,176,198,.38); }
 .dd-item.current .dd-dot { background: var(--gold); border-color: var(--gold); box-shadow: 0 0 6px rgba(201,156,90,.5); }
-
 .dd-div { height: 1px; background: rgba(201,156,90,.06); margin: 3px 0; }
 
 /* ── CENTER: situation title ── */
 .topbar-center {
   display: flex; flex-direction: column; align-items: center;
-  gap: 2px; pointer-events: none;
-  padding: 0 16px;
+  gap: 2px; pointer-events: none; padding: 0 16px;
   min-width: 0; overflow: hidden;
 }
-
-/* tc-title: was 14px → slight bump to 15px, stronger visual anchor */
 .tc-title {
   font-family: 'Cinzel', serif;
   font-size: 15px; font-weight: 700; letter-spacing: .07em;
@@ -176,40 +150,28 @@ html, body {
   max-width: 340px;
   transition: color .35s, text-shadow .35s, opacity .35s;
 }
-
-/* tc-mood: was 7px/.35/.24em → ~3.7:1 contrast FAIL, letter-spacing 1.68px on 7px = broken
-   Fix: 9px/.48/.13em → ~4.9:1 contrast, atmospheric but readable */
 .tc-mood {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 9px; letter-spacing: .13em; text-transform: uppercase;
   color: var(--gold); opacity: .48; line-height: 1;
-  white-space: nowrap;
-  transition: color .35s, opacity .35s;
+  white-space: nowrap; transition: color .35s, opacity .35s;
 }
-
-/* mood tints */
 .topbar.mood-safe   .tc-title { color: var(--gold2); opacity: .92; }
 .topbar.mood-safe   .tc-mood  { color: var(--gold); opacity: .55; }
 .topbar.mood-danger .tc-title { color: var(--ember); opacity: .94; text-shadow: 0 0 18px rgba(255,123,92,.28); }
 .topbar.mood-danger .tc-mood  { color: var(--ember); opacity: .55; }
 
 /* ── RIGHT: hamburger ── */
-.topbar-right {
-  display: flex; align-items: center; justify-content: flex-end;
-}
-
+.topbar-right { display: flex; align-items: center; justify-content: flex-end; }
 .hamburger {
   width: 36px; height: 36px;
   display: flex; flex-direction: column;
   align-items: flex-end; justify-content: center;
-  gap: 5px;
-  background: none; border: none;
+  gap: 5px; background: none; border: none;
   border-radius: 4px; padding: 8px 6px;
-  cursor: pointer;
-  transition: background .2s;
+  cursor: pointer; transition: background .2s;
 }
 .hamburger:hover { background: rgba(184,176,198,.06); }
-
 .hamburger span {
   display: block; height: 1.5px;
   background: var(--muted); opacity: .42; border-radius: 1px;
@@ -218,32 +180,22 @@ html, body {
 .hamburger span:nth-child(1) { width: 18px; }
 .hamburger span:nth-child(2) { width: 14px; }
 .hamburger span:nth-child(3) { width: 10px; }
-
-.hamburger:hover span                  { opacity: .78; }
-.hamburger:hover span:nth-child(2)     { width: 18px; }
-.hamburger:hover span:nth-child(3)     { width: 18px; }
-
-/* open → X. translateY(6.5px) = exact: gap(5) + h/2(0.75) + h/2(0.75) = 6.5px */
+.hamburger:hover span                { opacity: .78; }
+.hamburger:hover span:nth-child(2)   { width: 18px; }
+.hamburger:hover span:nth-child(3)   { width: 18px; }
 .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); width: 18px; opacity: .88; }
 .hamburger.open span:nth-child(2) { opacity: 0; width: 18px; }
 .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); width: 18px; opacity: .88; }
 
 /* ══ MOBILE ══ */
-
-/* 768px: narrow the title max-width so grid still holds */
 @media (max-width: 768px) {
   .tc-title { max-width: 220px; }
   .bc-name  { max-width: 100px; }
 }
-
-/* 640px: was display:none (title disappears entirely — loses context)
-   Fix: shrink to 12px and tighten padding — title stays visible */
 @media (max-width: 640px) {
   .tc-title { font-size: 12px; max-width: 160px; letter-spacing: .04em; }
   .tc-mood  { display: none; }
 }
-
-/* 480px: only show active scene in breadcrumb */
 @media (max-width: 480px) {
   .bc-seg.canto   .bc-name,
   .bc-seg.episode .bc-name { display: none; }
@@ -253,27 +205,107 @@ html, body {
 }
 
 /* ══ ACCESSIBILITY ══ */
-
-/* prefers-contrast: more — raise all opacity floors */
 @media (prefers-contrast: more) {
   .bc-label { opacity: .88; letter-spacing: .06em; }
   .bc-name  { opacity: .88; }
   .tc-title { opacity: 1.0; }
-  .tc-mood  { opacity: .75; letter-spacing: .06em; }
-  .dd-id    { opacity: .82; letter-spacing: .06em; }
+  .tc-mood  { opacity: .75; }
+  .dd-id    { opacity: .82; }
   .dd-name  { opacity: .88; }
   .hamburger span { opacity: .80; }
   .topbar   { border-bottom-color: rgba(201,156,90,.35); }
+  .event-chip { opacity: 1 !important; }
+}
+.bc-seg:focus-visible     { outline: 1px solid rgba(201,156,90,.45); outline-offset: -2px; }
+.hamburger:focus-visible  { outline: 1px solid rgba(184,176,198,.45); outline-offset: 2px; }
+
+/* ══════════════════════════════════════
+   EVENT TIMELINE STRIP  ·  28px fixed, top: 44px
+   Chip flow L→R, newest right, fade-mask left
+══════════════════════════════════════ */
+#event-strip {
+  position: fixed;
+  top: 44px; left: 0; right: 0;
+  height: 28px; z-index: 90;
+  background: rgba(5,4,10,.94);
+  border-bottom: 1px solid rgba(201,156,90,.10);
+  overflow: hidden;
 }
 
-/* focus-visible ring for keyboard nav */
-.bc-seg:focus-visible {
-  outline: 1px solid rgba(201,156,90,.45);
-  outline-offset: -2px;
+/* left fade mask — shows history exists */
+#event-strip::before {
+  content: '';
+  position: absolute; top: 0; left: 0;
+  width: 56px; height: 100%;
+  background: linear-gradient(to right,
+    rgba(5,4,10,.97) 0%,
+    rgba(5,4,10,.52) 55%,
+    transparent 100%);
+  z-index: 2; pointer-events: none;
 }
-.hamburger:focus-visible {
-  outline: 1px solid rgba(184,176,198,.45);
-  outline-offset: 2px;
+
+.strip-track {
+  display: flex; flex-direction: row; align-items: center;
+  gap: 4px; height: 100%; padding: 0 8px;
+  overflow-x: auto; overflow-y: hidden;
+  scroll-behavior: smooth;
+  scrollbar-width: none; -ms-overflow-style: none;
+}
+.strip-track::-webkit-scrollbar { display: none; }
+
+/* ── chip base ── */
+@keyframes chip-enter {
+  from { opacity: 0; transform: translateX(14px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.event-chip {
+  display: inline-flex; flex-shrink: 0;
+  align-items: center; gap: 4px;
+  height: 20px; padding: 0 7px;
+  border-radius: 3px; border: 1px solid transparent;
+  font-family: 'IBM Plex Mono', monospace;
+  white-space: nowrap; cursor: default;
+  animation: chip-enter .22s cubic-bezier(.22,1,.36,1) both;
+  transition: opacity .15s;
+}
+.event-chip:hover { opacity: .70; }
+
+.chip-icon  { font-size: 9px; line-height: 1; flex-shrink: 0; }
+.chip-label { font-size: 8px; letter-spacing: .09em; text-transform: uppercase; line-height: 1; opacity: .58; }
+.chip-val   { font-size: 9px; font-weight: 500; line-height: 1; opacity: .88; }
+
+/* ── DICE ─────── purple tón */
+.ev-nat20 { background: rgba(163,139,207,.16); border-color: rgba(163,139,207,.55); color: #a38bcf; }
+.ev-nat1  { background: rgba(255,123,92,.14);  border-color: rgba(255,123,92,.50);  color: #ff7b5c; }
+.ev-roll  { background: rgba(184,176,198,.08); border-color: rgba(184,176,198,.26); color: #b8b0c6; }
+.ev-save  { background: rgba(40,189,216,.10);  border-color: rgba(40,189,216,.38);  color: #28bdd8; }
+.ev-savef { background: rgba(255,123,92,.12);  border-color: rgba(255,123,92,.42);  color: #ff7b5c; }
+
+/* ── COMBAT ──── gold/ember tón */
+.ev-hit   { background: rgba(201,156,90,.13);  border-color: rgba(201,156,90,.46);  color: #c99c5a; }
+.ev-miss  { background: rgba(184,176,198,.06); border-color: rgba(184,176,198,.19); color: #b8b0c6; }
+.ev-kill  { background: rgba(255,123,92,.17);  border-color: rgba(255,123,92,.62);  color: #ff7b5c;
+            box-shadow: 0 0 8px rgba(255,123,92,.16); }
+.ev-ko    { background: rgba(163,139,207,.10); border-color: rgba(163,139,207,.36); color: #a38bcf; }
+
+/* ── CHOICE ──── mixed kategória-logika */
+.ev-violence { background: rgba(255,123,92,.11); border-color: rgba(255,123,92,.40); color: #ff7b5c; }
+.ev-mercy    { background: rgba(40,189,216,.10);  border-color: rgba(40,189,216,.36); color: #28bdd8; }
+.ev-deceive  { background: rgba(163,139,207,.10); border-color: rgba(163,139,207,.36); color: #a38bcf; }
+.ev-explore  { background: rgba(230,207,161,.09); border-color: rgba(230,207,161,.34); color: #e6cfa1; }
+
+/* ── STORY ───── cyan/gold tón */
+.ev-revived  { background: rgba(40,189,216,.12);  border-color: rgba(40,189,216,.44); color: #28bdd8; }
+.ev-failed   { background: rgba(255,123,92,.12);  border-color: rgba(255,123,92,.42); color: #ff7b5c; }
+.ev-unlocked { background: rgba(201,156,90,.13);  border-color: rgba(201,156,90,.46); color: #c99c5a; }
+.ev-found    { background: rgba(230,207,161,.10);  border-color: rgba(230,207,161,.38); color: #e6cfa1; }
+
+/* mobile: label el, icon+val marad */
+@media (max-width: 480px) {
+  .chip-label { display: none; }
+  .chip-icon  { font-size: 10px; }
+  .event-chip { padding: 0 5px; gap: 2px; }
 }
 
 /* ══ DEMO PAGE ══ */
@@ -295,6 +327,25 @@ html, body {
 }
 .tb-btn:hover { opacity: .85; border-color: rgba(184,176,198,.30); color: var(--text); }
 
+/* chip preview in demo buttons */
+.tb-btn.ev-nat20  { color: #a38bcf; border-color: rgba(163,139,207,.28); opacity: .55; }
+.tb-btn.ev-nat1   { color: #ff7b5c; border-color: rgba(255,123,92,.28);  opacity: .55; }
+.tb-btn.ev-roll   { color: #b8b0c6; border-color: rgba(184,176,198,.22); opacity: .55; }
+.tb-btn.ev-save   { color: #28bdd8; border-color: rgba(40,189,216,.28);  opacity: .55; }
+.tb-btn.ev-savef  { color: #ff7b5c; border-color: rgba(255,123,92,.28);  opacity: .55; }
+.tb-btn.ev-hit    { color: #c99c5a; border-color: rgba(201,156,90,.28);  opacity: .55; }
+.tb-btn.ev-miss   { color: #b8b0c6; border-color: rgba(184,176,198,.20); opacity: .55; }
+.tb-btn.ev-kill   { color: #ff7b5c; border-color: rgba(255,123,92,.40);  opacity: .60; }
+.tb-btn.ev-ko     { color: #a38bcf; border-color: rgba(163,139,207,.28); opacity: .55; }
+.tb-btn.ev-violence { color: #ff7b5c; border-color: rgba(255,123,92,.28); opacity: .55; }
+.tb-btn.ev-mercy    { color: #28bdd8; border-color: rgba(40,189,216,.28); opacity: .55; }
+.tb-btn.ev-deceive  { color: #a38bcf; border-color: rgba(163,139,207,.28);opacity: .55; }
+.tb-btn.ev-explore  { color: #e6cfa1; border-color: rgba(230,207,161,.28);opacity: .55; }
+.tb-btn.ev-revived  { color: #28bdd8; border-color: rgba(40,189,216,.30); opacity: .55; }
+.tb-btn.ev-failed   { color: #ff7b5c; border-color: rgba(255,123,92,.28); opacity: .55; }
+.tb-btn.ev-unlocked { color: #c99c5a; border-color: rgba(201,156,90,.30); opacity: .55; }
+.tb-btn.ev-found    { color: #e6cfa1; border-color: rgba(230,207,161,.28);opacity: .55; }
+
 /* contrast reference table */
 .contrast-table {
   width: 100%; border-collapse: collapse; font-size: 10px;
@@ -314,7 +365,6 @@ html, body {
 .pass-aa  { color: #7bc98c; }
 .pass-aaa { color: #5bb870; }
 .fail     { color: #ff7b5c; }
-.preview-cell { font-family: 'IBM Plex Mono', monospace; }
 </style>
 </head>
 <body>
@@ -322,9 +372,7 @@ html, body {
 <!-- ══ TOP BAR ══ -->
 <div class="topbar mood-safe" id="topbar">
 
-  <!-- LEFT: breadcrumb -->
   <div class="bc">
-
     <div class="bc-seg canto" tabindex="0">
       <div class="bc-inner">
         <span class="bc-label">Canto I</span>
@@ -348,9 +396,7 @@ html, body {
         </div>
       </div>
     </div>
-
     <span class="bc-sep">&#x203a;</span>
-
     <div class="bc-seg episode" tabindex="0">
       <div class="bc-inner">
         <span class="bc-label">Episode 1</span>
@@ -374,9 +420,7 @@ html, body {
         </div>
       </div>
     </div>
-
     <span class="bc-sep">&#x203a;</span>
-
     <div class="bc-seg scene active" tabindex="0">
       <div class="bc-inner">
         <span class="bc-label">Scene A1</span>
@@ -416,71 +460,77 @@ html, body {
         </div>
       </div>
     </div>
-
   </div>
 
-  <!-- CENTER: situation title -->
   <div class="topbar-center">
     <span class="tc-title" id="tc-title">Waking in the Null Meridian</span>
     <span class="tc-mood"  id="tc-mood">Safe &middot; Explore</span>
   </div>
 
-  <!-- RIGHT: hamburger -->
   <div class="topbar-right">
     <button class="hamburger" id="hamburger" onclick="this.classList.toggle('open')" aria-label="Menu">
-      <span></span>
-      <span></span>
-      <span></span>
+      <span></span><span></span><span></span>
     </button>
   </div>
+</div>
 
+<!-- ══ EVENT TIMELINE STRIP ══ -->
+<div id="event-strip" role="log" aria-live="polite" aria-label="Event timeline">
+  <div class="strip-track" id="strip-track"></div>
 </div>
 
 <!-- ══ DEMO ══ -->
 <div class="demo-section">
-  <div class="demo-title">Situation title &mdash; kattints</div>
+  <div class="demo-title">Event Strip &mdash; kattints, ad event-et</div>
   <div class="demo-variants">
 
     <div class="demo-bar-wrap">
-      <div class="demo-bar-label">Safe / Explore</div>
+      <div class="demo-bar-label">Dice</div>
       <div class="demo-btns">
-        <button class="tb-btn" onclick="set('Waking in the Null Meridian','Safe &middot; Explore','safe')">Null Meridian</button>
-        <button class="tb-btn" onclick="set('Campfire at the Wreck','Rest &middot; Safe','safe')">Campfire</button>
-        <button class="tb-btn" onclick="set('Sundown Saloon','Social &middot; Explore','safe')">Saloon</button>
-        <button class="tb-btn" onclick="set('Boarding the Red Line','Discovery &middot; Safe','safe')">Boarding</button>
+        <button class="tb-btn ev-nat20"   onclick="addEvent('nat20')">★ CRIT</button>
+        <button class="tb-btn ev-nat1"    onclick="addEvent('nat1')">✕ FUMBLE</button>
+        <button class="tb-btn ev-roll"    onclick="addEvent('roll', rnd(20))">◎ ROLL</button>
+        <button class="tb-btn ev-save"    onclick="addEvent('dc-save','pass')">◈ SAVE PASS</button>
+        <button class="tb-btn ev-savef"   onclick="addEvent('dc-save','fail')">◇ SAVE FAIL</button>
       </div>
     </div>
 
     <div class="demo-bar-wrap">
-      <div class="demo-bar-label">Danger / Combat</div>
+      <div class="demo-bar-label">Combat</div>
       <div class="demo-btns">
-        <button class="tb-btn" onclick="set('Bandit Ambush','Combat &middot; Deadly','danger')">Bandit Ambush</button>
-        <button class="tb-btn" onclick="set('Chaos Surge &mdash; Unstable','Timed &middot; Deadly','danger')">Chaos Surge</button>
-        <button class="tb-btn" onclick="set('Engine Room on Fire','Timed &middot; Deadly','danger')">Engine Fire</button>
-        <button class="tb-btn" onclick="set('Devil\'s Mercy &mdash; Final Print','Deadly &middot; Last Chance','danger')">Devil&apos;s Mercy</button>
+        <button class="tb-btn ev-hit"     onclick="addEvent('attack-hit','Grul')">▲ HIT</button>
+        <button class="tb-btn ev-miss"    onclick="addEvent('attack-miss')">△ MISS</button>
+        <button class="tb-btn ev-kill"    onclick="addEvent('kill','Guard')">◆ KILL</button>
+        <button class="tb-btn ev-ko"      onclick="addEvent('ko')">● K.O.</button>
       </div>
     </div>
 
     <div class="demo-bar-wrap">
-      <div class="demo-bar-label">Adversarial: hossz &amp; edge case</div>
+      <div class="demo-bar-label">Choice</div>
       <div class="demo-btns">
-        <button class="tb-btn" onclick="set('The Last Train to the End of All Known Worlds','Very Long Title Test &middot; Overflow','safe')">Nagyon hossz&uacute;</button>
-        <button class="tb-btn" onclick="set('X','A','safe')">Nagyon r&ouml;vid</button>
-        <button class="tb-btn" onclick="set('&Eacute;j&eacute;l &agrave; F&eacute;nytelen V&aacute;rosban','Ékezetes &middot; UTF-8','safe')">Ékezetes</button>
-        <button class="tb-btn" onclick="set('Scene &lt;script&gt;alert(1)&lt;/script&gt;','XSS Test','safe')">XSS kísérlet</button>
-        <button class="tb-btn" onclick="set('A'.repeat(80),'Repeat','safe')">80× A</button>
+        <button class="tb-btn ev-violence" onclick="addEvent('chosen-violence')">⊗ VIOLENCE</button>
+        <button class="tb-btn ev-mercy"    onclick="addEvent('chosen-mercy')">○ MERCY</button>
+        <button class="tb-btn ev-deceive"  onclick="addEvent('chosen-deceive')">◐ DECEIVE</button>
+        <button class="tb-btn ev-explore"  onclick="addEvent('chosen-explore')">◉ EXPLORE</button>
       </div>
     </div>
 
     <div class="demo-bar-wrap">
-      <div class="demo-bar-label">Zoom &amp; breakpoint teszt</div>
+      <div class="demo-bar-label">Story</div>
       <div class="demo-btns">
-        <button class="tb-btn" onclick="document.body.style.zoom='1.5'">Zoom 150%</button>
-        <button class="tb-btn" onclick="document.body.style.zoom='2.0'">Zoom 200%</button>
-        <button class="tb-btn" onclick="document.body.style.zoom='1.0'">Reset zoom</button>
-        <button class="tb-btn" onclick="simulateWidth(480)">480px viewport</button>
-        <button class="tb-btn" onclick="simulateWidth(640)">640px viewport</button>
-        <button class="tb-btn" onclick="simulateWidth(null)">Reset width</button>
+        <button class="tb-btn ev-revived"  onclick="addEvent('revived')">↑ REVIVED</button>
+        <button class="tb-btn ev-failed"   onclick="addEvent('failed','Quest')">▼ FAILED</button>
+        <button class="tb-btn ev-unlocked" onclick="addEvent('unlocked')">✦ UNLOCKED</button>
+        <button class="tb-btn ev-found"    onclick="addEvent('found','Map')">◇ FOUND</button>
+      </div>
+    </div>
+
+    <div class="demo-bar-wrap">
+      <div class="demo-bar-label">Utility</div>
+      <div class="demo-btns">
+        <button class="tb-btn" onclick="demoSeq()">Demo Sequence</button>
+        <button class="tb-btn" onclick="spamEvents()">Spam ×20</button>
+        <button class="tb-btn" onclick="clearStrip()">Clear</button>
       </div>
     </div>
 
@@ -488,106 +538,201 @@ html, body {
 </div>
 
 <div class="demo-section">
-  <div class="demo-title">Kontraszt referencia &mdash; javított értékek</div>
-  <div class="demo-note">
-    Háttér: <code>#05040a</code> @ 97% opacity. Számított WCAG 2.1 kontraszt arányok.
-    AA = min 4.5:1 kis szöveg (≤14px bold), AAA = 7:1.
+  <div class="demo-title">Situation title &mdash; kattints</div>
+  <div class="demo-variants">
+    <div class="demo-bar-wrap">
+      <div class="demo-bar-label">Safe / Explore</div>
+      <div class="demo-btns">
+        <button class="tb-btn" onclick="setBar('Waking in the Null Meridian','Safe &middot; Explore','safe')">Null Meridian</button>
+        <button class="tb-btn" onclick="setBar('Campfire at the Wreck','Rest &middot; Safe','safe')">Campfire</button>
+        <button class="tb-btn" onclick="setBar('Sundown Saloon','Social &middot; Explore','safe')">Saloon</button>
+        <button class="tb-btn" onclick="setBar('Boarding the Red Line','Discovery &middot; Safe','safe')">Boarding</button>
+      </div>
+    </div>
+    <div class="demo-bar-wrap">
+      <div class="demo-bar-label">Danger / Combat</div>
+      <div class="demo-btns">
+        <button class="tb-btn" onclick="setBar('Bandit Ambush','Combat &middot; Deadly','danger')">Bandit Ambush</button>
+        <button class="tb-btn" onclick="setBar('Chaos Surge &mdash; Unstable','Timed &middot; Deadly','danger')">Chaos Surge</button>
+        <button class="tb-btn" onclick="setBar('Engine Room on Fire','Timed &middot; Deadly','danger')">Engine Fire</button>
+        <button class="tb-btn" onclick="setBar('Devil\'s Mercy &mdash; Final Print','Deadly &middot; Last Chance','danger')">Devil&apos;s Mercy</button>
+      </div>
+    </div>
+    <div class="demo-bar-wrap">
+      <div class="demo-bar-label">Adversarial</div>
+      <div class="demo-btns">
+        <button class="tb-btn" onclick="setBar('The Last Train to the End of All Known Worlds','Very Long Title &middot; Overflow','safe')">Nagyon hossz&uacute;</button>
+        <button class="tb-btn" onclick="setBar('X','A','safe')">Nagyon r&ouml;vid</button>
+        <button class="tb-btn" onclick="document.body.style.zoom='1.5'">Zoom 150%</button>
+        <button class="tb-btn" onclick="document.body.style.zoom='1.0'">Reset zoom</button>
+      </div>
+    </div>
   </div>
+</div>
+
+<div class="demo-section" style="padding-bottom:48px">
+  <div class="demo-title">Kontraszt referencia</div>
   <table class="contrast-table">
     <thead>
-      <tr>
-        <th>Elem</th>
-        <th>Méret</th>
-        <th>Előtte</th>
-        <th>Utána</th>
-        <th>Kontraszt</th>
-        <th>WCAG</th>
-        <th>Preview</th>
-      </tr>
+      <tr><th>Elem</th><th>Méret</th><th>Opacity</th><th>Kontraszt</th><th>WCAG</th></tr>
     </thead>
     <tbody>
-      <tr>
-        <td>.bc-label</td>
-        <td>9px ← 7px</td>
-        <td>.35 op.</td>
-        <td>.50 op.</td>
-        <td>~5.0:1</td>
-        <td class="pass-aa">AA ✓</td>
-        <td class="preview-cell" style="font-size:9px;letter-spacing:.13em;color:#c99c5a;opacity:.50;text-transform:uppercase">CANTO I</td>
-      </tr>
-      <tr>
-        <td>.bc-name</td>
-        <td>13px ← 11px</td>
-        <td>.42 op.</td>
-        <td>.56 op.</td>
-        <td>~6.0:1</td>
-        <td class="pass-aaa">AAA ✓</td>
-        <td class="preview-cell" style="font-family:'Cinzel',serif;font-size:13px;font-weight:700;color:#b8b0c6;opacity:.56">The Red Line</td>
-      </tr>
-      <tr>
-        <td>.tc-title</td>
-        <td>15px ← 14px</td>
-        <td>.86 op.</td>
-        <td>.88 op.</td>
-        <td>~17:1</td>
-        <td class="pass-aaa">AAA ✓</td>
-        <td class="preview-cell" style="font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:#f8f5f0;opacity:.88">Waking</td>
-      </tr>
-      <tr>
-        <td>.tc-mood</td>
-        <td>9px ← 7px</td>
-        <td>.35 op.</td>
-        <td>.48 op.</td>
-        <td>~4.9:1</td>
-        <td class="pass-aa">AA ✓</td>
-        <td class="preview-cell" style="font-size:9px;letter-spacing:.13em;color:#c99c5a;opacity:.48;text-transform:uppercase">SAFE · EXPLORE</td>
-      </tr>
-      <tr>
-        <td>.dd-id</td>
-        <td>9px ← 7px</td>
-        <td>.45 op.</td>
-        <td>.55 op.</td>
-        <td>~5.5:1</td>
-        <td class="pass-aa">AA ✓</td>
-        <td class="preview-cell" style="font-size:9px;letter-spacing:.11em;color:#c99c5a;opacity:.55;text-transform:uppercase">A1</td>
-      </tr>
-      <tr>
-        <td>.dd-name</td>
-        <td>12px ← 10px</td>
-        <td>.45 op.</td>
-        <td>.58 op.</td>
-        <td>~6.2:1</td>
-        <td class="pass-aaa">AAA ✓</td>
-        <td class="preview-cell" style="font-family:'Cinzel',serif;font-size:12px;font-weight:700;color:#b8b0c6;opacity:.58">Waking</td>
-      </tr>
+      <tr><td>.bc-label</td><td>9px</td><td>.50</td><td>~5.0:1</td><td class="pass-aa">AA ✓</td></tr>
+      <tr><td>.bc-name</td><td>13px</td><td>.56</td><td>~6.0:1</td><td class="pass-aaa">AAA ✓</td></tr>
+      <tr><td>.tc-title</td><td>15px</td><td>.88</td><td>~17:1</td><td class="pass-aaa">AAA ✓</td></tr>
+      <tr><td>.tc-mood</td><td>9px</td><td>.48</td><td>~4.9:1</td><td class="pass-aa">AA ✓</td></tr>
+      <tr><td>.chip-label</td><td>8px</td><td>.58</td><td>~5.4:1</td><td class="pass-aa">AA ✓</td></tr>
+      <tr><td>.chip-val</td><td>9px</td><td>.88</td><td>~8.8:1</td><td class="pass-aaa">AAA ✓</td></tr>
     </tbody>
   </table>
 </div>
 
 <script>
+// ── topbar ──
 var bar = document.getElementById('topbar');
-function set(title, mood, type) {
+function setBar(title, mood, type) {
   document.getElementById('tc-title').innerHTML = title;
   document.getElementById('tc-mood').innerHTML  = mood;
   bar.className = 'topbar mood-' + type;
 }
 
-function simulateWidth(w) {
-  if (w === null) {
-    document.documentElement.style.minWidth = '';
-    document.documentElement.style.maxWidth = '';
-    document.documentElement.style.overflow = '';
-  } else {
-    // Simulate a narrow viewport by constraining the root
-    document.documentElement.style.maxWidth = w + 'px';
-    document.documentElement.style.overflow = 'hidden';
+// ── event strip ──
+var EVENT_CONFIG = {
+  'nat20':          { cls: 'ev-nat20',   icon: '★', label: 'CRIT'     },
+  'nat1':           { cls: 'ev-nat1',    icon: '✕', label: 'FUMBLE'   },
+  'roll':           { cls: 'ev-roll',    icon: '◎', label: 'ROLL'     },
+  'dc-save':        { cls: 'ev-save',    icon: '◈', label: 'SAVE'     }, // dynamic
+  'attack-hit':     { cls: 'ev-hit',     icon: '▲', label: 'HIT'      },
+  'attack-miss':    { cls: 'ev-miss',    icon: '△', label: 'MISS'     },
+  'kill':           { cls: 'ev-kill',    icon: '◆', label: 'KILL'     },
+  'ko':             { cls: 'ev-ko',      icon: '●', label: 'K.O.'     },
+  'chosen-violence':{ cls: 'ev-violence',icon: '⊗', label: 'VIOLENCE' },
+  'chosen-mercy':   { cls: 'ev-mercy',   icon: '○', label: 'MERCY'    },
+  'chosen-deceive': { cls: 'ev-deceive', icon: '◐', label: 'DECEIVE'  },
+  'chosen-explore': { cls: 'ev-explore', icon: '◉', label: 'EXPLORE'  },
+  'revived':        { cls: 'ev-revived', icon: '↑', label: 'REVIVED'  },
+  'failed':         { cls: 'ev-failed',  icon: '▼', label: 'FAILED'   },
+  'unlocked':       { cls: 'ev-unlocked',icon: '✦', label: 'UNLOCKED' },
+  'found':          { cls: 'ev-found',   icon: '◇', label: 'FOUND'    },
+};
+var MAX_EVENTS = 80;
+var PRUNE_TO   = 60;
+
+function rnd(n) { return Math.floor(Math.random() * n) + 1; }
+
+function addEvent(type, val) {
+  var track = document.getElementById('strip-track');
+  if (!track) return;
+
+  // prune oldest when over limit
+  var chips = track.querySelectorAll('.event-chip');
+  if (chips.length >= MAX_EVENTS) {
+    var cut = chips.length - PRUNE_TO + 1;
+    for (var i = 0; i < cut; i++) chips[i].remove();
   }
+
+  var chip = buildChip(type, val !== undefined ? val : null);
+  if (!chip) return;
+  track.appendChild(chip);
+  requestAnimationFrame(function() {
+    track.scrollTo({ left: track.scrollWidth, behavior: 'smooth' });
+  });
 }
 
-// Repeat helper for adversarial test
-String.prototype.repeat = String.prototype.repeat || function(n) {
-  return new Array(n+1).join(this);
-};
+function buildChip(type, val) {
+  var cfg = EVENT_CONFIG[type];
+  if (!cfg) return null;
+
+  var cls   = cfg.cls;
+  var icon  = cfg.icon;
+  var label = cfg.label;
+  var displayVal = (val !== null && val !== undefined)
+    ? String(val).slice(0, 8).toUpperCase()
+    : null;
+
+  // dc-save: dynamically flip class/icon/value
+  if (type === 'dc-save') {
+    var isPass = (String(val).toLowerCase() === 'pass');
+    cls        = isPass ? 'ev-save'  : 'ev-savef';
+    icon       = isPass ? '◈'        : '◇';
+    displayVal = isPass ? 'PASS'     : 'FAIL';
+  }
+
+  var chip = document.createElement('div');
+  chip.className = 'event-chip ' + cls;
+
+  var ic = document.createElement('span');
+  ic.className = 'chip-icon';
+  ic.textContent = icon;
+  chip.appendChild(ic);
+
+  var lb = document.createElement('span');
+  lb.className = 'chip-label';
+  lb.textContent = label;
+  chip.appendChild(lb);
+
+  if (displayVal) {
+    var vl = document.createElement('span');
+    vl.className = 'chip-val';
+    vl.textContent = displayVal;
+    chip.appendChild(vl);
+  }
+
+  return chip;
+}
+
+// demo sequence — rövid narratív encounter
+var DEMO_SEQ = [
+  ['chosen-explore', null],
+  ['roll', 14],
+  ['dc-save', 'pass'],
+  ['attack-hit', 'Grul'],
+  ['roll', 3],
+  ['attack-miss', null],
+  ['nat1', null],
+  ['chosen-violence', null],
+  ['kill', 'Grul'],
+  ['revived', null],
+  ['chosen-deceive', null],
+  ['dc-save', 'fail'],
+  ['failed', 'Guard'],
+  ['unlocked', null],
+  ['found', 'Map'],
+];
+
+function demoSeq() {
+  var i = 0;
+  function next() {
+    if (i >= DEMO_SEQ.length) return;
+    var ev = DEMO_SEQ[i++];
+    addEvent(ev[0], ev[1]);
+    setTimeout(next, 460);
+  }
+  next();
+}
+
+// spam — overflow + auto-scroll stress test
+var SPAM_POOL = [
+  ['nat20',null],['nat1',null],['roll',rnd(20)],['roll',rnd(20)],
+  ['attack-hit','Grul'],['attack-miss',null],['kill','Guard'],['ko',null],
+  ['chosen-violence',null],['chosen-mercy',null],['dc-save','pass'],['dc-save','fail'],
+  ['revived',null],['failed','Quest'],['unlocked',null],['found','Key'],
+];
+function spamEvents() {
+  var i = 0;
+  function next() {
+    if (i >= 20) return;
+    var ev = SPAM_POOL[Math.floor(Math.random() * SPAM_POOL.length)];
+    addEvent(ev[0], ev[1]);
+    i++;
+    setTimeout(next, 85);
+  }
+  next();
+}
+
+function clearStrip() {
+  document.getElementById('strip-track').innerHTML = '';
+}
 </script>
 </body>
 </html>
