@@ -263,7 +263,7 @@ html, body {
 
 /* ── vertikális stat bar ── */
 .ae-stat-bar {
-  width: 64px; flex-shrink: 0;
+  width: 96px; flex-shrink: 0;
   display: flex; flex-direction: column;
   justify-content: space-evenly; align-items: center;
   background: rgba(5,4,10,.92);
@@ -274,28 +274,28 @@ html, body {
 .ae-stat {
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
-  gap: 5px; width: 100%;
-  padding: 10px 0;
+  gap: 7px; width: 100%;
+  padding: 12px 0;
   position: relative;
 }
 .ae-stat::after {
   content: '';
-  position: absolute; bottom: 0; left: 18px; right: 18px;
-  height: 1px; background: rgba(184,176,198,.06);
+  position: absolute; bottom: 0; left: 22px; right: 22px;
+  height: 1px; background: rgba(184,176,198,.07);
 }
 .ae-stat:last-child::after { display: none; }
 .ae-stat-icon {
-  font-size: 14px; line-height: 1; opacity: .42;
+  font-size: 18px; line-height: 1; opacity: .50;
 }
 .ae-stat-val {
   font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px; font-weight: 500; letter-spacing: .03em;
-  line-height: 1; color: var(--text); opacity: .60;
+  font-size: 13px; font-weight: 500; letter-spacing: .04em;
+  line-height: 1; color: var(--text); opacity: .72;
 }
 .ae-stat-lbl {
   font-family: 'IBM Plex Mono', monospace;
-  font-size: 7px; letter-spacing: .16em; text-transform: uppercase;
-  color: var(--muted); opacity: .26; line-height: 1;
+  font-size: 9px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--muted); opacity: .35; line-height: 1;
 }
 
 /* color variants */
