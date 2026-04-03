@@ -1,0 +1,1039 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Apocalypse Express</title>
+  <meta name="description" content="A cinematic narrative RPG about dead souls, infernal railways, and a second life purchased on Lucifer's schedule.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Inter:wght@300;400;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --void:    #05040a;
+      --surface: #0b0e16;
+      --purple:  #4c2b70;
+      --purple2: #a38bcf;
+      --gold:    #c99c5a;
+      --gold2:   #e6cfa1;
+      --cyan:    #28bdd8;
+      --ember:   #ff7b5c;
+      --text:    #f8f5f0;
+      --muted:   #b8b0c6;
+      --prose:   #c2bcc8;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--void);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      overflow: hidden;
+    }
+
+    /* ── SLIDE ENGINE ── */
+    .slideshow {
+      width: 100vw; height: 100vh;
+      position: relative;
+      overflow: hidden;
+      padding:
+        env(safe-area-inset-top, 0)
+        env(safe-area-inset-right, 0)
+        env(safe-area-inset-bottom, 0)
+        env(safe-area-inset-left, 0);
+    }
+
+    .slide {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .7s ease;
+    }
+    .slide.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    /* ── SLIDE 0 — TITLE ── */
+    #slide-title {
+      background: var(--void);
+    }
+
+    /* atmospheric layers */
+    #slide-title .bg-glow {
+      position: absolute; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 50% 40%, rgba(76,43,112,.38), transparent 65%),
+        radial-gradient(ellipse 30% 25% at 50% 90%, rgba(201,156,90,.10), transparent 55%),
+        radial-gradient(ellipse 80% 60% at 10% 5%,  rgba(76,43,112,.12), transparent 50%);
+    }
+
+    /* faint rail lines across the bottom */
+    #slide-title .rails {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 180px; z-index: 1;
+      background:
+        linear-gradient(to bottom, transparent 0%, rgba(201,156,90,.04) 60%, rgba(201,156,90,.10) 100%);
+      overflow: hidden;
+    }
+    #slide-title .rails::before,
+    #slide-title .rails::after {
+      content: '';
+      position: absolute; bottom: 0;
+      width: 2px; height: 100%;
+      background: linear-gradient(to top, rgba(201,156,90,.45), transparent);
+    }
+    #slide-title .rails::before { left: calc(50% - 120px); }
+    #slide-title .rails::after  { left: calc(50% + 120px); }
+
+    /* content */
+    #slide-title .content {
+      position: relative; z-index: 2;
+      text-align: center;
+      max-width: 860px;
+      padding: 0 20px;
+      width: 100%;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px; letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid rgba(201,156,90,.3);
+      background: rgba(11,14,22,.6);
+      padding: 5px 12px; border-radius: 999px;
+      margin-bottom: 20px;
+    }
+
+    h1.title-main {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(40px, 10vw, 108px);
+      font-weight: 900;
+      line-height: .92;
+      letter-spacing: -.02em;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    h1.title-main .word-express {
+      display: block;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold2) 40%, var(--purple2) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.65;
+      max-width: 560px;
+      margin: 18px auto 0;
+      font-weight: 300;
+    }
+
+    .divider {
+      width: 48px; height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold), transparent);
+      margin: 22px auto;
+    }
+
+    .cta-row {
+      display: flex; flex-direction: column; gap: 10px;
+      align-items: center; justify-content: center;
+      margin-top: 8px;
+      width: 100%; max-width: 320px;
+      margin-left: auto; margin-right: auto;
+    }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      text-decoration: none; font-size: 13px; font-weight: 600;
+      padding: 14px 20px; border-radius: 999px;
+      border: 1px solid transparent;
+      cursor: pointer; transition: all .25s ease;
+      letter-spacing: .04em;
+      width: 100%;
+      min-height: 44px;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, rgba(76,43,112,.9), rgba(201,156,90,.28));
+      border-color: rgba(201,156,90,.5);
+      color: var(--gold2);
+    }
+    .btn-primary:hover {
+      background: linear-gradient(135deg, rgba(96,55,138,.95), rgba(201,156,90,.40));
+      border-color: var(--gold);
+      color: var(--text);
+    }
+    .btn-ghost {
+      background: rgba(11,14,22,.5);
+      border-color: rgba(255,255,255,.08);
+      color: var(--muted);
+    }
+    .btn-ghost:hover {
+      border-color: rgba(255,255,255,.18);
+      color: var(--text);
+    }
+
+    .btn-arrow {
+      font-size: 16px; line-height: 1;
+    }
+
+    /* ── SLIDE NAVIGATION ── */
+    .nav-btn {
+      position: fixed; top: 50%; z-index: 100;
+      transform: translateY(-50%);
+      width: 44px; height: 44px;
+      background: rgba(11,14,22,.7);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 50%;
+      color: var(--muted);
+      font-size: 18px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all .2s ease;
+      opacity: 0; pointer-events: none; /* hidden until slide 2+ */
+    }
+    .nav-btn:hover { background: rgba(76,43,112,.6); border-color: var(--purple2); color: var(--text); }
+    .nav-btn.visible { opacity: 1; pointer-events: all; }
+    #nav-prev { left: 10px; }
+    #nav-next { right: 10px; }
+
+    /* slide counter — hidden, not needed with pip progress */
+    .slide-counter { display: none; }
+
+    /* ── SCENE LAYOUT (vertical stack) ── */
+    .scene-layout {
+      display: flex; flex-direction: column;
+      width: 100%; height: 100%;
+      background: #02010a;
+      position: relative;
+    }
+
+    /* art panel with overlaid header */
+    .scene-art {
+      flex-shrink: 0;
+      height: 38vh;
+      background: url('assets/img/a1-null-meridian.webp') center 30% / cover no-repeat;
+      position: relative;
+    }
+    .scene-art::after {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(to bottom, rgba(2,1,10,.55) 0%, rgba(2,1,10,.1) 25%, transparent 50%, rgba(2,1,10,.95) 100%),
+        linear-gradient(to right, rgba(2,1,10,.3) 0%, transparent 20%, transparent 80%, rgba(2,1,10,.3) 100%);
+    }
+
+    /* header overlay — sits on top of art */
+    .scene-header {
+      position: absolute; top: 0; left: 0; right: 0;
+      z-index: 5;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 16px 18px 0;
+    }
+    .scene-header-left {
+      display: flex; flex-direction: column;
+      gap: 4px;
+    }
+    .scene-header-chapter {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px; letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: .4;
+    }
+    .scene-header-title {
+      font-family: 'Cinzel', serif;
+      font-size: 16px; font-weight: 700;
+      color: var(--text);
+      opacity: .7;
+      letter-spacing: .04em;
+      transition: opacity .4s ease;
+    }
+    .scene-header-right {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      padding-top: 4px;
+    }
+    .scene-pip {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: rgba(184,176,198,.15);
+      border: 1px solid rgba(184,176,198,.2);
+      transition: background .4s ease, border-color .4s ease, box-shadow .4s ease;
+    }
+    .scene-pip.active {
+      background: var(--gold);
+      border-color: var(--gold);
+      opacity: .7;
+      box-shadow: 0 0 6px rgba(201,156,90,.3);
+    }
+    .scene-pip.visited {
+      background: rgba(184,176,198,.35);
+      border-color: rgba(184,176,198,.35);
+    }
+
+    /* divider between art and body */
+    .scene-divider {
+      flex-shrink: 0;
+      height: 1px;
+      background: linear-gradient(to right,
+        transparent 5%,
+        rgba(201,156,90,.12) 20%,
+        rgba(201,156,90,.3) 50%,
+        rgba(201,156,90,.12) 80%,
+        transparent 95%
+      );
+      position: relative;
+    }
+    .scene-divider::before { display: none; }
+
+    .scene-body {
+      flex: 1; min-height: 0;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 24px 20px 0;
+      display: flex; flex-direction: column;
+      align-items: center;
+      position: relative;
+      mask-image: linear-gradient(to bottom, transparent 0%, black 16px, black 100%);
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 16px, black 100%);
+    }
+
+    /* fullscreen text toggle — centered on divider line */
+    .scene-expand {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+      width: 28px; height: 28px;
+      background: #02010a;
+      border: 1px solid rgba(201,156,90,.25);
+      border-radius: 6px;
+      color: var(--gold);
+      font-size: 11px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      opacity: .45;
+      transition: opacity .3s, border-color .3s, background .3s, transform .15s;
+    }
+    .scene-expand:hover { opacity: .8; border-color: rgba(201,156,90,.5); }
+    .scene-expand:active { transform: translate(-50%, -50%) scale(.9); }
+
+    /* fullscreen mode */
+    .scene-layout.fullscreen .scene-art,
+    .scene-layout.fullscreen .scene-divider { display: none; }
+    .scene-layout.fullscreen .scene-body {
+      padding-top: 16px;
+      mask-image: none;
+      -webkit-mask-image: none;
+    }
+    /* in fullscreen: divider hidden, so show a fixed close button instead */
+    /* in fullscreen: hide the divider expand button entirely */
+    .scene-layout.fullscreen .scene-expand { display: none; }
+    /* hide choices + footer in fullscreen — close button at bottom handles exit */
+    .scene-layout.fullscreen .scene-choices { display: none; }
+    .scene-layout.fullscreen .scene-footer { display: none; }
+    /* show the close strip at bottom */
+    .scene-layout.fullscreen .scene-close {
+      display: flex;
+    }
+
+    .scene-close {
+      display: none;
+      flex-shrink: 0;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 24px 0 calc(20px + env(safe-area-inset-bottom, 0px));
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: .4;
+      transition: opacity .3s;
+    }
+    .scene-close:hover { opacity: .7; }
+
+    .scene-text {
+      max-width: 580px; width: 100%;
+      font-size: 15px; line-height: 1.75;
+      font-weight: 400;
+      color: var(--prose);
+      font-style: normal;
+      text-align: left;
+      opacity: 0;
+      transition: opacity .5s ease;
+    }
+    .scene-text.visible { opacity: 1; }
+    .scene-text em {
+      color: var(--text);
+      font-style: italic;
+      font-weight: 500;
+    }
+    .scene-text br + br {
+      content: '';
+      display: block;
+      margin-top: 0.6em;
+    }
+
+    /* ── CARD CAROUSEL ── */
+    .scene-choices {
+      width: 100%;
+      opacity: 0;
+      transition: opacity .5s ease;
+      margin-top: 28px;
+      flex-shrink: 0;
+    }
+    .scene-choices.visible { opacity: 1; }
+
+    .card-carousel {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .card-arrow {
+      flex-shrink: 0;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: rgba(5,4,10,.6);
+      border: 1px solid rgba(163,139,207,.15);
+      color: var(--muted);
+      font-size: 14px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color .3s, color .3s, opacity .3s;
+      opacity: .4;
+    }
+    .card-arrow:hover { border-color: rgba(163,139,207,.4); color: var(--text); opacity: .8; }
+    .card-arrow.hidden { opacity: 0; pointer-events: none; }
+
+    .card-frame {
+      flex: 1; max-width: 240px;
+      display: flex; align-items: center; justify-content: center;
+      min-height: 160px;
+    }
+
+    .card {
+      width: 100%;
+      background: rgba(5,4,10,.6);
+      backdrop-filter: blur(10px) saturate(.6);
+      -webkit-backdrop-filter: blur(10px) saturate(.6);
+      border: 1px solid rgba(163,139,207,.2);
+      border-radius: 4px;
+      padding: 24px 16px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color .4s, background .4s, box-shadow .4s, transform .15s;
+      position: relative;
+    }
+    .card::before {
+      content: '';
+      position: absolute; inset: 4px;
+      border: 1px solid rgba(163,139,207,.08);
+      border-radius: 2px;
+      pointer-events: none;
+    }
+    .card:hover {
+      border-color: rgba(163,139,207,.45);
+      background: rgba(76,43,112,.18);
+      box-shadow: 0 0 24px rgba(76,43,112,.2);
+    }
+    .card:active { transform: scale(.97); }
+
+    .card-icon {
+      font-size: 20px;
+      margin-bottom: 14px;
+      opacity: .5;
+      display: block;
+    }
+    .card-type {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 8px; letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--purple2);
+      opacity: .45;
+      margin-bottom: 12px;
+    }
+    .card-label {
+      font-family: 'Cinzel', serif;
+      font-size: 12px; font-weight: 700;
+      letter-spacing: .08em;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .card:hover .card-label { color: var(--text); }
+    .card:hover .card-icon { opacity: .8; }
+
+    /* decide variant — gold tones */
+    .card.card-decide {
+      border-color: rgba(201,156,90,.2);
+    }
+    .card.card-decide::before {
+      border-color: rgba(201,156,90,.08);
+    }
+    .card.card-decide .card-type { color: var(--gold); }
+    .card.card-decide .card-icon { color: var(--gold); }
+    .card.card-decide .card-label { color: var(--gold2); opacity: .7; }
+    .card.card-decide:hover {
+      border-color: rgba(201,156,90,.5);
+      background: rgba(201,156,90,.1);
+      box-shadow: 0 0 24px rgba(201,156,90,.15);
+    }
+    .card.card-decide:hover .card-label { color: var(--gold2); opacity: 1; }
+
+    /* card pips */
+    .card-pips {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 14px;
+    }
+    .card-pip {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: rgba(184,176,198,.15);
+      border: 1px solid rgba(184,176,198,.2);
+      transition: background .3s, border-color .3s;
+    }
+    .card-pip.active {
+      background: var(--purple2);
+      border-color: var(--purple2);
+      opacity: .7;
+    }
+
+    .scene-footer {
+      flex-shrink: 0;
+      padding: 36px 0 calc(24px + env(safe-area-inset-bottom, 0px));
+      text-align: center;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 8px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      opacity: .2;
+    }
+
+    @keyframes fog-in {
+      from { opacity: 0; transform: translateX(18px); filter: blur(4px); }
+      to   { opacity: 1; transform: translateX(0);    filter: blur(0px); }
+    }
+    @keyframes fog-drift {
+      0%,100% { transform: translateY(0px); }
+      50%      { transform: translateY(-3px); }
+    }
+
+    /* staggered fog-in for carousel */
+    .scene-choices.visible .card-carousel { animation: fog-in .6s ease both; }
+
+    /* ── PULSE GLOW ANIMATION ── */
+    @keyframes pulse-glow {
+      0%, 100% { opacity: .38; }
+      50%       { opacity: .52; }
+    }
+    #slide-title .bg-glow {
+      animation: pulse-glow 6s ease-in-out infinite;
+    }
+
+    /* ── FADE IN FOR TITLE CONTENT ── */
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    #slide-title.active .eyebrow   { animation: fade-up .8s ease both .2s; }
+    #slide-title.active h1         { animation: fade-up .8s ease both .45s; }
+    #slide-title.active .subtitle  { animation: fade-up .8s ease both .7s; }
+    #slide-title.active .divider   { animation: fade-up .6s ease both .9s; }
+    #slide-title.active .cta-row   { animation: fade-up .6s ease both 1.0s; }
+
+    /* ── RESPONSIVE — desktop scale-up ── */
+    @media (min-width: 640px) {
+      .eyebrow { font-size: 11px; padding: 6px 14px; margin-bottom: 28px; }
+      .subtitle { font-size: clamp(15px, 2vw, 19px); margin-top: 24px; }
+      .divider { margin: 32px auto; }
+      .cta-row { flex-direction: row; width: auto; max-width: none; }
+      .btn { width: auto; font-size: 14px; padding: 14px 26px; }
+      #slide-title .content { padding: 0 24px; }
+
+      #nav-prev { left: 20px; }
+      #nav-next { right: 20px; }
+
+      .scene-header { padding: 20px 32px 0; }
+      .scene-header-chapter { font-size: 10px; }
+      .scene-header-title { font-size: 18px; }
+      .scene-art { height: 40vh; }
+      .scene-body { padding: 28px 32px 0; }
+      .scene-text { font-size: 17px; line-height: 1.85; }
+      .card-frame { max-width: 280px; min-height: 180px; }
+      .card-label { font-size: 13px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="slideshow" id="slideshow">
+
+    <!-- SLIDE 0: TITLE -->
+    <section class="slide active" id="slide-title" data-index="0">
+      <div class="bg-glow"></div>
+      <div class="rails"></div>
+
+      <div class="content">
+        <span class="eyebrow">A Narrative RPG Campaign</span>
+
+        <h1 class="title-main">
+          Apocalypse
+          <span class="word-express">Express</span>
+        </h1>
+
+        <p class="subtitle">
+          Dead souls. Infernal railways. Frozen time.<br>
+          A second life purchased on Lucifer's schedule.
+        </p>
+
+        <div class="divider"></div>
+
+        <div class="cta-row">
+          <button class="btn btn-primary" onclick="goTo(1)">
+            <span class="btn-arrow">→</span> Board the Train
+          </button>
+          <a class="btn btn-ghost" href="https://github.com/Kenessy/Kenessy/tree/Apocalypse-Express-DnD-Game/Database" target="_blank">
+            Open the Database
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 1: NULL MERIDIAN -->
+    <section class="slide" id="slide-a1" data-index="1">
+      <div class="scene-layout">
+        <div class="scene-art">
+          <div class="scene-header">
+            <div class="scene-header-left">
+              <div class="scene-header-chapter">Canto I · Episode 01</div>
+              <div class="scene-header-title" id="a1-heading">The Null Meridian</div>
+            </div>
+            <div class="scene-header-right" id="a1-pips">
+              <div class="scene-pip active"></div>
+              <div class="scene-pip"></div>
+              <div class="scene-pip"></div>
+              <div class="scene-pip"></div>
+            </div>
+          </div>
+        </div>
+        <div class="scene-divider">
+          <button class="scene-expand" id="a1-expand" onclick="toggleFullscreen()" title="Expand text">↕</button>
+        </div>
+        <div class="scene-body" id="a1-body">
+          <div class="scene-text" id="a1-text"></div>
+          <div class="scene-choices" id="a1-choices"></div>
+          <button class="scene-close" onclick="toggleFullscreen()">↩ Close</button>
+          <div class="scene-footer">Apocalypse Express</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 2: TO BE CONTINUED -->
+    <section class="slide" id="slide-tbc" data-index="2">
+      <div style="position:absolute;inset:0;background:var(--void);display:flex;align-items:center;justify-content:center;">
+        <div style="text-align:center;max-width:520px;padding:24px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--ember);opacity:.5;margin-bottom:18px;">Scene A2 — Obelisk &amp; Clock</div>
+          <h2 style="font-family:'Cinzel',serif;font-size:clamp(28px,5vw,48px);font-weight:700;color:var(--text);line-height:1;margin-bottom:20px;">To be continued.</h2>
+          <p style="font-size:14px;color:var(--muted);line-height:1.7;font-style:italic;margin-bottom:28px;">Something is taking shape in the dark beyond the platform's edge.</p>
+          <button class="btn btn-ghost" onclick="goTo(0)">← Back to title</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- future slides will be added here -->
+
+  </div>
+
+  <!-- NAV BUTTONS -->
+  <button class="nav-btn" id="nav-prev" onclick="goTo(currentSlide - 1)">&#8592;</button>
+  <button class="nav-btn" id="nav-next" onclick="goTo(currentSlide + 1)">&#8594;</button>
+
+  <!-- COUNTER -->
+  <div class="slide-counter hidden" id="slide-counter">1 / 1</div>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    let currentSlide = 0;
+    const total = slides.length;
+
+    function goTo(n) {
+      if (n < 0 || n >= total) return;
+      slides[currentSlide].classList.remove('active');
+      currentSlide = n;
+      slides[currentSlide].classList.add('active');
+      updateNav();
+    }
+
+    function updateNav() {
+      const prevBtn = document.getElementById('nav-prev');
+      const nextBtn = document.getElementById('nav-next');
+      const counter = document.getElementById('slide-counter');
+
+      // hide nav arrows on scene slides (story choices navigate instead)
+      const isScene = slides[currentSlide].querySelector('.scene-layout');
+      prevBtn.classList.toggle('visible', currentSlide > 0 && !isScene);
+      nextBtn.classList.toggle('visible', currentSlide < total - 1 && !isScene);
+      counter.classList.toggle('hidden', total <= 1);
+      if (total > 1) {
+        counter.textContent = (currentSlide + 1) + ' / ' + total;
+      }
+    }
+
+    // ── CARD CAROUSEL HELPERS ──
+    const cardIcons = {
+      think:  '\u2727',   // ✧
+      decide: '\u2192',   // →
+      primary: '\u2192',  // →
+    };
+    const cardTypes = {
+      think:  'Ponder',
+      decide: 'Decide',
+      primary: 'Continue',
+    };
+    let carouselIdx = 0;
+    let carouselChoices = [];
+
+    function renderCarousel(choices, container) {
+      carouselChoices = choices;
+      carouselIdx = 0;
+      updateCarousel(container);
+    }
+
+    function updateCarousel(container) {
+      const c = carouselChoices[carouselIdx];
+      const type = c.type || c.cls || 'primary';
+      const isDecide = type === 'decide' || type === 'primary';
+      const total = carouselChoices.length;
+
+      const pipsHtml = total > 1
+        ? `<div class="card-pips">${carouselChoices.map((_,i) =>
+            `<div class="card-pip${i === carouselIdx ? ' active' : ''}"></div>`
+          ).join('')}</div>`
+        : '';
+
+      container.innerHTML = `
+        <div class="card-carousel">
+          <button class="card-arrow${carouselIdx <= 0 ? ' hidden' : ''}" onclick="carouselNav(-1)">\u2039</button>
+          <div class="card-frame">
+            <div class="card${isDecide ? ' card-decide' : ''}" onclick="a1Act('${c.next}')">
+              <span class="card-icon">${cardIcons[type] || '\u2727'}</span>
+              <div class="card-type">${cardTypes[type] || 'Act'}</div>
+              <div class="card-label">${c.label}</div>
+            </div>
+          </div>
+          <button class="card-arrow${carouselIdx >= total - 1 ? ' hidden' : ''}" onclick="carouselNav(1)">\u203A</button>
+        </div>
+        ${pipsHtml}`;
+    }
+
+    function toggleFullscreen() {
+      const layout = document.querySelector('.scene-layout');
+      const btn = document.getElementById('a1-expand');
+      layout.classList.toggle('fullscreen');
+      btn.textContent = layout.classList.contains('fullscreen') ? '\u00D7' : '\u2195';
+    }
+
+    function carouselNav(dir) {
+      const newIdx = carouselIdx + dir;
+      if (newIdx < 0 || newIdx >= carouselChoices.length) return;
+      carouselIdx = newIdx;
+      updateCarousel(a1.choices);
+    }
+
+    // ── A1 BEAT SYSTEM ──
+    const a1Beats = {
+      intro: {
+        heading: 'The Null Meridian', pip: 0,
+        text: `You surface slowly.<br><br>
+               Fog first — thick, cold, the kind that doesn\u2019t move so much as it decides to let you through.
+               Then stone beneath you, obsidian-dark and perfectly still, a platform that seems to have
+               always been here, waiting for exactly this.<br><br>
+               The mist curls at your ankles. Around you, shapes resolve out of the grey —
+               figures that suggest people the way a shadow suggests a hand.
+               They don\u2019t speak. They don\u2019t move. They simply stand, the way things stand
+               when they have nowhere left to go.<br><br>
+               Above: nothing. The sky, if it deserves the word, is the color of a held breath.<br><br>
+               <em>You are somewhere. You are sure of that much.</em>`,
+        choices: [
+          { label: 'Continue', cls: 'primary', next: 'choose' }
+        ]
+      },
+      choose: {
+        heading: 'The platform waits.', pip: 1,
+        text: `The platform waits. The shapes stand. The silence is patient.<br><br>
+               <em>Whatever comes next starts with you.</em>`,
+        choices: [
+          { label: 'Step forward.',   type: 'think', next: 'forward' },
+          { label: 'Look around.',    type: 'think', next: 'look' },
+          { label: 'Search inward.',  type: 'think', next: 'inward' }
+        ]
+      },
+
+      /* ── SEARCH INWARD branch ── */
+      inward: {
+        heading: 'Searching inward\u2026', pip: 2,
+        text: `You stop. The fog, the shapes, the silence — you turn away from all of it.<br><br>
+               You close whatever counts as eyes. Somewhere underneath the nothing, something has to still be yours.<br><br>
+               <em>You reach inward. Three threads hang in the dark.</em>`,
+        choices: [
+          { label: 'The last thing before\u2014',  type: 'think', next: 'inward_memory' },
+          { label: 'Look down. What am I?',         type: 'think', next: 'inward_body' },
+          { label: 'Try something. Reach.',          type: 'think', next: 'inward_power' }
+        ]
+      },
+      inward_memory: {
+        heading: 'The last thing before\u2014', pip: 2,
+        text: `A face. Up close — too close, like seen mid-embrace. A smile, or tears. You can\u2019t tell. But familiar. The truest thing you ever saw.<br><br>
+               A room. A wall the colour you know. Light that was always there. A shelf, a bed, something you held before you fell asleep.<br><br>
+               Hands — your hands — working. The motion automatic. Life.<br><br>
+               Then the light changes. Everyone looks up. Helicopters pull across overhead so low the water trembles in the glass. Armoured vehicles in the streets. Someone crying in the corridor. The newsreader\u2019s face like someone who doesn\u2019t believe what they\u2019re reading.<br><br>
+               <em>Then — nothing. The fog takes it.</em>`,
+        choices: [
+          { label: 'Look down. What am I?',  type: 'think', next: 'inward_body' },
+          { label: 'Wait.',                   type: 'think', next: 'wait' }
+        ]
+      },
+      inward_body: {
+        heading: 'Your form', pip: 2,
+        text: `Hands. You have hands — or something that wants to count as hands. You raise them and the outline trembles, like a road surface in heat haze.<br><br>
+               For a moment they come into focus. Strong hands, worker\u2019s hands — you know the calluses, the grain of the skin. Yours. Surely.<br><br>
+               Then others. Longer, darker. Or slimmer, younger — a version you wanted? One you feared?<br><br>
+               You run a hand across your face. There is a face. Bridge of nose, jawline, eye socket — but the shape slides away before you grasp it. Three faces layered over each other: who you were, who you wanted to be, and something third that doesn\u2019t recognise you.<br><br>
+               <em>You are a soul. What remains when everything else is taken off.</em>`,
+        choices: [
+          { label: 'The last thing before\u2014',  type: 'think', next: 'inward_memory' },
+          { label: 'Wait.',                          type: 'think', next: 'wait' }
+        ]
+      },
+      inward_power: {
+        heading: 'Something deeper', pip: 2,
+        text: `You reach for something deeper. Not memory, not form — <em>force.</em><br><br>
+               Something gathers. Words, sigils, muscle memory — a current rising from wherever power used to live in you.<br><br>
+               A flash: light, sparks, the outline of something sharp and bright behind your knuckles.<br><br>
+               Then it collapses. Like a circuit with no source. The shape fades. The warmth drains.<br><br>
+               <em>Whatever fuelled that — it isn\u2019t connected here.</em>`,
+        choices: [
+          { label: 'The last thing before\u2014',  type: 'think', next: 'inward_memory' },
+          { label: 'Wait.',                          type: 'think', next: 'wait' }
+        ]
+      },
+
+      /* ── STEP FORWARD branch ── */
+      forward: {
+        heading: 'The nearest shape', pip: 2,
+        text: `The stone is cool beneath what passes for feet. The nearest shape stands a few paces away, half-turned, its outline flickering like a candle behind glass.<br><br>
+               <em>You take a step toward it.</em>`,
+        choices: [
+          { label: 'Reach out.',              type: 'think', next: 'forward_reach' },
+          { label: 'Speak.',                  type: 'think', next: 'forward_speak' },
+          { label: 'Search inward instead.',  type: 'think', next: 'inward' }
+        ]
+      },
+      forward_reach: {
+        heading: 'Contact', pip: 2,
+        text: `Your hand passes through. Not a wall, not resistance \u2014 <em>nothing.</em> The shape ripples where your fingers cross it, the way a reflection breaks in disturbed water.<br><br>
+               For a half-second you feel warmth. A pulse. Something that was alive, recently, and still hasn\u2019t accepted the alternative.<br><br>
+               Then the shape settles. It stands the way it stood before. It does not acknowledge you.<br><br>
+               <em>You are the same kind of thing. You understand this now.</em>`,
+        choices: [
+          { label: 'Search inward.',  type: 'think', next: 'inward' },
+          { label: 'Wait.',           type: 'think', next: 'wait' }
+        ]
+      },
+      forward_speak: {
+        heading: 'Your voice', pip: 2,
+        text: `You open your mouth. The word comes out flat, muffled, like speaking into packed wool.<br><br>
+               \u201CHello.\u201D<br><br>
+               The sound travels nowhere. It doesn\u2019t echo, doesn\u2019t fade \u2014 it simply stops, as if the air swallowed it mid-flight.<br><br>
+               The nearest shape turns slightly. Tilts. There is something where a face should be, but it is all suggestion. A sketch of attention.<br><br>
+               <em>It heard you. It has nothing to say back.</em>`,
+        choices: [
+          { label: 'Search inward.',  type: 'think', next: 'inward' },
+          { label: 'Wait.',           type: 'think', next: 'wait' }
+        ]
+      },
+
+      /* ── LOOK AROUND branch ── */
+      look: {
+        heading: 'The platform', pip: 2,
+        text: `You stay still. The platform resolves: raw stone, no railings, floating in featureless black. A thin red line traces the rim like wire heated to a glow.<br><br>
+               <em>Seven shapes. Maybe eight. The ones at the edge blur where the mist thickens.</em>`,
+        choices: [
+          { label: 'Walk to the rim.',  type: 'think', next: 'look_rim' },
+          { label: 'Study the shapes.', type: 'think', next: 'look_shapes' },
+          { label: 'Search inward.',    type: 'think', next: 'inward' }
+        ]
+      },
+      look_rim: {
+        heading: 'The edge', pip: 2,
+        text: `You walk toward the edge. The red line grows brighter as you approach \u2014 not hot, not warning, just <em>present.</em> Marking where something ends and something else begins.<br><br>
+               You step past it.<br><br>
+               The fog swallows you for three heartbeats. Then \u2014 stone beneath your feet again. The centre of the platform. The shapes around you, exactly where they were.<br><br>
+               <em>The space loops. There is no off.</em>`,
+        choices: [
+          { label: 'Study the shapes.',  type: 'think', next: 'look_shapes' },
+          { label: 'Search inward.',     type: 'think', next: 'inward' },
+          { label: 'Wait.',              type: 'think', next: 'wait' }
+        ]
+      },
+      look_shapes: {
+        heading: 'The others', pip: 2,
+        text: `You count them properly this time. Eight. Each one a different size, a different posture \u2014 but all made of the same uncertain material. Smoke given just enough weight to stand.<br><br>
+               None of them look at each other. None of them try to leave.<br><br>
+               One is smaller than the rest. It stands perfectly still, arms at its sides, chin tilted up as if it was looking at something when it arrived and hasn\u2019t stopped.<br><br>
+               <em>You were like this too, a moment ago. Before you decided to move.</em>`,
+        choices: [
+          { label: 'Search inward.',  type: 'think', next: 'inward' },
+          { label: 'Wait.',           type: 'think', next: 'wait' }
+        ]
+      },
+
+      /* ── CONVERGENCE ── */
+      wait: {
+        heading: 'Something moves.', pip: 3,
+        text: `You let it go.<br><br>
+               The fog doesn\u2019t lift. The silence doesn\u2019t break.<br><br>
+               And then — somewhere in the dark, just beyond the edge of the platform —<br>
+               <em>something moves.</em>`,
+        choices: [
+          { label: '\u2192 Continue', cls: 'primary', next: '__next__' }
+        ]
+      }
+    };
+
+    // ── A1 UI FUNCTIONS ──
+    const a1 = {
+      heading:  document.getElementById('a1-heading'),
+      text:     document.getElementById('a1-text'),
+      choices:  document.getElementById('a1-choices'),
+      body:     document.getElementById('a1-body'),
+      pips:     document.getElementById('a1-pips'),
+    };
+    let a1MaxPip = 0;
+
+    function a1UpdatePips(pip) {
+      if (pip > a1MaxPip) a1MaxPip = pip;
+      const dots = a1.pips.querySelectorAll('.scene-pip');
+      dots.forEach((d, i) => {
+        d.classList.remove('active', 'visited');
+        if (i === pip) d.classList.add('active');
+        else if (i < a1MaxPip) d.classList.add('visited');
+      });
+    }
+
+    function a1ShowBeat(beatId) {
+      const beat = a1Beats[beatId];
+      if (!beat) return;
+
+      // update header + pips
+      a1.heading.textContent = beat.heading;
+      a1UpdatePips(beat.pip);
+
+      // fade out current content
+      a1.text.classList.remove('visible');
+      a1.choices.classList.remove('visible');
+
+      setTimeout(() => {
+        // set text
+        a1.text.innerHTML = beat.text;
+
+        // scroll to top
+        a1.body.scrollTop = 0;
+
+        // fade in text
+        a1.text.classList.add('visible');
+
+        // render card carousel after reading delay
+        setTimeout(() => {
+          renderCarousel(beat.choices, a1.choices);
+          a1.choices.classList.add('visible');
+        }, 600);
+      }, 300);
+    }
+
+    function a1Act(next) {
+      if (next === '__next__') { goTo(2); return; }
+      // fade out, then show new beat
+      a1.text.classList.remove('visible');
+      a1.choices.classList.remove('visible');
+      setTimeout(() => a1ShowBeat(next), 350);
+    }
+
+    // open when A1 becomes active
+    const origGoTo = goTo;
+    goTo = function(n) {
+      origGoTo(n);
+      if (n === 1) {
+        // reset
+        document.querySelector('.scene-layout').classList.remove('fullscreen');
+        document.getElementById('a1-expand').textContent = '⛶';
+        a1.text.classList.remove('visible');
+        a1.choices.classList.remove('visible');
+        a1.choices.innerHTML = '';
+        a1.heading.textContent = 'The Null Meridian';
+        a1MaxPip = 0;
+        a1UpdatePips(0);
+        setTimeout(() => a1ShowBeat('intro'), 400);
+      }
+    };
+
+    // keyboard navigation — carousel on scene slides, slide nav elsewhere
+    document.addEventListener('keydown', e => {
+      const isScene = slides[currentSlide] && slides[currentSlide].querySelector('.scene-layout');
+      if (isScene) {
+        if (e.key === 'ArrowRight') { e.preventDefault(); carouselNav(1); }
+        if (e.key === 'ArrowLeft')  { e.preventDefault(); carouselNav(-1); }
+        if (e.key === ' ' || e.key === 'Enter') {
+          e.preventDefault();
+          const c = carouselChoices[carouselIdx];
+          if (c) a1Act(c.next);
+        }
+      } else {
+        if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); goTo(currentSlide + 1); }
+        if (e.key === 'ArrowLeft')                    { e.preventDefault(); goTo(currentSlide - 1); }
+      }
+    });
+
+    // touch / swipe — don't hijack scroll inside .d-card
+    let touchStartX = 0, touchStartY = 0;
+    document.addEventListener('touchstart', e => {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+    document.addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      const dy = e.changedTouches[0].clientY - touchStartY;
+      // only swipe if mostly horizontal and not inside a scrollable card
+      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+        if (!e.target.closest('.scene-body')) {
+          goTo(currentSlide + (dx < 0 ? 1 : -1));
+        }
+      }
+    });
+
+    updateNav();
+  </script>
+</body>
+</html>

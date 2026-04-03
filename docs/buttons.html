@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AE — Button Showcase</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Inter:wght@300;400;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --void: #05040a; --purple: #4c2b70; --purple2: #a38bcf;
+      --gold: #c99c5a; --gold2: #e6cfa1; --ember: #ff7b5c;
+      --text: #f8f5f0; --muted: #b8b0c6;
+    }
+    body {
+      background: var(--void);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      padding: 48px 32px;
+      background-image:
+        radial-gradient(ellipse 60% 40% at 50% 0%, rgba(76,43,112,.25), transparent 60%);
+    }
+    h1 { font-family: 'Cinzel', serif; font-size: 22px; color: var(--gold); letter-spacing:.1em; margin-bottom: 8px; }
+    .subtitle { font-size: 12px; color: var(--muted); letter-spacing:.08em; margin-bottom: 48px; font-family: 'IBM Plex Mono', monospace; }
+
+    .row { margin-bottom: 56px; }
+    .row-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px; letter-spacing:.2em; text-transform:uppercase;
+      color: rgba(163,139,207,.5); margin-bottom: 20px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .row-label::after { content:''; flex:1; height:1px; background: rgba(163,139,207,.12); }
+    .btn-row { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
+
+    /* ── 1. CORNER BRACKETS (current) ── */
+    .btn-bracket {
+      position: relative;
+      font-family: 'Cinzel', serif; font-size: 11px; font-weight: 700;
+      letter-spacing: .18em; text-transform: uppercase;
+      padding: 14px 28px; min-width: 200px; text-align: center;
+      background: rgba(5,4,10,.55); backdrop-filter: blur(10px);
+      color: rgba(184,176,198,.6);
+      border: 1px solid rgba(163,139,207,.2);
+      cursor: pointer;
+      transition: all .4s ease;
+    }
+    .btn-bracket::before,.btn-bracket::after,
+    .btn-bracket .tr,.btn-bracket .bl { position:absolute; width:8px; height:8px; border-color:rgba(163,139,207,.35); border-style:solid; transition: border-color .4s; }
+    .btn-bracket::before { top:3px;left:3px; border-width:1px 0 0 1px; }
+    .btn-bracket::after  { bottom:3px;right:3px; border-width:0 1px 1px 0; }
+    .btn-bracket .tr { top:3px;right:3px; border-width:1px 1px 0 0; }
+    .btn-bracket .bl { bottom:3px;left:3px; border-width:0 0 1px 1px; }
+    .btn-bracket:hover { background:rgba(76,43,112,.32); border-color:rgba(163,139,207,.5); color:rgba(248,245,240,.85); }
+    .btn-bracket:hover::before,.btn-bracket:hover::after,.btn-bracket:hover .tr,.btn-bracket:hover .bl { border-color:rgba(163,139,207,.7); }
+
+    /* ── 2. TICKET STUB ── */
+    .btn-ticket {
+      position: relative;
+      font-family: 'Cinzel', serif; font-size: 11px; font-weight: 700;
+      letter-spacing: .18em; text-transform: uppercase;
+      padding: 14px 28px 14px 36px; min-width: 200px;
+      background: rgba(5,4,10,.6); backdrop-filter: blur(10px);
+      color: rgba(184,176,198,.6);
+      border: 1px solid rgba(163,139,207,.18);
+      border-left: none;
+      cursor: pointer;
+      transition: all .4s ease;
+    }
+    .btn-ticket::before {
+      content: '';
+      position: absolute; left: 0; top: 0; bottom: 0; width: 8px;
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent 0px, transparent 5px,
+        rgba(163,139,207,.3) 5px, rgba(163,139,207,.3) 6px
+      );
+      border-right: 1px dashed rgba(163,139,207,.25);
+    }
+    .btn-ticket:hover { background:rgba(76,43,112,.28); color:rgba(248,245,240,.85); border-color:rgba(163,139,207,.4); }
+    .btn-ticket:hover::before { border-right-color:rgba(163,139,207,.5); }
+
+    /* ── 3. DOUBLE BORDER ── */
+    .btn-double {
+      position: relative;
+      font-family: 'Cinzel', serif; font-size: 11px; font-weight: 700;
+      letter-spacing: .18em; text-transform: uppercase;
+      padding: 14px 28px; min-width: 200px; text-align: center;
+      background: rgba(5,4,10,.55); backdrop-filter: blur(10px);
+      color: rgba(184,176,198,.6);
+      border: 1px solid rgba(163,139,207,.25);
+      outline: 1px solid rgba(163,139,207,.08);
+      outline-offset: 4px;
+      cursor: pointer;
+      transition: all .4s ease;
+    }
+    .btn-double:hover { background:rgba(76,43,112,.28); color:rgba(248,245,240,.85); border-color:rgba(163,139,207,.55); outline-color:rgba(163,139,207,.22); outline-offset:3px; }
+
+    /* ── 4. RUNE DASH ── */
+    .btn-rune {
+      position: relative;
+      font-family: 'Cinzel', serif; font-size: 11px; font-weight: 700;
+      letter-spacing: .18em; text-transform: uppercase;
+      padding: 14px 28px; min-width: 200px; text-align: center;
+      background: rgba(5,4,10,.55); backdrop-filter: blur(10px);
+      color: rgba(184,176,198,.6);
+      border: 1px dashed rgba(163,139,207,.22);
+      cursor: pointer;
+      transition: all .4s ease;
+    }
+    .btn-rune::before,.btn-rune::after {
+      content: '✦';
+      position: absolute; top:50%; transform:translateY(-50%);
+      font-size: 8px; color: rgba(163,139,207,.3);
+      transition: color .4s;
+    }
+    .btn-rune::before { left: 10px; }
+    .btn-rune::after  { right: 10px; }
+    .btn-rune:hover { background:rgba(76,43,112,.28); color:rgba(248,245,240,.85); border-color:rgba(163,139,207,.45); }
+    .btn-rune:hover::before,.btn-rune:hover::after { color:rgba(163,139,207,.8); }
+
+    /* ── 5. SCROLL / BANNER ── */
+    .btn-scroll {
+      position: relative;
+      font-family: 'Cinzel', serif; font-size: 11px; font-weight: 700;
+      letter-spacing: .18em; text-transform: uppercase;
+      padding: 14px 44px; min-width: 200px; text-align: center;
+      background: rgba(5,4,10,.55); backdrop-filter: blur(10px);
+      color: rgba(184,176,198,.6);
+      border-top: 1px solid rgba(163,139,207,.22);
+      border-bottom: 1px solid rgba(163,139,207,.22);
+      border-left: none; border-right: none;
+      cursor: pointer;
+      transition: all .4s ease;
+    }
+    .btn-scroll::before,.btn-scroll::after {
+      content: '';
+      position: absolute; top: 50%; transform: translateY(-50%);
+      width: 28px; height: 1px;
+      background: linear-gradient(to right, transparent, rgba(163,139,207,.4));
+      transition: width .4s, background .4s;
+    }
+    .btn-scroll::before { left: 8px; background: linear-gradient(to right, transparent, rgba(163,139,207,.4)); }
+    .btn-scroll::after  { right: 8px; background: linear-gradient(to left, transparent, rgba(163,139,207,.4)); }
+    .btn-scroll:hover { color:rgba(248,245,240,.85); border-color:rgba(163,139,207,.5); }
+    .btn-scroll:hover::before,.btn-scroll:hover::after { width: 36px; }
+
+    /* ── 6. INSET GLOW ── */
+    .btn-inset {
+      font-family: 'Cinzel', serif; font-size: 11px; font-weight: 700;
+      letter-spacing: .18em; text-transform: uppercase;
+      padding: 14px 28px; min-width: 200px; text-align: center;
+      background: rgba(5,4,10,.7);
+      color: rgba(184,176,198,.6);
+      border: 1px solid rgba(163,139,207,.18);
+      box-shadow: inset 0 1px 0 rgba(163,139,207,.08), inset 0 -1px 0 rgba(163,139,207,.08);
+      cursor: pointer;
+      transition: all .4s ease;
+    }
+    .btn-inset:hover {
+      background: rgba(76,43,112,.22);
+      color: rgba(248,245,240,.85);
+      border-color: rgba(163,139,207,.4);
+      box-shadow: inset 0 1px 0 rgba(163,139,207,.2), inset 0 -1px 0 rgba(163,139,207,.2), 0 0 20px rgba(76,43,112,.3);
+    }
+
+    /* ── GOLD VARIANTS ── */
+    .gold { --c: var(--gold); --csoft: var(--gold2); }
+    .btn-bracket.gold { border-color:rgba(201,156,90,.2); color:rgba(230,207,161,.55); }
+    .btn-bracket.gold::before,.btn-bracket.gold::after,.btn-bracket.gold .tr,.btn-bracket.gold .bl { border-color:rgba(201,156,90,.35); }
+    .btn-bracket.gold:hover { background:rgba(201,156,90,.12); border-color:rgba(201,156,90,.5); color:var(--gold2); }
+    .btn-rune.gold { border-color:rgba(201,156,90,.2); color:rgba(230,207,161,.55); }
+    .btn-rune.gold::before,.btn-rune.gold::after { color:rgba(201,156,90,.35); }
+    .btn-rune.gold:hover { background:rgba(201,156,90,.1); color:var(--gold2); border-color:rgba(201,156,90,.45); }
+    .btn-rune.gold:hover::before,.btn-rune.gold:hover::after { color:rgba(201,156,90,.8); }
+    .btn-scroll.gold { border-color:rgba(201,156,90,.22); color:rgba(230,207,161,.55); }
+    .btn-scroll.gold:hover { color:var(--gold2); border-color:rgba(201,156,90,.5); }
+  </style>
+</head>
+<body>
+  <h1>Button Showcase</h1>
+  <p class="subtitle">Apocalypse Express — ornate button variants</p>
+
+  <div class="row">
+    <div class="row-label">1 — Corner Brackets (current)</div>
+    <div class="btn-row">
+      <button class="btn-bracket"><span class="tr"></span><span class="bl"></span>Try to remember.</button>
+      <button class="btn-bracket"><span class="tr"></span><span class="bl"></span>Look around.</button>
+      <button class="btn-bracket gold"><span class="tr"></span><span class="bl"></span>Continue →</button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="row-label">2 — Ticket Stub (perforated left edge)</div>
+    <div class="btn-row">
+      <button class="btn-ticket">Try to remember.</button>
+      <button class="btn-ticket">Look around.</button>
+      <button class="btn-ticket">Leave it.</button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="row-label">3 — Double Border (outer outline)</div>
+    <div class="btn-row">
+      <button class="btn-double">Try to remember.</button>
+      <button class="btn-double">Look around.</button>
+      <button class="btn-double">Leave it.</button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="row-label">4 — Rune Dash (dashed + ✦ side ornaments)</div>
+    <div class="btn-row">
+      <button class="btn-rune">Try to remember.</button>
+      <button class="btn-rune">Look around.</button>
+      <button class="btn-rune gold">Continue →</button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="row-label">5 — Scroll / Banner (top+bottom only)</div>
+    <div class="btn-row">
+      <button class="btn-scroll">Try to remember.</button>
+      <button class="btn-scroll">Look around.</button>
+      <button class="btn-scroll gold">Continue →</button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="row-label">6 — Inset Glow (subtle inner shadow)</div>
+    <div class="btn-row">
+      <button class="btn-inset">Try to remember.</button>
+      <button class="btn-inset">Look around.</button>
+      <button class="btn-inset">Leave it.</button>
+    </div>
+  </div>
+
+</body>
+</html>
