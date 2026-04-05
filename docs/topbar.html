@@ -433,8 +433,8 @@ html, body {
 /* ── action bar (bottom panel) ── */
 .ae-action-bar {
   width: 100%; height: 100%;
-  display: flex; align-items: center;
-  padding: 12px 14px; gap: 12px;
+  display: flex; align-items: stretch;   /* stretch: minden child fill */
+  padding: 10px 14px; gap: 12px;
 }
 .ae-action-label {
   font: 400 7px/1 'IBM Plex Mono';
@@ -442,13 +442,14 @@ html, body {
   color: var(--gold); opacity: .28;
   writing-mode: vertical-rl;
   flex-shrink: 0;
+  align-self: center;                    /* label marad középen */
 }
 .ae-action-div {
   width: 1px; align-self: stretch;
   background: rgba(201,156,90,.08);
   flex-shrink: 0; margin: 0 2px;
 }
-.ae-choices-row { flex: 1; display: flex; gap: 8px; }
+.ae-choices-row { flex: 1; display: flex; gap: 8px; align-items: stretch; }
 .ae-choice-btn {
   flex: 1;
   display: flex; align-items: center; justify-content: center; gap: 8px;
@@ -471,7 +472,7 @@ html, body {
 
 /* ── bottom panel ── */
 .ae-bottom-panel {
-  height: 80px; flex-shrink: 0;
+  height: 96px; flex-shrink: 0;
   background: rgba(5,4,10,.60);
   position: relative; overflow: hidden;
 }
