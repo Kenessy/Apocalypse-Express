@@ -345,10 +345,9 @@ html, body {
   opacity: 0; pointer-events: none;
   transition: opacity .40s ease .18s;
   display: flex; flex-direction: column;
-  justify-content: flex-end;
-  padding: 32px 40px 28px;
-  background: linear-gradient(to top,
-    rgba(5,4,10,.88) 0%, rgba(5,4,10,.55) 40%, transparent 100%);
+  align-items: center; justify-content: center;
+  padding: 40px 48px;
+  background: rgba(5,4,10,.88);
 }
 .ae-scene-frame.is-dialogue .ae-sf-dialogue {
   opacity: 1; pointer-events: all;
@@ -357,7 +356,7 @@ html, body {
 /* speaker */
 .ae-sf-speaker-row {
   display: flex; align-items: center; gap: 12px;
-  margin-bottom: 16px;
+  margin-bottom: 20px; width: 100%; max-width: 560px;
 }
 .ae-sf-speaker-glyph {
   font-size: 10px; color: var(--gold); opacity: .55; flex-shrink: 0;
@@ -377,7 +376,7 @@ html, body {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 14px; line-height: 1.85; letter-spacing: .01em;
   color: var(--text); opacity: .78;
-  margin-bottom: 24px; max-width: 560px;
+  max-width: 560px; text-align: center;
 }
 
 /* choices */
