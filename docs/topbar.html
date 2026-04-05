@@ -453,8 +453,45 @@ html, body {
 /* ── action bar (bottom panel) ── */
 .ae-action-bar {
   width: 100%; height: 100%;
-  display: flex; align-items: stretch;   /* stretch: minden child fill */
+  display: flex; align-items: stretch;
   padding: 10px 14px; gap: 12px;
+}
+
+/* narrative mode: continue gomb, choices elrejtve */
+.ae-bottom-panel.is-narrative .ae-action-label,
+.ae-bottom-panel.is-narrative .ae-action-div,
+.ae-bottom-panel.is-narrative .ae-choices-row { display: none; }
+.ae-bottom-panel.is-narrative .ae-continue-btn { display: flex; }
+
+/* continue gomb */
+.ae-continue-btn {
+  display: none;   /* default: rejtett, choice mode az alap */
+  flex: 1; align-items: center; justify-content: center; gap: 10px;
+  border: 1px solid rgba(201,156,90,.09); border-radius: 3px;
+  background: rgba(201,156,90,.018);
+  cursor: pointer;
+  transition: background .2s, border-color .2s, opacity .2s;
+}
+.ae-continue-btn:hover {
+  background: rgba(201,156,90,.07);
+  border-color: rgba(201,156,90,.22);
+}
+.ae-continue-btn:hover .ae-continue-arrow { animation: none; opacity: .88; }
+.ae-continue-btn:hover .ae-continue-text  { opacity: .88; }
+.ae-continue-btn:focus-visible { outline: 1px solid rgba(201,156,90,.45); outline-offset: -1px; }
+
+.ae-continue-arrow {
+  color: var(--gold); font-size: 8px; flex-shrink: 0;
+  animation: ae-pulse 2.6s ease-in-out infinite;
+}
+@keyframes ae-pulse {
+  0%, 100% { opacity: .38; }
+  50%       { opacity: .72; }
+}
+.ae-continue-text {
+  font: 400 9px/1 'IBM Plex Mono';
+  letter-spacing: .26em; text-transform: uppercase;
+  color: var(--muted); opacity: .48;
 }
 .ae-action-label {
   font: 400 7px/1 'IBM Plex Mono';
@@ -659,10 +696,17 @@ html, body {
     </div>
 
     <div class="ae-h-sep"></div>
-    <div class="ae-bottom-panel">
+    <div class="ae-bottom-panel is-narrative">
       <div class="ae-action-bar">
         <span class="ae-action-label">choose</span>
         <div class="ae-action-div"></div>
+
+        <!-- narrative mode: single continue button -->
+        <div class="ae-continue-btn" tabindex="0" role="button" onclick="advanceScene()">
+          <span class="ae-continue-arrow">▶</span>
+          <span class="ae-continue-text">continue</span>
+        </div>
+
         <div class="ae-choices-row">
           <div class="ae-choice-btn" tabindex="0" role="button"
                data-icon="◎" data-tint="cyan"
@@ -700,6 +744,12 @@ html, body {
 <script>
 function toggleScene() {
   document.getElementById('scene-frame').classList.toggle('is-dialogue');
+}
+
+function advanceScene() {
+  // narrative → choice mode: continue gomb eltűnik, choices megjelennek
+  const panel = document.querySelector('.ae-bottom-panel');
+  panel.classList.remove('is-narrative');
 }
 
 (function initChoicePreview() {
