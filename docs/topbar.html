@@ -430,6 +430,45 @@ html, body {
   background: #0a0814; padding: 0 8px; line-height: 1;
 }
 
+/* ── action bar (bottom panel) ── */
+.ae-action-bar {
+  width: 100%; height: 100%;
+  display: flex; align-items: center;
+  padding: 12px 14px; gap: 12px;
+}
+.ae-action-label {
+  font: 400 7px/1 'IBM Plex Mono';
+  letter-spacing: .20em; text-transform: uppercase;
+  color: var(--gold); opacity: .28;
+  writing-mode: vertical-rl;
+  flex-shrink: 0;
+}
+.ae-action-div {
+  width: 1px; align-self: stretch;
+  background: rgba(201,156,90,.08);
+  flex-shrink: 0; margin: 0 2px;
+}
+.ae-choices-row { flex: 1; display: flex; gap: 8px; }
+.ae-choice-btn {
+  flex: 1;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  border: 1px solid rgba(201,156,90,.09); border-radius: 3px;
+  background: rgba(201,156,90,.025);
+  cursor: pointer;
+  transition: background .2s, border-color .2s;
+}
+.ae-choice-btn:hover {
+  background: rgba(201,156,90,.07);
+  border-color: rgba(201,156,90,.20);
+}
+.ae-choice-btn:hover .ae-cb-arrow { opacity: .60; }
+.ae-choice-btn:hover .ae-cb-text  { opacity: .85; }
+.ae-cb-arrow { color: var(--gold); opacity: .38; font-size: 8px; flex-shrink: 0; }
+.ae-cb-text {
+  font: 400 11px/1.3 'IBM Plex Mono'; letter-spacing: .03em;
+  color: var(--text); opacity: .62; text-align: center;
+}
+
 /* ── bottom panel ── */
 .ae-bottom-panel {
   height: 80px; flex-shrink: 0;
@@ -573,7 +612,26 @@ html, body {
     </div>
 
     <div class="ae-h-sep"></div>
-    <div class="ae-bottom-panel"></div>
+    <div class="ae-bottom-panel">
+      <div class="ae-action-bar">
+        <span class="ae-action-label">choose</span>
+        <div class="ae-action-div"></div>
+        <div class="ae-choices-row">
+          <div class="ae-choice-btn">
+            <span class="ae-cb-arrow">▶</span>
+            <span class="ae-cb-text">Approach the glowing platform</span>
+          </div>
+          <div class="ae-choice-btn">
+            <span class="ae-cb-arrow">▶</span>
+            <span class="ae-cb-text">Stay back and observe</span>
+          </div>
+          <div class="ae-choice-btn">
+            <span class="ae-cb-arrow">▶</span>
+            <span class="ae-cb-text">Check your pockets</span>
+          </div>
+        </div>
+      </div>
+    </div>
 
   </div>
 
