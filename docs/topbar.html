@@ -324,7 +324,7 @@ html, body {
   background: linear-gradient(to top, rgba(5,4,10,.80) 0%, transparent 100%);
   pointer-events: none;
 }
-.ae-scene-frame.is-dialogue .ae-sf-image { opacity: .06; }
+.ae-scene-frame.is-dialogue .ae-sf-image { opacity: .28; }
 .ae-scene-frame.is-preview  .ae-sf-image { opacity: .06; transition: opacity .22s ease; }
 /* dialogue + preview egyszerre: dialogue is halványodik */
 .ae-scene-frame.is-dialogue.is-preview .ae-sf-dialogue { opacity: .07; transition: opacity .22s ease; }
@@ -387,7 +387,11 @@ html, body {
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   padding: 40px 48px;
-  background: rgba(5,4,10,.88);
+  background: radial-gradient(ellipse 75% 65% at 50% 52%,
+    rgba(5,4,10,.84) 0%,
+    rgba(5,4,10,.62) 45%,
+    rgba(5,4,10,.28) 75%,
+    rgba(5,4,10,.10) 100%);
 }
 .ae-scene-frame.is-dialogue .ae-sf-dialogue {
   opacity: 1; pointer-events: all;
@@ -404,7 +408,8 @@ html, body {
 .ae-sf-speaker-name {
   font-family: 'Cinzel', serif;
   font-size: 18px; font-weight: 700; letter-spacing: .06em;
-  color: var(--gold2); opacity: .92; line-height: 1; flex-shrink: 0;
+  color: var(--gold2); opacity: .95; line-height: 1; flex-shrink: 0;
+  text-shadow: 0 1px 10px rgba(0,0,0,1), 0 0 20px rgba(0,0,0,.90);
 }
 .ae-sf-speaker-line {
   flex: 1; height: 1px;
@@ -415,11 +420,16 @@ html, body {
 .ae-sf-text {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 15px; line-height: 1.88; letter-spacing: .01em;
-  color: var(--text); opacity: .78;
+  color: var(--text); opacity: .88;
   max-width: 580px; text-align: center;
+  text-shadow:
+    0 1px 10px rgba(0,0,0,1),
+    0 0  24px rgba(0,0,0,.95),
+    0 0  48px rgba(5,4,10,.90);
 }
 .ae-sf-text em {
-  font-style: italic; color: var(--gold2); opacity: .90;
+  font-style: italic; color: var(--gold2); opacity: .95;
+  text-shadow: 0 0 18px rgba(201,156,90,.30), 0 1px 8px rgba(0,0,0,1);
 }
 
 /* demo toggle */
