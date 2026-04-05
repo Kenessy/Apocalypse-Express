@@ -325,6 +325,59 @@ html, body {
   pointer-events: none;
 }
 .ae-scene-frame.is-dialogue .ae-sf-image { opacity: .06; }
+.ae-scene-frame.is-preview  .ae-sf-image { opacity: .06; transition: opacity .22s ease; }
+/* dialogue + preview egyszerre: dialogue is halványodik */
+.ae-scene-frame.is-dialogue.is-preview .ae-sf-dialogue { opacity: .07; transition: opacity .22s ease; }
+
+/* ── choice hover preview ── */
+.ae-sf-preview {
+  position: absolute; inset: 0;
+  opacity: 0; pointer-events: none;
+  transition: opacity .22s ease;
+  z-index: 3;
+}
+.ae-scene-frame.is-preview .ae-sf-preview { opacity: 1; }
+
+.ae-sf-preview-img {
+  position: absolute; inset: 0;
+}
+.ae-sf-preview-img img {
+  display: block; width: 100%; height: 100%;
+  object-fit: cover; object-position: center;
+}
+.ae-sf-preview-tint {
+  position: absolute; inset: 0;
+  transition: background .22s ease;
+}
+.ae-sf-preview-body {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 40px 48px;
+  background: linear-gradient(to top, rgba(5,4,10,.90) 0%, rgba(5,4,10,.52) 55%, transparent 100%);
+}
+.ae-sf-preview-header {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 18px; width: 100%; max-width: 560px;
+}
+.ae-sf-preview-icon {
+  font-size: 13px; flex-shrink: 0;
+}
+.ae-sf-preview-label {
+  font-family: 'Cinzel', serif;
+  font-size: 17px; font-weight: 700; letter-spacing: .05em;
+  color: var(--gold2); opacity: .92; line-height: 1; flex-shrink: 0;
+}
+.ae-sf-preview-sep {
+  flex: 1; height: 1px;
+  background: linear-gradient(to right, rgba(201,156,90,.26), transparent);
+}
+.ae-sf-preview-text {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px; line-height: 1.82; letter-spacing: .01em;
+  color: var(--text); opacity: .68;
+  max-width: 560px; text-align: center;
+}
 
 /* dialogue layer */
 .ae-sf-dialogue {
@@ -433,6 +486,12 @@ html, body {
   outline-offset: -1px;
 }
 .ae-cb-arrow { color: var(--gold); opacity: .38; font-size: 8px; flex-shrink: 0; }
+.ae-cb-icon  { font-size: 12px; flex-shrink: 0; opacity: .42; transition: opacity .2s; }
+.ae-choice-btn:hover .ae-cb-icon { opacity: .82; }
+.ae-cb-icon--ember  { color: var(--ember);   }
+.ae-cb-icon--cyan   { color: var(--cyan);    }
+.ae-cb-icon--gold   { color: var(--gold);    }
+.ae-cb-icon--purple { color: var(--purple2); }
 .ae-cb-text {
   font: 400 11px/1.3 'IBM Plex Mono'; letter-spacing: .03em;
   color: var(--text); opacity: .62; text-align: center;
@@ -577,6 +636,22 @@ html, body {
         <p class="ae-sf-text">The platform hums beneath your feet, a low vibration you feel more than hear. Somewhere in the darkness, something watches. You are not alone here.</p>
       </div>
 
+      <!-- choice hover preview layer -->
+      <div class="ae-sf-preview" id="sf-preview">
+        <div class="ae-sf-preview-img">
+          <img id="sf-prev-img" src="" alt="">
+          <div class="ae-sf-preview-tint" id="sf-prev-tint"></div>
+        </div>
+        <div class="ae-sf-preview-body">
+          <div class="ae-sf-preview-header">
+            <span class="ae-sf-preview-icon" id="sf-prev-icon"></span>
+            <span class="ae-sf-preview-label" id="sf-prev-label"></span>
+            <div class="ae-sf-preview-sep"></div>
+          </div>
+          <p class="ae-sf-preview-text" id="sf-prev-text"></p>
+        </div>
+      </div>
+
       <button class="ae-sf-toggle" onclick="toggleScene()">image · text</button>
     </div>
 
@@ -586,16 +661,28 @@ html, body {
         <span class="ae-action-label">choose</span>
         <div class="ae-action-div"></div>
         <div class="ae-choices-row">
-          <div class="ae-choice-btn" tabindex="0" role="button">
-            <span class="ae-cb-arrow">▶</span>
+          <div class="ae-choice-btn" tabindex="0" role="button"
+               data-icon="◈" data-tint="gold"
+               data-preview-img="ae-s1-bg.png"
+               data-preview-label="Approach the platform"
+               data-preview-text="The hum intensifies as you step forward. Whatever awaits on that platform, you will meet it head-on. Courage — or recklessness — has always been your way.">
+            <span class="ae-cb-icon ae-cb-icon--gold">◈</span>
             <span class="ae-cb-text">Approach the glowing platform</span>
           </div>
-          <div class="ae-choice-btn" tabindex="0" role="button">
-            <span class="ae-cb-arrow">▶</span>
+          <div class="ae-choice-btn" tabindex="0" role="button"
+               data-icon="◎" data-tint="cyan"
+               data-preview-img="ae-s1-bg.png"
+               data-preview-label="Stay back and observe"
+               data-preview-text="You hold your ground, eyes scanning the darkness. Information is ammunition. Whatever lurks out there, you will understand it before you engage it.">
+            <span class="ae-cb-icon ae-cb-icon--cyan">◎</span>
             <span class="ae-cb-text">Stay back and observe</span>
           </div>
-          <div class="ae-choice-btn" tabindex="0" role="button">
-            <span class="ae-cb-arrow">▶</span>
+          <div class="ae-choice-btn" tabindex="0" role="button"
+               data-icon="⊙" data-tint="purple"
+               data-preview-img="ae-s1-bg.png"
+               data-preview-label="Check your pockets"
+               data-preview-text="Old habits die hard. Hands in pockets, taking inventory. You never know what forgotten thing might save your life — or at least remind you who you were.">
+            <span class="ae-cb-icon ae-cb-icon--purple">⊙</span>
             <span class="ae-cb-text">Check your pockets</span>
           </div>
         </div>
@@ -611,6 +698,50 @@ html, body {
 function toggleScene() {
   document.getElementById('scene-frame').classList.toggle('is-dialogue');
 }
+
+(function initChoicePreview() {
+  const frame    = document.getElementById('scene-frame');
+  const prevImg  = document.getElementById('sf-prev-img');
+  const prevTint = document.getElementById('sf-prev-tint');
+  const prevIcon = document.getElementById('sf-prev-icon');
+  const prevLbl  = document.getElementById('sf-prev-label');
+  const prevTxt  = document.getElementById('sf-prev-text');
+
+  const tints = {
+    ember:  'rgba(255,123,92,.22)',
+    cyan:   'rgba(40,189,216,.16)',
+    gold:   'rgba(201,156,90,.16)',
+    purple: 'rgba(163,139,207,.18)',
+  };
+  const iconColors = {
+    ember:  'var(--ember)',
+    cyan:   'var(--cyan)',
+    gold:   'var(--gold)',
+    purple: 'var(--purple2)',
+  };
+
+  function showPreview(btn) {
+    const tint = btn.dataset.tint || 'gold';
+    prevImg.src              = btn.dataset.previewImg || '';
+    prevTint.style.background = tints[tint] || tints.gold;
+    prevIcon.textContent     = btn.dataset.icon || '▶';
+    prevIcon.style.color     = iconColors[tint] || iconColors.gold;
+    prevLbl.textContent      = btn.dataset.previewLabel || btn.querySelector('.ae-cb-text').textContent;
+    prevTxt.textContent      = btn.dataset.previewText || '';
+    frame.classList.add('is-preview');
+  }
+
+  function hidePreview() {
+    frame.classList.remove('is-preview');
+  }
+
+  document.querySelectorAll('.ae-choice-btn').forEach(btn => {
+    btn.addEventListener('mouseenter', () => showPreview(btn));
+    btn.addEventListener('mouseleave', hidePreview);
+    btn.addEventListener('focus',      () => showPreview(btn));
+    btn.addEventListener('blur',       hidePreview);
+  });
+})();
 </script>
 </body>
 </html>
