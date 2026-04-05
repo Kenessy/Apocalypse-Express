@@ -432,6 +432,26 @@ html, body {
   text-shadow: 0 0 18px rgba(201,156,90,.30), 0 1px 8px rgba(0,0,0,1);
 }
 
+/* ── scene trigger indicator (top-left, diegetic) ── */
+.ae-sf-trigger {
+  position: absolute; top: 14px; left: 44px;
+  z-index: 6; pointer-events: none;
+  display: flex; align-items: center; gap: 6px;
+  padding: 5px 9px 5px 7px;
+  background: rgba(5,4,10,.72);
+  border: 1px solid rgba(40,189,216,.18);
+  border-radius: 2px;
+}
+.ae-sf-trigger-icon {
+  font-size: 9px; color: var(--cyan);
+  animation: ae-pulse 2.2s ease-in-out infinite;
+}
+.ae-sf-trigger-label {
+  font: 400 7px/1 'IBM Plex Mono';
+  letter-spacing: .20em; text-transform: uppercase;
+  color: var(--cyan); opacity: .55;
+}
+
 /* demo toggle */
 .ae-sf-toggle {
   position: absolute; bottom: 14px; right: 14px;
@@ -684,6 +704,12 @@ html, body {
           <div class="ae-sf-speaker-line"></div>
         </div>
         <p class="ae-sf-text">Morning, noon, evening — half-dark by day, darkness by night... An infinite loop. But what is a loop? A circuit where current builds until it crosses some threshold — in the brain, a synapse... the signal turns, the thought turns, until it reaches the desired effect.<br><br>The desired effect. But what is it?<br><br>Evening after morning, morning after evening. What is it that breaks us free? What if we step sideways out of the loop? Anything that breaks the logic... it is enough to wake in the night.<br><br><em>It is enough to wake. So let us wake.</em></p>
+      </div>
+
+      <!-- scene trigger indicator -->
+      <div class="ae-sf-trigger">
+        <span class="ae-sf-trigger-icon">◎</span>
+        <span class="ae-sf-trigger-label">hearing</span>
       </div>
 
       <!-- choice hover preview layer -->
