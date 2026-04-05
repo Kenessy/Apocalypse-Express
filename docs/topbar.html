@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AE · Top Bar + Event Column Demo</title>
+<title>AE · Waking — Null Meridian</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -243,21 +243,8 @@ html, body {
   font-size: 9px; letter-spacing: .16em; text-transform: uppercase;
   color: var(--muted); opacity: .40;
 }
-.ae-sep {
-  width: 1px; flex-shrink: 0; position: relative; z-index: 2;
-  background: linear-gradient(to bottom,
-    transparent 0%, rgba(201,156,90,.20) 15%,
-    rgba(201,156,90,.14) 50%, rgba(201,156,90,.20) 85%, transparent 100%);
-}
-.ae-sep::after {
-  content: '◈';
-  position: absolute; top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 9px; color: var(--gold); opacity: .35;
-  background: #0a0814; padding: 8px 0; line-height: 1;
-}
 .ae-col-content {
-  flex: 1; background: rgba(14,12,24,.22);
+  flex: 1; min-width: 0; background: rgba(14,12,24,.22);
   display: flex; flex-direction: column;
 }
 
@@ -379,29 +366,6 @@ html, body {
   max-width: 560px; text-align: center;
 }
 
-/* choices */
-.ae-sf-choices { display: flex; flex-direction: column; gap: 7px; }
-.ae-choice {
-  display: flex; align-items: center; gap: 10px;
-  padding: 10px 16px;
-  border: 1px solid rgba(201,156,90,.11); border-radius: 3px;
-  background: rgba(5,4,10,.55);
-  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-  cursor: pointer;
-  transition: background .2s, border-color .2s;
-  max-width: 480px;
-}
-.ae-choice:hover {
-  background: rgba(201,156,90,.08);
-  border-color: rgba(201,156,90,.22);
-}
-.ae-choice-arrow { color: var(--gold); opacity: .50; font-size: 9px; flex-shrink: 0; }
-.ae-choice-text {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 12px; letter-spacing: .04em;
-  color: var(--text); opacity: .70; line-height: 1;
-}
-
 /* demo toggle */
 .ae-sf-toggle {
   position: absolute; bottom: 14px; right: 14px;
@@ -427,7 +391,7 @@ html, body {
   position: absolute; top: 50%; left: 50%;
   transform: translate(-50%, -50%);
   font-size: 9px; color: var(--gold); opacity: .28;
-  background: #0a0814; padding: 0 8px; line-height: 1;
+  background: #05040a; padding: 0 8px; line-height: 1;
 }
 
 /* ── action bar (bottom panel) ── */
@@ -440,7 +404,7 @@ html, body {
   font: 400 7px/1 'IBM Plex Mono';
   letter-spacing: .20em; text-transform: uppercase;
   color: var(--gold); opacity: .28;
-  writing-mode: vertical-rl;
+  writing-mode: vertical-lr;
   flex-shrink: 0;
   align-self: center;                    /* label marad középen */
 }
@@ -464,6 +428,10 @@ html, body {
 }
 .ae-choice-btn:hover .ae-cb-arrow { opacity: .60; }
 .ae-choice-btn:hover .ae-cb-text  { opacity: .85; }
+.ae-choice-btn:focus-visible {
+  outline: 1px solid rgba(201,156,90,.45);
+  outline-offset: -1px;
+}
 .ae-cb-arrow { color: var(--gold); opacity: .38; font-size: 8px; flex-shrink: 0; }
 .ae-cb-text {
   font: 400 11px/1.3 'IBM Plex Mono'; letter-spacing: .03em;
@@ -618,15 +586,15 @@ html, body {
         <span class="ae-action-label">choose</span>
         <div class="ae-action-div"></div>
         <div class="ae-choices-row">
-          <div class="ae-choice-btn">
+          <div class="ae-choice-btn" tabindex="0" role="button">
             <span class="ae-cb-arrow">▶</span>
             <span class="ae-cb-text">Approach the glowing platform</span>
           </div>
-          <div class="ae-choice-btn">
+          <div class="ae-choice-btn" tabindex="0" role="button">
             <span class="ae-cb-arrow">▶</span>
             <span class="ae-cb-text">Stay back and observe</span>
           </div>
-          <div class="ae-choice-btn">
+          <div class="ae-choice-btn" tabindex="0" role="button">
             <span class="ae-cb-arrow">▶</span>
             <span class="ae-cb-text">Check your pockets</span>
           </div>
