@@ -291,13 +291,25 @@ html, body {
   position: absolute;
   top: 61.8%; left: 0; right: 0;
   transform: translateY(-50%);
-  padding: 28px 20px;
+  padding: 20px 20px;
   background: radial-gradient(ellipse 85% 70% at 50% 50%,
     rgba(5,4,10,.72) 0%,
     rgba(5,4,10,.40) 55%,
     transparent 100%);
   display: flex; flex-direction: column; align-items: center; gap: 10px;
   pointer-events: none; text-align: center;
+}
+/* ── status tiles — anchored to bottom ── */
+.ae-img-status {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 14px 16px 18px;
+  background: linear-gradient(to top,
+    rgba(5,4,10,.88) 0%,
+    rgba(5,4,10,.55) 50%,
+    transparent 100%);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  pointer-events: none; z-index: 3;
 }
 .ae-loc-rule {
   width: 40px; height: 1px;
@@ -571,7 +583,7 @@ html, body {
 }
 .ae-sf-preview-header {
   display: flex; align-items: center; gap: 12px;
-  margin-bottom: 18px; width: 100%; max-width: 820px;
+  margin-bottom: 18px; width: 100%; max-width: 680px;
 }
 .ae-sf-preview-icon {
   font-size: 13px; flex-shrink: 0;
@@ -589,7 +601,7 @@ html, body {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 14px; line-height: 1.80; letter-spacing: .01em;
   color: var(--text); opacity: .68;
-  max-width: 820px; text-align: center;
+  max-width: 680px; text-align: center;
 }
 
 /* dialogue layer */
@@ -621,7 +633,7 @@ html, body {
 /* speaker */
 .ae-sf-speaker-row {
   display: flex; align-items: center; gap: 12px;
-  margin-bottom: 20px; width: 100%; max-width: 820px;
+  margin-bottom: 20px; width: 100%; max-width: 680px;
   flex-shrink: 0;
 }
 .ae-sf-speaker-glyph {
@@ -643,7 +655,7 @@ html, body {
   font-family: 'IBM Plex Mono', monospace;
   font-size: var(--fs-body); line-height: 1.85; letter-spacing: .01em;
   color: var(--text); opacity: .88;
-  width: 100%; max-width: 820px;
+  width: 100%; max-width: 680px;
   text-align: left;
   text-shadow:
     0 1px 10px rgba(0,0,0,1),
@@ -652,9 +664,11 @@ html, body {
 }
 .ae-sf-text em {
   font-style: italic; color: var(--cyan); opacity: .92;
+  text-shadow: 0 0 20px rgba(40,189,216,.22), 0 1px 8px rgba(0,0,0,1);
+}
+.ae-sf-text em.standalone {
   display: block; text-align: center;
   margin: .25em 0;
-  text-shadow: 0 0 20px rgba(40,189,216,.22), 0 1px 8px rgba(0,0,0,1);
 }
 
 /* ── scene trigger indicator ── */
@@ -897,7 +911,9 @@ html, body {
       <div class="ae-img-caption">
         <div class="ae-loc-rule"></div>
         <span class="ae-loc-name">Null Meridian</span>
+      </div>
 
+      <div class="ae-img-status">
         <!-- mood tiles -->
         <div class="ae-loc-threat" data-state="calm">
           <div class="ae-loc-mood-block">
@@ -1027,7 +1043,7 @@ html, body {
             <span class="ae-sf-speaker-name">Cicero</span>
             <div class="ae-sf-speaker-line"></div>
           </div>
-          <p class="ae-sf-text">Morning, noon, evening — twilight by day, darkness by night... Our life is a loop of shadow and light. An endless loop of — well. But what <em>is</em> a loop? A circuit where we wake up, go to work, then fall asleep. Every day, the same exact thing, around and around — like a hamster in a wheel. Neuron A fires to B, B fires to C, C fires back to A, forever repeating the same cycle.<br><br>A circuit where current builds forever... or — until it breaches a threshold? In the brain, a synapse... the signal arcs, spikes, cascades — finally shattering its own cycle. So we are in a loop until we reach... what? Death? Whatever the "desired effect" is? We quit? We die? We get promoted? Anything — <em>anything</em> — to break the loop. But here is the thing: the loop won't change. We have to. This is why I was right earlier — in a stable loop, structure emerges. And we organise our entire lives around it.<br><br>But what is the purpose of said loop? To keep something — us — in it. As long as necessary. We are the same as our brains: looped through space and time, returning to the same place, processing vast amounts in our connections — giving our time and devotion to those we deem worthy, and ignoring those we don't. The whole thing rests on a single, fragile assumption: that we <em>choose</em>.<br><br>But whenever we do... it always feels one-sided, doesn't it? We didn't really have a choice. Did we? <em>Or did the loop decide for us?</em><br><br>Light follows darkness, darkness follows light. What is it that breaks us free? What if we step sideways — out of the loop entirely? Anything that breaks the flow is enough. And every loop ends with the same thing... learning. Becoming more than you were, by any means necessary. Learning... ascension... opening your eyes and seeing... waking up...<br><br><em>Wake up.</em></p>
+          <p class="ae-sf-text">Morning, noon, evening — twilight by day, darkness by night... Our life is a loop of shadow and light. An endless loop of — well. But what <em class="inline">is</em> a loop? A circuit where we wake up, go to work, then fall asleep. Every day, the same exact thing, around and around — like a hamster in a wheel. Neuron A fires to B, B fires to C, C fires back to A, forever repeating the same cycle.<br><br>A circuit where current builds forever... or — until it breaches a threshold? In the brain, a synapse... the signal arcs, spikes, cascades — finally shattering its own cycle. So we are in a loop until we reach... what? Death? Whatever the "desired effect" is? We quit? We die? We get promoted? Anything — <em class="inline">anything</em> — to break the loop. But here is the thing: the loop won't change. We have to. This is why I was right earlier — in a stable loop, structure emerges. And we organise our entire lives around it.<br><br>But what is the purpose of said loop? To keep something — us — in it. As long as necessary. We are the same as our brains: looped through space and time, returning to the same place, processing vast amounts in our connections — giving our time and devotion to those we deem worthy, and ignoring those we don't. The whole thing rests on a single, fragile assumption: that we <em class="inline">choose</em>.<br><br>But whenever we do... it always feels one-sided, doesn't it? We didn't really have a choice. Did we? <em class="standalone">Or did the loop decide for us?</em><br><br>Light follows darkness, darkness follows light. What is it that breaks us free? What if we step sideways — out of the loop entirely? Anything that breaks the flow is enough. And every loop ends with the same thing... learning. Becoming more than you were, by any means necessary. Learning... ascension... opening your eyes and seeing... waking up...<br><br><em class="standalone">Wake up.</em></p>
         </div>
       </div>
 
