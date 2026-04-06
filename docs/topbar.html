@@ -391,18 +391,21 @@ html, body {
   50%       { opacity: .52; }
 }
 .ae-time-icon {
-  font-size: 15px; line-height: 1;
+  font-size: 20px; line-height: 1;
   color: var(--gold); transition: color .3s, text-shadow .3s;
 }
 .ae-time-pip.active .ae-time-icon {
   color: var(--gold2);
-  text-shadow: 0 0 12px rgba(230,207,161,.55);
+  text-shadow: 0 0 14px rgba(230,207,161,.60);
 }
 .ae-time-pip.adjacent .ae-time-icon { color: var(--gold); }
-.ae-time-lbl {
-  font: 400 9px/1 'IBM Plex Mono';
-  letter-spacing: .10em; text-transform: uppercase;
-  color: var(--muted);
+/* midnight cloud: tiny ☁ floats above the moon */
+.ae-time-pip[data-t="midnight"] { position: relative; }
+.ae-time-pip[data-t="midnight"]::before {
+  content: '☁';
+  position: absolute; top: -7px; right: -2px;
+  font-size: 9px; opacity: .55; color: var(--muted);
+  transition: opacity .3s;
 }
 /* detail row colours — same gold→ember palette */
 .ae-loc-row.s-safe    .ae-loc-row-icon { color: #e6cfa1; }
@@ -912,28 +915,22 @@ html, body {
           </div>
           <div class="ae-time-strip">
             <div class="ae-time-pip" data-t="dawn">
-              <span class="ae-time-icon">◌</span>
-              <span class="ae-time-lbl">dawn</span>
+              <span class="ae-time-icon">✦</span>
             </div>
             <div class="ae-time-pip active likely" data-t="morning">
-              <span class="ae-time-icon">◔</span>
-              <span class="ae-time-lbl">morn</span>
+              <span class="ae-time-icon">☀</span>
             </div>
             <div class="ae-time-pip adjacent" data-t="noon">
-              <span class="ae-time-icon">◉</span>
-              <span class="ae-time-lbl">noon</span>
+              <span class="ae-time-icon">⊙</span>
             </div>
             <div class="ae-time-pip" data-t="afternoon">
               <span class="ae-time-icon">◐</span>
-              <span class="ae-time-lbl">aftn</span>
             </div>
             <div class="ae-time-pip" data-t="evening">
-              <span class="ae-time-icon">◑</span>
-              <span class="ae-time-lbl">eve</span>
+              <span class="ae-time-icon">☽</span>
             </div>
             <div class="ae-time-pip" data-t="midnight">
-              <span class="ae-time-icon">●</span>
-              <span class="ae-time-lbl">midn</span>
+              <span class="ae-time-icon">☾</span>
             </div>
           </div>
         </div>
