@@ -337,12 +337,12 @@ html, body {
   display: flex; flex-direction: column; align-items: center; gap: 6px;
   width: 100%;
 }
-/* state colour + needle rotation — set via data-state */
-.ae-loc-threat[data-state="safe"]    { --sc: #5ecf8a; --nr: -90deg; }
-.ae-loc-threat[data-state="calm"]    { --sc: #7ab898; --nr: -45deg; }
-.ae-loc-threat[data-state="unknown"] { --sc: #6a6280; --nr:   0deg; }
-.ae-loc-threat[data-state="ominous"] { --sc: #a06060; --nr:  45deg; }
-.ae-loc-threat[data-state="danger"]  { --sc: #c44040; --nr:  90deg; }
+/* state colour + needle rotation — gold2 → ember palette */
+.ae-loc-threat[data-state="safe"]    { --sc: #e6cfa1; --nr: -90deg; }
+.ae-loc-threat[data-state="calm"]    { --sc: #d4a85a; --nr: -45deg; }
+.ae-loc-threat[data-state="unknown"] { --sc: #c08840; --nr:   0deg; }
+.ae-loc-threat[data-state="ominous"] { --sc: #e07040; --nr:  45deg; }
+.ae-loc-threat[data-state="danger"]  { --sc: #ff7b5c; --nr:  90deg; }
 
 .ae-loc-threat-top {
   display: flex; align-items: baseline; gap: 8px;
@@ -366,17 +366,17 @@ html, body {
   transform: rotate(var(--nr, 0deg));
   transition: transform .5s cubic-bezier(.4,0,.2,1);
 }
-/* detail row colours */
-.ae-loc-row.s-safe    .ae-loc-row-icon { color: #5ecf8a; text-shadow: 0 0 8px rgba(94,207,138,.50); }
-.ae-loc-row.s-calm    .ae-loc-row-icon { color: #7ab898; }
-.ae-loc-row.s-unknown .ae-loc-row-icon { color: #6a6280; }
-.ae-loc-row.s-ominous .ae-loc-row-icon { color: #a06060; }
-.ae-loc-row.s-danger  .ae-loc-row-icon { color: #c44040; text-shadow: 0 0 8px rgba(196,64,64,.55); }
-.ae-loc-row.s-safe    .ae-loc-row-val  { color: #5ecf8a; opacity: .75; }
-.ae-loc-row.s-calm    .ae-loc-row-val  { color: #7ab898; opacity: .60; }
+/* detail row colours — same gold→ember palette */
+.ae-loc-row.s-safe    .ae-loc-row-icon { color: #e6cfa1; }
+.ae-loc-row.s-calm    .ae-loc-row-icon { color: #d4a85a; }
+.ae-loc-row.s-unknown .ae-loc-row-icon { color: var(--muted); opacity: .45; }
+.ae-loc-row.s-ominous .ae-loc-row-icon { color: #e07040; }
+.ae-loc-row.s-danger  .ae-loc-row-icon { color: #ff7b5c; text-shadow: 0 0 8px rgba(255,123,92,.45); }
+.ae-loc-row.s-safe    .ae-loc-row-val  { color: #e6cfa1; opacity: .72; }
+.ae-loc-row.s-calm    .ae-loc-row-val  { color: #d4a85a; opacity: .65; }
 .ae-loc-row.s-unknown .ae-loc-row-val  { color: var(--muted); opacity: .38; }
-.ae-loc-row.s-ominous .ae-loc-row-val  { color: #a06060; opacity: .65; }
-.ae-loc-row.s-danger  .ae-loc-row-val  { color: #c44040; opacity: .80; }
+.ae-loc-row.s-ominous .ae-loc-row-val  { color: #e07040; opacity: .70; }
+.ae-loc-row.s-danger  .ae-loc-row-val  { color: #ff7b5c; opacity: .82; }
 .ae-col-content {
   flex: 1; min-width: 0; background: rgba(14,12,24,.22);
   display: flex; flex-direction: column;
@@ -825,11 +825,10 @@ html, body {
           <svg class="ae-gauge" viewBox="0 0 100 56" width="136" height="76" aria-hidden="true">
             <defs>
               <linearGradient id="gGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%"   stop-color="#5ecf8a"/>
-                <stop offset="25%"  stop-color="#7ab898"/>
-                <stop offset="50%"  stop-color="#6a6280"/>
-                <stop offset="75%"  stop-color="#a06060"/>
-                <stop offset="100%" stop-color="#c44040"/>
+                <stop offset="0%"   stop-color="#e6cfa1"/>
+                <stop offset="40%"  stop-color="#c99c5a"/>
+                <stop offset="70%"  stop-color="#e07040"/>
+                <stop offset="100%" stop-color="#ff7b5c"/>
               </linearGradient>
             </defs>
             <!-- dim track -->
@@ -839,18 +838,18 @@ html, body {
             <path d="M 8 52 A 42 42 0 0 1 92 52" fill="none"
                   stroke="url(#gGrad)" stroke-width="2.5" stroke-linecap="round" opacity=".55"/>
             <!-- tick marks (safe/calm/unknown/ominous/danger) -->
-            <line x1="8"  y1="52" x2="12" y2="52" stroke="rgba(94,207,138,.40)"  stroke-width="1.2"/>
-            <line x1="20" y1="22" x2="24" y2="26" stroke="rgba(122,184,152,.35)" stroke-width="1.2"/>
-            <line x1="50" y1="10" x2="50" y2="15" stroke="rgba(106,98,128,.30)"  stroke-width="1.2"/>
-            <line x1="80" y1="22" x2="76" y2="26" stroke="rgba(160,96,96,.35)"   stroke-width="1.2"/>
-            <line x1="92" y1="52" x2="87" y2="52" stroke="rgba(196,64,64,.40)"   stroke-width="1.2"/>
+            <line x1="8"  y1="52" x2="12" y2="52" stroke="rgba(230,207,161,.38)" stroke-width="1.2"/>
+            <line x1="20" y1="22" x2="24" y2="26" stroke="rgba(201,156,90,.32)"  stroke-width="1.2"/>
+            <line x1="50" y1="10" x2="50" y2="15" stroke="rgba(192,136,64,.28)"  stroke-width="1.2"/>
+            <line x1="80" y1="22" x2="76" y2="26" stroke="rgba(224,112,64,.32)"  stroke-width="1.2"/>
+            <line x1="92" y1="52" x2="87" y2="52" stroke="rgba(255,123,92,.38)"  stroke-width="1.2"/>
             <!-- end labels -->
             <text x="5"  y="52" text-anchor="middle" dominant-baseline="hanging"
                   font-family="IBM Plex Mono" font-size="6" letter-spacing="0.5"
-                  fill="rgba(94,207,138,.45)" transform="translate(-2,4)">S</text>
+                  fill="rgba(230,207,161,.42)" transform="translate(-2,4)">S</text>
             <text x="95" y="52" text-anchor="middle" dominant-baseline="hanging"
                   font-family="IBM Plex Mono" font-size="6" letter-spacing="0.5"
-                  fill="rgba(196,64,64,.45)" transform="translate(2,4)">D</text>
+                  fill="rgba(255,123,92,.42)" transform="translate(2,4)">D</text>
             <!-- needle — rotates via CSS .ae-gauge-needle-group -->
             <g transform="translate(50,52)">
               <g class="ae-gauge-needle-group">
