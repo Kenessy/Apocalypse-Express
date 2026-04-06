@@ -736,31 +736,35 @@ html, body {
 .ae-continue-btn {
   display: none;   /* default: rejtett, choice mode az alap */
   flex: 1; align-items: center; justify-content: center; gap: 10px;
-  border: 1px solid rgba(201,156,90,.09); border-radius: 3px;
-  background: rgba(201,156,90,.018);
+  border: 1px solid rgba(201,156,90,.18); border-radius: 4px;
+  background: rgba(201,156,90,.05);
+  box-shadow: 0 0 20px rgba(201,156,90,.08), inset 0 0 30px rgba(201,156,90,.03);
   cursor: pointer;
-  transition: background .2s, border-color .2s, opacity .2s;
+  transition: background .2s, border-color .2s, box-shadow .2s;
 }
 .ae-continue-btn:hover {
-  background: rgba(201,156,90,.07);
-  border-color: rgba(201,156,90,.22);
+  background: rgba(201,156,90,.10);
+  border-color: rgba(201,156,90,.35);
+  box-shadow: 0 0 28px rgba(201,156,90,.15), inset 0 0 40px rgba(201,156,90,.05);
 }
-.ae-continue-btn:hover .ae-continue-arrow { animation: none; opacity: .88; }
-.ae-continue-btn:hover .ae-continue-text  { opacity: .88; }
+.ae-continue-btn:hover .ae-continue-arrow { animation: none; opacity: 1; }
+.ae-continue-btn:hover .ae-continue-text  { opacity: 1; color: var(--gold2); }
 .ae-continue-btn:focus-visible { outline: 1px solid rgba(201,156,90,.45); outline-offset: -1px; }
 
 .ae-continue-arrow {
-  color: var(--gold); font-size: var(--fs-ambient); flex-shrink: 0;
+  color: var(--gold2); font-size: var(--fs-caption); flex-shrink: 0;
+  text-shadow: 0 0 10px rgba(201,156,90,.50);
   animation: ae-pulse 2.6s ease-in-out infinite;
 }
 @keyframes ae-pulse {
-  0%, 100% { opacity: .38; }
-  50%       { opacity: .72; }
+  0%, 100% { opacity: .55; }
+  50%       { opacity: .95; }
 }
 .ae-continue-text {
-  font: 400 var(--fs-label)/1 'IBM Plex Mono';
+  font: 500 var(--fs-label)/1 'IBM Plex Mono';
   letter-spacing: .20em; text-transform: uppercase;
-  color: var(--muted); opacity: .60;
+  color: var(--gold); opacity: .75;
+  text-shadow: 0 0 14px rgba(201,156,90,.25);
 }
 .ae-action-label {
   font: 400 var(--fs-caption)/1 'IBM Plex Mono';
