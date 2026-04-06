@@ -1102,6 +1102,45 @@ html, body {
 .ae-dice-overlay-result.success { color: #5cc85c; text-shadow: 0 0 14px rgba(92,200,92,.40); }
 .ae-dice-overlay-result.failed { color: var(--ember); text-shadow: 0 0 14px rgba(255,123,92,.40); }
 
+/* overlay continue gomb */
+.ae-dice-ov-continue {
+  display: none; margin-top: 8px;
+  padding: 8px 24px; border-radius: 3px; cursor: pointer;
+  border: 1px solid rgba(201,156,90,.25);
+  background: rgba(201,156,90,.08);
+  transition: background .2s, border-color .2s, box-shadow .2s;
+}
+.ae-dice-ov-continue:hover {
+  background: rgba(201,156,90,.15);
+  border-color: rgba(201,156,90,.40);
+  box-shadow: 0 0 16px rgba(201,156,90,.12);
+}
+.ae-dice-ov-continue.success {
+  border-color: rgba(92,200,92,.30);
+  background: rgba(92,200,92,.08);
+}
+.ae-dice-ov-continue.success:hover {
+  background: rgba(92,200,92,.15);
+  border-color: rgba(92,200,92,.45);
+  box-shadow: 0 0 16px rgba(92,200,92,.15);
+}
+.ae-dice-ov-continue.failed {
+  border-color: rgba(255,123,92,.30);
+  background: rgba(255,123,92,.08);
+}
+.ae-dice-ov-continue.failed:hover {
+  background: rgba(255,123,92,.15);
+  border-color: rgba(255,123,92,.45);
+  box-shadow: 0 0 16px rgba(255,123,92,.15);
+}
+.ae-dice-ov-continue-text {
+  font: 500 var(--fs-label)/1 'IBM Plex Mono';
+  letter-spacing: .18em; text-transform: uppercase;
+  color: var(--gold); opacity: .80;
+}
+.ae-dice-ov-continue.success .ae-dice-ov-continue-text { color: #5cc85c; }
+.ae-dice-ov-continue.failed .ae-dice-ov-continue-text { color: var(--ember); }
+
 /* continue gomb */
 .ae-continue-btn {
   display: none;   /* default: rejtett, choice mode az alap */
@@ -1366,6 +1405,9 @@ html, body {
         </div>
         <span class="ae-dice-overlay-dc" id="dice-ov-dc">DC 10</span>
         <span class="ae-dice-overlay-result" id="dice-ov-result"></span>
+        <div class="ae-dice-ov-continue" id="dice-ov-continue" onclick="diceAdvance()">
+          <span class="ae-dice-ov-continue-text" id="dice-ov-continue-text">continue</span>
+        </div>
       </div>
 
       <button class="ae-img-view-toggle" onclick="toggleCleanView()" aria-label="Toggle background view">
@@ -1764,6 +1806,7 @@ function renderFrame(idx) {
     const ovResult = document.getElementById('dice-ov-result');
     ovResult.textContent = '';
     ovResult.className = 'ae-dice-overlay-result';
+    document.getElementById('dice-ov-continue').style.display = 'none';
     window._currentDice = f.diceCheck;
   } else if (f.continueLabel) {
     diceOverlay.classList.remove('active');
@@ -1848,18 +1891,27 @@ function rollDice() {
       result.className = 'ae-dice-result show ' + cls;
       ovResult.textContent = txt;
       ovResult.className = 'ae-dice-overlay-result show ' + cls;
-      // navigate after delay
-      setTimeout(() => {
-        const nextId = success ? dice.successNext : dice.failNext;
-        const nextIdx = frames.findIndex(fr => fr.id === nextId);
-        if (nextIdx >= 0) renderFrame(nextIdx);
-        else {
-          const inner = document.getElementById('dialogue-inner');
-          inner.innerHTML = '<p class="ae-sf-text" style="opacity:.4;text-align:center">[ scene not yet written ]</p>';
-        }
-      }, 1800);
+      // show overlay continue button (no auto-navigate)
+      const ovContinue = document.getElementById('dice-ov-continue');
+      const ovContinueText = document.getElementById('dice-ov-continue-text');
+      ovContinue.style.display = 'block';
+      ovContinue.className = 'ae-dice-ov-continue ' + cls;
+      ovContinueText.textContent = success ? 'continue' : 'try again';
+      window._diceNextId = success ? dice.successNext : dice.failNext;
     }
   }, 80);
+}
+
+function diceAdvance() {
+  const nextId = window._diceNextId;
+  if (!nextId) return;
+  window._diceNextId = null;
+  const nextIdx = frames.findIndex(fr => fr.id === nextId);
+  if (nextIdx >= 0) renderFrame(nextIdx);
+  else {
+    const inner = document.getElementById('dialogue-inner');
+    inner.innerHTML = '<p class="ae-sf-text" style="opacity:.4;text-align:center">[ scene not yet written ]</p>';
+  }
 }
 
 function chooseOption(nextId) {
