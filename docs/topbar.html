@@ -332,17 +332,16 @@ html, body {
   color: var(--muted); opacity: .72;
   text-transform: lowercase;
 }
-/* ── threat gauge ── */
+/* ── mood / threat ── */
 .ae-loc-threat {
   display: flex; flex-direction: column; align-items: center; gap: 6px;
   width: 100%;
 }
-/* state colour + needle rotation — gold2 → ember palette */
-.ae-loc-threat[data-state="safe"]    { --sc: #e6cfa1; --nr: -90deg; }
-.ae-loc-threat[data-state="calm"]    { --sc: #d4a85a; --nr: -45deg; }
-.ae-loc-threat[data-state="unknown"] { --sc: #c08840; --nr:   0deg; }
-.ae-loc-threat[data-state="ominous"] { --sc: #e07040; --nr:  45deg; }
-.ae-loc-threat[data-state="danger"]  { --sc: #ff7b5c; --nr:  90deg; }
+.ae-loc-threat[data-state="safe"]    { --sc: #e6cfa1; }
+.ae-loc-threat[data-state="calm"]    { --sc: #d4a85a; }
+.ae-loc-threat[data-state="unknown"] { --sc: #c08840; }
+.ae-loc-threat[data-state="ominous"] { --sc: #e07040; }
+.ae-loc-threat[data-state="danger"]  { --sc: #ff7b5c; }
 
 .ae-loc-threat-top {
   display: flex; align-items: baseline; gap: 8px;
@@ -359,12 +358,52 @@ html, body {
   color: var(--sc);
   text-shadow: 0 0 14px var(--sc);
 }
-/* SVG gauge */
-.ae-gauge { display: block; overflow: visible; }
-.ae-gauge-needle-group {
-  transform-origin: 0px 0px;
-  transform: rotate(var(--nr, 0deg));
-  transition: transform .5s cubic-bezier(.4,0,.2,1);
+/* ── mood tile strip ── */
+.ae-loc-mood-block {
+  display: flex; flex-direction: row; align-items: center;
+  justify-content: center; gap: 14px; width: 100%;
+}
+.ae-mood-strip { display: flex; gap: 2px; align-items: flex-end; }
+.ae-mood-pip {
+  --mc: var(--muted);
+  display: flex; flex-direction: column; align-items: center;
+  padding: 4px 5px; border-radius: 6px;
+  transition: background .3s, box-shadow .3s;
+  background: radial-gradient(circle, rgba(184,176,198,.18) 10%, transparent 65%);
+  box-shadow: 0 0 12px rgba(184,176,198,.10);
+}
+.ae-mood-pip[data-m="safe"]    { --mc: #e6cfa1; }
+.ae-mood-pip[data-m="calm"]    { --mc: #d4a85a; }
+.ae-mood-pip[data-m="unknown"] { --mc: #c08840; }
+.ae-mood-pip[data-m="ominous"] { --mc: #e07040; }
+.ae-mood-pip[data-m="danger"]  { --mc: #ff7b5c; }
+.ae-mood-pip.active {
+  background: radial-gradient(circle, rgba(255,255,255,.20) 5%, transparent 65%);
+  box-shadow: 0 0 20px var(--mc), 0 0 40px rgba(255,255,255,.06);
+  animation: ae-m-pulse 3.2s ease-in-out infinite;
+}
+.ae-mood-pip.adjacent {
+  background: radial-gradient(circle, rgba(255,255,255,.10) 10%, transparent 65%);
+  box-shadow: 0 0 14px rgba(184,176,198,.08);
+}
+@keyframes ae-m-pulse {
+  0%, 100% { background: radial-gradient(circle, rgba(255,255,255,.20) 5%, transparent 65%); }
+  50%      { background: radial-gradient(circle, rgba(255,255,255,.10) 5%, transparent 65%); }
+}
+.ae-mood-icon {
+  line-height: 0;
+  color: rgba(18,14,28,.92);
+  filter: drop-shadow(0 0 12px rgba(184,176,198,.50)) drop-shadow(0 0 24px rgba(184,176,198,.22));
+  transition: color .3s, filter .3s;
+}
+.ae-mood-icon svg { display: block; }
+.ae-mood-pip.active .ae-mood-icon {
+  color: var(--mc);
+  filter: drop-shadow(0 0 14px var(--mc)) drop-shadow(0 0 30px var(--mc));
+}
+.ae-mood-pip.adjacent .ae-mood-icon {
+  color: rgba(24,18,36,.85);
+  filter: drop-shadow(0 0 10px rgba(184,176,198,.30)) drop-shadow(0 0 20px rgba(184,176,198,.12));
 }
 
 /* ── time-of-day strip ── */
@@ -861,54 +900,32 @@ html, body {
         <div class="ae-loc-rule"></div>
         <span class="ae-loc-name">Null Meridian</span>
 
-        <!-- threat gauge -->
+        <!-- mood tiles -->
         <div class="ae-loc-threat" data-state="calm">
-          <div class="ae-loc-threat-top">
-            <span class="ae-loc-threat-key">mood</span>
-            <span class="ae-loc-threat-sep">·</span>
-            <span class="ae-loc-threat-label">calm</span>
+          <div class="ae-loc-mood-block">
+            <div class="ae-loc-threat-top">
+              <span class="ae-loc-threat-key">mood</span>
+              <span class="ae-loc-threat-sep">·</span>
+              <span class="ae-loc-threat-label">calm</span>
+            </div>
+            <div class="ae-mood-strip">
+              <div class="ae-mood-pip adjacent" data-m="safe">
+                <span class="ae-mood-icon"><svg viewBox="0 0 28 28" width="28" height="28" fill="currentColor"><path d="M14 3 L23 8 V15 C23 20,19 25,14 27 C9 25,5 20,5 15 V8 Z"/></svg></span>
+              </div>
+              <div class="ae-mood-pip active" data-m="calm">
+                <span class="ae-mood-icon"><svg viewBox="0 0 28 28" width="28" height="28" fill="currentColor"><path d="M14 2 C8 6,4 14,6 20 C7 23,10 25,14 26 C18 25,21 23,22 20 C24 14,20 6,14 2 Z"/></svg></span>
+              </div>
+              <div class="ae-mood-pip adjacent" data-m="unknown">
+                <span class="ae-mood-icon"><svg viewBox="0 0 28 28" width="28" height="28" fill="currentColor"><path fill-rule="evenodd" d="M2 14 C6 6,10 4,14 4 C18 4,22 6,26 14 C22 22,18 24,14 24 C10 24,6 22,2 14 Z M14 9.5 A4.5 4.5 0 1 0 14 18.5 A4.5 4.5 0 1 0 14 9.5 Z"/><circle cx="14" cy="14" r="2"/></svg></span>
+              </div>
+              <div class="ae-mood-pip" data-m="ominous">
+                <span class="ae-mood-icon"><svg viewBox="0 0 28 28" width="28" height="28" fill="currentColor"><path d="M16 2 L7 15 L12 15 L10 26 L21 13 L16 13 Z"/></svg></span>
+              </div>
+              <div class="ae-mood-pip" data-m="danger">
+                <span class="ae-mood-icon"><svg viewBox="0 0 28 28" width="28" height="28" fill="currentColor"><path fill-rule="evenodd" d="M14 2 C10 8,6 13,6 17 C6 22,9 26,14 26 C19 26,22 22,22 17 C22 13,18 8,14 2 Z M14 12 C12 15,11.5 18,13 20.5 C13.5 21,14.5 21,15 20.5 C16.5 18,16 15,14 12 Z"/></svg></span>
+              </div>
+            </div>
           </div>
-          <svg class="ae-gauge" viewBox="0 0 100 56" width="136" height="76" aria-hidden="true">
-            <defs>
-              <linearGradient id="gGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%"   stop-color="#e6cfa1"/>
-                <stop offset="40%"  stop-color="#c99c5a"/>
-                <stop offset="70%"  stop-color="#e07040"/>
-                <stop offset="100%" stop-color="#ff7b5c"/>
-              </linearGradient>
-            </defs>
-            <!-- dim track -->
-            <path d="M 8 52 A 42 42 0 0 1 92 52" fill="none"
-                  stroke="rgba(255,255,255,.07)" stroke-width="6" stroke-linecap="round"/>
-            <!-- gradient arc -->
-            <path d="M 8 52 A 42 42 0 0 1 92 52" fill="none"
-                  stroke="url(#gGrad)" stroke-width="2.5" stroke-linecap="round" opacity=".55"/>
-            <!-- tick marks (safe/calm/unknown/ominous/danger) -->
-            <line x1="8"  y1="52" x2="12" y2="52" stroke="rgba(230,207,161,.38)" stroke-width="1.2"/>
-            <line x1="20" y1="22" x2="24" y2="26" stroke="rgba(201,156,90,.32)"  stroke-width="1.2"/>
-            <line x1="50" y1="10" x2="50" y2="15" stroke="rgba(192,136,64,.28)"  stroke-width="1.2"/>
-            <line x1="80" y1="22" x2="76" y2="26" stroke="rgba(224,112,64,.32)"  stroke-width="1.2"/>
-            <line x1="92" y1="52" x2="87" y2="52" stroke="rgba(255,123,92,.38)"  stroke-width="1.2"/>
-            <!-- end labels -->
-            <text x="5"  y="52" text-anchor="middle" dominant-baseline="hanging"
-                  font-family="IBM Plex Mono" font-size="6" letter-spacing="0.5"
-                  fill="rgba(230,207,161,.42)" transform="translate(-2,4)">S</text>
-            <text x="95" y="52" text-anchor="middle" dominant-baseline="hanging"
-                  font-family="IBM Plex Mono" font-size="6" letter-spacing="0.5"
-                  fill="rgba(255,123,92,.42)" transform="translate(2,4)">D</text>
-            <!-- needle — rotates via CSS .ae-gauge-needle-group -->
-            <g transform="translate(50,52)">
-              <g class="ae-gauge-needle-group">
-                <line x1="0" y1="5" x2="0" y2="-33"
-                      stroke="var(--sc)" stroke-width="1.5" stroke-linecap="round" opacity=".80"/>
-                <polygon points="0,-33 -2,-26 2,-26"
-                         fill="var(--sc)" opacity=".60"/>
-              </g>
-            </g>
-            <!-- hub -->
-            <circle cx="50" cy="52" r="3.5" fill="rgba(5,4,10,.85)"
-                    stroke="var(--sc)" stroke-width="1.5"/>
-          </svg>
         </div>
 
         <!-- section separator -->
