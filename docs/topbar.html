@@ -1714,11 +1714,11 @@ const frames = [
     id: 'climb-success',
     speaker: null,
     text: [
-      'You reach the top. The wind dies. The mist falls away beneath you like a curtain being drawn.',
-      'And you see it — <em class="inline">everything</em>.',
-      'An endless obsidian plateau, stretching to the horizon in every direction. The same dark glass, fractured and ancient, as far as the eye can reach. No edge. No end. Trees grow in patches where dirt has gathered in the cracks — stubborn, dark-leaved things clinging to pockets of soil. The roads cut through it all like old veins, converging at crossroads identical to this one. Faint lights in the distance — other fountains? Other obelisks?',
-      'The sky above is a bruise — purples and deep oranges pressing against a ceiling of cloud. Not a sunrise. Not a sunset. Something else entirely.',
-      'You have seen enough. The world is vast, and it is all the same. You climb back down slowly, carefully, and return to the crossroads.',
+      'You pull yourself over the final edge. The wind stops. The mist falls away beneath you like a veil being lifted — and for the first time, you <em class="inline">see</em>.',
+      'An endless obsidian plain. In every direction — the same. The same dark glass, the same ancient fractures, the same silence. Wherever you look, wherever you turn, the answer is identical. There is no edge. No boundary. No end.',
+      'Here and there, soil has gathered in the cracks — blown in from nowhere, accumulated over aeons. Patches of earth where stubborn things grow. Bushes. Trees. Whole groves in places, dark-leaved and strange, clinging to pockets of dirt that have no business being here. Life — temporary, borrowed, growing on borrowed ground.',
+      'This is an ancient plane. Older than anything you have words for. It operates on rules you do not recognise, built by something you cannot name. It is not hostile. It is not welcoming. It is simply <em class="inline">alien</em>. And above all else — it is <em class="inline">old</em>.',
+      'You have seen enough. You climb back down — slowly, carefully — and return to the crossroads. The view stays with you. It will not leave easily.',
     ],
     continueLabel: 'return',
     continueIcon: '↩',
@@ -1812,18 +1812,19 @@ function renderFrame(idx) {
   } else if (f.choices) {
     // choice mode: gombok
     diceOverlay.classList.remove('active');
-    choicesRow.innerHTML = f.choices.map(c => `
-      <div class="ae-choice-btn" tabindex="0" role="button"
+    choicesRow.innerHTML = f.choices.map(c => {
+      const isMystery = c.mystery && !window._scoutDone;
+      return `<div class="ae-choice-btn" tabindex="0" role="button"
            data-icon="${c.icon}" data-tint="${c.tint}"
            data-preview-img="${c.previewImg || 'ae-null-meridian.png'}"
            data-preview-label="${c.label}"
            data-preview-text="${c.preview}"
-           data-mystery="${c.mystery || false}"
+           data-mystery="${isMystery}"
            data-next="${c.next}">
         <span class="ae-cb-icon ae-cb-icon--${c.tint}">${c.icon}</span>
         <span class="ae-cb-text">${c.label}</span>
-      </div>
-    `).join('');
+      </div>`;
+    }).join('');
     initChoiceEvents();
   }
 
@@ -1834,6 +1835,8 @@ function renderFrame(idx) {
 function advanceScene() {
   const f = frames[currentFrameIdx];
   if (!f) return;
+  // track completed branches
+  if (f.id === 'climb-success') window._scoutDone = true;
   if (f.next) {
     const nextIdx = frames.findIndex(fr => fr.id === f.next);
     if (nextIdx >= 0) { renderFrame(nextIdx); return; }
