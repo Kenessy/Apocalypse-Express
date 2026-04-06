@@ -877,91 +877,35 @@ html, body {
   position: relative;
 }
 
-/* left: d20 icon + fate roll label */
-.ae-dice-left {
+/* left: metadata + roll trigger */
+.ae-dice-meta {
   display: flex; align-items: center; gap: 10px;
-  padding: 0 18px;
+  padding: 0 14px;
   border-right: 1px solid rgba(201,156,90,.10);
-  height: 100%;
+  height: 100%; flex-shrink: 0;
 }
 .ae-dice-d20-icon {
-  color: var(--gold); opacity: .65;
+  color: var(--gold); opacity: .55;
   flex-shrink: 0; line-height: 0;
-  filter: drop-shadow(0 0 8px rgba(201,156,90,.25));
+  filter: drop-shadow(0 0 6px rgba(201,156,90,.20));
 }
 .ae-dice-d20-icon svg { display: block; }
-.ae-dice-left-text {
-  display: flex; flex-direction: column; gap: 3px;
-}
 .ae-dice-label {
   font: 500 var(--fs-label)/1 'IBM Plex Mono';
   letter-spacing: .14em; text-transform: uppercase;
-  color: var(--gold); opacity: .72;
+  color: var(--gold); opacity: .65;
 }
-.ae-dice-sublabel {
-  font: 400 var(--fs-caption)/1 'IBM Plex Mono';
-  letter-spacing: .10em; text-transform: uppercase;
-  color: var(--muted); opacity: .45;
-}
-
-/* center: roll display */
-.ae-dice-center {
-  flex: 1; display: flex; align-items: center; justify-content: center;
-  position: relative;
-}
-.ae-dice-display {
-  font: 700 var(--fs-display)/1 'Cinzel', serif;
-  color: var(--gold2); opacity: .85;
-  letter-spacing: .06em;
-  min-width: 52px; text-align: center;
-  transition: color .3s, text-shadow .3s;
-}
-.ae-dice-display.rolling {
-  animation: ae-dice-flash .08s steps(1) infinite;
-}
-.ae-dice-display.success {
-  color: #5cc85c;
-  text-shadow: 0 0 20px rgba(92,200,92,.50), 0 0 40px rgba(92,200,92,.20);
-}
-.ae-dice-display.failed {
-  color: var(--ember);
-  text-shadow: 0 0 20px rgba(255,123,92,.50), 0 0 40px rgba(255,123,92,.20);
-}
-.ae-dice-result {
-  font: 700 var(--fs-caption)/1 'IBM Plex Mono';
-  letter-spacing: .18em; text-transform: uppercase;
-  position: absolute; bottom: 4px; left: 50%;
-  transform: translateX(-50%);
-  opacity: 0; transition: opacity .3s;
-}
-.ae-dice-result.show { opacity: 1; }
-.ae-dice-result.success { color: #5cc85c; text-shadow: 0 0 12px rgba(92,200,92,.40); }
-.ae-dice-result.failed { color: var(--ember); text-shadow: 0 0 12px rgba(255,123,92,.40); }
-
-/* right: DC display + roll button */
-.ae-dice-right {
-  display: flex; align-items: center; gap: 14px;
-  padding: 0 14px;
-  border-left: 1px solid rgba(201,156,90,.10);
-  height: 100%;
-}
-.ae-dice-dc-block {
-  display: flex; flex-direction: column; align-items: center; gap: 2px;
-}
-.ae-dice-dc-label {
-  font: 400 var(--fs-ambient)/1 'IBM Plex Mono';
-  letter-spacing: .12em; text-transform: uppercase;
-  color: var(--muted); opacity: .40;
-}
-.ae-dice-dc {
-  font: 700 var(--fs-title)/1 'Cinzel', serif;
-  color: var(--gold2); opacity: .80;
+.ae-dice-dc-tag {
+  font: 700 var(--fs-label)/1 'Cinzel', serif;
+  color: var(--gold2); opacity: .70;
   letter-spacing: .04em;
-  text-shadow: 0 0 10px rgba(201,156,90,.25);
+  padding: 3px 8px; border-radius: 3px;
+  border: 1px solid rgba(201,156,90,.15);
+  background: rgba(201,156,90,.06);
 }
 .ae-dice-roll-btn {
-  display: flex; align-items: center; gap: 8px;
-  padding: 8px 18px; border-radius: 3px;
+  display: flex; align-items: center; gap: 6px;
+  padding: 6px 14px; border-radius: 3px;
   border: 1px solid rgba(201,156,90,.25);
   background: rgba(201,156,90,.08);
   cursor: pointer;
@@ -979,6 +923,86 @@ html, body {
 }
 .ae-dice-roll-btn .ae-continue-arrow {
   animation: none; opacity: .80; font-size: var(--fs-label);
+}
+
+/* right: 3 outcome buttons */
+.ae-dice-outcomes {
+  flex: 1; display: flex; align-items: stretch; gap: 0;
+  height: 100%;
+}
+.ae-dice-out-btn {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 3px;
+  cursor: default;
+  border-left: 1px solid rgba(201,156,90,.06);
+  transition: background .3s, border-color .3s, box-shadow .3s, opacity .3s;
+}
+.ae-dice-out-btn:first-child { border-left: none; }
+.ae-dice-out-icon {
+  font-size: var(--fs-body); line-height: 1;
+  opacity: .25; transition: opacity .3s, color .3s, text-shadow .3s;
+}
+.ae-dice-out-text {
+  font: 500 var(--fs-caption)/1 'IBM Plex Mono';
+  letter-spacing: .12em; text-transform: uppercase;
+  opacity: .20; transition: opacity .3s, color .3s;
+  color: var(--muted);
+}
+/* locked state */
+.ae-dice-out-btn.locked {
+  pointer-events: none; opacity: .55;
+}
+/* unlocked: succeed */
+.ae-dice-out-btn.unlocked.is-succeed {
+  cursor: pointer; opacity: 1;
+  background: rgba(92,200,92,.06);
+  border-color: rgba(92,200,92,.15);
+  box-shadow: inset 0 0 20px rgba(92,200,92,.04);
+}
+.ae-dice-out-btn.unlocked.is-succeed:hover {
+  background: rgba(92,200,92,.12);
+  box-shadow: 0 0 16px rgba(92,200,92,.10), inset 0 0 20px rgba(92,200,92,.06);
+}
+.ae-dice-out-btn.unlocked.is-succeed .ae-dice-out-icon {
+  color: #5cc85c; opacity: .85;
+  text-shadow: 0 0 8px rgba(92,200,92,.40);
+}
+.ae-dice-out-btn.unlocked.is-succeed .ae-dice-out-text {
+  color: #5cc85c; opacity: .75;
+}
+/* unlocked: fail / retry */
+.ae-dice-out-btn.unlocked.is-fail {
+  cursor: pointer; opacity: 1;
+  background: rgba(255,123,92,.06);
+  border-color: rgba(255,123,92,.15);
+  box-shadow: inset 0 0 20px rgba(255,123,92,.04);
+}
+.ae-dice-out-btn.unlocked.is-fail:hover {
+  background: rgba(255,123,92,.12);
+  box-shadow: 0 0 16px rgba(255,123,92,.10), inset 0 0 20px rgba(255,123,92,.06);
+}
+.ae-dice-out-btn.unlocked.is-fail .ae-dice-out-icon {
+  color: var(--ember); opacity: .85;
+  text-shadow: 0 0 8px rgba(255,123,92,.40);
+}
+.ae-dice-out-btn.unlocked.is-fail .ae-dice-out-text {
+  color: var(--ember); opacity: .75;
+}
+/* unlocked: give up (dim gold) */
+.ae-dice-out-btn.unlocked.is-giveup {
+  cursor: pointer; opacity: 1;
+  background: rgba(184,176,198,.04);
+  border-color: rgba(184,176,198,.12);
+}
+.ae-dice-out-btn.unlocked.is-giveup:hover {
+  background: rgba(184,176,198,.10);
+  box-shadow: 0 0 12px rgba(184,176,198,.08);
+}
+.ae-dice-out-btn.unlocked.is-giveup .ae-dice-out-icon {
+  color: var(--muted); opacity: .65;
+}
+.ae-dice-out-btn.unlocked.is-giveup .ae-dice-out-text {
+  color: var(--muted); opacity: .55;
 }
 
 @keyframes ae-dice-flash {
@@ -1101,45 +1125,6 @@ html, body {
 .ae-dice-overlay-result.show { opacity: 1; }
 .ae-dice-overlay-result.success { color: #5cc85c; text-shadow: 0 0 14px rgba(92,200,92,.40); }
 .ae-dice-overlay-result.failed { color: var(--ember); text-shadow: 0 0 14px rgba(255,123,92,.40); }
-
-/* overlay continue gomb */
-.ae-dice-ov-continue {
-  display: none; margin-top: 8px;
-  padding: 8px 24px; border-radius: 3px; cursor: pointer;
-  border: 1px solid rgba(201,156,90,.25);
-  background: rgba(201,156,90,.08);
-  transition: background .2s, border-color .2s, box-shadow .2s;
-}
-.ae-dice-ov-continue:hover {
-  background: rgba(201,156,90,.15);
-  border-color: rgba(201,156,90,.40);
-  box-shadow: 0 0 16px rgba(201,156,90,.12);
-}
-.ae-dice-ov-continue.success {
-  border-color: rgba(92,200,92,.30);
-  background: rgba(92,200,92,.08);
-}
-.ae-dice-ov-continue.success:hover {
-  background: rgba(92,200,92,.15);
-  border-color: rgba(92,200,92,.45);
-  box-shadow: 0 0 16px rgba(92,200,92,.15);
-}
-.ae-dice-ov-continue.failed {
-  border-color: rgba(255,123,92,.30);
-  background: rgba(255,123,92,.08);
-}
-.ae-dice-ov-continue.failed:hover {
-  background: rgba(255,123,92,.15);
-  border-color: rgba(255,123,92,.45);
-  box-shadow: 0 0 16px rgba(255,123,92,.15);
-}
-.ae-dice-ov-continue-text {
-  font: 500 var(--fs-label)/1 'IBM Plex Mono';
-  letter-spacing: .18em; text-transform: uppercase;
-  color: var(--gold); opacity: .80;
-}
-.ae-dice-ov-continue.success .ae-dice-ov-continue-text { color: #5cc85c; }
-.ae-dice-ov-continue.failed .ae-dice-ov-continue-text { color: var(--ember); }
 
 /* continue gomb */
 .ae-continue-btn {
@@ -1405,9 +1390,6 @@ html, body {
         </div>
         <span class="ae-dice-overlay-dc" id="dice-ov-dc">DC 10</span>
         <span class="ae-dice-overlay-result" id="dice-ov-result"></span>
-        <div class="ae-dice-ov-continue" id="dice-ov-continue" onclick="diceAdvance()">
-          <span class="ae-dice-ov-continue-text" id="dice-ov-continue-text">continue</span>
-        </div>
       </div>
 
       <button class="ae-img-view-toggle" onclick="toggleCleanView()" aria-label="Toggle background view">
@@ -1515,35 +1497,36 @@ html, body {
 
         <!-- dice mode -->
         <div class="ae-dice-area" id="dice-area">
-          <!-- left: d20 icon + labels -->
-          <div class="ae-dice-left">
+          <!-- left: metadata + roll trigger -->
+          <div class="ae-dice-meta">
             <div class="ae-dice-d20-icon">
-              <svg width="28" height="32" viewBox="0 0 28 32" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round">
+              <svg width="22" height="26" viewBox="0 0 28 32" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round">
                 <polygon points="14,1 27,9 27,23 14,31 1,23 1,9"/>
                 <line x1="14" y1="1" x2="14" y2="31"/>
                 <line x1="1" y1="9" x2="27" y2="23"/>
                 <line x1="27" y1="9" x2="1" y2="23"/>
               </svg>
             </div>
-            <div class="ae-dice-left-text">
-              <span class="ae-dice-label" id="dice-label">fate roll</span>
-              <span class="ae-dice-sublabel" id="dice-sublabel">Athletics</span>
-            </div>
-          </div>
-          <!-- center: roll display -->
-          <div class="ae-dice-center">
-            <span class="ae-dice-display" id="dice-display">d20</span>
-            <span class="ae-dice-result" id="dice-result"></span>
-          </div>
-          <!-- right: DC + roll button -->
-          <div class="ae-dice-right">
-            <div class="ae-dice-dc-block">
-              <span class="ae-dice-dc-label">target</span>
-              <span class="ae-dice-dc" id="dice-dc">10</span>
-            </div>
+            <span class="ae-dice-label" id="dice-label">fate roll</span>
+            <span class="ae-dice-dc-tag" id="dice-dc-tag">DC: 10</span>
             <div class="ae-dice-roll-btn" id="dice-roll-btn" tabindex="0" role="button" onclick="rollDice()">
               <span class="ae-continue-arrow">🎲</span>
               <span class="ae-continue-text">roll</span>
+            </div>
+          </div>
+          <!-- right: 3 outcome buttons (always visible, locked until roll) -->
+          <div class="ae-dice-outcomes">
+            <div class="ae-dice-out-btn locked" id="dice-out-succeed" onclick="diceAdvance('succeed')">
+              <span class="ae-dice-out-icon">✓</span>
+              <span class="ae-dice-out-text">succeed</span>
+            </div>
+            <div class="ae-dice-out-btn locked" id="dice-out-retry" onclick="diceAdvance('retry')">
+              <span class="ae-dice-out-icon">↻</span>
+              <span class="ae-dice-out-text" id="dice-out-retry-text">try again</span>
+            </div>
+            <div class="ae-dice-out-btn locked" id="dice-out-giveup" onclick="diceAdvance('giveup')">
+              <span class="ae-dice-out-icon">✕</span>
+              <span class="ae-dice-out-text">give up</span>
             </div>
           </div>
         </div>
@@ -1783,16 +1766,15 @@ function renderFrame(idx) {
   if (f.diceCheck) {
     // dice mode — bottom panel
     panel.classList.add('is-dice');
-    document.getElementById('dice-label').textContent = 'fate roll';
-    document.getElementById('dice-sublabel').textContent = f.diceCheck.label || 'Skill Check';
-    document.getElementById('dice-dc').textContent = f.diceCheck.dc;
-    const display = document.getElementById('dice-display');
-    display.textContent = 'd20';
-    display.className = 'ae-dice-display';
-    const result = document.getElementById('dice-result');
-    result.textContent = '';
-    result.className = 'ae-dice-result';
+    document.getElementById('dice-label').textContent = f.diceCheck.rollType || 'fate roll';
+    document.getElementById('dice-dc-tag').textContent = 'DC: ' + f.diceCheck.dc;
     document.getElementById('dice-roll-btn').style.display = 'flex';
+    // reset outcome buttons to locked
+    ['dice-out-succeed','dice-out-retry','dice-out-giveup'].forEach(id => {
+      const el = document.getElementById(id);
+      el.className = 'ae-dice-out-btn locked';
+    });
+    document.getElementById('dice-out-retry-text').textContent = f.diceCheck.failLabel || 'try again';
     // dice overlay — left panel
     diceOverlay.classList.add('active');
     document.getElementById('dice-ov-label').textContent = f.diceCheck.label || 'Skill Check';
@@ -1806,7 +1788,6 @@ function renderFrame(idx) {
     const ovResult = document.getElementById('dice-ov-result');
     ovResult.textContent = '';
     ovResult.className = 'ae-dice-overlay-result';
-    document.getElementById('dice-ov-continue').style.display = 'none';
     window._currentDice = f.diceCheck;
   } else if (f.continueLabel) {
     diceOverlay.classList.remove('active');
@@ -1850,62 +1831,62 @@ function advanceScene() {
 function rollDice() {
   const dice = window._currentDice;
   if (!dice) return;
-  // bottom panel elements
   const btn = document.getElementById('dice-roll-btn');
-  const display = document.getElementById('dice-display');
-  const result = document.getElementById('dice-result');
   // overlay elements
   const d20num = document.getElementById('d20-number');
   const d20svg = document.getElementById('d20-3d');
   const ovResult = document.getElementById('dice-ov-result');
 
   btn.style.display = 'none';
-  display.classList.add('rolling');
   d20num.classList.add('rolling');
   d20svg.classList.add('rolling');
+
+  // store targets for diceAdvance
+  window._diceSuccessNext = dice.successNext;
+  window._diceFailNext = dice.failNext;
 
   // animate: flash random numbers for 1.2s
   let ticks = 0;
   const interval = setInterval(() => {
     const n = Math.floor(Math.random() * 20) + 1;
-    display.textContent = n;
     d20num.textContent = n;
     ticks++;
     if (ticks > 15) {
       clearInterval(interval);
-      // final roll
       const roll = Math.floor(Math.random() * 20) + 1;
-      display.textContent = roll;
       d20num.textContent = roll;
-      display.classList.remove('rolling');
       d20num.classList.remove('rolling');
       d20svg.classList.remove('rolling');
       const success = roll >= dice.dc;
       const cls = success ? 'success' : 'failed';
-      display.classList.add(cls);
       d20num.classList.add(cls);
       d20svg.classList.add(cls);
       d20svg.style.color = success ? '#5cc85c' : 'var(--ember)';
       const txt = success ? (roll === 20 ? 'NAT 20!' : 'SUCCESS') : 'FAILED';
-      result.textContent = txt;
-      result.className = 'ae-dice-result show ' + cls;
       ovResult.textContent = txt;
       ovResult.className = 'ae-dice-overlay-result show ' + cls;
-      // show overlay continue button (no auto-navigate)
-      const ovContinue = document.getElementById('dice-ov-continue');
-      const ovContinueText = document.getElementById('dice-ov-continue-text');
-      ovContinue.style.display = 'block';
-      ovContinue.className = 'ae-dice-ov-continue ' + cls;
-      ovContinueText.textContent = success ? 'continue' : 'try again';
-      window._diceNextId = success ? dice.successNext : dice.failNext;
+      // unlock outcome buttons on bottom panel
+      if (success) {
+        const btn = document.getElementById('dice-out-succeed');
+        btn.className = 'ae-dice-out-btn unlocked is-succeed';
+      } else {
+        const retryBtn = document.getElementById('dice-out-retry');
+        retryBtn.className = 'ae-dice-out-btn unlocked is-fail';
+        const giveupBtn = document.getElementById('dice-out-giveup');
+        giveupBtn.className = 'ae-dice-out-btn unlocked is-giveup';
+      }
     }
   }, 80);
 }
 
-function diceAdvance() {
-  const nextId = window._diceNextId;
+function diceAdvance(type) {
+  let nextId;
+  if (type === 'succeed') nextId = window._diceSuccessNext;
+  else if (type === 'retry') nextId = window._diceFailNext;
+  else if (type === 'giveup') nextId = 'crossroads-choice'; // bail out to hub
   if (!nextId) return;
-  window._diceNextId = null;
+  window._diceSuccessNext = null;
+  window._diceFailNext = null;
   const nextIdx = frames.findIndex(fr => fr.id === nextId);
   if (nextIdx >= 0) renderFrame(nextIdx);
   else {
