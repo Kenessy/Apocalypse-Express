@@ -521,6 +521,104 @@ html, body {
 .ae-stat.locked .ae-stat-val  { opacity: .30; }
 .ae-stat.locked .ae-stat-lbl  { opacity: .20; }
 
+/* collection button (stat bar bottom) */
+.ae-collection-btn {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 4px; width: 100%;
+  padding: 10px 0; margin-top: 4px;
+  border-top: 1px solid rgba(201,156,90,.10);
+  cursor: pointer;
+  transition: background .2s;
+}
+.ae-collection-btn:hover { background: rgba(201,156,90,.06); }
+.ae-collection-icon { font-size: 16px; opacity: .50; }
+.ae-collection-lbl {
+  font: 500 var(--fs-ambient)/1 'IBM Plex Mono';
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--gold); opacity: .40;
+}
+.ae-collection-count {
+  font: 400 var(--fs-ambient)/1 'IBM Plex Mono';
+  color: var(--muted); opacity: .30;
+}
+
+/* collection panel (overlays left img panel) */
+.ae-collection-panel {
+  position: absolute; inset: 0; z-index: 25;
+  background: rgba(5,4,10,.97);
+  backdrop-filter: blur(12px);
+  display: none; flex-direction: column;
+  overflow: hidden;
+}
+.ae-collection-panel.open { display: flex; }
+.ae-collection-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 18px 12px;
+  border-bottom: 1px solid rgba(201,156,90,.10);
+}
+.ae-collection-title {
+  font: 700 var(--fs-title)/1 'Cinzel', serif;
+  color: var(--gold2); letter-spacing: .06em;
+}
+.ae-collection-close {
+  font-size: var(--fs-body); color: var(--muted); opacity: .45;
+  cursor: pointer; padding: 4px 8px;
+  transition: opacity .2s;
+}
+.ae-collection-close:hover { opacity: .80; }
+.ae-collection-grid {
+  flex: 1; overflow-y: auto;
+  padding: 14px;
+  display: grid; grid-template-columns: 1fr;
+  gap: 10px; align-content: start;
+}
+/* card */
+.ae-coll-card {
+  border: 1px solid rgba(201,156,90,.12);
+  border-radius: 4px; overflow: hidden;
+  background: rgba(201,156,90,.03);
+  transition: border-color .2s, box-shadow .2s;
+}
+.ae-coll-card:hover {
+  border-color: rgba(201,156,90,.25);
+  box-shadow: 0 0 16px rgba(201,156,90,.06);
+}
+.ae-coll-card.locked {
+  opacity: .40; pointer-events: none;
+}
+.ae-coll-card-img {
+  width: 100%; aspect-ratio: 16/9;
+  object-fit: cover; display: block;
+  filter: brightness(.85);
+}
+.ae-coll-card.locked .ae-coll-card-img {
+  filter: brightness(.15) grayscale(1);
+}
+.ae-coll-card-body { padding: 10px 12px; }
+.ae-coll-card-title {
+  font: 700 var(--fs-label)/1.3 'Cinzel', serif;
+  color: var(--gold2); letter-spacing: .04em;
+  margin-bottom: 5px;
+}
+.ae-coll-card-desc {
+  font: 400 var(--fs-caption)/1.5 'IBM Plex Mono';
+  color: var(--muted); opacity: .65;
+}
+.ae-coll-card-hint {
+  font: 400 var(--fs-ambient)/1.4 'IBM Plex Mono';
+  color: var(--gold); opacity: .35;
+  margin-top: 6px; font-style: italic;
+}
+.ae-coll-card.locked .ae-coll-card-title { color: var(--muted); opacity: .50; }
+.ae-coll-card.locked .ae-coll-card-desc { display: none; }
+.ae-coll-card.locked .ae-coll-card-hint { opacity: .50; }
+
+/* scrollbar */
+.ae-collection-grid::-webkit-scrollbar { width: 4px; }
+.ae-collection-grid::-webkit-scrollbar-track { background: transparent; }
+.ae-collection-grid::-webkit-scrollbar-thumb { background: rgba(201,156,90,.15); border-radius: 2px; }
+
 /* ── scene frame: dual-state (image ↔ dialogue) ── */
 .ae-scene-frame {
   flex: 1;
@@ -1398,6 +1496,16 @@ html, body {
         <span class="ae-dice-overlay-result" id="dice-ov-result"></span>
       </div>
 
+      <!-- collection panel overlay -->
+      <div class="ae-collection-panel" id="collection-panel">
+        <div class="ae-collection-header">
+          <span class="ae-collection-title">Collection</span>
+          <span class="ae-collection-close" onclick="toggleCollection()">✕</span>
+        </div>
+        <div class="ae-collection-grid" id="collection-grid">
+        </div>
+      </div>
+
       <button class="ae-img-view-toggle" onclick="toggleCleanView()" aria-label="Toggle background view">
         <svg viewBox="0 0 16 16" width="20" height="20" fill="currentColor" opacity=".7"><path fill-rule="evenodd" d="M1 8 C3.5 3.5,6 2,8 2 C10 2,12.5 3.5,15 8 C12.5 12.5,10 14,8 14 C6 14,3.5 12.5,1 8 Z M8 5.5 A2.5 2.5 0 1 0 8 10.5 A2.5 2.5 0 1 0 8 5.5 Z"/><circle cx="8" cy="8" r="1"/></svg>
         <span>view</span>
@@ -1431,6 +1539,11 @@ html, body {
       <span class="ae-stat-icon">◎</span>
       <span class="ae-stat-val">—</span>
       <span class="ae-stat-lbl">chaos die</span>
+    </div>
+    <div class="ae-collection-btn" onclick="toggleCollection()" tabindex="0" role="button">
+      <span class="ae-collection-icon">📜</span>
+      <span class="ae-collection-lbl">collection</span>
+      <span class="ae-collection-count" id="collection-count">0 / 0</span>
     </div>
   </div>
 
@@ -1545,6 +1658,66 @@ html, body {
 
 
 <script>
+/* ══════════════════════════════════════
+   COLLECTION
+══════════════════════════════════════ */
+const collection = [
+  {
+    id: 'panorama-void',
+    title: 'The Infinite Plane',
+    img: 'ae-crossroads-wide.png',
+    desc: 'An endless obsidian plain — inconceivably ancient. No edge, no boundary, no end. Patches of borrowed earth where alien life clings to cracks in the glass. A landscape older than language, operating on rules no one alive can name.',
+    hint: 'Climb the obelisk at the crossroads.',
+    unlocked: false,
+  },
+  {
+    id: 'obelisk-fountain',
+    title: 'The Obelisk',
+    img: 'ae-obelisk-fountain.png',
+    desc: 'A monolith of dark marble rising from an obsidian fountain. Its surface is carved with spiralling symbols — a staircase that forgot to be one. The water at its base is impossibly clear, patient, ancient.',
+    hint: 'Survey the landscape at the crossroads.',
+    unlocked: false,
+  },
+  {
+    id: 'crossroads',
+    title: 'Null Meridian',
+    img: 'ae-null-meridian.png',
+    desc: 'Where two roads cross on an endless obsidian plain. A fountain marks the centre. The traces of travellers have long since worn away — but the water remains.',
+    hint: 'Wake up.',
+    unlocked: false,
+  },
+];
+
+function unlockCollection(id) {
+  const card = collection.find(c => c.id === id);
+  if (card && !card.unlocked) {
+    card.unlocked = true;
+    renderCollection();
+  }
+}
+
+function renderCollection() {
+  const grid = document.getElementById('collection-grid');
+  const unlocked = collection.filter(c => c.unlocked).length;
+  document.getElementById('collection-count').textContent = unlocked + ' / ' + collection.length;
+  grid.innerHTML = collection.map(c => `
+    <div class="ae-coll-card${c.unlocked ? '' : ' locked'}">
+      <img class="ae-coll-card-img" src="${c.img}" alt="${c.title}">
+      <div class="ae-coll-card-body">
+        <div class="ae-coll-card-title">${c.unlocked ? c.title : '???'}</div>
+        <div class="ae-coll-card-desc">${c.desc}</div>
+        <div class="ae-coll-card-hint">${c.unlocked ? '✓ Discovered' : c.hint}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleCollection() {
+  const panel = document.getElementById('collection-panel');
+  panel.classList.toggle('open');
+  if (panel.classList.contains('open')) renderCollection();
+}
+
 /* ══════════════════════════════════════
    STORY FRAMES
 ══════════════════════════════════════ */
@@ -1746,6 +1919,14 @@ function renderFrame(idx) {
   const f = frames[idx];
   if (!f) return;
   currentFrameIdx = idx;
+
+  // collection unlocks
+  const unlocks = {
+    'stand-up': 'crossroads',
+    'look-around': 'obelisk-fountain',
+    'climb-success': 'panorama-void',
+  };
+  if (unlocks[f.id]) unlockCollection(unlocks[f.id]);
 
   // dialogue inner
   const inner = document.getElementById('dialogue-inner');
@@ -2024,6 +2205,7 @@ function initChoiceEvents() {
 }
 
 // init first frame
+renderCollection();
 renderFrame(0);
 </script>
 </body>
