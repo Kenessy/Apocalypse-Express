@@ -1943,6 +1943,54 @@ const frames = [
     continueIcon: '↩',
     next: 'crossroads-choice',
   },
+  // ── FOUNTAIN BRANCH ──
+  {
+    id: 'examine-fountain',
+    speaker: null,
+    text: [
+      'You walk to the fountain. Up close, the strangeness sharpens. The basin is carved from a single piece of obsidian — no seams, no joints, no mason\'s marks. The water pours from somewhere inside the obelisk\'s base, though there\'s no visible mechanism. It just... flows. As if it always has.',
+      'The water is crystal-clear. Not clean the way a mountain stream is clean — clean the way a vacuum is clean. There is nothing <em class="inline">in</em> it. No algae, no sediment, no life. The stones beneath it are ancient but unblemished. Not a single patch of moss. Not a single stain.',
+      'Around the fountain, the crossroads stretches in four directions. Each road is lined with shapes in the mist — posts, markers, signs. And scattered at the fountain\'s edge: remnants. Things people left behind.',
+      'Two things catch your eye.',
+    ],
+    choices: [
+      { icon: '⊙', tint: 'gold', label: 'The fountain',
+        preview: 'Coins glint beneath the surface. Scraps of cloth and broken crates ring the basin. Someone was here. Many someones. A long time ago.',
+        previewImg: 'ae-obelisk-fountain.png',
+        next: 'fountain-close' },
+      { icon: '◎', tint: 'cyan', label: 'The roads',
+        preview: 'Four paths. Four directions. Signs in languages you don\'t recognise, pointing to distances that no longer mean anything.',
+        previewImg: 'ae-crossroads-wide.png',
+        next: 'roads-signs' },
+    ],
+  },
+  {
+    id: 'fountain-close',
+    speaker: null,
+    text: [
+      'You kneel at the basin\'s edge and look into the water. Coins rest on the bottom — different sizes, different metals. Copper, silver, something darker. Some are round, some square, some shaped like nothing you\'ve seen before. Wishes, thrown into a fountain where no one listens.',
+      'The water is impossibly still between the ripples. Not fresh because it\'s young — fresh because there is <em class="inline">nothing here to contaminate it</em>. No soil to cloud it. No insects to drown in it. No wind to stir dust into it. It is sterile in a way that nature never is.',
+      'Around the basin: the remains of travellers. Cloth rotted to grey threads. Wooden crates collapsed into splinters — only the iron fittings remain, rusted into lace. A carved bone die, yellowed and cracked. A metal button stamped with a symbol you don\'t recognise. A stone bead, smooth and pale, threaded on nothing.',
+      'Small things. Personal things. Left here by people who passed through and kept walking. Or people who stopped and never left. You can\'t tell which. And nothing here will tell you.',
+    ],
+    continueLabel: 'return',
+    continueIcon: '↩',
+    next: 'crossroads-choice',
+  },
+  {
+    id: 'roads-signs',
+    speaker: null,
+    text: [
+      'You walk to the nearest road and follow it a few paces. Then the next. Then the third, the fourth. They are identical — the same width, the same obsidian surface, the same fog swallowing them whole within fifty metres.',
+      'But the signs are different. Each road has them — posts driven into cracks in the glass, made from stone, metal, rotting wood. The inscriptions are in languages you\'ve never seen. Some are carved deep, some painted in pigments that have almost faded to nothing. Numbers — or what you think are numbers — beside words that might be names. Distances, maybe. Directions to places.',
+      'But as you study them, a feeling creeps in. Not understanding — something before understanding. An <em class="inline">intuition</em>. These distances are wrong. Not because the signs are lying — because the world has <em class="inline">moved</em>. Whatever these markers once pointed to has shifted, drifted, dissolved. The places they name are no longer where they were. They may no longer <em class="inline">be</em> at all.',
+      'You step back from the signs. Not from fear. From something deeper — the quiet certainty that you are reading directions to a dead world. Signposts to nowhere. A map of things that used to exist, carved by hands that are long gone, in languages that no one alive can speak.',
+      'You turn away. Some knowledge is worse than ignorance.',
+    ],
+    continueLabel: 'return',
+    continueIcon: '↩',
+    next: 'crossroads-choice',
+  },
   // ── WANDER EXPLORE (fallback scout) ──
   {
     id: 'wander-explore',
