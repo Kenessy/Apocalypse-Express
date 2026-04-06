@@ -325,35 +325,92 @@ h2 { color: #e6cfa1; font-size: 18px; margin: 32px 0 16px; opacity: .8; }
 
   <div class="node narrator">
     <div class="node-id">examine-fountain <span class="status done">DONE</span></div>
-    <span class="node-type choices">2 choices</span>
+    <span class="node-type continue">⊙ look closer → fountain-close</span>
     <div class="node-text">
-      <span class="full">You walk to the fountain. Up close, the strangeness sharpens. The basin is carved from a single piece of obsidian — no seams, no joints. The water pours from somewhere inside the obelisk's base. It just... flows.<br><br>The water is crystal-clear. Not clean the way a mountain stream is clean — clean the way a vacuum is clean. Nothing in it. No algae, no sediment, no life. The stones beneath it are ancient but unblemished.<br><br>Around the fountain, the crossroads stretches in four directions. Each road lined with shapes — posts, markers, signs. Scattered at the fountain's edge: remnants. Things people left behind.</span>
-      <br><em>⊙ The fountain</em> → fountain-close <span class="img-tag">ae-obelisk-fountain.png</span><br>
-      <em>◎ The roads</em> → roads-signs <span class="img-tag">ae-crossroads-wide.png</span>
+      <span class="full">You walk to the fountain. Up close, the strangeness sharpens. Basin carved from a single piece of obsidian. The water crystal-clear — clean the way a vacuum is clean. No algae, no sediment, no life. Remnants scattered at the edge.</span>
     </div>
   </div>
   <div class="conn">│</div>
 
+  <div class="node narrator">
+    <div class="node-id">fountain-close <span class="status done">DONE</span></div>
+    <span class="node-type choices">keep searching vs move on</span>
+    <div class="node-text">
+      <span class="full">Coins on the bottom — copper, silver, something darker. Wishes thrown where no one listens. Water impossibly sterile. Around the basin: cloth rotted to threads, collapsed crates, a bone die, a metal button, a stone bead. Small personal things. Left by people who passed through — or stopped and never left.</span>
+      <br><em>◎ Keep searching</em> → roads-signs &nbsp;|&nbsp; <em>↩ Move on</em> → crossroads-choice
+    </div>
+  </div>
+  <div class="conn">│</div>
+
+  <div class="node narrator">
+    <div class="node-id">roads-signs <span class="status done">DONE</span></div>
+    <span class="node-type choices">keep searching vs move on</span>
+    <div class="node-text">
+      <span class="full">Four identical roads, same fog. Signs in unknown languages — distances to places that have <em>moved</em>. The world shifted. Those places may no longer exist. Signposts to nowhere. Directions to a dead world.</span>
+      <br><em>◎ Keep searching</em> → fountain-desk &nbsp;|&nbsp; <em>↩ Move on</em> → crossroads-choice
+    </div>
+  </div>
+  <div class="conn">│</div>
+
+  <div class="node narrator">
+    <div class="node-id">fountain-desk <span class="status done">DONE</span></div>
+    <span class="node-type choices">examine scrolls vs leave</span>
+    <div class="node-text">
+      <span class="full">A collapsed desk near the fountain. Two scrolls pinned under a stone. Parchment brittle, damp, the colour of old bone. One wrong move and they disintegrate. Whatever is written has survived centuries. Whether it survives <em>you</em> is another question.</span>
+      <br><em>⊙ Examine the scrolls</em> → scroll-check-1 &nbsp;|&nbsp; <em>↩ Leave them</em> → crossroads-choice
+    </div>
+  </div>
+  <div class="conn">│</div>
+
+  <div class="node dice">
+    <div class="node-id">scroll-check-1 <span class="status done">DONE</span></div>
+    <span class="node-type dice-tag">🎲 d20 · DC 10 · Delicacy</span>
+    <div class="node-text">
+      <span class="full">You reach for the first scroll. It creaks. The wax seal flakes away. You unroll slowly...</span>
+    </div>
+  </div>
+
   <div class="branches">
     <div class="branch-col">
-      <div class="branch-label a">⊙ The fountain</div>
-      <div class="node narrator" style="border-radius: 0 0 6px 6px;">
-        <div class="node-id">fountain-close <span class="status done">DONE</span></div>
-        <span class="node-type continue">↩ return → crossroads-choice</span>
+      <div class="branch-label a">✓ First scroll survives</div>
+      <div class="node dice" style="border-radius: 0 0 6px 6px;">
+        <div class="node-id">scroll-safe-1 <span class="status done">DONE</span></div>
+        <span class="node-type dice-tag">🎲 d20 · DC 10 · Delicacy (2nd scroll)</span>
         <div class="node-text">
-          <span class="full">You kneel at the basin's edge. Coins rest on the bottom — copper, silver, something darker. Wishes thrown into a fountain where no one listens.<br><br>The water is impossibly still. Not fresh because it's young — fresh because there is <em>nothing here to contaminate it</em>. Sterile in a way that nature never is.<br><br>Around the basin: cloth rotted to grey threads. Wooden crates collapsed — only iron fittings remain. A carved bone die. A metal button. A stone bead threaded on nothing.<br><br>Small things. Personal things. Left by people who passed through and kept walking. Or people who stopped and never left. Nothing here will tell you which.</span>
+          <span class="full">First survives! Set down carefully. Second scroll — worse condition, darker, damper...</span>
+          <br>✓ or ✗ → <strong>scroll-revelation</strong> (first scroll enough)
         </div>
       </div>
     </div>
     <div class="branch-col">
-      <div class="branch-label b">◎ The roads</div>
-      <div class="node narrator" style="border-radius: 0 0 6px 6px;">
-        <div class="node-id">roads-signs <span class="status done">DONE</span></div>
-        <span class="node-type continue">↩ return → crossroads-choice</span>
+      <div class="branch-label b">✗ First scroll crumbles</div>
+      <div class="node dice" style="border-radius: 0 0 6px 6px;">
+        <div class="node-id">scroll-lost-1 <span class="status done">DONE</span></div>
+        <span class="node-type dice-tag">🎲 d20 · DC 10 · Delicacy (2nd scroll)</span>
         <div class="node-text">
-          <span class="full">Four roads, identical. Same width, same obsidian, same fog. But the signs are different — posts in stone, metal, rotting wood. Languages you've never seen. Numbers, distances, names.<br><br>A feeling creeps in: these distances are <em>wrong</em>. Not because the signs lie — because the world has <em>moved</em>. The places they name have shifted, drifted, dissolved. They may no longer <em>be</em> at all.<br><br>You step back. Not from fear. From the quiet certainty that you are reading directions to a dead world. Signposts to nowhere. A map of things that used to exist.<br><br>Some knowledge is worse than ignorance.</span>
+          <span class="full">First sighs apart — brown dust through your fingers. Gone. Only the second left...</span>
+          <br>✓ → scroll-revelation &nbsp;|&nbsp; ✗ → <strong>scrolls-dust</strong>
         </div>
       </div>
+    </div>
+  </div>
+  <div class="conn">│</div>
+
+  <div class="node coll">
+    <div class="node-id">scroll-revelation <span class="status done">DONE</span></div>
+    <span class="node-type coll-tag">📜 collection: The Unsent Letter</span>
+    <span class="node-type continue" style="margin-left:6px">↩ return → crossroads-choice</span>
+    <div class="node-text">
+      <span class="full">A ledger. Weapons orders — growing quantities. "Forest thickening. Night patrols doubled. Road to Ashenmere no longer safe after dusk." Shipments delayed, eastern road compromised.<br><br>At the bottom, different ink, shakier: <em>"Send word to my son. Tell them to stay home. Do not let his mother leave after twilight. Lock everything if I am not back by dark."</em><br><br>The message was never sent. No one read it. Until now.</span>
+    </div>
+  </div>
+  <div class="conn">│</div>
+
+  <div class="node outcome">
+    <div class="node-id">scrolls-dust <span class="status done">DONE</span></div>
+    <span class="node-type continue">↩ return → crossroads-choice</span>
+    <div class="node-text">
+      <span class="full">Both scrolls — dust. Two documents that survived centuries, undone by a single touch. Whatever was written — orders, letters, warnings — now dust on obsidian. Indistinguishable from the rest of this dead place.<br><br>Some things are not meant to be found. Or maybe they were — just not by you.</span>
     </div>
   </div>
 
