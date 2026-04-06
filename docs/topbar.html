@@ -332,50 +332,39 @@ html, body {
   color: var(--muted); opacity: .72;
   text-transform: lowercase;
 }
-/* ── threat indicator ── */
+/* ── threat gauge ── */
 .ae-loc-threat {
-  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
   width: 100%;
 }
+/* state colour + needle rotation — set via data-state */
+.ae-loc-threat[data-state="safe"]    { --sc: #5ecf8a; --nr: -90deg; }
+.ae-loc-threat[data-state="calm"]    { --sc: #7ab898; --nr: -45deg; }
+.ae-loc-threat[data-state="unknown"] { --sc: #6a6280; --nr:   0deg; }
+.ae-loc-threat[data-state="ominous"] { --sc: #a06060; --nr:  45deg; }
+.ae-loc-threat[data-state="danger"]  { --sc: #c44040; --nr:  90deg; }
+
 .ae-loc-threat-top {
-  display: flex; align-items: center; gap: 8px;
+  display: flex; align-items: baseline; gap: 8px;
 }
-.ae-loc-threat-icon { font-size: 11px; }
+.ae-loc-threat-key {
+  font: 400 var(--fs-caption)/1 'IBM Plex Mono';
+  letter-spacing: .18em; text-transform: uppercase;
+  color: var(--muted); opacity: .42;
+}
+.ae-loc-threat-sep { color: var(--muted); opacity: .22; font-size: var(--fs-caption); }
 .ae-loc-threat-label {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 15px; font-weight: 500; letter-spacing: .28em; text-transform: uppercase;
+  font: 500 var(--fs-body)/1 'IBM Plex Mono';
+  letter-spacing: .22em; text-transform: uppercase;
+  color: var(--sc);
+  text-shadow: 0 0 14px var(--sc);
 }
-/* gradient scale bar */
-.ae-loc-scale {
-  position: relative; width: 140px; height: 3px; border-radius: 2px;
-  background: linear-gradient(to right,
-    #5ecf8a 0%, #7ab898 25%, #6a6280 50%, #a06060 75%, #c44040 100%);
-  opacity: .55;
-}
-.ae-loc-scale-dot {
-  position: absolute; top: 50%; transform: translate(-50%, -50%);
-  width: 8px; height: 8px; border-radius: 50%;
-  border: 1.5px solid rgba(5,4,10,.90);
-}
-.ae-loc-scale-ends {
-  display: flex; justify-content: space-between; width: 140px;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: var(--fs-ambient); letter-spacing: .12em; text-transform: uppercase;
-  color: var(--muted); opacity: .32;
-}
-/* state colours — applied to .ae-loc-threat[data-state="X"] */
-.ae-loc-threat[data-state="safe"]    { --sc: #5ecf8a; --sp: 0%;   }
-.ae-loc-threat[data-state="calm"]    { --sc: #7ab898; --sp: 25%;  }
-.ae-loc-threat[data-state="unknown"] { --sc: #6a6280; --sp: 50%;  }
-.ae-loc-threat[data-state="ominous"] { --sc: #a06060; --sp: 75%;  }
-.ae-loc-threat[data-state="danger"]  { --sc: #c44040; --sp: 100%; }
-.ae-loc-threat .ae-loc-threat-icon  { color: var(--sc); text-shadow: 0 0 8px var(--sc); }
-.ae-loc-threat .ae-loc-threat-label { color: var(--sc); }
-.ae-loc-threat .ae-loc-scale        { opacity: .60; }
-.ae-loc-threat .ae-loc-scale-dot    {
-  left: var(--sp);
-  background: var(--sc);
-  box-shadow: 0 0 7px var(--sc), 0 0 14px var(--sc);
+/* SVG gauge */
+.ae-gauge { display: block; overflow: visible; }
+.ae-gauge-needle-group {
+  transform-origin: 0px 0px;
+  transform: rotate(var(--nr, 0deg));
+  transition: transform .5s cubic-bezier(.4,0,.2,1);
 }
 /* detail row colours */
 .ae-loc-row.s-safe    .ae-loc-row-icon { color: #5ecf8a; text-shadow: 0 0 8px rgba(94,207,138,.50); }
@@ -826,19 +815,55 @@ html, body {
         <div class="ae-loc-rule"></div>
         <span class="ae-loc-name">Null Meridian</span>
 
-        <!-- threat meter -->
+        <!-- threat gauge -->
         <div class="ae-loc-threat" data-state="calm">
           <div class="ae-loc-threat-top">
-            <span class="ae-loc-threat-icon">◉</span>
+            <span class="ae-loc-threat-key">mood</span>
+            <span class="ae-loc-threat-sep">·</span>
             <span class="ae-loc-threat-label">calm</span>
           </div>
-          <div class="ae-loc-scale">
-            <div class="ae-loc-scale-dot"></div>
-          </div>
-          <div class="ae-loc-scale-ends">
-            <span>safe</span>
-            <span>danger</span>
-          </div>
+          <svg class="ae-gauge" viewBox="0 0 100 56" width="136" height="76" aria-hidden="true">
+            <defs>
+              <linearGradient id="gGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%"   stop-color="#5ecf8a"/>
+                <stop offset="25%"  stop-color="#7ab898"/>
+                <stop offset="50%"  stop-color="#6a6280"/>
+                <stop offset="75%"  stop-color="#a06060"/>
+                <stop offset="100%" stop-color="#c44040"/>
+              </linearGradient>
+            </defs>
+            <!-- dim track -->
+            <path d="M 8 52 A 42 42 0 0 1 92 52" fill="none"
+                  stroke="rgba(255,255,255,.07)" stroke-width="6" stroke-linecap="round"/>
+            <!-- gradient arc -->
+            <path d="M 8 52 A 42 42 0 0 1 92 52" fill="none"
+                  stroke="url(#gGrad)" stroke-width="2.5" stroke-linecap="round" opacity=".55"/>
+            <!-- tick marks (safe/calm/unknown/ominous/danger) -->
+            <line x1="8"  y1="52" x2="12" y2="52" stroke="rgba(94,207,138,.40)"  stroke-width="1.2"/>
+            <line x1="20" y1="22" x2="24" y2="26" stroke="rgba(122,184,152,.35)" stroke-width="1.2"/>
+            <line x1="50" y1="10" x2="50" y2="15" stroke="rgba(106,98,128,.30)"  stroke-width="1.2"/>
+            <line x1="80" y1="22" x2="76" y2="26" stroke="rgba(160,96,96,.35)"   stroke-width="1.2"/>
+            <line x1="92" y1="52" x2="87" y2="52" stroke="rgba(196,64,64,.40)"   stroke-width="1.2"/>
+            <!-- end labels -->
+            <text x="5"  y="52" text-anchor="middle" dominant-baseline="hanging"
+                  font-family="IBM Plex Mono" font-size="6" letter-spacing="0.5"
+                  fill="rgba(94,207,138,.45)" transform="translate(-2,4)">S</text>
+            <text x="95" y="52" text-anchor="middle" dominant-baseline="hanging"
+                  font-family="IBM Plex Mono" font-size="6" letter-spacing="0.5"
+                  fill="rgba(196,64,64,.45)" transform="translate(2,4)">D</text>
+            <!-- needle — rotates via CSS .ae-gauge-needle-group -->
+            <g transform="translate(50,52)">
+              <g class="ae-gauge-needle-group">
+                <line x1="0" y1="5" x2="0" y2="-33"
+                      stroke="var(--sc)" stroke-width="1.5" stroke-linecap="round" opacity=".80"/>
+                <polygon points="0,-33 -2,-26 2,-26"
+                         fill="var(--sc)" opacity=".60"/>
+              </g>
+            </g>
+            <!-- hub -->
+            <circle cx="50" cy="52" r="3.5" fill="rgba(5,4,10,.85)"
+                    stroke="var(--sc)" stroke-width="1.5"/>
+          </svg>
         </div>
 
         <!-- detail rows -->
