@@ -517,6 +517,9 @@ html, body {
 .ae-stat.chaos .ae-stat-icon { color: var(--ember);   }
 .ae-stat.harm  .ae-stat-icon { color: var(--cyan);    }
 .ae-stat.dice  .ae-stat-icon { color: var(--purple2); }
+.ae-stat.locked .ae-stat-icon { opacity: .22; }
+.ae-stat.locked .ae-stat-val  { opacity: .30; }
+.ae-stat.locked .ae-stat-lbl  { opacity: .20; }
 
 /* ── scene frame: dual-state (image ↔ dialogue) ── */
 .ae-scene-frame {
@@ -1098,27 +1101,27 @@ html, body {
   <div class="ae-stat-bar">
     <div class="ae-stat gold">
       <span class="ae-stat-icon">◈</span>
-      <span class="ae-stat-val">1,240</span>
+      <span class="ae-stat-val">0</span>
       <span class="ae-stat-lbl">gold</span>
     </div>
     <div class="ae-stat hp">
       <span class="ae-stat-icon">●</span>
-      <span class="ae-stat-val">8/10</span>
+      <span class="ae-stat-val">?/?</span>
       <span class="ae-stat-lbl">HP</span>
     </div>
-    <div class="ae-stat chaos">
+    <div class="ae-stat chaos locked">
       <span class="ae-stat-icon">◉</span>
-      <span class="ae-stat-val">3/5</span>
+      <span class="ae-stat-val">—</span>
       <span class="ae-stat-lbl">Chaos</span>
     </div>
-    <div class="ae-stat harm">
+    <div class="ae-stat harm locked">
       <span class="ae-stat-icon">○</span>
-      <span class="ae-stat-val">6/10</span>
+      <span class="ae-stat-val">—</span>
       <span class="ae-stat-lbl">Harmony</span>
     </div>
-    <div class="ae-stat dice">
+    <div class="ae-stat dice locked">
       <span class="ae-stat-icon">◎</span>
-      <span class="ae-stat-val">d6+2</span>
+      <span class="ae-stat-val">—</span>
       <span class="ae-stat-lbl">chaos die</span>
     </div>
   </div>
