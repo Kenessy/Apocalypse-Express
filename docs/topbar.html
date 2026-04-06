@@ -366,6 +366,49 @@ html, body {
   transform: rotate(var(--nr, 0deg));
   transition: transform .5s cubic-bezier(.4,0,.2,1);
 }
+
+/* ── time-of-day strip ── */
+.ae-loc-time-block {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  width: 100%;
+}
+.ae-loc-time-label {
+  font: 400 var(--fs-caption)/1 'IBM Plex Mono';
+  letter-spacing: .18em; text-transform: uppercase;
+  color: var(--muted); opacity: .45;
+}
+.ae-time-strip {
+  display: flex; gap: 2px; align-items: flex-end;
+}
+.ae-time-pip {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  padding: 4px 7px;
+  opacity: .16;
+  transition: opacity .35s ease, filter .35s ease;
+}
+.ae-time-pip.active   { opacity: .92; }
+.ae-time-pip.adjacent { opacity: .32; }
+.ae-time-pip.active.likely {
+  animation: ae-t-pulse 3.2s ease-in-out infinite;
+}
+@keyframes ae-t-pulse {
+  0%, 100% { opacity: .88; }
+  50%       { opacity: .52; }
+}
+.ae-time-icon {
+  font-size: 15px; line-height: 1;
+  color: var(--gold); transition: color .3s, text-shadow .3s;
+}
+.ae-time-pip.active .ae-time-icon {
+  color: var(--gold2);
+  text-shadow: 0 0 12px rgba(230,207,161,.55);
+}
+.ae-time-pip.adjacent .ae-time-icon { color: var(--gold); }
+.ae-time-lbl {
+  font: 400 9px/1 'IBM Plex Mono';
+  letter-spacing: .10em; text-transform: uppercase;
+  color: var(--muted);
+}
 /* detail row colours — same gold→ember palette */
 .ae-loc-row.s-safe    .ae-loc-row-icon { color: #e6cfa1; }
 .ae-loc-row.s-calm    .ae-loc-row-icon { color: #d4a85a; }
@@ -865,13 +908,39 @@ html, body {
           </svg>
         </div>
 
+        <!-- time of day strip -->
+        <div class="ae-loc-time-block">
+          <span class="ae-loc-time-label">time</span>
+          <div class="ae-time-strip">
+            <div class="ae-time-pip" data-t="dawn">
+              <span class="ae-time-icon">◌</span>
+              <span class="ae-time-lbl">dawn</span>
+            </div>
+            <div class="ae-time-pip active likely" data-t="morning">
+              <span class="ae-time-icon">◔</span>
+              <span class="ae-time-lbl">morn</span>
+            </div>
+            <div class="ae-time-pip adjacent" data-t="noon">
+              <span class="ae-time-icon">◉</span>
+              <span class="ae-time-lbl">noon</span>
+            </div>
+            <div class="ae-time-pip" data-t="afternoon">
+              <span class="ae-time-icon">◐</span>
+              <span class="ae-time-lbl">aftn</span>
+            </div>
+            <div class="ae-time-pip" data-t="evening">
+              <span class="ae-time-icon">◑</span>
+              <span class="ae-time-lbl">eve</span>
+            </div>
+            <div class="ae-time-pip" data-t="midnight">
+              <span class="ae-time-icon">●</span>
+              <span class="ae-time-lbl">midn</span>
+            </div>
+          </div>
+        </div>
+
         <!-- detail rows -->
         <div class="ae-loc-table">
-          <div class="ae-loc-row s-unknown">
-            <span class="ae-loc-row-icon">○</span>
-            <span class="ae-loc-row-key">time</span>
-            <span class="ae-loc-row-val">morning — likely</span>
-          </div>
           <div class="ae-loc-row s-unknown">
             <span class="ae-loc-row-icon">◈</span>
             <span class="ae-loc-row-key">zone</span>
