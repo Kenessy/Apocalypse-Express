@@ -314,11 +314,55 @@ h2 { color: #e6cfa1; font-size: 18px; margin: 32px 0 16px; opacity: .8; }
 <div class="flow">
 
   <div class="node narrator">
-    <div class="node-id">talk-cicero <span class="status done">DONE</span> (intro only)</div>
-    <span class="node-type continue">† wait → crossroads-choice (placeholder)</span>
+    <div class="node-id">talk-cicero <span class="status done">DONE</span></div>
+    <span class="node-type continue">† call out → cicero-call-1</span>
     <div class="node-text">
-      <span class="full">You approach the old man. Heavy cloak — dark, unremarkable, forgettable. Nothing striking about him. Except the quill. Obsidian tip, gleaming. It moves across pages of a small, thick, expensive leather-bound book. He writes without looking up. Without pausing.<br><br>The book doesn't belong here. Neither does the quill. But the man? He fits perfectly — as if the crossroads grew around him, or he grew out of it.<br><br>He hasn't acknowledged you. But he knows you're there.</span>
-      <br><em>Choices TBD — interaction options not yet written</em>
+      <span class="full">You approach the old man. Heavy cloak — dark, unremarkable, forgettable. Nothing striking. Except the quill — obsidian tip, gleaming. Moves across pages of a thick, expensive book. He writes without looking up.<br><br>The book doesn't belong here. Neither does the quill. But the man fits perfectly — as if the crossroads grew around him.</span>
+    </div>
+  </div>
+  <div class="conn">│</div>
+
+  <div class="node narrator">
+    <div class="node-id">cicero-call-1 <span class="status done">DONE</span></div>
+    <span class="node-type continue">† try again → cicero-call-2</span>
+    <div class="node-text">
+      <span class="full">You call out. He stirs — barely. A tremor. The quill pauses for half a heartbeat, then resumes. He's not ignoring you. He's simply not entirely here. Like a man dreaming with his eyes open.</span>
+    </div>
+  </div>
+  <div class="conn">│</div>
+
+  <div class="node narrator">
+    <div class="node-id">cicero-call-2 <span class="status done">DONE</span></div>
+    <span class="node-type continue">◎ wait and listen → cicero-listen</span>
+    <div class="node-text">
+      <span class="full">You step closer. Raise your voice. Nothing. The quill doesn't even pause. His shadow falls too dark, too sharp — as if he is both here and somewhere else. He is unreachable. Perhaps a different approach.</span>
+    </div>
+  </div>
+  <div class="conn">│</div>
+
+  <div class="node narrator">
+    <div class="node-id">cicero-listen <span class="status done">DONE</span></div>
+    <span class="node-type continue">◎ listen closer → cicero-mumble</span>
+    <div class="node-text">
+      <span class="full">You stop trying. Stand and wait. Watch the quill. Listen to the scratch of obsidian on parchment. For a long time, nothing. Then — quietly — he speaks. Not to you. To the book. To himself.</span>
+    </div>
+  </div>
+  <div class="conn">│</div>
+
+  <div class="node main">
+    <div class="node-id">cicero-mumble <span class="status done">DONE</span></div>
+    <span class="node-type continue">↩ leave him be → cicero-leave</span>
+    <div class="node-text"><strong>Cicero</strong>
+      <span class="full">"...but a promise is a promise. He has to honour it. <em>They</em> have to honour it. They <em>cannot</em> lie — this is known. Not to me. Not them. So here we are..."<br><br>"...but for how much longer? Good stories don't keep you waiting — only me... but where am I? Hm..."<br><br>The quill resumes. The window closes.</span>
+    </div>
+  </div>
+  <div class="conn">│</div>
+
+  <div class="node narrator">
+    <div class="node-id">cicero-leave <span class="status done">DONE</span></div>
+    <span class="node-type continue">↩ return → crossroads-choice</span>
+    <div class="node-text">
+      <span class="full">A promise. Something that <em>cannot lie</em>. An obligation. And the old man — waiting, writing. For how long?<br><br>He's not ready to talk. Whatever holds his attention is stronger than you. You leave him to his pages. He'll be here when you come back.</span>
     </div>
   </div>
 
