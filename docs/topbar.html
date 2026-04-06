@@ -419,18 +419,24 @@ html, body {
     0 0 12px rgba(201,156,90,.40),
     0 0 22px rgba(201,156,90,.16);
 }
-/* dawn SVG: use filter instead of text-shadow */
+/* SVG icons: filter replaces text-shadow for dawn/morning/afternoon */
 .ae-time-icon svg { display: block; }
-.ae-time-pip[data-t="dawn"] .ae-time-icon {
+.ae-time-pip[data-t="dawn"] .ae-time-icon,
+.ae-time-pip[data-t="morning"] .ae-time-icon,
+.ae-time-pip[data-t="afternoon"] .ae-time-icon {
   text-shadow: none;
   filter: drop-shadow(0 0 12px rgba(184,176,198,.50)) drop-shadow(0 0 24px rgba(184,176,198,.22));
   transition: color .3s, filter .3s;
 }
-.ae-time-pip[data-t="dawn"].active .ae-time-icon {
+.ae-time-pip[data-t="dawn"].active .ae-time-icon,
+.ae-time-pip[data-t="morning"].active .ae-time-icon,
+.ae-time-pip[data-t="afternoon"].active .ae-time-icon {
   text-shadow: none;
   filter: drop-shadow(0 0 14px rgba(230,207,161,.90)) drop-shadow(0 0 30px rgba(201,156,90,.55));
 }
-.ae-time-pip[data-t="dawn"].adjacent .ae-time-icon {
+.ae-time-pip[data-t="dawn"].adjacent .ae-time-icon,
+.ae-time-pip[data-t="morning"].adjacent .ae-time-icon,
+.ae-time-pip[data-t="afternoon"].adjacent .ae-time-icon {
   text-shadow: none;
   filter: drop-shadow(0 0 12px rgba(201,156,90,.40)) drop-shadow(0 0 22px rgba(201,156,90,.16));
 }
@@ -948,13 +954,13 @@ html, body {
               <span class="ae-time-icon"><svg viewBox="0 0 22 22" width="22" height="22" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 15 A6 6 0 0 1 17 15" stroke="none"/><line x1="1" y1="15" x2="21" y2="15"/><line x1="11" y1="2" x2="11" y2="7"/><line x1="5" y1="5" x2="7.5" y2="7.5"/><line x1="17" y1="5" x2="14.5" y2="7.5"/></svg></span>
             </div>
             <div class="ae-time-pip active likely" data-t="morning">
-              <span class="ae-time-icon">☀</span>
+              <span class="ae-time-icon"><svg viewBox="0 0 22 22" width="22" height="22" fill="currentColor" stroke="currentColor" stroke-linecap="round"><circle cx="14" cy="7" r="4.5" stroke="none"/><line x1="14" y1="0" x2="14" y2="2" stroke-width="2"/><line x1="20" y1="7" x2="18" y2="7" stroke-width="2"/><line x1="18.5" y1="2.5" x2="17" y2="4" stroke-width="2"/><ellipse cx="9" cy="18.5" rx="9" ry="3" stroke="none"/><circle cx="4" cy="15" r="3.5" stroke="none"/><circle cx="9.5" cy="13" r="4" stroke="none"/><circle cx="14.5" cy="15" r="3" stroke="none"/></svg></span>
             </div>
             <div class="ae-time-pip adjacent" data-t="noon">
-              <span class="ae-time-icon">◉</span>
+              <span class="ae-time-icon">☀</span>
             </div>
             <div class="ae-time-pip" data-t="afternoon">
-              <span class="ae-time-icon">◕</span>
+              <span class="ae-time-icon"><svg viewBox="0 0 22 22" width="22" height="22" fill="currentColor" stroke="currentColor" stroke-linecap="round"><circle cx="8" cy="7" r="4.5" stroke="none"/><line x1="8" y1="0" x2="8" y2="2" stroke-width="2"/><line x1="2" y1="7" x2="4" y2="7" stroke-width="2"/><line x1="3.5" y1="2.5" x2="5" y2="4" stroke-width="2"/><ellipse cx="13" cy="18.5" rx="9" ry="3" stroke="none"/><circle cx="18" cy="15" r="3.5" stroke="none"/><circle cx="12.5" cy="13" r="4" stroke="none"/><circle cx="7.5" cy="15" r="3" stroke="none"/></svg></span>
             </div>
             <div class="ae-time-pip" data-t="evening">
               <span class="ae-time-icon">◑</span>
