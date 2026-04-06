@@ -952,6 +952,12 @@ html, body {
 .ae-dice-out-btn.locked {
   opacity: .75; cursor: pointer;
 }
+.ae-dice-out-btn.locked:hover {
+  background: rgba(201,156,90,.06);
+  border-color: rgba(201,156,90,.15);
+}
+.ae-dice-out-btn.locked:hover .ae-dice-out-icon { opacity: .65; color: var(--gold); }
+.ae-dice-out-btn.locked:hover .ae-dice-out-text { opacity: .55; color: var(--gold2); }
 /* unlocked: succeed */
 .ae-dice-out-btn.unlocked.is-succeed {
   cursor: pointer; opacity: 1;
