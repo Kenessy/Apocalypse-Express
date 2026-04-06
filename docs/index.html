@@ -1,1039 +1,2579 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Apocalypse Express</title>
-  <meta name="description" content="A cinematic narrative RPG about dead souls, infernal railways, and a second life purchased on Lucifer's schedule.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Inter:wght@300;400;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AE · Waking — Null Meridian</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --void:    #05040a;
+  --gold:    #c99c5a;
+  --gold2:   #e6cfa1;
+  --cyan:    #28bdd8;
+  --purple2: #a38bcf;
+  --ember:   #ff7b5c;
+  --text:    #f8f5f0;
+  --muted:   #b8b0c6;
 
-    :root {
-      --void:    #05040a;
-      --surface: #0b0e16;
-      --purple:  #4c2b70;
-      --purple2: #a38bcf;
-      --gold:    #c99c5a;
-      --gold2:   #e6cfa1;
-      --cyan:    #28bdd8;
-      --ember:   #ff7b5c;
-      --text:    #f8f5f0;
-      --muted:   #b8b0c6;
-      --prose:   #c2bcc8;
-    }
+  /* ── typography scale (Perfect Fourth ×1.333, dark game UI, IBM Plex Mono)
+     T1 display  32px — helyszín cím, major title
+     T2 title    20px — speaker név, section header
+     T3 body     15px — narratíva, dialóg
+     T4 label    13px — stat értékek, choice text, topbar nevek
+     T5 caption  11px — stat labelek, breadcrumb, mood tagek (abs. minimum)
+     T6 ambient  10px — nyilak, elválasztók, dekoratív ── */
+  --fs-display:  32px;
+  --fs-title:    20px;
+  --fs-body:     15px;
+  --fs-label:    13px;
+  --fs-caption:  11px;
+  --fs-ambient:  10px;
+}
+html, body {
+  background: #0e0c18;
+  font-family: 'IBM Plex Mono', monospace;
+  min-height: 100vh;
+  display: flex; flex-direction: column; align-items: stretch;
+  padding-top: 44px; gap: 0;
+}
 
-    html, body {
-      width: 100%; height: 100%;
-      background: var(--void);
-      color: var(--text);
-      font-family: 'Inter', system-ui, sans-serif;
-      overflow: hidden;
-    }
+/* ══════════════════════════════════════
+   TOP BAR  ·  44px fixed
+══════════════════════════════════════ */
+.topbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: 44px;
+  background: rgba(5,4,10,.97);
+  backdrop-filter: blur(16px) saturate(.8);
+  -webkit-backdrop-filter: blur(16px) saturate(.8);
+  border-bottom: 1px solid rgba(201,156,90,.08);
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 0 12px; gap: 0;
+}
 
-    /* ── SLIDE ENGINE ── */
-    .slideshow {
-      width: 100vw; height: 100vh;
-      position: relative;
-      overflow: hidden;
-      padding:
-        env(safe-area-inset-top, 0)
-        env(safe-area-inset-right, 0)
-        env(safe-area-inset-bottom, 0)
-        env(safe-area-inset-left, 0);
-    }
+.bc { display: flex; align-items: center; overflow: visible; min-width: 0; }
+.bc-seg {
+  display: flex; align-items: center;
+  padding: 0 9px; height: 44px;
+  border-radius: 3px; cursor: pointer;
+  position: relative; flex-shrink: 0;
+  transition: background .2s; isolation: isolate;
+}
+.bc-seg:hover  { background: rgba(201,156,90,.055); }
+.bc-seg.active { background: rgba(201,156,90,.04); }
+.bc-inner { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 
-    .slide {
-      position: absolute; inset: 0;
-      display: flex; align-items: center; justify-content: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity .7s ease;
-    }
-    .slide.active {
-      opacity: 1;
-      pointer-events: all;
-    }
+.bc-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: var(--fs-caption); letter-spacing: .12em; text-transform: uppercase;
+  color: var(--gold); opacity: .50; line-height: 1;
+  transition: opacity .2s; white-space: nowrap;
+}
+.bc-seg:hover .bc-label  { opacity: .72; }
+.bc-seg.active .bc-label { opacity: .65; }
 
-    /* ── SLIDE 0 — TITLE ── */
-    #slide-title {
-      background: var(--void);
-    }
+.bc-name {
+  font-family: 'Cinzel', serif;
+  font-size: 13px; font-weight: 700; letter-spacing: .04em;
+  color: var(--muted); opacity: .56; line-height: 1;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  max-width: 130px; transition: color .2s, opacity .2s;
+}
+.bc-seg:hover .bc-name  { color: var(--text); opacity: .82; }
+.bc-seg.active .bc-name { color: var(--gold2); opacity: .92; }
 
-    /* atmospheric layers */
-    #slide-title .bg-glow {
-      position: absolute; inset: 0; z-index: 0;
-      background:
-        radial-gradient(ellipse 60% 50% at 50% 40%, rgba(76,43,112,.38), transparent 65%),
-        radial-gradient(ellipse 30% 25% at 50% 90%, rgba(201,156,90,.10), transparent 55%),
-        radial-gradient(ellipse 80% 60% at 10% 5%,  rgba(76,43,112,.12), transparent 50%);
-    }
+.bc-seg.active::after {
+  content: '';
+  position: absolute; bottom: 5px; left: 9px; right: 9px; height: 1px;
+  background: linear-gradient(to right, transparent, var(--gold), transparent);
+  opacity: .45;
+}
+.bc-sep { font-size: var(--fs-ambient); color: var(--gold); opacity: .18; flex-shrink: 0; padding: 0 1px; user-select: none; }
 
-    /* faint rail lines across the bottom */
-    #slide-title .rails {
-      position: absolute; bottom: 0; left: 0; right: 0;
-      height: 180px; z-index: 1;
-      background:
-        linear-gradient(to bottom, transparent 0%, rgba(201,156,90,.04) 60%, rgba(201,156,90,.10) 100%);
-      overflow: hidden;
-    }
-    #slide-title .rails::before,
-    #slide-title .rails::after {
-      content: '';
-      position: absolute; bottom: 0;
-      width: 2px; height: 100%;
-      background: linear-gradient(to top, rgba(201,156,90,.45), transparent);
-    }
-    #slide-title .rails::before { left: calc(50% - 120px); }
-    #slide-title .rails::after  { left: calc(50% + 120px); }
+.bc-dropdown {
+  position: absolute; top: 100%; left: 0; min-width: 220px;
+  background: rgba(5,4,10,.99);
+  border: 1px solid rgba(201,156,90,.11);
+  border-radius: 4px; padding: 5px 0;
+  z-index: 9999; opacity: 0; pointer-events: none;
+  transform: translateY(-4px);
+  transition: opacity .18s ease, transform .18s ease;
+  box-shadow: 0 10px 36px rgba(0,0,0,.7), 0 0 0 1px rgba(201,156,90,.04);
+}
+.bc-seg:hover        .bc-dropdown { opacity: 1; pointer-events: all; transform: translateY(0); }
+.bc-seg:focus-within .bc-dropdown { opacity: 1; pointer-events: all; transform: translateY(0); }
 
-    /* content */
-    #slide-title .content {
-      position: relative; z-index: 2;
-      text-align: center;
-      max-width: 860px;
-      padding: 0 20px;
-      width: 100%;
-    }
+.dd-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 14px; cursor: pointer;
+  transition: background .16s; min-height: 30px;
+}
+.dd-item:hover   { background: rgba(201,156,90,.06); }
+.dd-item.current { background: rgba(201,156,90,.04); }
+.dd-id {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: var(--fs-caption); letter-spacing: .10em; text-transform: uppercase;
+  color: var(--gold); opacity: .55; flex-shrink: 0; width: 32px;
+}
+.dd-item.current .dd-id { opacity: .88; }
+.dd-item.locked  .dd-id { opacity: .20; }
+.dd-name {
+  font-family: 'Cinzel', serif; font-size: var(--fs-label); font-weight: 700;
+  letter-spacing: .03em; color: var(--muted); opacity: .58;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 160px;
+}
+.dd-item.current .dd-name { color: var(--gold2); opacity: .90; }
+.dd-item.locked  .dd-name { opacity: .20; }
+.dd-dot {
+  width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; margin-left: auto;
+  background: rgba(184,176,198,.12); border: 1px solid rgba(184,176,198,.18);
+}
+.dd-item.done    .dd-dot { background: rgba(184,176,198,.38); border-color: rgba(184,176,198,.38); }
+.dd-item.current .dd-dot { background: var(--gold); border-color: var(--gold); box-shadow: 0 0 6px rgba(201,156,90,.5); }
+.dd-div { height: 1px; background: rgba(201,156,90,.06); margin: 3px 0; }
 
-    .eyebrow {
-      display: inline-block;
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 10px; letter-spacing: .22em;
-      text-transform: uppercase;
-      color: var(--gold);
-      border: 1px solid rgba(201,156,90,.3);
-      background: rgba(11,14,22,.6);
-      padding: 5px 12px; border-radius: 999px;
-      margin-bottom: 20px;
-    }
+.topbar-center {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 2px; pointer-events: none; padding: 0 16px;
+  min-width: 0; overflow: hidden;
+}
+.tc-title {
+  font-family: 'Cinzel', serif;
+  font-size: 15px; font-weight: 700; letter-spacing: .07em;
+  color: var(--text); opacity: .88; line-height: 1;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  max-width: 340px; transition: color .35s, text-shadow .35s, opacity .35s;
+}
+.tc-mood {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: var(--fs-caption); letter-spacing: .12em; text-transform: uppercase;
+  color: var(--gold); opacity: .48; line-height: 1;
+  white-space: nowrap; transition: color .35s, opacity .35s;
+}
+.topbar.mood-safe   .tc-title { color: var(--gold2); opacity: .92; }
+.topbar.mood-safe   .tc-mood  { color: var(--gold); opacity: .55; }
+.topbar.mood-danger .tc-title { color: var(--ember); opacity: .94; text-shadow: 0 0 18px rgba(255,123,92,.28); }
+.topbar.mood-danger .tc-mood  { color: var(--ember); opacity: .55; }
 
-    h1.title-main {
-      font-family: 'Cinzel', serif;
-      font-size: clamp(40px, 10vw, 108px);
-      font-weight: 900;
-      line-height: .92;
-      letter-spacing: -.02em;
-      color: var(--text);
-      margin-bottom: 6px;
-    }
+.topbar-right { display: flex; align-items: center; justify-content: flex-end; }
+.hamburger {
+  width: 36px; height: 36px;
+  display: flex; flex-direction: column; align-items: flex-end; justify-content: center;
+  gap: 5px; background: none; border: none;
+  border-radius: 4px; padding: 8px 6px; cursor: pointer; transition: background .2s;
+}
+.hamburger:hover { background: rgba(184,176,198,.06); }
+.hamburger span {
+  display: block; height: 1.5px;
+  background: var(--muted); opacity: .42; border-radius: 1px;
+  transition: opacity .2s, width .2s, transform .2s;
+}
+.hamburger span:nth-child(1) { width: 18px; }
+.hamburger span:nth-child(2) { width: 14px; }
+.hamburger span:nth-child(3) { width: 10px; }
+.hamburger:hover span              { opacity: .78; }
+.hamburger:hover span:nth-child(2) { width: 18px; }
+.hamburger:hover span:nth-child(3) { width: 18px; }
+.hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); width: 18px; opacity: .88; }
+.hamburger.open span:nth-child(2) { opacity: 0; width: 18px; }
+.hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); width: 18px; opacity: .88; }
 
-    h1.title-main .word-express {
-      display: block;
-      background: linear-gradient(135deg, var(--gold) 0%, var(--gold2) 40%, var(--purple2) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
+/* ══ MOBILE ══ */
+@media (max-width: 768px) { .tc-title { max-width: 220px; } .bc-name { max-width: 100px; } }
+@media (max-width: 640px) { .tc-title { font-size: 12px; max-width: 160px; letter-spacing: .04em; } .tc-mood { display: none; } }
+@media (max-width: 480px) {
+  .bc-seg.canto .bc-name, .bc-seg.episode .bc-name { display: none; }
+  .bc-seg.canto .bc-label, .bc-seg.episode .bc-label { font-size: 9px; letter-spacing: .10em; }
+  .tc-title { max-width: 100px; }
+}
 
-    .subtitle {
-      font-size: 14px;
-      color: var(--muted);
-      line-height: 1.65;
-      max-width: 560px;
-      margin: 18px auto 0;
-      font-weight: 300;
-    }
+/* ══ ACCESSIBILITY ══ */
+@media (prefers-contrast: more) {
+  .bc-label { opacity: .88; } .bc-name { opacity: .88; }
+  .tc-title { opacity: 1; }   .tc-mood { opacity: .75; }
+  .dd-id { opacity: .82; }    .dd-name { opacity: .88; }
+  .hamburger span { opacity: .80; }
+  .topbar { border-bottom-color: rgba(201,156,90,.35); }
+}
+.bc-seg:focus-visible    { outline: 1px solid rgba(201,156,90,.45); outline-offset: -2px; }
+.hamburger:focus-visible { outline: 1px solid rgba(184,176,198,.45); outline-offset: 2px; }
 
-    .divider {
-      width: 48px; height: 1px;
-      background: linear-gradient(to right, transparent, var(--gold), transparent);
-      margin: 22px auto;
-    }
+/* ══════════════════════════════════════
+   LAYOUT  ·  position:fixed, flush a topbar alá
+══════════════════════════════════════ */
+.ae-layout {
+  position: fixed;
+  top: 44px; left: 0; right: 0; bottom: 0;
+  display: flex; flex-direction: row;
+  z-index: 50;
+}
+.ae-col {
+  display: flex; flex-direction: column;
+  position: relative; overflow: hidden;
+}
+.ae-col-img {
+  width: calc((100vh - 44px) * var(--img-ratio, 0.6667));
+  flex-shrink: 0; background: #000;
+}
+.ae-img-panel {
+  position: relative; width: 100%; height: 100%; overflow: hidden;
+}
+.ae-img-panel::before,
+.ae-img-panel::after {
+  content: ''; position: absolute;
+  width: 20px; height: 20px;
+  border-color: rgba(201,156,90,.28); border-style: solid;
+  z-index: 2; pointer-events: none;
+  transition: opacity .4s ease;
+}
+.ae-img-panel::before { top: 14px; left: 14px;  border-width: 1px 0 0 1px; }
+.ae-img-panel::after  { top: 14px; right: 14px; border-width: 1px 1px 0 0; }
+.ae-img-bg {
+  display: block; width: 100%; height: 100%;
+  object-fit: cover; object-position: center 35%;
+}
 
-    .cta-row {
-      display: flex; flex-direction: column; gap: 10px;
-      align-items: center; justify-content: center;
-      margin-top: 8px;
-      width: 100%; max-width: 320px;
-      margin-left: auto; margin-right: auto;
-    }
+/* ── ambient particles ── */
+.ae-particles {
+  position: absolute; inset: 0;
+  z-index: 2; pointer-events: none; overflow: hidden;
+}
+.ae-p {
+  position: absolute; top: 0;
+  animation: linear infinite;
+  will-change: transform;
+}
+/* 3 különböző szélirányú drift útvonal */
+@keyframes ae-fall-a {
+  0%   { transform: translateY(-20px) translateX(0px)   rotate(0deg);   opacity: 0; }
+  12%  { opacity: 1; }
+  30%  { transform: translateY(28vh)  translateX(18px)  rotate(40deg);  }
+  60%  { transform: translateY(56vh)  translateX(6px)   rotate(90deg);  opacity: .65; }
+  80%  { transform: translateY(78vh)  translateX(22px)  rotate(130deg); }
+  88%  { opacity: .5; }
+  100% { transform: translateY(calc(100vh - 4px)) translateX(10px) rotate(175deg); opacity: 0; }
+}
+@keyframes ae-fall-b {
+  0%   { transform: translateY(-20px) translateX(0px)   rotate(0deg);   opacity: 0; }
+  12%  { opacity: 1; }
+  25%  { transform: translateY(22vh)  translateX(-14px) rotate(-25deg); }
+  55%  { transform: translateY(52vh)  translateX(-4px)  rotate(-70deg); opacity: .60; }
+  78%  { transform: translateY(76vh)  translateX(-20px) rotate(-115deg); }
+  88%  { opacity: .45; }
+  100% { transform: translateY(calc(100vh - 4px)) translateX(-8px) rotate(-160deg); opacity: 0; }
+}
+@keyframes ae-fall-c {
+  0%   { transform: translateY(-20px) translateX(0px)   rotate(0deg);   opacity: 0; }
+  15%  { opacity: 1; }
+  40%  { transform: translateY(36vh)  translateX(10px)  rotate(20deg);  }
+  65%  { transform: translateY(62vh)  translateX(-6px)  rotate(55deg);  opacity: .55; }
+  88%  { opacity: .40; }
+  100% { transform: translateY(calc(100vh - 4px)) translateX(4px) rotate(90deg); opacity: 0; }
+}
+/* ash colors set per-particle in JS */
+.ae-particles[data-type="embers"] .ae-p { background: var(--ember); box-shadow: 0 0 5px rgba(255,123,92,.55); border-radius: 50%; }
+.ae-particles[data-type="snow"]   .ae-p { background: rgba(245,242,238,.85); border-radius: 50%; }
+.ae-particles[data-type="leaves"] .ae-p { background: #6e8f48; }
+.ae-img-fade {
+  position: absolute; inset: 0;
+  pointer-events: none; z-index: 1;
+  background:
+    linear-gradient(to left,   rgba(5,4,10,.95) 0%, transparent 30%),
+    linear-gradient(to bottom, rgba(5,4,10,.72) 0%, transparent 22%),
+    linear-gradient(to right,  rgba(5,4,10,.55) 0%, transparent 20%),
+    linear-gradient(to top,    rgba(5,4,10,.40) 0%, transparent 14%);
+}
+/* ── location title card — φ⁻¹ = 61.8% from top ── */
+.ae-img-caption {
+  position: absolute;
+  top: 61.8%; left: 0; right: 0;
+  transform: translateY(-50%);
+  padding: 20px 20px;
+  background: radial-gradient(ellipse 85% 70% at 50% 50%,
+    rgba(5,4,10,.72) 0%,
+    rgba(5,4,10,.40) 55%,
+    transparent 100%);
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  pointer-events: none; text-align: center;
+}
+/* ── status tiles — anchored to bottom ── */
+.ae-img-status {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 14px 16px 18px;
+  background: linear-gradient(to top,
+    rgba(5,4,10,.88) 0%,
+    rgba(5,4,10,.55) 50%,
+    transparent 100%);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  pointer-events: none; z-index: 3;
+}
+.ae-loc-rule {
+  width: 40px; height: 1px;
+  background: linear-gradient(to right, transparent, rgba(201,156,90,.50), transparent);
+}
+.ae-loc-name {
+  font-family: 'Cinzel', serif;
+  font-size: var(--fs-display); font-weight: 700; line-height: 1;
+  letter-spacing: .22em;
+  color: rgba(235,220,195,.62);
+  text-shadow: 0 1px 14px rgba(0,0,0,.95), 0 0 40px rgba(5,4,10,.98);
+  text-transform: uppercase;
+}
+/* ── zone tile strip ── */
+.ae-loc-zone-block {
+  display: flex; flex-direction: row; align-items: center;
+  justify-content: center; gap: 10px; width: 100%;
+}
+.ae-zone-strip { display: flex; gap: 6px; align-items: center; }
+.ae-zone-pip {
+  display: flex; align-items: center; gap: 6px;
+  padding: 5px 10px 5px 6px; border-radius: 6px;
+  background: radial-gradient(circle, rgba(201,156,90,.16) 10%, transparent 65%);
+  box-shadow: 0 0 14px rgba(201,156,90,.10);
+  transition: background .3s, box-shadow .3s;
+}
+.ae-zone-icon {
+  line-height: 0;
+  color: var(--gold);
+  filter: drop-shadow(0 0 10px rgba(201,156,90,.45)) drop-shadow(0 0 20px rgba(201,156,90,.18));
+  transition: color .3s, filter .3s;
+}
+.ae-zone-icon svg { display: block; }
+.ae-zone-label {
+  font: 400 var(--fs-caption)/1 'IBM Plex Mono';
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--gold); opacity: .72;
+  text-shadow: 0 0 12px rgba(201,156,90,.20);
+}
+/* ── mood / threat ── */
+.ae-loc-threat {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  width: 100%;
+}
+.ae-loc-threat[data-state="safe"]    { --sc: #e6cfa1; }
+.ae-loc-threat[data-state="calm"]    { --sc: #d4a85a; }
+.ae-loc-threat[data-state="unknown"] { --sc: #c08840; }
+.ae-loc-threat[data-state="ominous"] { --sc: #e07040; }
+.ae-loc-threat[data-state="danger"]  { --sc: #ff7b5c; }
 
-    .btn {
-      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-      text-decoration: none; font-size: 13px; font-weight: 600;
-      padding: 14px 20px; border-radius: 999px;
-      border: 1px solid transparent;
-      cursor: pointer; transition: all .25s ease;
-      letter-spacing: .04em;
-      width: 100%;
-      min-height: 44px;
-    }
-    .btn-primary {
-      background: linear-gradient(135deg, rgba(76,43,112,.9), rgba(201,156,90,.28));
-      border-color: rgba(201,156,90,.5);
-      color: var(--gold2);
-    }
-    .btn-primary:hover {
-      background: linear-gradient(135deg, rgba(96,55,138,.95), rgba(201,156,90,.40));
-      border-color: var(--gold);
-      color: var(--text);
-    }
-    .btn-ghost {
-      background: rgba(11,14,22,.5);
-      border-color: rgba(255,255,255,.08);
-      color: var(--muted);
-    }
-    .btn-ghost:hover {
-      border-color: rgba(255,255,255,.18);
-      color: var(--text);
-    }
+.ae-loc-threat-top {
+  display: flex; align-items: baseline; gap: 8px;
+}
+.ae-loc-threat-key {
+  font: 400 var(--fs-label)/1 'IBM Plex Mono';
+  letter-spacing: .18em; text-transform: uppercase;
+  color: var(--muted); opacity: .55;
+}
+.ae-loc-threat-sep { color: var(--muted); opacity: .22; font-size: var(--fs-caption); }
+.ae-loc-threat-label {
+  font: 500 var(--fs-body)/1 'IBM Plex Mono';
+  letter-spacing: .22em; text-transform: uppercase;
+  color: var(--sc);
+  text-shadow: 0 0 14px var(--sc);
+}
+/* ── mood tile strip ── */
+.ae-loc-mood-block {
+  display: flex; flex-direction: row; align-items: center;
+  justify-content: center; gap: 14px; width: 100%;
+}
+.ae-mood-strip { display: flex; gap: 2px; align-items: flex-end; }
+.ae-mood-pip {
+  --mc: var(--muted);
+  display: flex; flex-direction: column; align-items: center;
+  padding: 4px 5px; border-radius: 6px;
+  transition: background .3s, box-shadow .3s;
+  background: radial-gradient(circle, rgba(184,176,198,.18) 10%, transparent 65%);
+  box-shadow: 0 0 12px rgba(184,176,198,.10);
+}
+.ae-mood-pip[data-m="safe"]    { --mc: #e6cfa1; }
+.ae-mood-pip[data-m="calm"]    { --mc: #d4a85a; }
+.ae-mood-pip[data-m="unknown"] { --mc: #c08840; }
+.ae-mood-pip[data-m="ominous"] { --mc: #e07040; }
+.ae-mood-pip[data-m="danger"]  { --mc: #ff7b5c; }
+.ae-mood-pip.active {
+  background: radial-gradient(circle, rgba(255,255,255,.20) 5%, transparent 65%);
+  box-shadow: 0 0 20px var(--mc), 0 0 40px rgba(255,255,255,.06);
+  animation: ae-m-pulse 3.2s ease-in-out infinite;
+}
+.ae-mood-pip.adjacent {
+  background: radial-gradient(circle, rgba(255,255,255,.10) 10%, transparent 65%);
+  box-shadow: 0 0 14px rgba(184,176,198,.08);
+}
+@keyframes ae-m-pulse {
+  0%, 100% { background: radial-gradient(circle, rgba(255,255,255,.20) 5%, transparent 65%); }
+  50%      { background: radial-gradient(circle, rgba(255,255,255,.10) 5%, transparent 65%); }
+}
+.ae-mood-icon {
+  line-height: 0;
+  color: rgba(18,14,28,.92);
+  filter: drop-shadow(0 0 12px rgba(184,176,198,.50)) drop-shadow(0 0 24px rgba(184,176,198,.22));
+  transition: color .3s, filter .3s;
+}
+.ae-mood-icon svg { display: block; }
+.ae-mood-pip.active .ae-mood-icon {
+  color: var(--mc);
+  filter: drop-shadow(0 0 14px var(--mc)) drop-shadow(0 0 30px var(--mc));
+}
+.ae-mood-pip.adjacent .ae-mood-icon {
+  color: rgba(24,18,36,.85);
+  filter: drop-shadow(0 0 10px rgba(184,176,198,.30)) drop-shadow(0 0 20px rgba(184,176,198,.12));
+}
 
-    .btn-arrow {
-      font-size: 16px; line-height: 1;
-    }
+/* ── time-of-day strip ── */
+.ae-loc-time-block {
+  display: flex; flex-direction: row; align-items: center;
+  justify-content: center; gap: 14px; width: 100%;
+}
+.ae-time-strip {
+  display: flex; gap: 2px; align-items: flex-end;
+}
+.ae-time-pip {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  padding: 5px 7px;
+  border-radius: 6px;
+  transition: background .3s, box-shadow .3s;
+  /* backlit glow — inverted: dark icon, bright halo */
+  background: radial-gradient(circle, rgba(184,176,198,.18) 10%, transparent 65%);
+  box-shadow: 0 0 12px rgba(184,176,198,.10);
+}
+.ae-time-pip.active {
+  background: radial-gradient(circle, rgba(230,207,161,.42) 5%, rgba(201,156,90,.18) 30%, transparent 65%);
+  box-shadow: 0 0 20px rgba(230,207,161,.30), 0 0 40px rgba(201,156,90,.12);
+  animation: ae-t-pulse 3.2s ease-in-out infinite;
+}
+.ae-time-pip.adjacent {
+  background: radial-gradient(circle, rgba(201,156,90,.22) 10%, transparent 65%);
+  box-shadow: 0 0 14px rgba(201,156,90,.12);
+}
+@keyframes ae-t-pulse {
+  0%, 100% { background: radial-gradient(circle, rgba(230,207,161,.42) 5%, rgba(201,156,90,.18) 30%, transparent 65%); box-shadow: 0 0 20px rgba(230,207,161,.30), 0 0 40px rgba(201,156,90,.12); }
+  50%       { background: radial-gradient(circle, rgba(230,207,161,.28) 5%, rgba(201,156,90,.10) 30%, transparent 65%); box-shadow: 0 0 14px rgba(230,207,161,.18), 0 0 28px rgba(201,156,90,.08); }
+}
+.ae-time-icon {
+  line-height: 0;
+  color: rgba(18,14,28,.92);
+  filter: drop-shadow(0 0 12px rgba(184,176,198,.50)) drop-shadow(0 0 24px rgba(184,176,198,.22));
+  transition: color .3s, filter .3s;
+}
+.ae-time-icon svg { display: block; }
+.ae-time-pip.active .ae-time-icon {
+  color: var(--gold2);
+  filter: drop-shadow(0 0 14px rgba(230,207,161,.90)) drop-shadow(0 0 30px rgba(201,156,90,.55)) drop-shadow(0 0 48px rgba(201,156,90,.18));
+}
+.ae-time-pip.adjacent .ae-time-icon {
+  color: rgba(24,18,36,.85);
+  filter: drop-shadow(0 0 12px rgba(201,156,90,.40)) drop-shadow(0 0 22px rgba(201,156,90,.16));
+}
+.ae-col-content {
+  flex: 1; min-width: 0; background: rgba(14,12,24,.22);
+  display: flex; flex-direction: column;
+}
 
-    /* ── SLIDE NAVIGATION ── */
-    .nav-btn {
-      position: fixed; top: 50%; z-index: 100;
-      transform: translateY(-50%);
-      width: 44px; height: 44px;
-      background: rgba(11,14,22,.7);
-      border: 1px solid rgba(255,255,255,.08);
-      border-radius: 50%;
-      color: var(--muted);
-      font-size: 18px;
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: all .2s ease;
-      opacity: 0; pointer-events: none; /* hidden until slide 2+ */
-    }
-    .nav-btn:hover { background: rgba(76,43,112,.6); border-color: var(--purple2); color: var(--text); }
-    .nav-btn.visible { opacity: 1; pointer-events: all; }
-    #nav-prev { left: 10px; }
-    #nav-next { right: 10px; }
+/* ── vertikális stat bar ── */
+.ae-stat-bar {
+  width: 96px; flex-shrink: 0;
+  display: flex; flex-direction: column;
+  justify-content: space-evenly; align-items: center;
+  background: rgba(5,4,10,.92);
+  border-left:  1px solid rgba(201,156,90,.09);
+  border-right: 1px solid rgba(201,156,90,.09);
+  z-index: 2;
+}
+.ae-stat {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 7px; width: 100%;
+  padding: 12px 0;
+  position: relative;
+}
+.ae-stat::after {
+  content: '';
+  position: absolute; bottom: 0; left: 22px; right: 22px;
+  height: 1px; background: rgba(184,176,198,.07);
+}
+.ae-stat:last-child::after { display: none; }
+.ae-stat-icon {
+  font-size: 18px; line-height: 1; opacity: .50;
+}
+.ae-stat-val {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px; font-weight: 500; letter-spacing: .04em;
+  line-height: 1; color: var(--text); opacity: .72;
+}
+.ae-stat-lbl {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: var(--fs-caption); letter-spacing: .12em; text-transform: uppercase;
+  color: var(--muted); opacity: .35; line-height: 1;
+}
 
-    /* slide counter — hidden, not needed with pip progress */
-    .slide-counter { display: none; }
+/* color variants */
+.ae-stat.gold  .ae-stat-icon { color: var(--gold2);   }
+.ae-stat.hp    .ae-stat-icon { color: var(--ember);   }
+.ae-stat.chaos .ae-stat-icon { color: var(--ember);   }
+.ae-stat.harm  .ae-stat-icon { color: var(--cyan);    }
+.ae-stat.dice  .ae-stat-icon { color: var(--purple2); }
+.ae-stat.locked .ae-stat-icon { opacity: .22; }
+.ae-stat.locked .ae-stat-val  { opacity: .30; }
+.ae-stat.locked .ae-stat-lbl  { opacity: .20; }
 
-    /* ── SCENE LAYOUT (vertical stack) ── */
-    .scene-layout {
-      display: flex; flex-direction: column;
-      width: 100%; height: 100%;
-      background: #02010a;
-      position: relative;
-    }
+/* collection button (stat bar bottom) */
+.ae-collection-btn {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 4px; width: 100%;
+  padding: 10px 0; margin-top: 4px;
+  border-top: 1px solid rgba(201,156,90,.10);
+  cursor: pointer;
+  transition: background .2s;
+}
+.ae-collection-btn:hover { background: rgba(201,156,90,.06); }
+.ae-collection-icon { font-size: 16px; opacity: .50; }
+.ae-collection-lbl {
+  font: 500 var(--fs-ambient)/1 'IBM Plex Mono';
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--gold); opacity: .40;
+}
+.ae-collection-count {
+  font: 400 var(--fs-ambient)/1 'IBM Plex Mono';
+  color: var(--muted); opacity: .30;
+}
 
-    /* art panel with overlaid header */
-    .scene-art {
-      flex-shrink: 0;
-      height: 38vh;
-      background: url('assets/img/a1-null-meridian.webp') center 30% / cover no-repeat;
-      position: relative;
-    }
-    .scene-art::after {
-      content: '';
-      position: absolute; inset: 0;
-      background:
-        linear-gradient(to bottom, rgba(2,1,10,.55) 0%, rgba(2,1,10,.1) 25%, transparent 50%, rgba(2,1,10,.95) 100%),
-        linear-gradient(to right, rgba(2,1,10,.3) 0%, transparent 20%, transparent 80%, rgba(2,1,10,.3) 100%);
-    }
+/* collection panel (overlays left img panel) */
+.ae-collection-panel {
+  position: absolute; inset: 0; z-index: 25;
+  background: rgba(5,4,10,.97);
+  backdrop-filter: blur(12px);
+  display: none; flex-direction: column;
+  overflow: hidden;
+}
+.ae-collection-panel.open { display: flex; }
+.ae-collection-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 18px 12px;
+  border-bottom: 1px solid rgba(201,156,90,.10);
+}
+.ae-collection-title {
+  font: 700 var(--fs-title)/1 'Cinzel', serif;
+  color: var(--gold2); letter-spacing: .06em;
+}
+.ae-collection-close {
+  font-size: var(--fs-body); color: var(--muted); opacity: .45;
+  cursor: pointer; padding: 4px 8px;
+  transition: opacity .2s;
+}
+.ae-collection-close:hover { opacity: .80; }
+.ae-collection-grid {
+  flex: 1; overflow-y: auto;
+  padding: 14px;
+  display: grid; grid-template-columns: 1fr;
+  gap: 10px; align-content: start;
+}
+/* card */
+.ae-coll-card {
+  border: 1px solid rgba(201,156,90,.12);
+  border-radius: 4px; overflow: hidden;
+  background: rgba(201,156,90,.03);
+  transition: border-color .2s, box-shadow .2s;
+}
+.ae-coll-card:hover {
+  border-color: rgba(201,156,90,.25);
+  box-shadow: 0 0 16px rgba(201,156,90,.06);
+}
+.ae-coll-card.locked {
+  opacity: .40; pointer-events: none;
+}
+.ae-coll-card-img-wrap {
+  position: relative; overflow: hidden;
+}
+.ae-coll-card-img {
+  width: 100%; aspect-ratio: 16/9;
+  object-fit: cover; display: block;
+  filter: brightness(.85);
+  transition: filter .3s;
+}
+.ae-coll-card:hover .ae-coll-card-img {
+  filter: brightness(.35);
+}
+.ae-coll-card-img-overlay {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  padding: 12px 16px; text-align: center;
+  opacity: 0; transition: opacity .3s;
+}
+.ae-coll-card:hover .ae-coll-card-img-overlay { opacity: 1; }
+.ae-coll-card-img-overlay-text {
+  font: 400 var(--fs-caption)/1.6 'IBM Plex Mono';
+  color: var(--gold2); letter-spacing: .03em;
+  text-shadow: 0 1px 6px rgba(0,0,0,.60);
+}
+.ae-coll-card.locked .ae-coll-card-img {
+  filter: brightness(.15) grayscale(1);
+}
+.ae-coll-card.locked:hover .ae-coll-card-img {
+  filter: brightness(.10) grayscale(1);
+}
+.ae-coll-card-body { padding: 10px 12px; }
+.ae-coll-card-title {
+  font: 700 var(--fs-label)/1.3 'Cinzel', serif;
+  color: var(--gold2); letter-spacing: .04em;
+  margin-bottom: 5px;
+}
+.ae-coll-card-desc {
+  font: 400 var(--fs-caption)/1.5 'IBM Plex Mono';
+  color: var(--muted); opacity: .65;
+}
+.ae-coll-card-hint {
+  font: 400 var(--fs-ambient)/1.4 'IBM Plex Mono';
+  color: var(--gold); opacity: .35;
+  margin-top: 6px; font-style: italic;
+}
+.ae-coll-card.locked .ae-coll-card-title { color: var(--muted); opacity: .50; }
+.ae-coll-card.locked .ae-coll-card-desc { display: none; }
+.ae-coll-card.locked .ae-coll-card-hint { opacity: .50; }
 
-    /* header overlay — sits on top of art */
-    .scene-header {
-      position: absolute; top: 0; left: 0; right: 0;
-      z-index: 5;
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      padding: 16px 18px 0;
-    }
-    .scene-header-left {
-      display: flex; flex-direction: column;
-      gap: 4px;
-    }
-    .scene-header-chapter {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 9px; letter-spacing: .2em;
-      text-transform: uppercase;
-      color: var(--gold);
-      opacity: .4;
-    }
-    .scene-header-title {
-      font-family: 'Cinzel', serif;
-      font-size: 16px; font-weight: 700;
-      color: var(--text);
-      opacity: .7;
-      letter-spacing: .04em;
-      transition: opacity .4s ease;
-    }
-    .scene-header-right {
-      display: flex;
-      gap: 6px;
-      align-items: center;
-      padding-top: 4px;
-    }
-    .scene-pip {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: rgba(184,176,198,.15);
-      border: 1px solid rgba(184,176,198,.2);
-      transition: background .4s ease, border-color .4s ease, box-shadow .4s ease;
-    }
-    .scene-pip.active {
-      background: var(--gold);
-      border-color: var(--gold);
-      opacity: .7;
-      box-shadow: 0 0 6px rgba(201,156,90,.3);
-    }
-    .scene-pip.visited {
-      background: rgba(184,176,198,.35);
-      border-color: rgba(184,176,198,.35);
-    }
+/* scrollbar */
+.ae-collection-grid::-webkit-scrollbar { width: 4px; }
+.ae-collection-grid::-webkit-scrollbar-track { background: transparent; }
+.ae-collection-grid::-webkit-scrollbar-thumb { background: rgba(201,156,90,.15); border-radius: 2px; }
 
-    /* divider between art and body */
-    .scene-divider {
-      flex-shrink: 0;
-      height: 1px;
-      background: linear-gradient(to right,
-        transparent 5%,
-        rgba(201,156,90,.12) 20%,
-        rgba(201,156,90,.3) 50%,
-        rgba(201,156,90,.12) 80%,
-        transparent 95%
-      );
-      position: relative;
-    }
-    .scene-divider::before { display: none; }
+/* ── scene frame: dual-state (image ↔ dialogue) ── */
+.ae-scene-frame {
+  flex: 1;
+  position: relative; overflow: hidden;
+  background: #000;
+}
+/* top corner brackets */
+.ae-scene-frame::before,
+.ae-scene-frame::after {
+  content: ''; position: absolute;
+  width: 20px; height: 20px;
+  border-color: rgba(201,156,90,.22); border-style: solid;
+  z-index: 5; pointer-events: none;
+  transition: opacity .4s ease;
+}
+.ae-scene-frame::before { top: 14px; left: 14px;  border-width: 1px 0 0 1px; }
+.ae-scene-frame::after  { top: 14px; right: 14px; border-width: 1px 1px 0 0; }
 
-    .scene-body {
-      flex: 1; min-height: 0;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-      padding: 24px 20px 0;
-      display: flex; flex-direction: column;
-      align-items: center;
-      position: relative;
-      mask-image: linear-gradient(to bottom, transparent 0%, black 16px, black 100%);
-      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 16px, black 100%);
-    }
+/* image layer */
+.ae-sf-image {
+  position: absolute; inset: 0;
+  transition: opacity .50s ease;
+}
+.ae-sf-image img {
+  display: block; width: 100%; height: 100%;
+  object-fit: cover; object-position: center 45%;
+}
+.ae-sf-image::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0; height: 40%;
+  background: linear-gradient(to top, rgba(5,4,10,.80) 0%, transparent 100%);
+  pointer-events: none;
+  transition: opacity .4s ease;
+}
+.ae-scene-frame.is-dialogue .ae-sf-image { opacity: .55; }
+.ae-scene-frame.is-preview  .ae-sf-image { opacity: .06; transition: opacity .22s ease; }
+/* dialogue + preview egyszerre: dialogue is halványodik */
+.ae-scene-frame.is-dialogue.is-preview .ae-sf-dialogue { opacity: .07; transition: opacity .22s ease; }
 
-    /* fullscreen text toggle — centered on divider line */
-    .scene-expand {
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 10;
-      width: 28px; height: 28px;
-      background: #02010a;
-      border: 1px solid rgba(201,156,90,.25);
-      border-radius: 6px;
-      color: var(--gold);
-      font-size: 11px;
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      opacity: .45;
-      transition: opacity .3s, border-color .3s, background .3s, transform .15s;
-    }
-    .scene-expand:hover { opacity: .8; border-color: rgba(201,156,90,.5); }
-    .scene-expand:active { transform: translate(-50%, -50%) scale(.9); }
+/* ── choice hover preview ── */
+.ae-sf-preview {
+  position: absolute; inset: 0;
+  opacity: 0; pointer-events: none;
+  transition: opacity .22s ease;
+  z-index: 3;
+}
+.ae-scene-frame.is-preview .ae-sf-preview { opacity: 1; }
 
-    /* fullscreen mode */
-    .scene-layout.fullscreen .scene-art,
-    .scene-layout.fullscreen .scene-divider { display: none; }
-    .scene-layout.fullscreen .scene-body {
-      padding-top: 16px;
-      mask-image: none;
-      -webkit-mask-image: none;
-    }
-    /* in fullscreen: divider hidden, so show a fixed close button instead */
-    /* in fullscreen: hide the divider expand button entirely */
-    .scene-layout.fullscreen .scene-expand { display: none; }
-    /* hide choices + footer in fullscreen — close button at bottom handles exit */
-    .scene-layout.fullscreen .scene-choices { display: none; }
-    .scene-layout.fullscreen .scene-footer { display: none; }
-    /* show the close strip at bottom */
-    .scene-layout.fullscreen .scene-close {
-      display: flex;
-    }
+.ae-sf-preview-img {
+  position: absolute; inset: 0;
+}
+.ae-sf-preview-img img {
+  display: block; width: 100%; height: 100%;
+  object-fit: cover; object-position: center;
+}
+.ae-sf-preview-tint {
+  position: absolute; inset: 0;
+  transition: background .22s ease;
+}
+.ae-sf-preview-body {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 40px 48px;
+  background: linear-gradient(to top, rgba(5,4,10,.90) 0%, rgba(5,4,10,.52) 55%, transparent 100%);
+  transition: background .22s ease;
+}
+/* mystery mode: almost fully dark, spotlight around text */
+.ae-sf-preview.is-mystery .ae-sf-preview-tint {
+  background: radial-gradient(ellipse 44% 40% at 50% 52%,
+    rgba(5,4,10,.10) 0%,
+    rgba(5,4,10,.50) 28%,
+    rgba(5,4,10,.92) 52%,
+    rgba(5,4,10,.97) 100%) !important;
+}
+.ae-sf-preview.is-mystery .ae-sf-preview-body {
+  background: none;
+  justify-content: flex-start;
+  padding-top: 28px;
+}
+.ae-sf-preview-header {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 18px; width: 100%; max-width: 680px;
+}
+.ae-sf-preview-icon {
+  font-size: 13px; flex-shrink: 0;
+}
+.ae-sf-preview-label {
+  font-family: 'Cinzel', serif;
+  font-size: 17px; font-weight: 700; letter-spacing: .05em;
+  color: var(--gold2); opacity: .92; line-height: 1; flex-shrink: 0;
+}
+.ae-sf-preview-sep {
+  flex: 1; height: 1px;
+  background: linear-gradient(to right, rgba(201,156,90,.26), transparent);
+}
+.ae-sf-preview-text {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 14px; line-height: 1.80; letter-spacing: .01em;
+  color: var(--text); opacity: .68;
+  max-width: 680px; text-align: center;
+}
 
-    .scene-close {
-      display: none;
-      flex-shrink: 0;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 24px 0 calc(20px + env(safe-area-inset-bottom, 0px));
-      cursor: pointer;
-      background: none;
-      border: none;
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 9px;
-      letter-spacing: .18em;
-      text-transform: uppercase;
-      color: var(--gold);
-      opacity: .4;
-      transition: opacity .3s;
-    }
-    .scene-close:hover { opacity: .7; }
+/* dialogue layer */
+.ae-sf-dialogue {
+  position: absolute; inset: 0;
+  opacity: 0; pointer-events: none;
+  transition: opacity .40s ease .18s;
+  overflow-y: auto;
+  background: radial-gradient(ellipse 52% 48% at 50% 52%,
+    rgba(5,4,10,.92) 0%,
+    rgba(5,4,10,.75) 30%,
+    rgba(5,4,10,.30) 58%,
+    rgba(5,4,10,0)   80%);
+}
+.ae-sf-dialogue::-webkit-scrollbar { width: 2px; }
+.ae-sf-dialogue::-webkit-scrollbar-track { background: transparent; }
+.ae-sf-dialogue::-webkit-scrollbar-thumb { background: rgba(201,156,90,.20); border-radius: 2px; }
+/* inner wrapper: centers when short, scrolls from top when long */
+.ae-sf-dialogue-inner {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  min-height: 100%;
+  padding: 36px 48px 28px;
+}
+.ae-scene-frame.is-dialogue .ae-sf-dialogue {
+  opacity: 1; pointer-events: all;
+}
 
-    .scene-text {
-      max-width: 580px; width: 100%;
-      font-size: 15px; line-height: 1.75;
-      font-weight: 400;
-      color: var(--prose);
-      font-style: normal;
-      text-align: left;
-      opacity: 0;
-      transition: opacity .5s ease;
-    }
-    .scene-text.visible { opacity: 1; }
-    .scene-text em {
-      color: var(--text);
-      font-style: italic;
-      font-weight: 500;
-    }
-    .scene-text br + br {
-      content: '';
-      display: block;
-      margin-top: 0.6em;
-    }
+/* speaker */
+.ae-sf-speaker-row {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 20px; width: 100%; max-width: 680px;
+  flex-shrink: 0;
+}
+.ae-sf-speaker-glyph {
+  font-size: 10px; color: var(--gold); opacity: .55; flex-shrink: 0;
+}
+.ae-sf-speaker-name {
+  font-family: 'Cinzel', serif;
+  font-size: var(--fs-title); font-weight: 700; letter-spacing: .06em;
+  color: var(--gold2); opacity: .95; line-height: 1; flex-shrink: 0;
+  text-shadow: 0 1px 10px rgba(0,0,0,1), 0 0 20px rgba(0,0,0,.90);
+}
+.ae-sf-speaker-line {
+  flex: 1; height: 1px;
+  background: linear-gradient(to right, rgba(201,156,90,.30), transparent);
+}
 
-    /* ── CARD CAROUSEL ── */
-    .scene-choices {
-      width: 100%;
-      opacity: 0;
-      transition: opacity .5s ease;
-      margin-top: 28px;
-      flex-shrink: 0;
-    }
-    .scene-choices.visible { opacity: 1; }
+/* dialogue text */
+.ae-sf-text {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: var(--fs-body); line-height: 1.85; letter-spacing: .01em;
+  color: var(--text); opacity: .88;
+  width: 100%; max-width: 680px;
+  text-align: left;
+  text-shadow:
+    0 1px 10px rgba(0,0,0,1),
+    0 0  24px rgba(0,0,0,.95),
+    0 0  48px rgba(5,4,10,.90);
+}
+.ae-sf-text em {
+  font-style: italic; color: var(--cyan); opacity: .92;
+  text-shadow: 0 0 20px rgba(40,189,216,.22), 0 1px 8px rgba(0,0,0,1);
+}
+.ae-sf-text em.standalone {
+  display: block; text-align: center;
+  margin: .25em 0;
+}
+.ae-sf-text em.cyan {
+  color: var(--cyan); opacity: 1;
+  text-shadow: 0 0 18px rgba(40,189,216,.55), 0 0 40px rgba(40,189,216,.25), 0 1px 8px rgba(0,0,0,1);
+}
 
-    .card-carousel {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      width: 100%;
-    }
+/* ── scene trigger indicator ── */
+.ae-sf-trigger {
+  position: absolute; top: 16px; left: 16px;
+  z-index: 6; pointer-events: none;
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 18px;
+  background: rgba(5,4,10,.78);
+  border: 1px solid rgba(201,156,90,.16);
+  border-radius: 3px;
+}
+.ae-sf-trigger-bars {
+  display: flex; align-items: flex-end; gap: 3.5px; height: 20px;
+}
+.ae-sf-trigger-bar {
+  width: 3.5px; border-radius: 1.5px;
+  background: var(--gold);
+  transform-origin: bottom;
+  animation: ae-bar 1.4s ease-in-out infinite;
+}
+.ae-sf-trigger-bar:nth-child(1) { height: 8px;  animation-delay: 0s;    opacity: .50; }
+.ae-sf-trigger-bar:nth-child(2) { height: 14px; animation-delay: .18s;  opacity: .65; }
+.ae-sf-trigger-bar:nth-child(3) { height: 20px; animation-delay: .36s;  opacity: .80; }
+.ae-sf-trigger-bar:nth-child(4) { height: 11px; animation-delay: .54s;  opacity: .55; }
+.ae-sf-trigger-bar:nth-child(5) { height: 6px;  animation-delay: .72s;  opacity: .40; }
+@keyframes ae-bar {
+  0%, 100% { transform: scaleY(1);   }
+  50%       { transform: scaleY(.35); }
+}
+.ae-sf-trigger-label {
+  font: 400 var(--fs-label)/1 'IBM Plex Mono';
+  letter-spacing: .18em; text-transform: uppercase;
+  color: var(--gold); opacity: .55;
+}
 
-    .card-arrow {
-      flex-shrink: 0;
-      width: 32px; height: 32px;
-      border-radius: 50%;
-      background: rgba(5,4,10,.6);
-      border: 1px solid rgba(163,139,207,.15);
-      color: var(--muted);
-      font-size: 14px;
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: border-color .3s, color .3s, opacity .3s;
-      opacity: .4;
-    }
-    .card-arrow:hover { border-color: rgba(163,139,207,.4); color: var(--text); opacity: .8; }
-    .card-arrow.hidden { opacity: 0; pointer-events: none; }
+/* demo toggle */
+.ae-sf-toggle {
+  position: absolute; bottom: 14px; right: 14px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: var(--fs-ambient); letter-spacing: .14em; text-transform: uppercase;
+  color: var(--muted); opacity: .28;
+  background: none; border: 1px solid rgba(184,176,198,.10);
+  border-radius: 2px; padding: 5px 10px;
+  cursor: pointer; z-index: 10;
+  transition: opacity .2s, border-color .2s;
+}
+.ae-sf-toggle:hover { opacity: .55; border-color: rgba(184,176,198,.25); }
 
-    .card-frame {
-      flex: 1; max-width: 240px;
-      display: flex; align-items: center; justify-content: center;
-      min-height: 160px;
-    }
+/* ── clean view toggle (bottom-left, image panel) ── */
+.ae-img-view-toggle {
+  position: absolute; bottom: 16px; left: 16px;
+  display: flex; align-items: center; gap: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: var(--fs-label); letter-spacing: .18em; text-transform: uppercase;
+  color: var(--gold); opacity: .55;
+  background: rgba(5,4,10,.78);
+  border: 1px solid rgba(201,156,90,.16);
+  border-radius: 3px; padding: 10px 18px;
+  cursor: pointer; z-index: 10;
+  transition: opacity .3s, border-color .3s, background .3s;
+  pointer-events: auto;
+}
+.ae-img-view-toggle:hover {
+  opacity: .80;
+  border-color: rgba(201,156,90,.35);
+  background: rgba(5,4,10,.88);
+}
+.ae-img-view-toggle:focus-visible { outline: 1px solid rgba(201,156,90,.45); outline-offset: -1px; }
+.ae-img-view-toggle svg { display: block; opacity: .55; }
 
-    .card {
-      width: 100%;
-      background: rgba(5,4,10,.6);
-      backdrop-filter: blur(10px) saturate(.6);
-      -webkit-backdrop-filter: blur(10px) saturate(.6);
-      border: 1px solid rgba(163,139,207,.2);
-      border-radius: 4px;
-      padding: 24px 16px 20px;
-      text-align: center;
-      cursor: pointer;
-      transition: border-color .4s, background .4s, box-shadow .4s, transform .15s;
-      position: relative;
-    }
-    .card::before {
-      content: '';
-      position: absolute; inset: 4px;
-      border: 1px solid rgba(163,139,207,.08);
-      border-radius: 2px;
-      pointer-events: none;
-    }
-    .card:hover {
-      border-color: rgba(163,139,207,.45);
-      background: rgba(76,43,112,.18);
-      box-shadow: 0 0 24px rgba(76,43,112,.2);
-    }
-    .card:active { transform: scale(.97); }
+/* clean view: hide all overlays */
+.ae-img-fade,
+.ae-img-caption,
+.ae-img-status,
+.ae-particles { transition: opacity .4s ease; }
 
-    .card-icon {
-      font-size: 20px;
-      margin-bottom: 14px;
-      opacity: .5;
-      display: block;
-    }
-    .card-type {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 8px; letter-spacing: .2em;
-      text-transform: uppercase;
-      color: var(--purple2);
-      opacity: .45;
-      margin-bottom: 12px;
-    }
-    .card-label {
-      font-family: 'Cinzel', serif;
-      font-size: 12px; font-weight: 700;
-      letter-spacing: .08em;
-      color: var(--muted);
-      line-height: 1.5;
-    }
-    .card:hover .card-label { color: var(--text); }
-    .card:hover .card-icon { opacity: .8; }
+.ae-img-panel.clean-view .ae-img-fade,
+.ae-img-panel.clean-view .ae-img-caption,
+.ae-img-panel.clean-view .ae-img-status,
+.ae-img-panel.clean-view .ae-particles { opacity: 0; pointer-events: none; }
 
-    /* decide variant — gold tones */
-    .card.card-decide {
-      border-color: rgba(201,156,90,.2);
-    }
-    .card.card-decide::before {
-      border-color: rgba(201,156,90,.08);
-    }
-    .card.card-decide .card-type { color: var(--gold); }
-    .card.card-decide .card-icon { color: var(--gold); }
-    .card.card-decide .card-label { color: var(--gold2); opacity: .7; }
-    .card.card-decide:hover {
-      border-color: rgba(201,156,90,.5);
-      background: rgba(201,156,90,.1);
-      box-shadow: 0 0 24px rgba(201,156,90,.15);
-    }
-    .card.card-decide:hover .card-label { color: var(--gold2); opacity: 1; }
+.ae-img-panel.clean-view::before,
+.ae-img-panel.clean-view::after { opacity: 0; }
 
-    /* card pips */
-    .card-pips {
-      display: flex;
-      justify-content: center;
-      gap: 6px;
-      margin-top: 14px;
-    }
-    .card-pip {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: rgba(184,176,198,.15);
-      border: 1px solid rgba(184,176,198,.2);
-      transition: background .3s, border-color .3s;
-    }
-    .card-pip.active {
-      background: var(--purple2);
-      border-color: var(--purple2);
-      opacity: .7;
-    }
+.ae-img-panel.clean-view .ae-img-view-toggle {
+  opacity: .72; color: var(--gold2);
+  border-color: rgba(201,156,90,.30);
+  background: rgba(5,4,10,.88);
+}
+.ae-img-panel.clean-view .ae-img-view-toggle svg { opacity: .80; }
 
-    .scene-footer {
-      flex-shrink: 0;
-      padding: 36px 0 calc(24px + env(safe-area-inset-bottom, 0px));
-      text-align: center;
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 8px;
-      letter-spacing: .18em;
-      text-transform: uppercase;
-      color: var(--muted);
-      opacity: .2;
-    }
+/* ── scene frame VIEW toggle (bottom-left) ── */
+.ae-sf-view-toggle {
+  position: absolute; bottom: 16px; left: 16px;
+  display: flex; align-items: center; gap: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: var(--fs-label); letter-spacing: .18em; text-transform: uppercase;
+  color: var(--gold); opacity: .55;
+  background: rgba(5,4,10,.78);
+  border: 1px solid rgba(201,156,90,.16);
+  border-radius: 3px; padding: 10px 18px;
+  cursor: pointer; z-index: 10;
+  transition: opacity .3s, border-color .3s, background .3s;
+}
+.ae-sf-view-toggle:hover {
+  opacity: .80;
+  border-color: rgba(201,156,90,.35);
+  background: rgba(5,4,10,.88);
+}
+.ae-sf-view-toggle:focus-visible { outline: 1px solid rgba(201,156,90,.45); outline-offset: -1px; }
+.ae-sf-view-toggle svg { display: block; }
 
-    @keyframes fog-in {
-      from { opacity: 0; transform: translateX(18px); filter: blur(4px); }
-      to   { opacity: 1; transform: translateX(0);    filter: blur(0px); }
-    }
-    @keyframes fog-drift {
-      0%,100% { transform: translateY(0px); }
-      50%      { transform: translateY(-3px); }
-    }
+/* scene frame clean view: show raw image only */
+.ae-scene-frame.clean-view .ae-sf-dialogue { opacity: 0 !important; pointer-events: none !important; }
+.ae-scene-frame.clean-view .ae-sf-image { opacity: 1 !important; }
+.ae-scene-frame.clean-view .ae-sf-image::after { opacity: 0; }
+.ae-scene-frame.clean-view .ae-sf-trigger { opacity: 0; pointer-events: none; }
+.ae-scene-frame.clean-view .ae-sf-toggle { opacity: 0; pointer-events: none; }
+.ae-scene-frame.clean-view .ae-sf-preview { opacity: 0 !important; pointer-events: none !important; }
+.ae-scene-frame.clean-view::before,
+.ae-scene-frame.clean-view::after { opacity: 0; }
 
-    /* staggered fog-in for carousel */
-    .scene-choices.visible .card-carousel { animation: fog-in .6s ease both; }
+.ae-scene-frame.clean-view .ae-sf-view-toggle {
+  opacity: .72; color: var(--gold2);
+  border-color: rgba(201,156,90,.30);
+  background: rgba(5,4,10,.88);
+}
 
-    /* ── PULSE GLOW ANIMATION ── */
-    @keyframes pulse-glow {
-      0%, 100% { opacity: .38; }
-      50%       { opacity: .52; }
-    }
-    #slide-title .bg-glow {
-      animation: pulse-glow 6s ease-in-out infinite;
-    }
+/* ── view toggle breathing animation (both panels) ── */
+@keyframes ae-view-breathe {
+  0%, 100% { transform: scale(1); opacity: .55; }
+  50%      { transform: scale(1.06); opacity: .78; }
+}
+.ae-img-view-toggle svg,
+.ae-sf-view-toggle svg {
+  animation: ae-view-breathe 3s ease-in-out infinite;
+}
 
-    /* ── FADE IN FOR TITLE CONTENT ── */
-    @keyframes fade-up {
-      from { opacity: 0; transform: translateY(18px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    #slide-title.active .eyebrow   { animation: fade-up .8s ease both .2s; }
-    #slide-title.active h1         { animation: fade-up .8s ease both .45s; }
-    #slide-title.active .subtitle  { animation: fade-up .8s ease both .7s; }
-    #slide-title.active .divider   { animation: fade-up .6s ease both .9s; }
-    #slide-title.active .cta-row   { animation: fade-up .6s ease both 1.0s; }
+/* ── vízszintes elválasztó ── */
+.ae-h-sep {
+  height: 1px; flex-shrink: 0; position: relative;
+  background: linear-gradient(to right,
+    transparent 0%, rgba(201,156,90,.18) 15%,
+    rgba(201,156,90,.12) 50%, rgba(201,156,90,.18) 85%, transparent 100%);
+}
+.ae-h-sep::after {
+  content: '◈';
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 9px; color: var(--gold); opacity: .28;
+  background: #05040a; padding: 0 8px; line-height: 1;
+}
 
-    /* ── RESPONSIVE — desktop scale-up ── */
-    @media (min-width: 640px) {
-      .eyebrow { font-size: 11px; padding: 6px 14px; margin-bottom: 28px; }
-      .subtitle { font-size: clamp(15px, 2vw, 19px); margin-top: 24px; }
-      .divider { margin: 32px auto; }
-      .cta-row { flex-direction: row; width: auto; max-width: none; }
-      .btn { width: auto; font-size: 14px; padding: 14px 26px; }
-      #slide-title .content { padding: 0 24px; }
+/* ── action bar (bottom panel) ── */
+.ae-action-bar {
+  width: 100%; height: 100%;
+  display: flex; align-items: stretch;
+  padding: 10px 14px; gap: 12px;
+}
 
-      #nav-prev { left: 20px; }
-      #nav-next { right: 20px; }
+/* narrative mode: continue gomb, choices elrejtve */
+.ae-bottom-panel.is-narrative .ae-action-label,
+.ae-bottom-panel.is-narrative .ae-action-div,
+.ae-bottom-panel.is-narrative .ae-choices-row,
+.ae-bottom-panel.is-narrative .ae-dice-area { display: none; }
+.ae-bottom-panel.is-narrative .ae-continue-btn { display: flex; }
 
-      .scene-header { padding: 20px 32px 0; }
-      .scene-header-chapter { font-size: 10px; }
-      .scene-header-title { font-size: 18px; }
-      .scene-art { height: 40vh; }
-      .scene-body { padding: 28px 32px 0; }
-      .scene-text { font-size: 17px; line-height: 1.85; }
-      .card-frame { max-width: 280px; min-height: 180px; }
-      .card-label { font-size: 13px; }
-    }
-  </style>
+/* dice mode */
+.ae-bottom-panel.is-dice .ae-action-label,
+.ae-bottom-panel.is-dice .ae-action-div,
+.ae-bottom-panel.is-dice .ae-choices-row,
+.ae-bottom-panel.is-dice .ae-continue-btn { display: none; }
+.ae-bottom-panel.is-dice .ae-dice-area { display: flex; }
+
+.ae-dice-area {
+  display: none;
+  flex: 1; align-items: center; justify-content: center; gap: 0;
+  border: 1px solid rgba(201,156,90,.18); border-radius: 4px;
+  background: rgba(201,156,90,.05);
+  box-shadow: 0 0 20px rgba(201,156,90,.08), inset 0 0 30px rgba(201,156,90,.03);
+  position: relative;
+}
+
+/* left: metadata + roll trigger */
+.ae-dice-meta {
+  display: flex; align-items: center; gap: 10px;
+  padding: 0 14px;
+  border-right: 1px solid rgba(201,156,90,.10);
+  height: 100%; flex-shrink: 0;
+}
+.ae-dice-d20-icon {
+  color: var(--gold); opacity: .55;
+  flex-shrink: 0; line-height: 0;
+  filter: drop-shadow(0 0 6px rgba(201,156,90,.20));
+}
+.ae-dice-d20-icon svg { display: block; }
+.ae-dice-label {
+  font: 500 var(--fs-label)/1 'IBM Plex Mono';
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--gold); opacity: .65;
+}
+.ae-dice-dc-tag {
+  font: 700 var(--fs-label)/1 'Cinzel', serif;
+  color: var(--gold2); opacity: .70;
+  letter-spacing: .04em;
+  padding: 3px 8px; border-radius: 3px;
+  border: 1px solid rgba(201,156,90,.15);
+  background: rgba(201,156,90,.06);
+}
+.ae-dice-roll-btn {
+  display: flex; align-items: center; gap: 6px;
+  padding: 6px 14px; border-radius: 3px;
+  border: 1px solid rgba(201,156,90,.25);
+  background: rgba(201,156,90,.08);
+  cursor: pointer;
+  transition: background .2s, border-color .2s, box-shadow .2s;
+}
+.ae-dice-roll-btn:hover {
+  background: rgba(201,156,90,.15);
+  border-color: rgba(201,156,90,.40);
+  box-shadow: 0 0 16px rgba(201,156,90,.12);
+}
+.ae-dice-roll-btn .ae-continue-text {
+  font: 500 var(--fs-label)/1 'IBM Plex Mono';
+  letter-spacing: .18em; text-transform: uppercase;
+  color: var(--gold); opacity: .80;
+}
+.ae-dice-roll-btn .ae-continue-arrow {
+  animation: none; opacity: .80; font-size: var(--fs-label);
+}
+
+/* right: 3 outcome buttons */
+.ae-dice-outcomes {
+  flex: 1; display: flex; align-items: stretch; gap: 0;
+  height: 100%;
+}
+.ae-dice-out-btn {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 3px;
+  cursor: default;
+  border-left: 1px solid rgba(201,156,90,.06);
+  transition: background .3s, border-color .3s, box-shadow .3s, opacity .3s;
+}
+.ae-dice-out-btn:first-child { border-left: none; }
+.ae-dice-out-icon {
+  font-size: var(--fs-body); line-height: 1;
+  opacity: .45; transition: opacity .3s, color .3s, text-shadow .3s;
+}
+.ae-dice-out-text {
+  font: 500 var(--fs-caption)/1 'IBM Plex Mono';
+  letter-spacing: .12em; text-transform: uppercase;
+  opacity: .40; transition: opacity .3s, color .3s;
+  color: var(--muted);
+}
+/* locked state (visually dim but still clickable for dev) */
+.ae-dice-out-btn.locked {
+  opacity: .75; cursor: pointer;
+}
+.ae-dice-out-btn.locked:hover {
+  background: rgba(201,156,90,.06);
+  border-color: rgba(201,156,90,.15);
+}
+.ae-dice-out-btn.locked:hover .ae-dice-out-icon { opacity: .65; color: var(--gold); }
+.ae-dice-out-btn.locked:hover .ae-dice-out-text { opacity: .55; color: var(--gold2); }
+/* unlocked: succeed */
+.ae-dice-out-btn.unlocked.is-succeed {
+  cursor: pointer; opacity: 1;
+  background: rgba(92,200,92,.06);
+  border-color: rgba(92,200,92,.15);
+  box-shadow: inset 0 0 20px rgba(92,200,92,.04);
+}
+.ae-dice-out-btn.unlocked.is-succeed:hover {
+  background: rgba(92,200,92,.12);
+  box-shadow: 0 0 16px rgba(92,200,92,.10), inset 0 0 20px rgba(92,200,92,.06);
+}
+.ae-dice-out-btn.unlocked.is-succeed .ae-dice-out-icon {
+  color: #5cc85c; opacity: .85;
+  text-shadow: 0 0 8px rgba(92,200,92,.40);
+}
+.ae-dice-out-btn.unlocked.is-succeed .ae-dice-out-text {
+  color: #5cc85c; opacity: .75;
+}
+/* unlocked: fail / retry */
+.ae-dice-out-btn.unlocked.is-fail {
+  cursor: pointer; opacity: 1;
+  background: rgba(255,123,92,.06);
+  border-color: rgba(255,123,92,.15);
+  box-shadow: inset 0 0 20px rgba(255,123,92,.04);
+}
+.ae-dice-out-btn.unlocked.is-fail:hover {
+  background: rgba(255,123,92,.12);
+  box-shadow: 0 0 16px rgba(255,123,92,.10), inset 0 0 20px rgba(255,123,92,.06);
+}
+.ae-dice-out-btn.unlocked.is-fail .ae-dice-out-icon {
+  color: var(--ember); opacity: .85;
+  text-shadow: 0 0 8px rgba(255,123,92,.40);
+}
+.ae-dice-out-btn.unlocked.is-fail .ae-dice-out-text {
+  color: var(--ember); opacity: .75;
+}
+/* unlocked: give up (dim gold) */
+.ae-dice-out-btn.unlocked.is-giveup {
+  cursor: pointer; opacity: 1;
+  background: rgba(184,176,198,.04);
+  border-color: rgba(184,176,198,.12);
+}
+.ae-dice-out-btn.unlocked.is-giveup:hover {
+  background: rgba(184,176,198,.10);
+  box-shadow: 0 0 12px rgba(184,176,198,.08);
+}
+.ae-dice-out-btn.unlocked.is-giveup .ae-dice-out-icon {
+  color: var(--muted); opacity: .65;
+}
+.ae-dice-out-btn.unlocked.is-giveup .ae-dice-out-text {
+  color: var(--muted); opacity: .55;
+}
+
+@keyframes ae-dice-flash {
+  0%   { opacity: .90; }
+  50%  { opacity: .50; }
+}
+
+/* ── dice overlay (left image panel) ── */
+.ae-dice-overlay {
+  position: absolute; inset: 0; z-index: 20;
+  display: none; flex-direction: column;
+  align-items: center; justify-content: center; gap: 16px;
+  background: radial-gradient(ellipse 55% 50% at 50% 48%,
+    rgba(5,4,10,.60) 0%,
+    rgba(5,4,10,.90) 55%,
+    rgba(5,4,10,.96) 100%);
+  pointer-events: none;
+  opacity: 0; transition: opacity .4s ease;
+}
+.ae-dice-overlay.active {
+  display: flex; opacity: 1; pointer-events: auto;
+}
+.ae-dice-overlay-label {
+  font: 400 var(--fs-caption)/1 'IBM Plex Mono';
+  letter-spacing: .18em; text-transform: uppercase;
+  color: var(--gold); opacity: .55;
+}
+.ae-dice-overlay-dc {
+  font: 500 var(--fs-label)/1 'IBM Plex Mono';
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--muted); opacity: .55;
+}
+
+/* d20 3D wireframe */
+.ae-d20-wrap {
+  position: relative;
+  width: 160px; height: 160px;
+  display: flex; align-items: center; justify-content: center;
+  perspective: 500px;
+}
+.ae-d20-3d {
+  width: 140px; height: 140px;
+  position: relative;
+  transform-style: preserve-3d;
+  animation: ae-d20-idle 12s linear infinite;
+  transition: filter .4s;
+  filter: drop-shadow(0 0 20px rgba(201,156,90,.25)) drop-shadow(0 0 50px rgba(201,156,90,.08));
+}
+.ae-d20-face {
+  position: absolute; inset: 0;
+  clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
+  backface-visibility: visible;
+  border: 1.5px solid rgba(184,176,198,.30);
+  background: rgba(5,4,10,.20);
+}
+.ae-d20-face:nth-child(1) { transform: rotateX(0deg);   border-color: rgba(201,156,90,.40); }
+.ae-d20-face:nth-child(2) { transform: rotateX(60deg);  border-color: rgba(184,176,198,.28); }
+.ae-d20-face:nth-child(3) { transform: rotateX(120deg); border-color: rgba(201,156,90,.35); }
+.ae-d20-face:nth-child(4) { transform: rotateY(90deg);  border-color: rgba(184,176,198,.25); }
+.ae-d20-face:nth-child(5) { transform: rotateY(90deg) rotateX(60deg);  border-color: rgba(201,156,90,.30); }
+.ae-d20-face:nth-child(6) { transform: rotateY(90deg) rotateX(120deg); border-color: rgba(184,176,198,.22); }
+
+@keyframes ae-d20-idle {
+  0%   { transform: rotateX(0deg)   rotateY(0deg)   rotateZ(0deg); }
+  100% { transform: rotateX(360deg) rotateY(360deg) rotateZ(180deg); }
+}
+.ae-d20-3d.rolling {
+  animation: ae-d20-roll 1.2s cubic-bezier(.2,.8,.3,1);
+}
+@keyframes ae-d20-roll {
+  0%   { transform: rotateX(0deg)    rotateY(0deg)    rotateZ(0deg)    scale(1); }
+  20%  { transform: rotateX(180deg)  rotateY(90deg)   rotateZ(45deg)   scale(1.08); }
+  45%  { transform: rotateX(400deg)  rotateY(250deg)  rotateZ(120deg)  scale(.95); }
+  70%  { transform: rotateX(600deg)  rotateY(500deg)  rotateZ(200deg)  scale(1.03); }
+  90%  { transform: rotateX(700deg)  rotateY(680deg)  rotateZ(340deg)  scale(1); }
+  100% { transform: rotateX(720deg)  rotateY(720deg)  rotateZ(360deg)  scale(1); }
+}
+.ae-d20-3d.success {
+  filter: drop-shadow(0 0 28px rgba(92,200,92,.50)) drop-shadow(0 0 60px rgba(92,200,92,.18));
+}
+.ae-d20-3d.success .ae-d20-face {
+  border-color: rgba(92,200,92,.50);
+  background: rgba(92,200,92,.04);
+}
+.ae-d20-3d.failed {
+  filter: drop-shadow(0 0 28px rgba(255,123,92,.50)) drop-shadow(0 0 60px rgba(255,123,92,.18));
+}
+.ae-d20-3d.failed .ae-d20-face {
+  border-color: rgba(255,123,92,.50);
+  background: rgba(255,123,92,.04);
+}
+
+.ae-d20-number {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font: 700 48px/1 'Cinzel', serif;
+  color: var(--gold2);
+  letter-spacing: .04em;
+  text-shadow: 0 0 16px rgba(201,156,90,.40);
+  transition: color .3s, text-shadow .3s;
+  z-index: 2;
+}
+.ae-d20-number.rolling {
+  animation: ae-dice-flash .08s steps(1) infinite;
+}
+.ae-d20-number.success {
+  color: #5cc85c;
+  text-shadow: 0 0 20px rgba(92,200,92,.60);
+}
+.ae-d20-number.failed {
+  color: var(--ember);
+  text-shadow: 0 0 20px rgba(255,123,92,.60);
+}
+
+.ae-dice-overlay-result {
+  font: 700 var(--fs-label)/1 'IBM Plex Mono';
+  letter-spacing: .22em; text-transform: uppercase;
+  opacity: 0; transition: opacity .4s;
+}
+.ae-dice-overlay-result.show { opacity: 1; }
+.ae-dice-overlay-result.success { color: #5cc85c; text-shadow: 0 0 14px rgba(92,200,92,.40); }
+.ae-dice-overlay-result.failed { color: var(--ember); text-shadow: 0 0 14px rgba(255,123,92,.40); }
+
+/* continue gomb */
+.ae-continue-btn {
+  display: none;   /* default: rejtett, choice mode az alap */
+  flex: 1; align-items: center; justify-content: center; gap: 10px;
+  border: 1px solid rgba(201,156,90,.18); border-radius: 4px;
+  background: rgba(201,156,90,.05);
+  box-shadow: 0 0 20px rgba(201,156,90,.08), inset 0 0 30px rgba(201,156,90,.03);
+  cursor: pointer;
+  transition: background .2s, border-color .2s, box-shadow .2s;
+}
+.ae-continue-btn:hover {
+  background: rgba(201,156,90,.10);
+  border-color: rgba(201,156,90,.35);
+  box-shadow: 0 0 28px rgba(201,156,90,.15), inset 0 0 40px rgba(201,156,90,.05);
+}
+.ae-continue-btn:hover .ae-continue-arrow { animation: none; opacity: 1; }
+.ae-continue-btn:hover .ae-continue-text  { opacity: 1; color: var(--gold2); }
+.ae-continue-btn:focus-visible { outline: 1px solid rgba(201,156,90,.45); outline-offset: -1px; }
+
+.ae-continue-arrow {
+  color: var(--gold2); font-size: var(--fs-caption); flex-shrink: 0;
+  text-shadow: 0 0 10px rgba(201,156,90,.50);
+  animation: ae-pulse 2.6s ease-in-out infinite;
+}
+@keyframes ae-pulse {
+  0%, 100% { opacity: .55; }
+  50%       { opacity: .95; }
+}
+.ae-continue-text {
+  font: 500 var(--fs-label)/1 'IBM Plex Mono';
+  letter-spacing: .20em; text-transform: uppercase;
+  color: var(--gold); opacity: .75;
+  text-shadow: 0 0 14px rgba(201,156,90,.25);
+}
+.ae-action-label {
+  font: 400 var(--fs-caption)/1 'IBM Plex Mono';
+  letter-spacing: .16em; text-transform: uppercase;
+  color: var(--gold); opacity: .35;
+  writing-mode: vertical-lr;
+  flex-shrink: 0;
+  align-self: center;                    /* label marad középen */
+}
+.ae-action-div {
+  width: 1px; align-self: stretch;
+  background: rgba(201,156,90,.08);
+  flex-shrink: 0; margin: 0 2px;
+}
+.ae-choices-row { flex: 1; display: flex; gap: 8px; align-items: stretch; }
+.ae-choice-btn {
+  flex: 1;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  border: 1px solid rgba(201,156,90,.09); border-radius: 3px;
+  background: rgba(201,156,90,.025);
+  cursor: pointer;
+  transition: background .2s, border-color .2s;
+}
+.ae-choice-btn:hover {
+  background: rgba(201,156,90,.07);
+  border-color: rgba(201,156,90,.20);
+}
+.ae-choice-btn:hover .ae-cb-arrow { opacity: .60; }
+.ae-choice-btn:hover .ae-cb-text  { opacity: .85; }
+.ae-choice-btn:focus-visible {
+  outline: 1px solid rgba(201,156,90,.45);
+  outline-offset: -1px;
+}
+.ae-cb-arrow { color: var(--gold); opacity: .38; font-size: var(--fs-ambient); flex-shrink: 0; }
+.ae-cb-icon  { font-size: 12px; flex-shrink: 0; opacity: .42; transition: opacity .2s; }
+.ae-choice-btn:hover .ae-cb-icon { opacity: .82; }
+.ae-cb-icon--ember  { color: var(--ember);   }
+.ae-cb-icon--cyan   { color: var(--cyan);    }
+.ae-cb-icon--gold   { color: var(--gold);    }
+.ae-cb-icon--purple { color: var(--purple2); }
+.ae-cb-text {
+  font: 400 var(--fs-label)/1.3 'IBM Plex Mono'; letter-spacing: .03em;
+  color: var(--text); opacity: .62; text-align: center;
+}
+
+/* ── bottom panel ── */
+.ae-bottom-panel {
+  height: 96px; flex-shrink: 0;
+  background: rgba(5,4,10,.60);
+  position: relative; overflow: hidden;
+}
+.ae-bottom-panel::before,
+.ae-bottom-panel::after {
+  content: ''; position: absolute;
+  width: 12px; height: 12px;
+  border-color: rgba(201,156,90,.18); border-style: solid;
+  z-index: 2; pointer-events: none;
+}
+.ae-bottom-panel::before { top: 10px; left: 14px;  border-width: 1px 0 0 1px; }
+.ae-bottom-panel::after  { top: 10px; right: 14px; border-width: 1px 1px 0 0; }
+</style>
 </head>
 <body>
 
-  <div class="slideshow" id="slideshow">
-
-    <!-- SLIDE 0: TITLE -->
-    <section class="slide active" id="slide-title" data-index="0">
-      <div class="bg-glow"></div>
-      <div class="rails"></div>
-
-      <div class="content">
-        <span class="eyebrow">A Narrative RPG Campaign</span>
-
-        <h1 class="title-main">
-          Apocalypse
-          <span class="word-express">Express</span>
-        </h1>
-
-        <p class="subtitle">
-          Dead souls. Infernal railways. Frozen time.<br>
-          A second life purchased on Lucifer's schedule.
-        </p>
-
-        <div class="divider"></div>
-
-        <div class="cta-row">
-          <button class="btn btn-primary" onclick="goTo(1)">
-            <span class="btn-arrow">→</span> Board the Train
-          </button>
-          <a class="btn btn-ghost" href="https://github.com/Kenessy/Kenessy/tree/Apocalypse-Express-DnD-Game/Database" target="_blank">
-            Open the Database
-          </a>
-        </div>
+<!-- ══ TOP BAR ══ -->
+<div class="topbar mood-safe" id="topbar">
+  <div class="bc">
+    <div class="bc-seg canto" tabindex="0">
+      <div class="bc-inner">
+        <span class="bc-label">Canto I</span>
+        <span class="bc-name">The Red Line</span>
       </div>
-    </section>
+      <div class="bc-dropdown">
+        <div class="dd-item current"><span class="dd-id">C&middot;I</span><span class="dd-name">The Red Line</span><span class="dd-dot current"></span></div>
+        <div class="dd-item locked"><span class="dd-id">C&middot;II</span><span class="dd-name">The Broken Earth</span><span class="dd-dot"></span></div>
+        <div class="dd-item locked"><span class="dd-id">C&middot;III</span><span class="dd-name">The Contract</span><span class="dd-dot"></span></div>
+      </div>
+    </div>
+    <span class="bc-sep">&#x203a;</span>
+    <div class="bc-seg episode" tabindex="0">
+      <div class="bc-inner">
+        <span class="bc-label">Episode 1</span>
+        <span class="bc-name">Null Meridian</span>
+      </div>
+      <div class="bc-dropdown">
+        <div class="dd-item current"><span class="dd-id">EP.1</span><span class="dd-name">Null Meridian</span><span class="dd-dot current"></span></div>
+        <div class="dd-item locked"><span class="dd-id">EP.2</span><span class="dd-name">Boarding the Red Line</span><span class="dd-dot"></span></div>
+        <div class="dd-item locked"><span class="dd-id">EP.3</span><span class="dd-name">The Sundown Saloon</span><span class="dd-dot"></span></div>
+      </div>
+    </div>
+    <span class="bc-sep">&#x203a;</span>
+    <div class="bc-seg scene active" tabindex="0">
+      <div class="bc-inner">
+        <span class="bc-label">Scene A1</span>
+        <span class="bc-name">Waking</span>
+      </div>
+      <div class="bc-dropdown">
+        <div class="dd-item done"><span class="dd-id">PRO</span><span class="dd-name">The Null Meridian</span><span class="dd-dot done"></span></div>
+        <div class="dd-div"></div>
+        <div class="dd-item current"><span class="dd-id">A1</span><span class="dd-name">Waking</span><span class="dd-dot current"></span></div>
+        <div class="dd-item locked"><span class="dd-id">A2</span><span class="dd-name">Obelisk, Clock &amp; Postcards</span><span class="dd-dot"></span></div>
+        <div class="dd-item locked"><span class="dd-id">A3</span><span class="dd-name">Train Arrival &amp; Boarding</span><span class="dd-dot"></span></div>
+        <div class="dd-item locked"><span class="dd-id">A4</span><span class="dd-name">Gossip Car &amp; Golden Tickets</span><span class="dd-dot"></span></div>
+        <div class="dd-item locked"><span class="dd-id">A5</span><span class="dd-name">Sundown Saloon</span><span class="dd-dot"></span></div>
+      </div>
+    </div>
+  </div>
 
-    <!-- SLIDE 1: NULL MERIDIAN -->
-    <section class="slide" id="slide-a1" data-index="1">
-      <div class="scene-layout">
-        <div class="scene-art">
-          <div class="scene-header">
-            <div class="scene-header-left">
-              <div class="scene-header-chapter">Canto I · Episode 01</div>
-              <div class="scene-header-title" id="a1-heading">The Null Meridian</div>
+  <div class="topbar-center">
+    <span class="tc-title" id="tc-title">Waking in the Null Meridian</span>
+    <span class="tc-mood"  id="tc-mood">Safe &middot; Explore</span>
+  </div>
+
+  <div class="topbar-right">
+    <button class="hamburger" id="hamburger" onclick="this.classList.toggle('open')" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</div>
+
+<!-- ══ LAYOUT ══ -->
+<div class="ae-layout">
+
+  <!-- bal: kép 2:3, tölti a teljes magasságot -->
+  <div class="ae-col ae-col-img">
+    <div class="ae-img-panel">
+      <img class="ae-img-bg" src="ae-null-meridian-portrait.png" alt="Null Meridian — The Obelisk">
+      <div class="ae-img-fade"></div>
+      <div class="ae-particles" data-type="ash"></div>
+      <div class="ae-img-caption">
+        <div class="ae-loc-rule"></div>
+        <span class="ae-loc-name">Null Meridian</span>
+      </div>
+
+      <div class="ae-img-status">
+        <!-- mood tiles -->
+        <div class="ae-loc-threat" data-state="calm">
+          <div class="ae-loc-mood-block">
+            <div class="ae-loc-threat-top">
+              <span class="ae-loc-threat-key">mood</span>
+              <span class="ae-loc-threat-sep">·</span>
+              <span class="ae-loc-threat-label">calm</span>
             </div>
-            <div class="scene-header-right" id="a1-pips">
-              <div class="scene-pip active"></div>
-              <div class="scene-pip"></div>
-              <div class="scene-pip"></div>
-              <div class="scene-pip"></div>
+            <div class="ae-mood-strip">
+              <div class="ae-mood-pip adjacent" data-m="safe">
+                <span class="ae-mood-icon"><svg viewBox="0 0 28 28" width="28" height="28" fill="currentColor"><path d="M14 3 L23 8 V15 C23 20,19 25,14 27 C9 25,5 20,5 15 V8 Z"/></svg></span>
+              </div>
+              <div class="ae-mood-pip active" data-m="calm">
+                <span class="ae-mood-icon"><svg viewBox="0 0 28 28" width="28" height="28" fill="currentColor"><path d="M14 2 C8 6,4 14,6 20 C7 23,10 25,14 26 C18 25,21 23,22 20 C24 14,20 6,14 2 Z"/></svg></span>
+              </div>
+              <div class="ae-mood-pip adjacent" data-m="unknown">
+                <span class="ae-mood-icon"><svg viewBox="0 0 28 28" width="28" height="28" fill="currentColor"><path fill-rule="evenodd" d="M2 14 C6 6,10 4,14 4 C18 4,22 6,26 14 C22 22,18 24,14 24 C10 24,6 22,2 14 Z M14 9.5 A4.5 4.5 0 1 0 14 18.5 A4.5 4.5 0 1 0 14 9.5 Z"/><circle cx="14" cy="14" r="2"/></svg></span>
+              </div>
+              <div class="ae-mood-pip" data-m="ominous">
+                <span class="ae-mood-icon"><svg viewBox="0 0 28 28" width="28" height="28" fill="currentColor"><path d="M16 2 L7 15 L12 15 L10 26 L21 13 L16 13 Z"/></svg></span>
+              </div>
+              <div class="ae-mood-pip" data-m="danger">
+                <span class="ae-mood-icon"><svg viewBox="0 0 28 28" width="28" height="28" fill="currentColor"><path fill-rule="evenodd" d="M14 2 C10 8,6 13,6 17 C6 22,9 26,14 26 C19 26,22 22,22 17 C22 13,18 8,14 2 Z M14 12 C12 15,11.5 18,13 20.5 C13.5 21,14.5 21,15 20.5 C16.5 18,16 15,14 12 Z"/></svg></span>
+              </div>
             </div>
           </div>
         </div>
-        <div class="scene-divider">
-          <button class="scene-expand" id="a1-expand" onclick="toggleFullscreen()" title="Expand text">↕</button>
+
+        <!-- section separator -->
+        <div style="width:80%;height:1px;background:linear-gradient(to right,transparent,rgba(201,156,90,.18),transparent);flex-shrink:0"></div>
+
+        <!-- time of day strip -->
+        <div class="ae-loc-time-block">
+          <div class="ae-loc-threat-top">
+            <span class="ae-loc-threat-key">time</span>
+            <span class="ae-loc-threat-sep">·</span>
+            <span class="ae-loc-threat-label" style="color:var(--gold2);text-shadow:0 0 14px rgba(230,207,161,.45)">morning</span>
+          </div>
+          <div class="ae-time-strip">
+            <div class="ae-time-pip" data-t="dawn">
+              <span class="ae-time-icon"><svg viewBox="0 0 28 28" width="28" height="28" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 19 A8 8 0 0 1 22 19" stroke="none"/><line x1="1" y1="19" x2="27" y2="19"/><line x1="14" y1="2" x2="14" y2="7"/><line x1="5" y1="6" x2="8" y2="9"/><line x1="23" y1="6" x2="20" y2="9"/><line x1="1" y1="13" x2="4.5" y2="13.5"/><line x1="27" y1="13" x2="23.5" y2="13.5"/></svg></span>
+            </div>
+            <div class="ae-time-pip active likely" data-t="morning">
+              <span class="ae-time-icon"><svg viewBox="0 0 28 28" width="28" height="28" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="19" cy="8" r="5.5" stroke="none"/><line x1="19" y1="0" x2="19" y2="2"/><line x1="27" y1="8" x2="25" y2="8"/><line x1="24.5" y1="2.5" x2="23" y2="4"/><line x1="24.5" y1="13.5" x2="23" y2="12"/><ellipse cx="12" cy="24" rx="12" ry="3.5" stroke="none"/><circle cx="5" cy="19.5" r="4.5" stroke="none"/><circle cx="12" cy="17" r="5" stroke="none"/><circle cx="18.5" cy="19.5" r="4" stroke="none"/></svg></span>
+            </div>
+            <div class="ae-time-pip adjacent" data-t="noon">
+              <span class="ae-time-icon"><svg viewBox="0 0 28 28" width="28" height="28" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="14" cy="14" r="6" stroke="none"/><line x1="14" y1="1" x2="14" y2="5"/><line x1="14" y1="23" x2="14" y2="27"/><line x1="1" y1="14" x2="5" y2="14"/><line x1="23" y1="14" x2="27" y2="14"/><line x1="5" y1="5" x2="7.8" y2="7.8"/><line x1="20.2" y1="20.2" x2="23" y2="23"/><line x1="23" y1="5" x2="20.2" y2="7.8"/><line x1="5" y1="23" x2="7.8" y2="20.2"/></svg></span>
+            </div>
+            <div class="ae-time-pip" data-t="afternoon">
+              <span class="ae-time-icon"><svg viewBox="0 0 28 28" width="28" height="28" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="8" r="5.5" stroke="none"/><line x1="9" y1="0" x2="9" y2="2"/><line x1="1" y1="8" x2="3" y2="8"/><line x1="3.5" y1="2.5" x2="5" y2="4"/><line x1="3.5" y1="13.5" x2="5" y2="12"/><ellipse cx="16" cy="24" rx="12" ry="3.5" stroke="none"/><circle cx="23" cy="19.5" r="4.5" stroke="none"/><circle cx="16" cy="17" r="5" stroke="none"/><circle cx="9.5" cy="19.5" r="4" stroke="none"/></svg></span>
+            </div>
+            <div class="ae-time-pip" data-t="evening">
+              <span class="ae-time-icon"><svg viewBox="0 0 28 28" width="28" height="28" fill="currentColor"><path d="M15 3 C9 3,4 8,4 14 C4 20,9 25,15 25 C10 23,8 19,8 14 C8 9,10 5,15 3 Z"/><path d="M22 5 L22.6 6.8 L24.5 7 L22.6 7.2 L22 9 L21.4 7.2 L19.5 7 L21.4 6.8 Z"/><circle cx="25" cy="12" r="0.9"/></svg></span>
+            </div>
+            <div class="ae-time-pip" data-t="midnight">
+              <span class="ae-time-icon"><svg viewBox="0 0 28 28" width="28" height="28" fill="currentColor"><circle cx="14" cy="14" r="9.5"/><circle cx="3.5" cy="5" r="1.2"/><circle cx="25" cy="6" r="0.8"/><circle cx="24.5" cy="22" r="1"/><circle cx="4" cy="21" r="0.7"/></svg></span>
+            </div>
+          </div>
         </div>
-        <div class="scene-body" id="a1-body">
-          <div class="scene-text" id="a1-text"></div>
-          <div class="scene-choices" id="a1-choices"></div>
-          <button class="scene-close" onclick="toggleFullscreen()">↩ Close</button>
-          <div class="scene-footer">Apocalypse Express</div>
+
+        <!-- section separator -->
+        <div style="width:80%;height:1px;background:linear-gradient(to right,transparent,rgba(184,176,198,.12),transparent);flex-shrink:0"></div>
+
+        <!-- zone tiles -->
+        <div class="ae-loc-zone-block">
+          <span class="ae-loc-threat-key">zone</span>
+          <span class="ae-loc-threat-sep">·</span>
+          <div class="ae-zone-strip">
+            <div class="ae-zone-pip" data-z="obsidian">
+              <span class="ae-zone-icon"><svg viewBox="0 0 28 28" width="28" height="28" fill="currentColor"><path d="M14 1 L22 9 L19 19 L14 27 L9 19 L6 9 Z"/><line x1="14" y1="1" x2="14" y2="27" stroke="currentColor" stroke-width="0.6" opacity="0.2"/><line x1="6" y1="9" x2="19" y2="19" stroke="currentColor" stroke-width="0.6" opacity="0.2"/><line x1="22" y1="9" x2="9" y2="19" stroke="currentColor" stroke-width="0.6" opacity="0.2"/></svg></span>
+              <span class="ae-zone-label">obsidian</span>
+            </div>
+            <div class="ae-zone-pip" data-z="void">
+              <span class="ae-zone-icon"><svg viewBox="0 0 28 28" width="28" height="28" fill="currentColor" stroke="currentColor"><circle cx="14" cy="14" r="12" fill="none" stroke-width="1.8"/><circle cx="14" cy="14" r="7" fill="none" stroke-width="1.4"/><circle cx="14" cy="14" r="2.5" stroke="none"/></svg></span>
+              <span class="ae-zone-label">void</span>
+            </div>
+          </div>
         </div>
       </div>
-    </section>
 
-    <!-- SLIDE 2: TO BE CONTINUED -->
-    <section class="slide" id="slide-tbc" data-index="2">
-      <div style="position:absolute;inset:0;background:var(--void);display:flex;align-items:center;justify-content:center;">
-        <div style="text-align:center;max-width:520px;padding:24px;">
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--ember);opacity:.5;margin-bottom:18px;">Scene A2 — Obelisk &amp; Clock</div>
-          <h2 style="font-family:'Cinzel',serif;font-size:clamp(28px,5vw,48px);font-weight:700;color:var(--text);line-height:1;margin-bottom:20px;">To be continued.</h2>
-          <p style="font-size:14px;color:var(--muted);line-height:1.7;font-style:italic;margin-bottom:28px;">Something is taking shape in the dark beyond the platform's edge.</p>
-          <button class="btn btn-ghost" onclick="goTo(0)">← Back to title</button>
+      <!-- dice overlay -->
+      <div class="ae-dice-overlay" id="dice-overlay">
+        <span class="ae-dice-overlay-label" id="dice-ov-label">Athletics</span>
+        <div class="ae-d20-wrap">
+          <div class="ae-d20-3d" id="d20-3d">
+            <div class="ae-d20-face"></div>
+            <div class="ae-d20-face"></div>
+            <div class="ae-d20-face"></div>
+            <div class="ae-d20-face"></div>
+            <div class="ae-d20-face"></div>
+            <div class="ae-d20-face"></div>
+          </div>
+          <span class="ae-d20-number" id="d20-number">d20</span>
+        </div>
+        <span class="ae-dice-overlay-dc" id="dice-ov-dc">DC 10</span>
+        <span class="ae-dice-overlay-result" id="dice-ov-result"></span>
+      </div>
+
+      <!-- collection panel overlay -->
+      <div class="ae-collection-panel" id="collection-panel">
+        <div class="ae-collection-header">
+          <span class="ae-collection-title">Collection</span>
+          <span class="ae-collection-close" onclick="toggleCollection()">✕</span>
+        </div>
+        <div class="ae-collection-grid" id="collection-grid">
         </div>
       </div>
-    </section>
 
-    <!-- future slides will be added here -->
+      <button class="ae-img-view-toggle" onclick="toggleCleanView()" aria-label="Toggle background view">
+        <svg viewBox="0 0 16 16" width="20" height="20" fill="currentColor" opacity=".7"><path fill-rule="evenodd" d="M1 8 C3.5 3.5,6 2,8 2 C10 2,12.5 3.5,15 8 C12.5 12.5,10 14,8 14 C6 14,3.5 12.5,1 8 Z M8 5.5 A2.5 2.5 0 1 0 8 10.5 A2.5 2.5 0 1 0 8 5.5 Z"/><circle cx="8" cy="8" r="1"/></svg>
+        <span>view</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- vertikális stat bar a két kép között -->
+  <div class="ae-stat-bar">
+    <div class="ae-stat gold">
+      <span class="ae-stat-icon">◈</span>
+      <span class="ae-stat-val">0</span>
+      <span class="ae-stat-lbl">gold</span>
+    </div>
+    <div class="ae-stat hp">
+      <span class="ae-stat-icon">●</span>
+      <span class="ae-stat-val">?/?</span>
+      <span class="ae-stat-lbl">HP</span>
+    </div>
+    <div class="ae-stat chaos locked">
+      <span class="ae-stat-icon">◉</span>
+      <span class="ae-stat-val">—</span>
+      <span class="ae-stat-lbl">Chaos</span>
+    </div>
+    <div class="ae-stat harm locked">
+      <span class="ae-stat-icon">○</span>
+      <span class="ae-stat-val">—</span>
+      <span class="ae-stat-lbl">Harmony</span>
+    </div>
+    <div class="ae-stat dice locked">
+      <span class="ae-stat-icon">◎</span>
+      <span class="ae-stat-val">—</span>
+      <span class="ae-stat-lbl">chaos die</span>
+    </div>
+    <div class="ae-collection-btn" onclick="toggleCollection()" tabindex="0" role="button">
+      <span class="ae-collection-icon">📜</span>
+      <span class="ae-collection-lbl">collection</span>
+      <span class="ae-collection-count" id="collection-count">0 / 0</span>
+    </div>
+  </div>
+
+  <!-- jobb: scene frame + bottom panel -->
+  <div class="ae-col ae-col-content">
+
+    <div class="ae-scene-frame is-dialogue" id="scene-frame">
+
+      <!-- image layer -->
+      <div class="ae-sf-image">
+        <img src="ae-null-meridian.png" alt="Null Meridian — The Obelisk">
+      </div>
+
+      <!-- dialogue layer (rendered by JS from frames[]) -->
+      <div class="ae-sf-dialogue">
+        <div class="ae-sf-dialogue-inner" id="dialogue-inner">
+        </div>
+      </div>
+
+      <!-- scene trigger indicator -->
+      <div class="ae-sf-trigger">
+        <div class="ae-sf-trigger-bars">
+          <div class="ae-sf-trigger-bar"></div>
+          <div class="ae-sf-trigger-bar"></div>
+          <div class="ae-sf-trigger-bar"></div>
+          <div class="ae-sf-trigger-bar"></div>
+          <div class="ae-sf-trigger-bar"></div>
+        </div>
+        <span class="ae-sf-trigger-label">hearing</span>
+      </div>
+
+      <!-- choice hover preview layer -->
+      <div class="ae-sf-preview" id="sf-preview">
+        <div class="ae-sf-preview-img">
+          <img id="sf-prev-img" src="" alt="">
+          <div class="ae-sf-preview-tint" id="sf-prev-tint"></div>
+        </div>
+        <div class="ae-sf-preview-body">
+          <div class="ae-sf-preview-header">
+            <span class="ae-sf-preview-icon" id="sf-prev-icon"></span>
+            <span class="ae-sf-preview-label" id="sf-prev-label"></span>
+            <div class="ae-sf-preview-sep"></div>
+          </div>
+          <p class="ae-sf-preview-text" id="sf-prev-text"></p>
+        </div>
+      </div>
+
+      <button class="ae-sf-view-toggle" onclick="toggleSceneCleanView()" aria-label="Toggle background view">
+        <svg viewBox="0 0 16 16" width="20" height="20" fill="currentColor"><path fill-rule="evenodd" d="M1 8 C3.5 3.5,6 2,8 2 C10 2,12.5 3.5,15 8 C12.5 12.5,10 14,8 14 C6 14,3.5 12.5,1 8 Z M8 5.5 A2.5 2.5 0 1 0 8 10.5 A2.5 2.5 0 1 0 8 5.5 Z"/><circle cx="8" cy="8" r="1"/></svg>
+        <span>view</span>
+      </button>
+      <button class="ae-sf-toggle" onclick="toggleScene()">image · text</button>
+    </div>
+
+    <div class="ae-h-sep"></div>
+    <div class="ae-bottom-panel is-narrative">
+      <div class="ae-action-bar">
+        <span class="ae-action-label">choose</span>
+        <div class="ae-action-div"></div>
+
+        <!-- narrative mode: continue button (rendered by JS) -->
+        <div class="ae-continue-btn" tabindex="0" role="button" onclick="advanceScene()" id="continue-btn">
+          <span class="ae-continue-arrow" id="continue-arrow">▶</span>
+          <span class="ae-continue-text" id="continue-text">wake up</span>
+        </div>
+
+        <!-- choice mode: buttons (rendered by JS) -->
+        <div class="ae-choices-row" id="choices-row">
+        </div>
+
+        <!-- dice mode -->
+        <div class="ae-dice-area" id="dice-area">
+          <!-- left: metadata + roll trigger -->
+          <div class="ae-dice-meta">
+            <div class="ae-dice-d20-icon">
+              <svg width="22" height="26" viewBox="0 0 28 32" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round">
+                <polygon points="14,1 27,9 27,23 14,31 1,23 1,9"/>
+                <line x1="14" y1="1" x2="14" y2="31"/>
+                <line x1="1" y1="9" x2="27" y2="23"/>
+                <line x1="27" y1="9" x2="1" y2="23"/>
+              </svg>
+            </div>
+            <span class="ae-dice-label" id="dice-label">fate roll</span>
+            <span class="ae-dice-dc-tag" id="dice-dc-tag">DC: 10</span>
+            <div class="ae-dice-roll-btn" id="dice-roll-btn" tabindex="0" role="button" onclick="rollDice()">
+              <span class="ae-continue-arrow">🎲</span>
+              <span class="ae-continue-text">roll</span>
+            </div>
+          </div>
+          <!-- right: 3 outcome buttons (always visible, locked until roll) -->
+          <div class="ae-dice-outcomes">
+            <div class="ae-dice-out-btn locked" id="dice-out-succeed" onclick="diceAdvance('succeed')">
+              <span class="ae-dice-out-icon">✓</span>
+              <span class="ae-dice-out-text">succeed</span>
+            </div>
+            <div class="ae-dice-out-btn locked" id="dice-out-retry" onclick="diceAdvance('retry')">
+              <span class="ae-dice-out-icon">↻</span>
+              <span class="ae-dice-out-text" id="dice-out-retry-text">try again</span>
+            </div>
+            <div class="ae-dice-out-btn locked" id="dice-out-giveup" onclick="diceAdvance('giveup')">
+              <span class="ae-dice-out-icon">✕</span>
+              <span class="ae-dice-out-text">give up</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
   </div>
 
-  <!-- NAV BUTTONS -->
-  <button class="nav-btn" id="nav-prev" onclick="goTo(currentSlide - 1)">&#8592;</button>
-  <button class="nav-btn" id="nav-next" onclick="goTo(currentSlide + 1)">&#8594;</button>
+</div>
 
-  <!-- COUNTER -->
-  <div class="slide-counter hidden" id="slide-counter">1 / 1</div>
 
-  <script>
-    const slides = document.querySelectorAll('.slide');
-    let currentSlide = 0;
-    const total = slides.length;
+<script>
+/* ══════════════════════════════════════
+   COLLECTION
+══════════════════════════════════════ */
+const collection = [
+  {
+    id: 'panorama-void',
+    title: 'The Infinite Plane',
+    img: 'ae-crossroads-wide.png',
+    desc: 'An endless obsidian plain — inconceivably ancient. No edge, no boundary, no end. Patches of borrowed earth where alien life clings to cracks in the glass. A landscape older than language, operating on rules no one alive can name.',
+    lore: 'An infinite obsidian void stretching in every direction. The same fractured glass, the same silence, repeating forever. Soil gathers in the cracks — bushes, trees, whole forests grow on borrowed ground. Everything here is temporary except the plane itself. It is older than anything you have words for.',
+    hint: 'Climb the obelisk at the crossroads.',
+    unlocked: false,
+  },
+  {
+    id: 'glimpse-fog',
+    title: 'A Glimpse Through the Fog',
+    img: 'ae-crossroads-wide.png',
+    desc: 'A partial view from a treetop — just high enough to see the roads converge, but not high enough to see where they lead. The horizon stays hidden. You know there is more. You just can\'t see it.',
+    lore: 'From the crown of a dark-leaved tree, barely above the fog line. The crossroads spreads below — roads cutting through obsidian like old scars. But the edges of the world stay out of reach. A glimpse is not a view. It\'s a promise.',
+    hint: 'Find another way up at the crossroads.',
+    unlocked: false,
+  },
+  {
+    id: 'unsent-letter',
+    title: 'The Unsent Letter',
+    img: 'ae-obelisk-fountain.png',
+    desc: 'A crumbling message that never reached its destination. Weapons orders, darkening forests, a father\'s warning to his son. The letter was never sent. No one read it — until you.',
+    lore: 'Buried in the ruins of a collapsed desk at the crossroads. The ink has faded but the fear hasn\'t. Whoever wrote this knew something was wrong — forests growing too fast, nights growing too dangerous, supply lines failing. And at the bottom, not an order but a plea: tell my son to lock the doors.',
+    hint: 'Search thoroughly near the fountain.',
+    unlocked: false,
+  },
+];
 
-    function goTo(n) {
-      if (n < 0 || n >= total) return;
-      slides[currentSlide].classList.remove('active');
-      currentSlide = n;
-      slides[currentSlide].classList.add('active');
-      updateNav();
-    }
+function unlockCollection(id) {
+  const card = collection.find(c => c.id === id);
+  if (card && !card.unlocked) {
+    card.unlocked = true;
+    renderCollection();
+  }
+}
 
-    function updateNav() {
-      const prevBtn = document.getElementById('nav-prev');
-      const nextBtn = document.getElementById('nav-next');
-      const counter = document.getElementById('slide-counter');
-
-      // hide nav arrows on scene slides (story choices navigate instead)
-      const isScene = slides[currentSlide].querySelector('.scene-layout');
-      prevBtn.classList.toggle('visible', currentSlide > 0 && !isScene);
-      nextBtn.classList.toggle('visible', currentSlide < total - 1 && !isScene);
-      counter.classList.toggle('hidden', total <= 1);
-      if (total > 1) {
-        counter.textContent = (currentSlide + 1) + ' / ' + total;
-      }
-    }
-
-    // ── CARD CAROUSEL HELPERS ──
-    const cardIcons = {
-      think:  '\u2727',   // ✧
-      decide: '\u2192',   // →
-      primary: '\u2192',  // →
-    };
-    const cardTypes = {
-      think:  'Ponder',
-      decide: 'Decide',
-      primary: 'Continue',
-    };
-    let carouselIdx = 0;
-    let carouselChoices = [];
-
-    function renderCarousel(choices, container) {
-      carouselChoices = choices;
-      carouselIdx = 0;
-      updateCarousel(container);
-    }
-
-    function updateCarousel(container) {
-      const c = carouselChoices[carouselIdx];
-      const type = c.type || c.cls || 'primary';
-      const isDecide = type === 'decide' || type === 'primary';
-      const total = carouselChoices.length;
-
-      const pipsHtml = total > 1
-        ? `<div class="card-pips">${carouselChoices.map((_,i) =>
-            `<div class="card-pip${i === carouselIdx ? ' active' : ''}"></div>`
-          ).join('')}</div>`
-        : '';
-
-      container.innerHTML = `
-        <div class="card-carousel">
-          <button class="card-arrow${carouselIdx <= 0 ? ' hidden' : ''}" onclick="carouselNav(-1)">\u2039</button>
-          <div class="card-frame">
-            <div class="card${isDecide ? ' card-decide' : ''}" onclick="a1Act('${c.next}')">
-              <span class="card-icon">${cardIcons[type] || '\u2727'}</span>
-              <div class="card-type">${cardTypes[type] || 'Act'}</div>
-              <div class="card-label">${c.label}</div>
-            </div>
-          </div>
-          <button class="card-arrow${carouselIdx >= total - 1 ? ' hidden' : ''}" onclick="carouselNav(1)">\u203A</button>
+function renderCollection() {
+  const grid = document.getElementById('collection-grid');
+  const unlocked = collection.filter(c => c.unlocked).length;
+  document.getElementById('collection-count').textContent = unlocked + ' / ' + collection.length;
+  grid.innerHTML = collection.map(c => {
+    const overlayText = c.unlocked ? c.lore : c.hint;
+    return `<div class="ae-coll-card${c.unlocked ? '' : ' locked'}">
+      <div class="ae-coll-card-img-wrap">
+        <img class="ae-coll-card-img" src="${c.img}" alt="${c.title}">
+        <div class="ae-coll-card-img-overlay">
+          <span class="ae-coll-card-img-overlay-text">${overlayText}</span>
         </div>
-        ${pipsHtml}`;
-    }
+      </div>
+      <div class="ae-coll-card-body">
+        <div class="ae-coll-card-title">${c.unlocked ? c.title : '???'}</div>
+        <div class="ae-coll-card-desc">${c.desc}</div>
+        <div class="ae-coll-card-hint">${c.unlocked ? '✓ Discovered' : c.hint}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
 
-    function toggleFullscreen() {
-      const layout = document.querySelector('.scene-layout');
-      const btn = document.getElementById('a1-expand');
-      layout.classList.toggle('fullscreen');
-      btn.textContent = layout.classList.contains('fullscreen') ? '\u00D7' : '\u2195';
-    }
+function toggleCollection() {
+  const panel = document.getElementById('collection-panel');
+  panel.classList.toggle('open');
+  if (panel.classList.contains('open')) renderCollection();
+}
 
-    function carouselNav(dir) {
-      const newIdx = carouselIdx + dir;
-      if (newIdx < 0 || newIdx >= carouselChoices.length) return;
-      carouselIdx = newIdx;
-      updateCarousel(a1.choices);
-    }
+/* ══════════════════════════════════════
+   STORY FRAMES
+══════════════════════════════════════ */
+const frames = [
+  {
+    id: 'cicero-monologue',
+    speaker: { name: 'Cicero', glyph: '†' },
+    text: [
+      'Morning, noon, evening — twilight by day, darkness by night... Our life is a loop of shadow and light. An endless loop of — well. But what <em class="inline">is</em> a loop? A circuit where we wake up, go to work, then fall asleep. Every day, the same exact thing, around and around — like a hamster in a wheel. Neuron A fires to B, B fires to C, C fires back to A, forever repeating the same cycle.',
+      'A circuit where current builds forever... or — until it breaches a threshold? In the brain, a synapse... the signal arcs, spikes, cascades — finally shattering its own cycle. So we are in a loop until we reach... what? Death? Whatever the "desired effect" is? We quit? We die? We get promoted? Anything — <em class="inline">anything</em> — to break the loop. But here is the thing: the loop won\'t change. We have to. This is why I was right earlier — in a stable loop, structure emerges. And we organise our entire lives around it.',
+      'But what is the purpose of said loop? To keep something — us — in it. As long as necessary. We are the same as our brains: looped through space and time, returning to the same place, processing vast amounts in our connections — giving our time and devotion to those we deem worthy, and ignoring those we don\'t. The whole thing rests on a single, fragile assumption: that we <em class="inline">choose</em>.',
+      'But whenever we do... it always feels one-sided, doesn\'t it? We didn\'t really have a choice. Did we? <em class="standalone">Or did the loop decide for us?</em>',
+      'Light follows darkness, darkness follows light. What is it that breaks us free? What if we step sideways — out of the loop entirely? Anything that breaks the flow is enough. And every loop ends with the same thing... learning. Becoming more than you were, by any means necessary. Learning... ascending.... ascension... opening your eyes and seeing... understanding... waking up... becoming... something more?',
+      '<em class="standalone cyan">Wake up.</em>',
+    ],
+    continueLabel: 'wake up',
+    next: 'waking-up',
+  },
+  {
+    id: 'waking-up',
+    speaker: { name: 'Cicero', glyph: '†' },
+    text: [
+      'The mist is rising — slowly, deliberately — from the obsidian landscape. Something fully strange, yet awfully familiar. As if you had been here before... in a dream you never quite finished.',
+      'Two main roads once crossed here. Travellers stopped to drink from the fountain — an obsidian basin at the heart of the crossroads, its water still crystal-clear. The traces of the living have long since worn away. Footprints eroded, carts dissolved into dust, voices swallowed by the fog. But the water remains. Pure. Patient.',
+      'The land did not decay. Only those who walked it. Now it waits — masterless — for a new soul. Someone willing to step into a new adventure. A new loop. Out of the frying pan and into the fire, as they say.',
+      'At least <em class="inline">this</em> loop is fast. The roads lead to the same place regardless of the traveller. But it is the one who chooses that carries the meaning. A highway is nothing without its wanderers. A crossroads is nothing without the souls who dare to cross to the other side.',
+      'So then — let us choose. Nothing simpler than that.',
+      '<em class="standalone">— Someone, somewhere.</em>',
+    ],
+    continueLabel: 'stand up',
+    continueIcon: '⛯',
+    next: 'stand-up',
+  },
+  {
+    id: 'stand-up',
+    speaker: null,
+    text: [
+      'You stand. Your legs hold — barely. The mist curls around your ankles like something alive.',
+      'A vast obsidian plain stretches in every direction. Two roads cross here, cutting through the dark glass like old scars. At their centre: a fountain. Black stone, carved with symbols you can\'t read. Water spills from it — clear, impossibly clean — pooling in a basin that no one has tended for what looks like centuries.',
+      'Somewhere to your left, a voice. The old man — still talking. Still philosophising. He hasn\'t stopped since you woke up. His words drift through the fog like smoke, half-heard, half-understood.',
+      'The air smells of nothing. Not clean, not foul. Just... absent. As if scent itself gave up on this place long ago.',
+    ],
+    continueLabel: 'look around',
+    continueIcon: '◎',
+    next: 'crossroads-choice',
+  },
+  {
+    id: 'crossroads-choice',
+    speaker: null,
+    text: [
+      'You take it in. The obsidian ground reflects the mist above like a dark mirror. Everything here feels suspended — waiting for you to move first.',
+      'Three things demand your attention.',
+    ],
+    choices: [
+      { icon: '◎', tint: 'cyan', label: 'Survey the landscape',
+        preview: 'Two roads. Endless obsidian. The mist hides more than it reveals — but if you look carefully, there are shapes out there. Structures. Maybe even movement.',
+        previewImg: 'ae-crossroads-wide.png',
+        mystery: true,
+        next: 'look-around' },
+      { icon: '†', tint: 'gold', label: 'Talk to the old man',
+        preview: 'He stands a few paces away, quill in hand, muttering to himself. A thick book rests open against his forearm. He knows you\'re awake. He hasn\'t looked up yet.',
+        previewImg: 'ae-cicero-close.png',
+        next: 'talk-cicero' },
+      { icon: '⊙', tint: 'ember', label: 'Examine the fountain',
+        preview: 'The obsidian basin is old — ancient. But the water is pristine. Objects glint beneath the surface. Someone left things here. Or something did.',
+        previewImg: 'ae-fountain-close.png',
+        next: 'examine-fountain' },
+    ],
+  },
+  {
+    id: 'look-around',
+    speaker: null,
+    text: [
+      'You look up — and the answer is right in front of you. A massive obelisk, carved from obsidian. Monstrous and immovable. It rises from the fountain like a black needle piercing the fog, its surface etched with spiralling symbols that catch no light.',
+      'From the top you would see everything. The roads, the horizon, whatever lies beyond this mist. It is the only sure vantage point — nothing else here comes close.',
+      'You could try to climb it. Or find another way up.',
+    ],
+    choices: [
+      { icon: '⊙', tint: 'gold', label: 'Climb the obelisk',
+        preview: 'A solid marble column — fifteen metres of carved stone. Risky, but from the top you would see everything. The only sure vantage point.',
+        previewImg: 'ae-obelisk-fountain.png',
+        next: 'climb-obelisk' },
+      { icon: '◎', tint: 'cyan', label: 'Search for another way up',
+        preview: 'Trees, boulders, maybe a ridge — something out there has to be tall enough. Safer than the obelisk... or there may not be anything at all.',
+        previewImg: 'ae-crossroads-wide.png',
+        mystery: true,
+        next: 'find-ridge' },
+    ],
+  },
+  {
+    id: 'climb-obelisk',
+    speaker: null,
+    text: [
+      'You step onto the fountain\'s edge and wade through the shallow water to the base of the obelisk. Cold seeps through your boots. The stone is slick, dark, featureless — until you run your fingers along it and find the first crack.',
+      'You climb. Slowly at first, testing each grip, each foothold. But the cracks are generous — deep enough to trust. Your confidence builds with every metre. The mist thins. The air sharpens. You can almost see over it.',
+      'Then — a flicker. Something moves in the corner of your eye. A shadow, shifting against the stone. You snap your head toward it and your hand slips on the wet surface.',
+      '<em class="standalone">What happens next is not entirely up to you.</em>',
+    ],
+    diceCheck: {
+      type: 'd20', dc: 10,
+      label: 'Athletics',
+      successNext: 'climb-success',
+      failNext: 'climb-fail-1',
+    },
+  },
+  {
+    id: 'climb-fail-1',
+    speaker: null,
+    text: [
+      'Your fingers scrape across the wet stone — and find nothing. The grip is gone. Your body tilts backward, slow at first, then all at once.',
+      'You fall. The mist swallows you for a heartbeat before the water catches you with a soft, merciful splash. The fountain basin is shallow but deep enough. Cold rushes through your clothes, your bones, your pride.',
+      'You stand up. Shake yourself off. Water drips from every part of you. The obelisk looms above — unmoved, unimpressed.',
+      'How do you proceed?',
+    ],
+    choices: [
+      { icon: '⊙', tint: 'gold', label: 'Try again',
+        preview: 'The obelisk is still there. The cracks haven\'t changed. Maybe you can find a better route this time.',
+        previewImg: 'ae-obelisk-fountain.png',
+        next: 'climb-attempt-2' },
+      { icon: '✕', tint: 'cyan', label: 'That\'s enough',
+        preview: 'You\'re soaked, cold, and no closer to the top. Maybe the answer isn\'t up there.',
+        previewImg: 'ae-crossroads-wide.png',
+        next: 'crossroads-choice' },
+    ],
+  },
+  {
+    id: 'climb-attempt-2',
+    speaker: null,
+    text: [
+      'You wade back through the fountain. Your palms are raw and wet — the stone remembers your last attempt, and so do your hands. The grooves that felt generous before now feel shallow. Uncooperative. As if the obelisk has <em class="inline">adjusted</em>.',
+      'This is the thing about choices: they leave marks. Not just on you — on the world around you. The stone is slicker because you made it slick. The carvings feel narrower because your fingers are swollen from the fall. Every decision reshapes the next one. The difficulty didn\'t change — <em class="inline">you</em> did.',
+      'You grit your teeth and climb. Higher this time, faster, before doubt can catch up. The wind bites harder up here. Your arms shake.',
+    ],
+    diceCheck: {
+      type: 'd20', dc: 15,
+      label: 'Athletics',
+      successNext: 'climb-success',
+      failNext: 'climb-fail-2',
+    },
+  },
+  {
+    id: 'climb-fail-2',
+    speaker: null,
+    text: [
+      'Your grip fails at the halfway point. The stone doesn\'t even pretend to hold you this time — it simply lets go. You slide, scraping skin and pride against the wet marble, and hit the water back-first.',
+      'The splash is louder this time. Or maybe it\'s quieter and you just feel it more. You float there for a moment, staring up at the peak dissolving into mist. It looks further away than it did before you started.',
+      'Your body is telling you to stop. Your arms are dead weight. Your fingers are bleeding. But there\'s something else — something stubborn, something <em class="inline">unreasonable</em> — that hasn\'t given up yet.',
+      'The obelisk has beaten you twice. If you go again, it won\'t be skill that gets you to the top. It\'ll be something else entirely.',
+    ],
+    choices: [
+      { icon: '⊙', tint: 'gold', label: 'One last time',
+        preview: 'Your body says no. Everything says no. But you\'re going anyway.',
+        previewImg: 'ae-obelisk-fountain.png',
+        next: 'climb-attempt-3' },
+      { icon: '✕', tint: 'cyan', label: 'Accept defeat',
+        preview: 'Twice is enough. The obelisk wins. You can still walk away.',
+        previewImg: 'ae-crossroads-wide.png',
+        next: 'crossroads-choice' },
+    ],
+  },
+  {
+    id: 'climb-attempt-3',
+    speaker: null,
+    text: [
+      'You don\'t think about it. If you think, you\'ll stop. You grab the stone with hands that can barely close and you <em class="inline">pull</em>.',
+      'The obelisk is different now. Not physically — the cracks are the same, the marble is the same. But it feels like it\'s watching. Like it\'s <em class="inline">waiting</em> to see what you do. Two failures have changed the equation. The difficulty isn\'t in the stone anymore. It\'s in you. In whether you have anything left that physics can\'t explain.',
+      'Your muscles scream. Your vision narrows. The wind doesn\'t howl — it <em class="inline">laughs</em>. Somewhere below, the fountain catches the last of the light.',
+      'This is not a test of strength. This is a test of something else.',
+    ],
+    diceCheck: {
+      type: 'd20', dc: 20,
+      label: 'Athletics',
+      successNext: 'climb-success',
+      failNext: 'climb-failed',
+    },
+  },
+  {
+    id: 'climb-success',
+    speaker: null,
+    text: [
+      'You pull yourself over the final edge. The wind stops. The mist falls away beneath you like a veil being lifted — and for the first time, you <em class="inline">see</em>.',
+      'An endless obsidian plain. In every direction — the same. The same dark glass, the same ancient fractures, the same silence. Wherever you look, wherever you turn, the answer is identical. There is no edge. No boundary. No end.',
+      'Here and there, soil has gathered in the cracks — blown in from nowhere, accumulated over aeons. Patches of earth where stubborn things grow. Bushes. Trees. Whole groves in places, dark-leaved and strange, clinging to pockets of dirt that have no business being here. Life — temporary, borrowed, growing on borrowed ground.',
+      'This is an ancient plane. Older than anything you have words for. It operates on rules you do not recognise, built by something you cannot name. It is not hostile. It is not welcoming. It is simply <em class="inline">alien</em>. And above all else — it is <em class="inline">old</em>.',
+      'You have seen enough. You climb back down — slowly, carefully — and return to the crossroads. The view stays with you. It will not leave easily.',
+    ],
+    continueLabel: 'return',
+    continueIcon: '↩',
+    next: 'crossroads-choice',
+  },
+  {
+    id: 'climb-failed',
+    speaker: null,
+    text: [
+      'You fall. The water catches you — for the third time. But this time you don\'t get up.',
+      'You lie in the basin. The water is warm now, or maybe you\'ve just stopped feeling the cold. Above you, the obelisk\'s peak disappears into the mist. Unreachable. Indifferent. It was never trying to stop you — it simply <em class="inline">is</em>, and you simply <em class="inline">aren\'t</em> enough.',
+      'Three chances. Three failures. Whatever sits at the top of that column — the view, the answers, the thing you needed to see — it stays hidden. The mist keeps its secrets. Some doors don\'t open on the third knock. Some doors don\'t open at all.',
+      'You drag yourself from the fountain. Water drains from your clothes in long, heavy streams. The crossroads waits — unchanged, unimpressed. As if nothing happened. As if you never tried.',
+    ],
+    continueLabel: 'give up',
+    continueIcon: '↩',
+    next: 'crossroads-choice',
+  },
+  // ── FOUNTAIN BRANCH ──
+  {
+    id: 'examine-fountain',
+    speaker: null,
+    text: [
+      'You walk to the fountain. Up close, the strangeness sharpens. The basin is carved from a single piece of obsidian — no seams, no joints, no mason\'s marks. The water pours from somewhere inside the obelisk\'s base, though there\'s no visible mechanism. It just... flows. As if it always has.',
+      'The water is crystal-clear. Not clean the way a mountain stream is clean — clean the way a vacuum is clean. There is nothing <em class="inline">in</em> it. No algae, no sediment, no life. The stones beneath it are ancient but unblemished. Not a single patch of moss. Not a single stain.',
+      'Around the fountain, the crossroads stretches in four directions. Remnants are scattered at the basin\'s edge — things people left behind. You kneel down for a closer look.',
+    ],
+    continueLabel: 'look closer',
+    continueIcon: '⊙',
+    next: 'fountain-close',
+  },
+  {
+    id: 'fountain-close',
+    speaker: null,
+    text: [
+      'Coins rest on the bottom of the basin — different sizes, different metals. Copper, silver, something darker. Some round, some square, some shaped like nothing you\'ve seen before. Wishes, thrown into a fountain where no one listens.',
+      'The water is impossibly still between the ripples. Not fresh because it\'s young — fresh because there is <em class="inline">nothing here to contaminate it</em>. No soil to cloud it. No insects to drown in it. It is sterile in a way that nature never is.',
+      'Around the basin: the remains of travellers. Cloth rotted to grey threads. Wooden crates collapsed into splinters — only the iron fittings remain, rusted into lace. A carved bone die, yellowed and cracked. A metal button. A stone bead, smooth and pale, threaded on nothing.',
+      'Small things. Personal things. Left by people who passed through and kept walking. Or people who stopped and never left. Nothing here will tell you which.',
+    ],
+    choices: [
+      { icon: '◎', tint: 'gold', label: 'Keep searching',
+        preview: 'There might be more here. The roads, the signs — something must explain this place.',
+        previewImg: 'ae-crossroads-wide.png',
+        next: 'roads-signs' },
+      { icon: '↩', tint: 'cyan', label: 'Move on',
+        preview: 'Coins and relics. Nothing that answers anything. Time to do something else.',
+        previewImg: 'ae-null-meridian.png',
+        next: 'crossroads-choice' },
+    ],
+  },
+  {
+    id: 'roads-signs',
+    speaker: null,
+    text: [
+      'You walk to the nearest road and follow it a few paces. Then the next. Then the third, the fourth. They are identical — the same width, the same obsidian surface, the same fog swallowing them whole within fifty metres.',
+      'But the signs are different. Each road has them — posts driven into cracks in the glass, made from stone, metal, rotting wood. The inscriptions are in languages you\'ve never seen. Some carved deep, some painted in pigments that have almost faded to nothing. Numbers beside words that might be names. Distances, maybe. Directions to places.',
+      'But as you study them, a feeling creeps in. An <em class="inline">intuition</em>. These distances are wrong. Not because the signs are lying — because the world has <em class="inline">moved</em>. Whatever these markers once pointed to has shifted, drifted, dissolved. The places they name are no longer where they were. They may no longer <em class="inline">be</em> at all.',
+      'You step back from the signs. Not from fear. From the quiet certainty that you are reading directions to a dead world. Signposts to nowhere.',
+    ],
+    choices: [
+      { icon: '◎', tint: 'gold', label: 'Keep searching',
+        preview: 'Something nags at you. There was a shape in the mist earlier — off to the side. Maybe worth checking.',
+        previewImg: 'ae-obelisk-fountain.png',
+        next: 'fountain-desk' },
+      { icon: '↩', tint: 'cyan', label: 'Move on',
+        preview: 'Dead signs pointing to dead places. You\'ve spent enough time here.',
+        previewImg: 'ae-null-meridian.png',
+        next: 'crossroads-choice' },
+    ],
+  },
+  {
+    id: 'fountain-desk',
+    speaker: null,
+    text: [
+      'A few paces from the fountain, half-swallowed by mist: the remains of a desk. Or a table. Something with legs, once. The wood has collapsed into itself — soft, dark, crumbling. But it was once a workstation. Someone sat here.',
+      'On top — pinned beneath a stone that might have been placed deliberately — two scrolls. Rolled tight, sealed with wax that cracked centuries ago. The parchment is brittle, damp, the colour of old bone. One wrong move and they\'ll disintegrate.',
+      'Whatever is written on them has survived this long. Whether it survives <em class="inline">you</em> is another question.',
+    ],
+    choices: [
+      { icon: '⊙', tint: 'gold', label: 'Examine the scrolls',
+        preview: 'They\'ve lasted this long. Maybe they\'ll hold together long enough to read. Maybe.',
+        previewImg: 'ae-obelisk-fountain.png',
+        next: 'scroll-check-1' },
+      { icon: '↩', tint: 'cyan', label: 'Leave them',
+        preview: 'Some things are better left undisturbed. These scrolls have been waiting long enough — they can keep waiting.',
+        previewImg: 'ae-null-meridian.png',
+        next: 'crossroads-choice' },
+    ],
+  },
+  {
+    id: 'scroll-check-1',
+    speaker: null,
+    text: [
+      'You reach for the first scroll. Your fingers hover — then close, gently, around the rolled parchment. It creaks. The wax seal flakes away like ash.',
+      'You begin to unroll it. Slowly. The edges are ragged, the surface spotted with damp. The ink beneath is faded but present — lines of text in a script you almost recognise. Almost.',
+    ],
+    diceCheck: {
+      type: 'd20', dc: 10,
+      rollType: 'fate roll',
+      label: 'Delicacy',
+      successNext: 'scroll-safe-1',
+      failNext: 'scroll-lost-1',
+    },
+  },
+  {
+    id: 'scroll-safe-1',
+    speaker: null,
+    text: [
+      'The parchment holds. The edges crumble, the corners dissolve, but the core survives — enough to read. You set it down carefully on the stone, weighting the corners with debris.',
+      'One down. The second scroll waits beside it — in worse condition. Darker, damper, more fragile. You reach for it.',
+    ],
+    diceCheck: {
+      type: 'd20', dc: 10,
+      rollType: 'fate roll',
+      label: 'Delicacy',
+      successNext: 'scroll-revelation',
+      failNext: 'scroll-revelation',
+    },
+  },
+  {
+    id: 'scroll-lost-1',
+    speaker: null,
+    text: [
+      'The parchment <em class="inline">sighs</em> — and comes apart in your hands. Not dramatically. Quietly. The fibres separate, the ink bleeds into nothing, and what was once a document becomes a handful of brown dust sifting through your fingers.',
+      'Gone. Whatever it said — gone.',
+      'One scroll left. The second. It looks worse than the first — darker, damper. But it\'s all you have now.',
+    ],
+    diceCheck: {
+      type: 'd20', dc: 10,
+      rollType: 'fate roll',
+      label: 'Delicacy',
+      successNext: 'scroll-revelation',
+      failNext: 'scrolls-dust',
+    },
+  },
+  {
+    id: 'scroll-revelation',
+    speaker: null,
+    text: [
+      'The surviving parchment yields its secrets — slowly, grudgingly, in fragments. The script is archaic but not alien. You can make out enough.',
+      'It\'s a ledger. Weapons orders — swords, pikes, crossbow bolts — in quantities that grow with every entry. Dates you can\'t parse, but the pattern is clear: <em class="inline">more, faster, urgent</em>. Beside each order, notes in a hurried hand. <em class="inline">"Forest thickening. Night patrols doubled. Road to Ashenmere no longer safe after dusk."</em>',
+      'The entries get shorter toward the bottom. Less formal. More afraid. <em class="inline">"Shipments delayed — third time this cycle. Eastern road compromised. Requesting reinforcements."</em>',
+      'And at the very bottom, in different ink — shakier, personal — a note. Not an order. A message. To a servant, perhaps. Or a friend.',
+      '<em class="standalone">"Send word to my son. Tell them to stay home. Do not let his mother leave the house after twilight. Lock everything if I am not back by dark."</em>',
+      'The message was never sent. The wax was never broken from the other side. No one folded it for travel. No one read it. Until now.',
+      'You set the parchment down. The wind doesn\'t touch it. Nothing here touches anything.',
+    ],
+    continueLabel: 'return',
+    continueIcon: '↩',
+    next: 'crossroads-choice',
+  },
+  {
+    id: 'scrolls-dust',
+    speaker: null,
+    text: [
+      'The second scroll follows the first. It doesn\'t even pretend to hold — the moment your fingers close, it exhales a puff of brown dust and collapses into nothing.',
+      'Both gone. Two documents that survived centuries of silence, undone by a single touch. Whatever was written on them — orders, letters, confessions, warnings — it is now dust on an obsidian floor, indistinguishable from the rest of this dead place.',
+      'You stare at the empty desk. At the stone that held them down. At your own hands, still powdered with the remains of someone\'s last words.',
+      'Some things are not meant to be found. Or maybe they were — just not by you. Not today.',
+    ],
+    continueLabel: 'return',
+    continueIcon: '↩',
+    next: 'crossroads-choice',
+  },
+  // ── CICERO BRANCH ──
+  {
+    id: 'talk-cicero',
+    speaker: null,
+    text: [
+      'You approach the old man. He stands a few paces from the fountain, slightly hunched, facing no particular direction. A heavy cloak drapes from his shoulders — the fabric is dark, unremarkable, the kind of thing you\'d forget the moment you looked away. There is nothing striking about him. Nothing that would make you look twice.',
+      'Except the quill. It catches the light — what little there is — and gleams. The tip is obsidian, honed to a needle point, black and glossy as the ground beneath your feet. It moves across the pages of a small, thick book bound in leather so dark it could be skin. He writes without looking up. Without pausing. As if the words arrive faster than his hand can follow.',
+      'The book itself is expensive — that much is clear. The binding is tight, the pages cream-coloured, the edges trimmed clean. It doesn\'t belong in this place. Neither does the quill. But the man holding them? He fits. He fits <em class="inline">perfectly</em> — as if the crossroads grew around him, or he grew out of it.',
+      'He hasn\'t acknowledged you. But he knows you\'re there. You\'re certain of it.',
+    ],
+    continueLabel: 'call out to him',
+    continueIcon: '†',
+    next: 'cicero-call-1',
+  },
+  {
+    id: 'cicero-call-1',
+    speaker: null,
+    text: [
+      'You open your mouth. A word — any word — it doesn\'t matter which. You say something. A greeting, maybe. A question. The shape of the sound leaves your lips and crosses the still air between you.',
+      'He stirs. Not a turn, not a look — more like a tremor. The quill pauses for half a heartbeat. His head tilts, barely, the way a sleeper shifts when a door opens in a distant room.',
+      'Then the quill resumes. The pages turn. He didn\'t hear you — or he did, and it wasn\'t enough to surface from wherever he is. He\'s not ignoring you. He\'s simply <em class="inline">not entirely here</em>. Like a man dreaming with his eyes open.',
+    ],
+    continueLabel: 'try again, louder',
+    continueIcon: '†',
+    next: 'cicero-call-2',
+  },
+  {
+    id: 'cicero-call-2',
+    speaker: null,
+    text: [
+      'You step closer. Raise your voice. Not a shout — but firm. Deliberate. The kind of voice you use when someone is looking through you and you need them to <em class="inline">stop</em>.',
+      'Nothing. The old man\'s quill doesn\'t even pause this time. His shadow falls on the obsidian in a way that seems too dark, too sharp — as if the light bends around him differently than around you. As if he is both here and somewhere else, and neither place has his full attention.',
+      'He is not deaf. He is not rude. He is simply <em class="inline">unreachable</em> — buried in whatever he\'s writing, lost in the pages the way a swimmer is lost beneath the surface. You could scream and he would not look up.',
+      'Perhaps a different approach.',
+    ],
+    continueLabel: 'wait and listen',
+    continueIcon: '◎',
+    next: 'cicero-listen',
+  },
+  {
+    id: 'cicero-listen',
+    speaker: null,
+    text: [
+      'You stop trying. You stand a few paces away, arms at your sides, and you wait. You watch the quill move. You listen to the scratch of obsidian on parchment. The mist drifts between you.',
+      'For a long time, there is nothing but that sound. Scratch. Turn. Scratch. The rhythm of someone working through something that has no end.',
+      'And then — so quietly you almost miss it — he speaks. Not to you. To the book. To himself. To something you can\'t see.',
+    ],
+    continueLabel: 'listen closer',
+    continueIcon: '◎',
+    next: 'cicero-mumble',
+  },
+  {
+    id: 'cicero-mumble',
+    speaker: { name: 'Cicero', glyph: '†' },
+    text: [
+      '"...but a promise is a promise. He has to honour it. <em class="inline">They</em> have to honour it. So that is what we must hope for. They <em class="inline">cannot</em> lie — this is known. Not to me. Not them. So here we are..."',
+      'A pause. The quill stops. He frowns at something on the page.',
+      '"...but for how much longer? Good stories don\'t keep you waiting — only me... but where am I? Hm..."',
+      'The quill resumes. The moment passes. Whatever window was open has closed again.',
+    ],
+    continueLabel: 'leave him be',
+    continueIcon: '↩',
+    next: 'cicero-leave',
+  },
+  {
+    id: 'cicero-leave',
+    speaker: null,
+    text: [
+      'A promise. Someone — or something — that <em class="inline">cannot lie</em>. An obligation that must be honoured. And the old man, here, waiting. Writing. For how long?',
+      'He\'s an interesting man. But he\'s not ready to talk — not yet. Whatever holds his attention is stronger than you. Stronger than this place, maybe.',
+      'You leave him to his pages. The quill scratches on behind you, steady as a heartbeat. He\'ll be here when you come back. You\'re sure of that much.',
+    ],
+    continueLabel: 'return',
+    continueIcon: '↩',
+    next: 'crossroads-choice',
+  },
+  // ── WANDER EXPLORE (fallback scout) ──
+  {
+    id: 'wander-explore',
+    speaker: null,
+    text: [
+      'You walk. No plan, no target, no urgency. Just one foot in front of the other, through the mist, across the obsidian.',
+      'You walk for a long time. The crossroads shrinks behind you, then disappears. The fountain\'s glow fades. There is nothing ahead and nothing behind — just the same dark glass, the same grey air, the same silence that has been here since before anything had a name.',
+      'And slowly — so slowly you almost miss it — the truth arrives. Not from above. Not from a vantage point. From the ground. From your feet. From the monotony itself.',
+      '<em class="inline">It\'s all the same.</em>',
+      'Every direction, every road, every crack in the obsidian — the same. The landscape doesn\'t hide its secret behind fog or height. It hides it in <em class="inline">plain sight</em>. There is nothing to see because there is nothing <em class="inline">different</em> to see. An infinite plane of ancient glass, repeating forever, older than thought, indifferent to exploration.',
+      'You didn\'t need to climb. You just needed to walk long enough to understand.',
+      'You turn around. The crossroads finds you again — or you find it. The fountain glows. The obelisk stands. Nothing has changed. But you have.',
+    ],
+    continueLabel: 'return',
+    continueIcon: '↩',
+    next: 'crossroads-choice',
+  },
+  // ── FIND RIDGE BRANCH ──
+  {
+    id: 'find-ridge',
+    speaker: null,
+    text: [
+      'You turn away from the obelisk and walk into the mist. Carefully. Slowly. Never straying so far that you lose sight of the fountain\'s faint glow behind you.',
+      'The landscape doesn\'t change. The same obsidian underfoot, the same grey nothing in every direction. You walk for what feels like minutes but could be seconds — distance is meaningless here. The fog eats depth, swallows scale. Everything is always the same distance away: <em class="inline">too far to see</em>.',
+      'You\'re about to turn back when you spot it. A shape in the mist — solid, dark, not obsidian. A tree. Thick-trunked, dark-leaved, growing from a crack where soil has gathered over centuries. And at its base: a boulder. Large enough to stand on. High enough that you might — <em class="inline">just might</em> — reach the lowest branches.',
+      'It\'s not the obelisk. But it\'s something.',
+    ],
+    continueLabel: 'approach the tree',
+    continueIcon: '◎',
+    next: 'tree-climb',
+  },
+  {
+    id: 'tree-climb',
+    speaker: null,
+    text: [
+      'You climb the boulder. The stone is rough — easier than obsidian, at least. From the top, the lowest branch hangs about a metre above your head. Thick as your thigh, dark and slick with condensation.',
+      'The tree is strange. Its bark is almost black, grooved in patterns that look deliberate. The leaves are broad, heavy, and they don\'t move in the wind — because there is no wind down here. Everything is still.',
+      'You coil your legs and jump. Your fingers brush the bark — wet, cold, uncertain. If the branch holds, you\'re up. If it doesn\'t...',
+    ],
+    diceCheck: {
+      type: 'd20', dc: 15,
+      label: 'Athletics',
+      successNext: 'tree-success',
+      failNext: 'tree-failed',
+    },
+  },
+  {
+    id: 'tree-success',
+    speaker: null,
+    text: [
+      'The branch holds. You swing, grip, pull — and you\'re up. The bark bites into your palms but it\'s solid. You climb higher, branch by branch, until the canopy opens and your head breaks through the fog.',
+      'You see... <em class="inline">something</em>. The roads below — four dark lines converging on the crossroads, stretching outward into grey. The fountain, small from here, still catching light. The obelisk, a black needle rising higher than you\'ll ever get from this tree.',
+      'But the horizon — the horizon stays hidden. The fog is thinner up here, not gone. You can see the <em class="inline">shape</em> of the world — vast, flat, endless — but not its edges. Not its truth. You know there is more out there. You just can\'t see it from here.',
+      'A glimpse. Not a view. But more than you had before.',
+      'You climb down carefully. The branches creak but hold. The boulder accepts you back without comment.',
+    ],
+    continueLabel: 'climb down',
+    continueIcon: '↩',
+    next: 'crossroads-choice',
+  },
+  {
+    id: 'tree-failed',
+    speaker: null,
+    text: [
+      'Your fingers close around the branch — and it <em class="inline">cracks</em>. Not a slow groan, not a warning. A sharp, wet snap that echoes through the fog like a gunshot.',
+      'The branch comes away in your hands. You fall — not far, just off the boulder — but you land hard on the obsidian. The broken branch lands beside you, trailing splinters and dark sap.',
+      'You look up. Where the branch was, a pale wound in the bark. The remaining branches are higher now — impossibly so. Even if you climbed the boulder again, there\'s nothing to grab. The tree is done with you.',
+      'This path is closed. Whatever was up there — you won\'t be seeing it from this tree.',
+    ],
+    continueLabel: 'return',
+    continueIcon: '↩',
+    next: 'crossroads-choice',
+  },
+];
 
-    // ── A1 BEAT SYSTEM ──
-    const a1Beats = {
-      intro: {
-        heading: 'The Null Meridian', pip: 0,
-        text: `You surface slowly.<br><br>
-               Fog first — thick, cold, the kind that doesn\u2019t move so much as it decides to let you through.
-               Then stone beneath you, obsidian-dark and perfectly still, a platform that seems to have
-               always been here, waiting for exactly this.<br><br>
-               The mist curls at your ankles. Around you, shapes resolve out of the grey —
-               figures that suggest people the way a shadow suggests a hand.
-               They don\u2019t speak. They don\u2019t move. They simply stand, the way things stand
-               when they have nowhere left to go.<br><br>
-               Above: nothing. The sky, if it deserves the word, is the color of a held breath.<br><br>
-               <em>You are somewhere. You are sure of that much.</em>`,
-        choices: [
-          { label: 'Continue', cls: 'primary', next: 'choose' }
-        ]
-      },
-      choose: {
-        heading: 'The platform waits.', pip: 1,
-        text: `The platform waits. The shapes stand. The silence is patient.<br><br>
-               <em>Whatever comes next starts with you.</em>`,
-        choices: [
-          { label: 'Step forward.',   type: 'think', next: 'forward' },
-          { label: 'Look around.',    type: 'think', next: 'look' },
-          { label: 'Search inward.',  type: 'think', next: 'inward' }
-        ]
-      },
+let currentFrameIdx = 0;
+const visitedFrames = new Set();
 
-      /* ── SEARCH INWARD branch ── */
-      inward: {
-        heading: 'Searching inward\u2026', pip: 2,
-        text: `You stop. The fog, the shapes, the silence — you turn away from all of it.<br><br>
-               You close whatever counts as eyes. Somewhere underneath the nothing, something has to still be yours.<br><br>
-               <em>You reach inward. Three threads hang in the dark.</em>`,
-        choices: [
-          { label: 'The last thing before\u2014',  type: 'think', next: 'inward_memory' },
-          { label: 'Look down. What am I?',         type: 'think', next: 'inward_body' },
-          { label: 'Try something. Reach.',          type: 'think', next: 'inward_power' }
-        ]
-      },
-      inward_memory: {
-        heading: 'The last thing before\u2014', pip: 2,
-        text: `A face. Up close — too close, like seen mid-embrace. A smile, or tears. You can\u2019t tell. But familiar. The truest thing you ever saw.<br><br>
-               A room. A wall the colour you know. Light that was always there. A shelf, a bed, something you held before you fell asleep.<br><br>
-               Hands — your hands — working. The motion automatic. Life.<br><br>
-               Then the light changes. Everyone looks up. Helicopters pull across overhead so low the water trembles in the glass. Armoured vehicles in the streets. Someone crying in the corridor. The newsreader\u2019s face like someone who doesn\u2019t believe what they\u2019re reading.<br><br>
-               <em>Then — nothing. The fog takes it.</em>`,
-        choices: [
-          { label: 'Look down. What am I?',  type: 'think', next: 'inward_body' },
-          { label: 'Wait.',                   type: 'think', next: 'wait' }
-        ]
-      },
-      inward_body: {
-        heading: 'Your form', pip: 2,
-        text: `Hands. You have hands — or something that wants to count as hands. You raise them and the outline trembles, like a road surface in heat haze.<br><br>
-               For a moment they come into focus. Strong hands, worker\u2019s hands — you know the calluses, the grain of the skin. Yours. Surely.<br><br>
-               Then others. Longer, darker. Or slimmer, younger — a version you wanted? One you feared?<br><br>
-               You run a hand across your face. There is a face. Bridge of nose, jawline, eye socket — but the shape slides away before you grasp it. Three faces layered over each other: who you were, who you wanted to be, and something third that doesn\u2019t recognise you.<br><br>
-               <em>You are a soul. What remains when everything else is taken off.</em>`,
-        choices: [
-          { label: 'The last thing before\u2014',  type: 'think', next: 'inward_memory' },
-          { label: 'Wait.',                          type: 'think', next: 'wait' }
-        ]
-      },
-      inward_power: {
-        heading: 'Something deeper', pip: 2,
-        text: `You reach for something deeper. Not memory, not form — <em>force.</em><br><br>
-               Something gathers. Words, sigils, muscle memory — a current rising from wherever power used to live in you.<br><br>
-               A flash: light, sparks, the outline of something sharp and bright behind your knuckles.<br><br>
-               Then it collapses. Like a circuit with no source. The shape fades. The warmth drains.<br><br>
-               <em>Whatever fuelled that — it isn\u2019t connected here.</em>`,
-        choices: [
-          { label: 'The last thing before\u2014',  type: 'think', next: 'inward_memory' },
-          { label: 'Wait.',                          type: 'think', next: 'wait' }
-        ]
-      },
+/* ── render engine ── */
+function renderFrame(idx) {
+  const f = frames[idx];
+  if (!f) return;
+  currentFrameIdx = idx;
+  visitedFrames.add(f.id);
 
-      /* ── STEP FORWARD branch ── */
-      forward: {
-        heading: 'The nearest shape', pip: 2,
-        text: `The stone is cool beneath what passes for feet. The nearest shape stands a few paces away, half-turned, its outline flickering like a candle behind glass.<br><br>
-               <em>You take a step toward it.</em>`,
-        choices: [
-          { label: 'Reach out.',              type: 'think', next: 'forward_reach' },
-          { label: 'Speak.',                  type: 'think', next: 'forward_speak' },
-          { label: 'Search inward instead.',  type: 'think', next: 'inward' }
-        ]
-      },
-      forward_reach: {
-        heading: 'Contact', pip: 2,
-        text: `Your hand passes through. Not a wall, not resistance \u2014 <em>nothing.</em> The shape ripples where your fingers cross it, the way a reflection breaks in disturbed water.<br><br>
-               For a half-second you feel warmth. A pulse. Something that was alive, recently, and still hasn\u2019t accepted the alternative.<br><br>
-               Then the shape settles. It stands the way it stood before. It does not acknowledge you.<br><br>
-               <em>You are the same kind of thing. You understand this now.</em>`,
-        choices: [
-          { label: 'Search inward.',  type: 'think', next: 'inward' },
-          { label: 'Wait.',           type: 'think', next: 'wait' }
-        ]
-      },
-      forward_speak: {
-        heading: 'Your voice', pip: 2,
-        text: `You open your mouth. The word comes out flat, muffled, like speaking into packed wool.<br><br>
-               \u201CHello.\u201D<br><br>
-               The sound travels nowhere. It doesn\u2019t echo, doesn\u2019t fade \u2014 it simply stops, as if the air swallowed it mid-flight.<br><br>
-               The nearest shape turns slightly. Tilts. There is something where a face should be, but it is all suggestion. A sketch of attention.<br><br>
-               <em>It heard you. It has nothing to say back.</em>`,
-        choices: [
-          { label: 'Search inward.',  type: 'think', next: 'inward' },
-          { label: 'Wait.',           type: 'think', next: 'wait' }
-        ]
-      },
+  // collection unlocks
+  const unlocks = {
+    'climb-success': 'panorama-void',
+    'tree-success': 'glimpse-fog',
+    'wander-explore': 'panorama-void',
+    'scroll-revelation': 'unsent-letter',
+  };
+  if (unlocks[f.id]) unlockCollection(unlocks[f.id]);
 
-      /* ── LOOK AROUND branch ── */
-      look: {
-        heading: 'The platform', pip: 2,
-        text: `You stay still. The platform resolves: raw stone, no railings, floating in featureless black. A thin red line traces the rim like wire heated to a glow.<br><br>
-               <em>Seven shapes. Maybe eight. The ones at the edge blur where the mist thickens.</em>`,
-        choices: [
-          { label: 'Walk to the rim.',  type: 'think', next: 'look_rim' },
-          { label: 'Study the shapes.', type: 'think', next: 'look_shapes' },
-          { label: 'Search inward.',    type: 'think', next: 'inward' }
-        ]
-      },
-      look_rim: {
-        heading: 'The edge', pip: 2,
-        text: `You walk toward the edge. The red line grows brighter as you approach \u2014 not hot, not warning, just <em>present.</em> Marking where something ends and something else begins.<br><br>
-               You step past it.<br><br>
-               The fog swallows you for three heartbeats. Then \u2014 stone beneath your feet again. The centre of the platform. The shapes around you, exactly where they were.<br><br>
-               <em>The space loops. There is no off.</em>`,
-        choices: [
-          { label: 'Study the shapes.',  type: 'think', next: 'look_shapes' },
-          { label: 'Search inward.',     type: 'think', next: 'inward' },
-          { label: 'Wait.',              type: 'think', next: 'wait' }
-        ]
-      },
-      look_shapes: {
-        heading: 'The others', pip: 2,
-        text: `You count them properly this time. Eight. Each one a different size, a different posture \u2014 but all made of the same uncertain material. Smoke given just enough weight to stand.<br><br>
-               None of them look at each other. None of them try to leave.<br><br>
-               One is smaller than the rest. It stands perfectly still, arms at its sides, chin tilted up as if it was looking at something when it arrived and hasn\u2019t stopped.<br><br>
-               <em>You were like this too, a moment ago. Before you decided to move.</em>`,
-        choices: [
-          { label: 'Search inward.',  type: 'think', next: 'inward' },
-          { label: 'Wait.',           type: 'think', next: 'wait' }
-        ]
-      },
+  // dialogue inner
+  const inner = document.getElementById('dialogue-inner');
+  let html = '';
 
-      /* ── CONVERGENCE ── */
-      wait: {
-        heading: 'Something moves.', pip: 3,
-        text: `You let it go.<br><br>
-               The fog doesn\u2019t lift. The silence doesn\u2019t break.<br><br>
-               And then — somewhere in the dark, just beyond the edge of the platform —<br>
-               <em>something moves.</em>`,
-        choices: [
-          { label: '\u2192 Continue', cls: 'primary', next: '__next__' }
-        ]
-      }
-    };
+  // speaker row (ha van)
+  if (f.speaker) {
+    html += `<div class="ae-sf-speaker-row">
+      <span class="ae-sf-speaker-glyph">${f.speaker.glyph}</span>
+      <span class="ae-sf-speaker-name">${f.speaker.name}</span>
+      <div class="ae-sf-speaker-line"></div>
+    </div>`;
+  }
 
-    // ── A1 UI FUNCTIONS ──
-    const a1 = {
-      heading:  document.getElementById('a1-heading'),
-      text:     document.getElementById('a1-text'),
-      choices:  document.getElementById('a1-choices'),
-      body:     document.getElementById('a1-body'),
-      pips:     document.getElementById('a1-pips'),
-    };
-    let a1MaxPip = 0;
+  // text paragraphs
+  html += '<p class="ae-sf-text">' + f.text.join('<br><br>') + '</p>';
+  inner.innerHTML = html;
 
-    function a1UpdatePips(pip) {
-      if (pip > a1MaxPip) a1MaxPip = pip;
-      const dots = a1.pips.querySelectorAll('.scene-pip');
-      dots.forEach((d, i) => {
-        d.classList.remove('active', 'visited');
-        if (i === pip) d.classList.add('active');
-        else if (i < a1MaxPip) d.classList.add('visited');
-      });
-    }
+  // bottom panel
+  const panel = document.querySelector('.ae-bottom-panel');
+  const contText = document.getElementById('continue-text');
+  const choicesRow = document.getElementById('choices-row');
 
-    function a1ShowBeat(beatId) {
-      const beat = a1Beats[beatId];
-      if (!beat) return;
+  // reset panel modes
+  panel.classList.remove('is-narrative', 'is-dice');
 
-      // update header + pips
-      a1.heading.textContent = beat.heading;
-      a1UpdatePips(beat.pip);
+  // dice overlay on left panel
+  const diceOverlay = document.getElementById('dice-overlay');
 
-      // fade out current content
-      a1.text.classList.remove('visible');
-      a1.choices.classList.remove('visible');
-
-      setTimeout(() => {
-        // set text
-        a1.text.innerHTML = beat.text;
-
-        // scroll to top
-        a1.body.scrollTop = 0;
-
-        // fade in text
-        a1.text.classList.add('visible');
-
-        // render card carousel after reading delay
-        setTimeout(() => {
-          renderCarousel(beat.choices, a1.choices);
-          a1.choices.classList.add('visible');
-        }, 600);
-      }, 300);
-    }
-
-    function a1Act(next) {
-      if (next === '__next__') { goTo(2); return; }
-      // fade out, then show new beat
-      a1.text.classList.remove('visible');
-      a1.choices.classList.remove('visible');
-      setTimeout(() => a1ShowBeat(next), 350);
-    }
-
-    // open when A1 becomes active
-    const origGoTo = goTo;
-    goTo = function(n) {
-      origGoTo(n);
-      if (n === 1) {
-        // reset
-        document.querySelector('.scene-layout').classList.remove('fullscreen');
-        document.getElementById('a1-expand').textContent = '⛶';
-        a1.text.classList.remove('visible');
-        a1.choices.classList.remove('visible');
-        a1.choices.innerHTML = '';
-        a1.heading.textContent = 'The Null Meridian';
-        a1MaxPip = 0;
-        a1UpdatePips(0);
-        setTimeout(() => a1ShowBeat('intro'), 400);
-      }
-    };
-
-    // keyboard navigation — carousel on scene slides, slide nav elsewhere
-    document.addEventListener('keydown', e => {
-      const isScene = slides[currentSlide] && slides[currentSlide].querySelector('.scene-layout');
-      if (isScene) {
-        if (e.key === 'ArrowRight') { e.preventDefault(); carouselNav(1); }
-        if (e.key === 'ArrowLeft')  { e.preventDefault(); carouselNav(-1); }
-        if (e.key === ' ' || e.key === 'Enter') {
-          e.preventDefault();
-          const c = carouselChoices[carouselIdx];
-          if (c) a1Act(c.next);
-        }
+  if (f.diceCheck) {
+    // dice mode — bottom panel
+    panel.classList.add('is-dice');
+    document.getElementById('dice-label').textContent = f.diceCheck.rollType || 'fate roll';
+    document.getElementById('dice-dc-tag').textContent = 'DC: ' + f.diceCheck.dc;
+    document.getElementById('dice-roll-btn').style.display = 'flex';
+    // reset outcome buttons to locked
+    ['dice-out-succeed','dice-out-retry','dice-out-giveup'].forEach(id => {
+      const el = document.getElementById(id);
+      el.className = 'ae-dice-out-btn locked';
+    });
+    document.getElementById('dice-out-retry-text').textContent = f.diceCheck.failLabel || 'try again';
+    // dice overlay — left panel
+    diceOverlay.classList.add('active');
+    document.getElementById('dice-ov-label').textContent = f.diceCheck.label || 'Skill Check';
+    document.getElementById('dice-ov-dc').textContent = 'DC ' + f.diceCheck.dc;
+    const d20num = document.getElementById('d20-number');
+    d20num.textContent = 'd20';
+    d20num.className = 'ae-d20-number';
+    const d20svg = document.getElementById('d20-3d');
+    d20svg.className = 'ae-d20-3d';
+    d20svg.style.color = 'var(--gold)';
+    const ovResult = document.getElementById('dice-ov-result');
+    ovResult.textContent = '';
+    ovResult.className = 'ae-dice-overlay-result';
+    window._currentDice = f.diceCheck;
+    window._diceSuccessNext = f.diceCheck.successNext;
+    window._diceFailNext = f.diceCheck.failNext;
+  } else if (f.continueLabel) {
+    diceOverlay.classList.remove('active');
+    // narrative mode: continue gomb
+    panel.classList.add('is-narrative');
+    contText.textContent = f.continueLabel;
+    document.getElementById('continue-arrow').textContent = f.continueIcon || '▶';
+  } else if (f.choices) {
+    // choice mode: gombok
+    diceOverlay.classList.remove('active');
+    // dynamic choices for look-around when both scout paths exhausted
+    let choices = f.choices;
+    if (f.id === 'look-around') {
+      const climbDone = visitedFrames.has('climb-obelisk');
+      const treeDone = visitedFrames.has('tree-climb');
+      if (climbDone && treeDone && !window._scoutDone) {
+        // both paths tried and failed — offer wander or give up
+        choices = [
+          { icon: '◎', tint: 'gold', label: 'Take your time. Walk.',
+            preview: 'No shortcuts. No climbing. Just walk until the fog gives up its secrets — or until you understand that it already has.',
+            previewImg: 'ae-crossroads-wide.png',
+            next: 'wander-explore' },
+          { icon: '✕', tint: 'cyan', label: 'Give up. You\'ve seen enough.',
+            preview: 'You don\'t need the view. Whatever is out there — it can wait. Or it can stay hidden forever.',
+            previewImg: 'ae-null-meridian.png',
+            next: 'crossroads-choice' },
+        ];
       } else {
-        if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); goTo(currentSlide + 1); }
-        if (e.key === 'ArrowLeft')                    { e.preventDefault(); goTo(currentSlide - 1); }
+        // filter out exhausted paths
+        choices = f.choices.filter(c => {
+          if (c.next === 'climb-obelisk' && climbDone) return false;
+          if (c.next === 'find-ridge' && treeDone) return false;
+          return true;
+        });
       }
-    });
+    }
+    choicesRow.innerHTML = choices.map(c => {
+      const isMystery = c.mystery && !window._scoutDone;
+      return `<div class="ae-choice-btn" tabindex="0" role="button"
+           data-icon="${c.icon}" data-tint="${c.tint}"
+           data-preview-img="${c.previewImg || 'ae-null-meridian.png'}"
+           data-preview-label="${c.label}"
+           data-preview-text="${c.preview}"
+           data-mystery="${isMystery}"
+           data-next="${c.next}">
+        <span class="ae-cb-icon ae-cb-icon--${c.tint}">${c.icon}</span>
+        <span class="ae-cb-text">${c.label}</span>
+      </div>`;
+    }).join('');
+    initChoiceEvents();
+  }
 
-    // touch / swipe — don't hijack scroll inside .d-card
-    let touchStartX = 0, touchStartY = 0;
-    document.addEventListener('touchstart', e => {
-      touchStartX = e.touches[0].clientX;
-      touchStartY = e.touches[0].clientY;
-    }, { passive: true });
-    document.addEventListener('touchend', e => {
-      const dx = e.changedTouches[0].clientX - touchStartX;
-      const dy = e.changedTouches[0].clientY - touchStartY;
-      // only swipe if mostly horizontal and not inside a scrollable card
-      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
-        if (!e.target.closest('.scene-body')) {
-          goTo(currentSlide + (dx < 0 ? 1 : -1));
-        }
+  // scene frame dialogue módba
+  document.getElementById('scene-frame').classList.add('is-dialogue');
+}
+
+function advanceScene() {
+  const f = frames[currentFrameIdx];
+  if (!f) return;
+  // track completed branches
+  if (f.id === 'climb-success' || f.id === 'tree-success' || f.id === 'wander-explore') window._scoutDone = true;
+  if (f.next) {
+    const nextIdx = frames.findIndex(fr => fr.id === f.next);
+    if (nextIdx >= 0) { renderFrame(nextIdx); return; }
+  }
+  // fallback: choice mode ha nincs next
+  document.querySelector('.ae-bottom-panel').classList.remove('is-narrative');
+}
+
+function rollDice() {
+  const dice = window._currentDice;
+  if (!dice) return;
+  const btn = document.getElementById('dice-roll-btn');
+  // overlay elements
+  const d20num = document.getElementById('d20-number');
+  const d20svg = document.getElementById('d20-3d');
+  const ovResult = document.getElementById('dice-ov-result');
+
+  btn.style.display = 'none';
+  d20num.classList.add('rolling');
+  d20svg.classList.add('rolling');
+
+  // store targets for diceAdvance
+  window._diceSuccessNext = dice.successNext;
+  window._diceFailNext = dice.failNext;
+
+  // animate: flash random numbers for 1.2s
+  let ticks = 0;
+  const interval = setInterval(() => {
+    const n = Math.floor(Math.random() * 20) + 1;
+    d20num.textContent = n;
+    ticks++;
+    if (ticks > 15) {
+      clearInterval(interval);
+      const roll = Math.floor(Math.random() * 20) + 1;
+      d20num.textContent = roll;
+      d20num.classList.remove('rolling');
+      d20svg.classList.remove('rolling');
+      const success = roll >= dice.dc;
+      const cls = success ? 'success' : 'failed';
+      d20num.classList.add(cls);
+      d20svg.classList.add(cls);
+      d20svg.style.color = success ? '#5cc85c' : 'var(--ember)';
+      const txt = success ? (roll === 20 ? 'NAT 20!' : 'SUCCESS') : 'FAILED';
+      ovResult.textContent = txt;
+      ovResult.className = 'ae-dice-overlay-result show ' + cls;
+      // unlock outcome buttons on bottom panel
+      if (success) {
+        const btn = document.getElementById('dice-out-succeed');
+        btn.className = 'ae-dice-out-btn unlocked is-succeed';
+      } else {
+        const retryBtn = document.getElementById('dice-out-retry');
+        retryBtn.className = 'ae-dice-out-btn unlocked is-fail';
+        const giveupBtn = document.getElementById('dice-out-giveup');
+        giveupBtn.className = 'ae-dice-out-btn unlocked is-giveup';
       }
-    });
+    }
+  }, 80);
+}
 
-    updateNav();
-  </script>
+function diceAdvance(type) {
+  let nextId;
+  if (type === 'succeed') nextId = window._diceSuccessNext;
+  else if (type === 'retry') nextId = window._diceFailNext;
+  else if (type === 'giveup') nextId = 'crossroads-choice'; // bail out to hub
+  if (!nextId) return;
+  window._diceSuccessNext = null;
+  window._diceFailNext = null;
+  const nextIdx = frames.findIndex(fr => fr.id === nextId);
+  if (nextIdx >= 0) renderFrame(nextIdx);
+  else {
+    const inner = document.getElementById('dialogue-inner');
+    inner.innerHTML = '<p class="ae-sf-text" style="opacity:.4;text-align:center">[ scene not yet written ]</p>';
+  }
+}
+
+function chooseOption(nextId) {
+  const nextIdx = frames.findIndex(fr => fr.id === nextId);
+  if (nextIdx >= 0) { renderFrame(nextIdx); return; }
+  // frame még nem létezik — placeholder
+  const inner = document.getElementById('dialogue-inner');
+  inner.innerHTML = '<p class="ae-sf-text" style="opacity:.4;text-align:center">[ scene not yet written ]</p>';
+}
+
+function toggleScene() {
+  document.getElementById('scene-frame').classList.toggle('is-dialogue');
+}
+
+function toggleCleanView() {
+  document.querySelector('.ae-img-panel').classList.toggle('clean-view');
+}
+
+function toggleSceneCleanView() {
+  document.getElementById('scene-frame').classList.toggle('clean-view');
+}
+
+(function initParticles() {
+  const container = document.querySelector('.ae-particles');
+  if (!container) return;
+  const anims = ['ae-fall-a','ae-fall-b','ae-fall-c'];
+  // ash color palette: cool grey → warm grey → dusty amber → ember orange-red
+  const ashColors = [
+    'rgba(160,152,142,.70)',  // cool grey ash
+    'rgba(178,168,155,.68)',  // warm grey
+    'rgba(195,182,165,.72)',  // dusty warm
+    'rgba(195,182,165,.72)',  // dusty warm (weighted)
+    'rgba(178,168,155,.68)',  // warm grey (weighted)
+    'rgba(160,152,142,.70)',  // cool grey (weighted)
+    'rgba(210,175,110,.65)',  // dusty amber — fresh-fallen hot ash
+    'rgba(200,155, 90,.60)',  // golden amber
+    'rgba(220,130, 70,.55)',  // warm ember glow
+    'rgba(225,105, 60,.50)',  // cinder orange-red
+  ];
+  for (let i = 0; i < 28; i++) {
+    const p   = document.createElement('span');
+    p.className = 'ae-p';
+    const dur  = 12 + Math.random() * 10;
+    const w    = (3 + Math.random() * 4).toFixed(1);
+    const h    = (parseFloat(w) * (0.35 + Math.random() * 0.35)).toFixed(1);
+    const anim = anims[Math.floor(Math.random() * 3)];
+    const r1 = Math.floor(Math.random()*40+20);
+    const r2 = Math.floor(Math.random()*20+5);
+    const r3 = Math.floor(Math.random()*40+20);
+    const r4 = Math.floor(Math.random()*20+5);
+    const col = ashColors[Math.floor(Math.random() * ashColors.length)];
+    p.style.cssText = [
+      `left:${(Math.random()*95).toFixed(1)}%`,
+      `width:${w}px`,
+      `height:${h}px`,
+      `background:${col}`,
+      `border-radius:${r1}% ${r2}% ${r3}% ${r4}%`,
+      `filter:blur(${(0.3+Math.random()*0.5).toFixed(1)}px)`,
+      `animation-name:${anim}`,
+      `animation-duration:${dur.toFixed(1)}s`,
+      `animation-delay:-${(Math.random()*dur).toFixed(1)}s`,
+    ].join(';');
+    container.appendChild(p);
+  }
+})();
+
+const previewTints = {
+  ember:  'rgba(255,123,92,.22)',
+  cyan:   'rgba(40,189,216,.16)',
+  gold:   'rgba(201,156,90,.16)',
+  purple: 'rgba(163,139,207,.18)',
+};
+const previewIconColors = {
+  ember:  'var(--ember)',
+  cyan:   'var(--cyan)',
+  gold:   'var(--gold)',
+  purple: 'var(--purple2)',
+};
+
+function initChoiceEvents() {
+  const frame    = document.getElementById('scene-frame');
+  const prevImg  = document.getElementById('sf-prev-img');
+  const prevTint = document.getElementById('sf-prev-tint');
+  const prevIcon = document.getElementById('sf-prev-icon');
+  const prevLbl  = document.getElementById('sf-prev-label');
+  const prevTxt  = document.getElementById('sf-prev-text');
+
+  function showPreview(btn) {
+    const tint = btn.dataset.tint || 'gold';
+    const preview = document.getElementById('sf-preview');
+    prevImg.src              = btn.dataset.previewImg || '';
+    prevTint.style.background = previewTints[tint] || previewTints.gold;
+    prevIcon.textContent     = btn.dataset.icon || '▶';
+    prevIcon.style.color     = previewIconColors[tint] || previewIconColors.gold;
+    prevLbl.textContent      = btn.dataset.previewLabel || '';
+    prevTxt.textContent      = btn.dataset.previewText || '';
+    preview.classList.toggle('is-mystery', btn.dataset.mystery === 'true');
+    frame.classList.add('is-preview');
+  }
+
+  function hidePreview() {
+    frame.classList.remove('is-preview');
+  }
+
+  document.querySelectorAll('.ae-choice-btn').forEach(btn => {
+    btn.addEventListener('mouseenter', () => showPreview(btn));
+    btn.addEventListener('mouseleave', hidePreview);
+    btn.addEventListener('focus',      () => showPreview(btn));
+    btn.addEventListener('blur',       hidePreview);
+    btn.addEventListener('click',      () => chooseOption(btn.dataset.next));
+  });
+}
+
+// init first frame
+renderCollection();
+renderFrame(0);
+</script>
 </body>
 </html>
