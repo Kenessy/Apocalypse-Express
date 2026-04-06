@@ -587,13 +587,35 @@ html, body {
 .ae-coll-card.locked {
   opacity: .40; pointer-events: none;
 }
+.ae-coll-card-img-wrap {
+  position: relative; overflow: hidden;
+}
 .ae-coll-card-img {
   width: 100%; aspect-ratio: 16/9;
   object-fit: cover; display: block;
   filter: brightness(.85);
+  transition: filter .3s;
+}
+.ae-coll-card:hover .ae-coll-card-img {
+  filter: brightness(.35);
+}
+.ae-coll-card-img-overlay {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  padding: 12px 16px; text-align: center;
+  opacity: 0; transition: opacity .3s;
+}
+.ae-coll-card:hover .ae-coll-card-img-overlay { opacity: 1; }
+.ae-coll-card-img-overlay-text {
+  font: 400 var(--fs-caption)/1.6 'IBM Plex Mono';
+  color: var(--gold2); letter-spacing: .03em;
+  text-shadow: 0 1px 6px rgba(0,0,0,.60);
 }
 .ae-coll-card.locked .ae-coll-card-img {
   filter: brightness(.15) grayscale(1);
+}
+.ae-coll-card.locked:hover .ae-coll-card-img {
+  filter: brightness(.10) grayscale(1);
 }
 .ae-coll-card-body { padding: 10px 12px; }
 .ae-coll-card-title {
@@ -1667,6 +1689,7 @@ const collection = [
     title: 'The Infinite Plane',
     img: 'ae-crossroads-wide.png',
     desc: 'An endless obsidian plain — inconceivably ancient. No edge, no boundary, no end. Patches of borrowed earth where alien life clings to cracks in the glass. A landscape older than language, operating on rules no one alive can name.',
+    lore: 'An infinite obsidian void stretching in every direction. The same fractured glass, the same silence, repeating forever. Soil gathers in the cracks — bushes, trees, whole forests grow on borrowed ground. Everything here is temporary except the plane itself. It is older than anything you have words for.',
     hint: 'Climb the obelisk at the crossroads.',
     unlocked: false,
   },
@@ -1675,6 +1698,7 @@ const collection = [
     title: 'The Obelisk',
     img: 'ae-obelisk-fountain.png',
     desc: 'A monolith of dark marble rising from an obsidian fountain. Its surface is carved with spiralling symbols — a staircase that forgot to be one. The water at its base is impossibly clear, patient, ancient.',
+    lore: 'A towering needle of carved obsidian, rising from a fountain at the crossroads. The carvings spiral upward — deep enough to grip, strange enough to unsettle. The water at its feet is crystal-clear. No one tends it. It does not need tending.',
     hint: 'Survey the landscape at the crossroads.',
     unlocked: false,
   },
@@ -1683,6 +1707,7 @@ const collection = [
     title: 'Null Meridian',
     img: 'ae-null-meridian.png',
     desc: 'Where two roads cross on an endless obsidian plain. A fountain marks the centre. The traces of travellers have long since worn away — but the water remains.',
+    lore: 'Two ancient roads crossing on a featureless obsidian plain. A fountain at the centre, still flowing after aeons. The footprints of every traveller who ever passed through have been erased. Only the roads remember.',
     hint: 'Wake up.',
     unlocked: false,
   },
@@ -1700,16 +1725,22 @@ function renderCollection() {
   const grid = document.getElementById('collection-grid');
   const unlocked = collection.filter(c => c.unlocked).length;
   document.getElementById('collection-count').textContent = unlocked + ' / ' + collection.length;
-  grid.innerHTML = collection.map(c => `
-    <div class="ae-coll-card${c.unlocked ? '' : ' locked'}">
-      <img class="ae-coll-card-img" src="${c.img}" alt="${c.title}">
+  grid.innerHTML = collection.map(c => {
+    const overlayText = c.unlocked ? c.lore : c.hint;
+    return `<div class="ae-coll-card${c.unlocked ? '' : ' locked'}">
+      <div class="ae-coll-card-img-wrap">
+        <img class="ae-coll-card-img" src="${c.img}" alt="${c.title}">
+        <div class="ae-coll-card-img-overlay">
+          <span class="ae-coll-card-img-overlay-text">${overlayText}</span>
+        </div>
+      </div>
       <div class="ae-coll-card-body">
         <div class="ae-coll-card-title">${c.unlocked ? c.title : '???'}</div>
         <div class="ae-coll-card-desc">${c.desc}</div>
         <div class="ae-coll-card-hint">${c.unlocked ? '✓ Discovered' : c.hint}</div>
       </div>
-    </div>
-  `).join('');
+    </div>`;
+  }).join('');
 }
 
 function toggleCollection() {
