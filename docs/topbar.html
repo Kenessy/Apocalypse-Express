@@ -286,13 +286,15 @@ html, body {
     linear-gradient(to right,  rgba(5,4,10,.55) 0%, transparent 20%),
     linear-gradient(to top,    rgba(5,4,10,.40) 0%, transparent 14%);
 }
-/* ── location title card ── */
+/* ── location title card — φ⁻¹ = 61.8% from top ── */
 .ae-img-caption {
-  position: absolute; bottom: 0; left: 0; right: 0;
-  padding: 72px 20px 26px;
-  background: linear-gradient(to top,
-    rgba(5,4,10,.96) 0%,
-    rgba(5,4,10,.74) 40%,
+  position: absolute;
+  top: 61.8%; left: 0; right: 0;
+  transform: translateY(-50%);
+  padding: 28px 20px;
+  background: radial-gradient(ellipse 85% 70% at 50% 50%,
+    rgba(5,4,10,.72) 0%,
+    rgba(5,4,10,.40) 55%,
     transparent 100%);
   display: flex; flex-direction: column; align-items: center; gap: 10px;
   pointer-events: none; text-align: center;
