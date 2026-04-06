@@ -985,17 +985,17 @@ html, body {
 }
 .ae-d20-face {
   position: absolute; inset: 0;
-  border: 1.5px solid rgba(201,156,90,.45);
-  background: rgba(201,156,90,.03);
   clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
   backface-visibility: visible;
+  border: 1.5px solid rgba(184,176,198,.30);
+  background: rgba(5,4,10,.20);
 }
-.ae-d20-face:nth-child(1) { transform: rotateX(0deg); }
-.ae-d20-face:nth-child(2) { transform: rotateX(60deg); }
-.ae-d20-face:nth-child(3) { transform: rotateX(120deg); }
-.ae-d20-face:nth-child(4) { transform: rotateY(90deg); }
-.ae-d20-face:nth-child(5) { transform: rotateY(90deg) rotateX(60deg); }
-.ae-d20-face:nth-child(6) { transform: rotateY(90deg) rotateX(120deg); }
+.ae-d20-face:nth-child(1) { transform: rotateX(0deg);   border-color: rgba(201,156,90,.40); }
+.ae-d20-face:nth-child(2) { transform: rotateX(60deg);  border-color: rgba(184,176,198,.28); }
+.ae-d20-face:nth-child(3) { transform: rotateX(120deg); border-color: rgba(201,156,90,.35); }
+.ae-d20-face:nth-child(4) { transform: rotateY(90deg);  border-color: rgba(184,176,198,.25); }
+.ae-d20-face:nth-child(5) { transform: rotateY(90deg) rotateX(60deg);  border-color: rgba(201,156,90,.30); }
+.ae-d20-face:nth-child(6) { transform: rotateY(90deg) rotateX(120deg); border-color: rgba(184,176,198,.22); }
 
 @keyframes ae-d20-idle {
   0%   { transform: rotateX(0deg)   rotateY(0deg)   rotateZ(0deg); }
