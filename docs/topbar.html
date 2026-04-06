@@ -259,7 +259,7 @@ html, body {
   88%  { opacity: .40; }
   100% { transform: translateY(calc(100vh - 4px)) translateX(4px) rotate(90deg); opacity: 0; }
 }
-.ae-particles[data-type="ash"]    .ae-p { background: rgba(195,182,165,.72); }
+/* ash colors set per-particle in JS */
 .ae-particles[data-type="embers"] .ae-p { background: var(--ember); box-shadow: 0 0 5px rgba(255,123,92,.55); border-radius: 50%; }
 .ae-particles[data-type="snow"]   .ae-p { background: rgba(245,242,238,.85); border-radius: 50%; }
 .ae-particles[data-type="leaves"] .ae-p { background: #6e8f48; }
@@ -865,6 +865,19 @@ function advanceScene() {
   const container = document.querySelector('.ae-particles');
   if (!container) return;
   const anims = ['ae-fall-a','ae-fall-b','ae-fall-c'];
+  // ash color palette: cool grey → warm grey → dusty amber → ember orange-red
+  const ashColors = [
+    'rgba(160,152,142,.70)',  // cool grey ash
+    'rgba(178,168,155,.68)',  // warm grey
+    'rgba(195,182,165,.72)',  // dusty warm
+    'rgba(195,182,165,.72)',  // dusty warm (weighted)
+    'rgba(178,168,155,.68)',  // warm grey (weighted)
+    'rgba(160,152,142,.70)',  // cool grey (weighted)
+    'rgba(210,175,110,.65)',  // dusty amber — fresh-fallen hot ash
+    'rgba(200,155, 90,.60)',  // golden amber
+    'rgba(220,130, 70,.55)',  // warm ember glow
+    'rgba(225,105, 60,.50)',  // cinder orange-red
+  ];
   for (let i = 0; i < 28; i++) {
     const p   = document.createElement('span');
     p.className = 'ae-p';
@@ -876,10 +889,12 @@ function advanceScene() {
     const r2 = Math.floor(Math.random()*20+5);
     const r3 = Math.floor(Math.random()*40+20);
     const r4 = Math.floor(Math.random()*20+5);
+    const col = ashColors[Math.floor(Math.random() * ashColors.length)];
     p.style.cssText = [
       `left:${(Math.random()*95).toFixed(1)}%`,
       `width:${w}px`,
       `height:${h}px`,
+      `background:${col}`,
       `border-radius:${r1}% ${r2}% ${r3}% ${r4}%`,
       `filter:blur(${(0.3+Math.random()*0.5).toFixed(1)}px)`,
       `animation-name:${anim}`,
