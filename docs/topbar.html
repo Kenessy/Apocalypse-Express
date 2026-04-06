@@ -314,22 +314,29 @@ html, body {
 /* ── zone tile strip ── */
 .ae-loc-zone-block {
   display: flex; flex-direction: row; align-items: center;
-  justify-content: center; gap: 14px; width: 100%;
+  justify-content: center; gap: 10px; width: 100%;
 }
-.ae-zone-strip { display: flex; gap: 4px; align-items: center; }
+.ae-zone-strip { display: flex; gap: 6px; align-items: center; }
 .ae-zone-pip {
-  display: flex; align-items: center; padding: 4px 6px; border-radius: 6px;
-  background: radial-gradient(circle, rgba(184,176,198,.14) 10%, transparent 65%);
-  box-shadow: 0 0 10px rgba(184,176,198,.08);
+  display: flex; align-items: center; gap: 6px;
+  padding: 5px 10px 5px 6px; border-radius: 6px;
+  background: radial-gradient(circle, rgba(201,156,90,.16) 10%, transparent 65%);
+  box-shadow: 0 0 14px rgba(201,156,90,.10);
   transition: background .3s, box-shadow .3s;
 }
 .ae-zone-icon {
   line-height: 0;
-  color: rgba(184,176,198,.60);
-  filter: drop-shadow(0 0 10px rgba(184,176,198,.40)) drop-shadow(0 0 20px rgba(184,176,198,.15));
+  color: var(--gold);
+  filter: drop-shadow(0 0 10px rgba(201,156,90,.45)) drop-shadow(0 0 20px rgba(201,156,90,.18));
   transition: color .3s, filter .3s;
 }
 .ae-zone-icon svg { display: block; }
+.ae-zone-label {
+  font: 400 var(--fs-caption)/1 'IBM Plex Mono';
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--gold); opacity: .72;
+  text-shadow: 0 0 12px rgba(201,156,90,.20);
+}
 /* ── mood / threat ── */
 .ae-loc-threat {
   display: flex; flex-direction: column; align-items: center; gap: 6px;
@@ -952,17 +959,16 @@ html, body {
 
         <!-- zone tiles -->
         <div class="ae-loc-zone-block">
-          <div class="ae-loc-threat-top">
-            <span class="ae-loc-threat-key">zone</span>
-            <span class="ae-loc-threat-sep">·</span>
-            <span class="ae-loc-threat-label" style="color:var(--muted);text-shadow:0 0 14px rgba(184,176,198,.25)">obsidian · void</span>
-          </div>
+          <span class="ae-loc-threat-key">zone</span>
+          <span class="ae-loc-threat-sep">·</span>
           <div class="ae-zone-strip">
             <div class="ae-zone-pip" data-z="obsidian">
               <span class="ae-zone-icon"><svg viewBox="0 0 28 28" width="28" height="28" fill="currentColor"><path d="M14 1 L22 9 L19 19 L14 27 L9 19 L6 9 Z"/><line x1="14" y1="1" x2="14" y2="27" stroke="currentColor" stroke-width="0.6" opacity="0.2"/><line x1="6" y1="9" x2="19" y2="19" stroke="currentColor" stroke-width="0.6" opacity="0.2"/><line x1="22" y1="9" x2="9" y2="19" stroke="currentColor" stroke-width="0.6" opacity="0.2"/></svg></span>
+              <span class="ae-zone-label">obsidian</span>
             </div>
             <div class="ae-zone-pip" data-z="void">
               <span class="ae-zone-icon"><svg viewBox="0 0 28 28" width="28" height="28" fill="currentColor" stroke="currentColor"><circle cx="14" cy="14" r="12" fill="none" stroke-width="1.8"/><circle cx="14" cy="14" r="7" fill="none" stroke-width="1.4"/><circle cx="14" cy="14" r="2.5" stroke="none"/></svg></span>
+              <span class="ae-zone-label">void</span>
             </div>
           </div>
         </div>
