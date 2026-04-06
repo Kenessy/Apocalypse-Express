@@ -1261,12 +1261,15 @@ const frames = [
     choices: [
       { icon: '◎', tint: 'cyan', label: 'Survey the landscape',
         preview: 'Two roads. Endless obsidian. The mist hides more than it reveals — but if you look carefully, there are shapes out there. Structures. Maybe even movement.',
+        previewImg: 'ae-crossroads-wide.png',
         next: 'look-around' },
       { icon: '†', tint: 'gold', label: 'Talk to the old man',
         preview: 'He stands a few paces away, quill in hand, muttering to himself. A thick book rests open against his forearm. He knows you\'re awake. He hasn\'t looked up yet.',
+        previewImg: 'ae-cicero-close.png',
         next: 'talk-cicero' },
       { icon: '⊙', tint: 'ember', label: 'Examine the fountain',
         preview: 'The obsidian basin is old — ancient. But the water is pristine. Objects glint beneath the surface. Someone left things here. Or something did.',
+        previewImg: 'ae-fountain-close.png',
         next: 'examine-fountain' },
     ],
   },
@@ -1313,7 +1316,7 @@ function renderFrame(idx) {
     choicesRow.innerHTML = f.choices.map(c => `
       <div class="ae-choice-btn" tabindex="0" role="button"
            data-icon="${c.icon}" data-tint="${c.tint}"
-           data-preview-img="ae-null-meridian.png"
+           data-preview-img="${c.previewImg || 'ae-null-meridian.png'}"
            data-preview-label="${c.label}"
            data-preview-text="${c.preview}"
            data-next="${c.next}">
