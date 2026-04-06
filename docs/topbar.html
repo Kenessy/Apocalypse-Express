@@ -586,6 +586,18 @@ html, body {
   align-items: center; justify-content: center;
   padding: 40px 48px;
   background: linear-gradient(to top, rgba(5,4,10,.90) 0%, rgba(5,4,10,.52) 55%, transparent 100%);
+  transition: background .22s ease;
+}
+/* mystery mode: almost fully dark, spotlight around text */
+.ae-sf-preview.is-mystery .ae-sf-preview-tint {
+  background: rgba(5,4,10,.88) !important;
+}
+.ae-sf-preview.is-mystery .ae-sf-preview-body {
+  background: radial-gradient(ellipse 42% 38% at 50% 52%,
+    transparent 0%,
+    rgba(5,4,10,.40) 35%,
+    rgba(5,4,10,.92) 60%,
+    rgba(5,4,10,.96) 100%);
 }
 .ae-sf-preview-header {
   display: flex; align-items: center; gap: 12px;
@@ -1262,6 +1274,7 @@ const frames = [
       { icon: '◎', tint: 'cyan', label: 'Survey the landscape',
         preview: 'Two roads. Endless obsidian. The mist hides more than it reveals — but if you look carefully, there are shapes out there. Structures. Maybe even movement.',
         previewImg: 'ae-crossroads-wide.png',
+        mystery: true,
         next: 'look-around' },
       { icon: '†', tint: 'gold', label: 'Talk to the old man',
         preview: 'He stands a few paces away, quill in hand, muttering to himself. A thick book rests open against his forearm. He knows you\'re awake. He hasn\'t looked up yet.',
@@ -1319,6 +1332,7 @@ function renderFrame(idx) {
            data-preview-img="${c.previewImg || 'ae-null-meridian.png'}"
            data-preview-label="${c.label}"
            data-preview-text="${c.preview}"
+           data-mystery="${c.mystery || false}"
            data-next="${c.next}">
         <span class="ae-cb-icon ae-cb-icon--${c.tint}">${c.icon}</span>
         <span class="ae-cb-text">${c.label}</span>
@@ -1429,12 +1443,14 @@ function initChoiceEvents() {
 
   function showPreview(btn) {
     const tint = btn.dataset.tint || 'gold';
+    const preview = document.getElementById('sf-preview');
     prevImg.src              = btn.dataset.previewImg || '';
     prevTint.style.background = previewTints[tint] || previewTints.gold;
     prevIcon.textContent     = btn.dataset.icon || '▶';
     prevIcon.style.color     = previewIconColors[tint] || previewIconColors.gold;
     prevLbl.textContent      = btn.dataset.previewLabel || '';
     prevTxt.textContent      = btn.dataset.previewText || '';
+    preview.classList.toggle('is-mystery', btn.dataset.mystery === 'true');
     frame.classList.add('is-preview');
   }
 
