@@ -8,299 +8,208 @@
 body {
   background: #0e0c18; color: #f8f5f0;
   font-family: 'Segoe UI', system-ui, sans-serif;
-  padding: 40px; min-height: 100vh;
+  padding: 40px 20px; min-height: 100vh;
 }
-h1 { color: #c99c5a; font-size: 24px; margin-bottom: 8px; }
-h2 { color: #e6cfa1; font-size: 18px; margin: 32px 0 16px; opacity: .8; }
-.subtitle { color: #b8b0c6; font-size: 14px; margin-bottom: 32px; }
-
-.flow { display: flex; flex-direction: column; gap: 0; max-width: 960px; }
-
-.node {
-  position: relative; padding: 14px 20px; border-radius: 6px;
-  font-size: 14px; line-height: 1.5;
+h1 { color: #c99c5a; font-size: 24px; margin-bottom: 4px; text-align: center; }
+.subtitle { color: #b8b0c6; font-size: 13px; margin-bottom: 40px; text-align: center; }
+h2 {
+  color: #e6cfa1; font-size: 16px; letter-spacing: .1em; text-transform: uppercase;
+  text-align: center; margin: 48px 0 24px; opacity: .7;
+  position: relative;
 }
-.node.main    { background: rgba(201,156,90,.12); border: 1px solid rgba(201,156,90,.25); }
-.node.narrator{ background: rgba(184,176,198,.08); border: 1px solid rgba(184,176,198,.15); }
-.node.choice  { background: rgba(40,189,216,.08);  border: 1px solid rgba(40,189,216,.20); }
-.node.outcome { background: rgba(255,123,92,.08);  border: 1px solid rgba(255,123,92,.20); }
-.node.merge   { background: rgba(163,139,207,.10); border: 1px solid rgba(163,139,207,.22); }
-.node.dice    { background: rgba(201,156,90,.08);  border: 1px solid rgba(201,156,90,.20); }
-.node.coll    { background: rgba(92,200,92,.08);   border: 1px solid rgba(92,200,92,.20); }
-
-.node-id { font-family: monospace; font-size: 11px; color: #c99c5a; opacity: .6; margin-bottom: 4px; }
-.node-type {
-  font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
-  padding: 2px 8px; border-radius: 3px; display: inline-block; margin-bottom: 6px;
+h2::before, h2::after {
+  content: ''; position: absolute; top: 50%; height: 1px; width: 80px;
+  background: linear-gradient(to right, transparent, rgba(201,156,90,.25));
 }
-.node-type.continue { background: rgba(201,156,90,.2); color: #e6cfa1; }
-.node-type.choices  { background: rgba(40,189,216,.2);  color: #28bdd8; }
-.node-type.merge-tag{ background: rgba(163,139,207,.2); color: #a38bcf; }
-.node-type.dice-tag { background: rgba(255,200,40,.2);  color: #ffc828; }
-.node-type.coll-tag { background: rgba(92,200,92,.2);   color: #5cc85c; }
+h2::before { right: calc(50% + 100px); }
+h2::after { left: calc(50% + 100px); transform: scaleX(-1); }
 
-.node-text { color: #b8b0c6; font-size: 13px; }
-.node-text em { color: #28bdd8; font-style: normal; }
-.node-text strong { color: #e6cfa1; font-weight: 600; }
-.node-text .full { color: #8a8498; font-size: 12px; line-height: 1.6; display: block; margin-top: 8px; padding: 8px 12px; background: rgba(0,0,0,.25); border-radius: 4px; border-left: 2px solid rgba(201,156,90,.15); }
+/* ── TIMELINE ── */
+.timeline {
+  position: relative; max-width: 900px; margin: 0 auto;
+  padding: 0 20px;
+}
+.timeline::before {
+  content: ''; position: absolute;
+  left: 50%; top: 0; bottom: 0; width: 2px;
+  background: linear-gradient(to bottom, rgba(201,156,90,.06), rgba(201,156,90,.18) 10%, rgba(201,156,90,.18) 90%, rgba(201,156,90,.06));
+  transform: translateX(-50%);
+}
 
-.img-tag { display: inline-block; font-size: 10px; padding: 2px 6px; border-radius: 3px; margin-left: 6px; background: rgba(92,200,92,.15); color: #5cc85c; }
-.img-tag.missing { background: rgba(255,123,92,.15); color: #ff7b5c; }
-.img-tag.mystery { background: rgba(163,139,207,.15); color: #a38bcf; }
+/* ── NODE ── */
+.tl-node {
+  position: relative; display: flex; gap: 0;
+  margin-bottom: 20px;
+  width: 48%; /* each side */
+}
+.tl-node.left { margin-right: auto; flex-direction: row; }
+.tl-node.right { margin-left: auto; flex-direction: row-reverse; }
 
-.conn { display: flex; align-items: center; padding: 4px 0 4px 30px; color: rgba(201,156,90,.35); font-size: 18px; line-height: 1; }
+/* center dot */
+.tl-node::before {
+  content: ''; position: absolute;
+  top: 18px; width: 10px; height: 10px;
+  border-radius: 50%; border: 2px solid rgba(201,156,90,.40);
+  background: #0e0c18; z-index: 2;
+}
+.tl-node.left::before { right: -28px; }
+.tl-node.right::before { left: -28px; }
 
-.branches { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding-left: 30px; margin-top: 8px; }
-.branch-col { display: flex; flex-direction: column; gap: 0; }
-.branch-label { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; padding: 6px 12px; border-radius: 4px 4px 0 0; font-weight: 600; }
-.branch-label.a { background: rgba(40,189,216,.15); color: #28bdd8; }
-.branch-label.b { background: rgba(255,123,92,.15); color: #ff7b5c; }
+/* connector line from dot to card */
+.tl-node::after {
+  content: ''; position: absolute; top: 22px; height: 1px;
+  background: rgba(201,156,90,.15); width: 20px;
+}
+.tl-node.left::after { right: -20px; }
+.tl-node.right::after { left: -20px; }
 
-.legend { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(201,156,90,.12); }
-.legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #b8b0c6; }
-.legend-dot { width: 12px; height: 12px; border-radius: 3px; }
+/* card */
+.tl-card {
+  flex: 1; border-radius: 6px; overflow: hidden;
+  font-size: 13px; line-height: 1.5;
+  transition: border-color .2s, box-shadow .2s;
+}
+.tl-card:hover { box-shadow: 0 0 20px rgba(201,156,90,.08); }
 
-.status { display: inline-block; font-size: 10px; padding: 2px 6px; border-radius: 3px; margin-left: 8px; }
-.status.done { background: rgba(92,200,92,.2); color: #5cc85c; }
-.status.wip  { background: rgba(255,200,40,.2); color: #ffc828; }
-.status.todo { background: rgba(184,176,198,.15); color: #b8b0c6; }
+/* card types */
+.tl-card.main     { background: rgba(201,156,90,.10); border: 1px solid rgba(201,156,90,.22); }
+.tl-card.narrator  { background: rgba(184,176,198,.06); border: 1px solid rgba(184,176,198,.12); }
+.tl-card.dice      { background: rgba(255,200,40,.06); border: 1px solid rgba(255,200,40,.15); }
+.tl-card.outcome   { background: rgba(255,123,92,.06); border: 1px solid rgba(255,123,92,.15); }
+.tl-card.coll      { background: rgba(92,200,92,.06); border: 1px solid rgba(92,200,92,.15); }
+.tl-card.choice    { background: rgba(40,189,216,.06); border: 1px solid rgba(40,189,216,.15); }
 
-.img-summary { margin-top: 32px; padding: 16px 20px; background: rgba(201,156,90,.06); border: 1px solid rgba(201,156,90,.12); border-radius: 6px; }
-.img-summary h3 { color: #c99c5a; font-size: 14px; margin-bottom: 12px; }
-.img-row { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #b8b0c6; padding: 4px 0; }
-.img-row code { color: #e6cfa1; font-size: 11px; }
+/* dot color overrides */
+.tl-node.is-dice::before { border-color: rgba(255,200,40,.50); }
+.tl-node.is-coll::before { border-color: rgba(92,200,92,.50); }
+.tl-node.is-choice::before { border-color: rgba(40,189,216,.50); }
+.tl-node.is-outcome::before { border-color: rgba(255,123,92,.50); }
+
+/* thumbnail */
+.tl-thumb {
+  width: 100%; aspect-ratio: 2.2/1; object-fit: cover;
+  display: block; filter: brightness(.7); border-bottom: 1px solid rgba(201,156,90,.08);
+}
+
+/* card body */
+.tl-body { padding: 10px 14px; }
+.tl-id {
+  font-family: monospace; font-size: 10px; color: #c99c5a; opacity: .5;
+  margin-bottom: 3px; display: flex; align-items: center; gap: 6px;
+}
+.tl-tag {
+  font-size: 9px; letter-spacing: .1em; text-transform: uppercase;
+  padding: 1px 6px; border-radius: 3px; display: inline-block;
+}
+.tl-tag.cont   { background: rgba(201,156,90,.18); color: #e6cfa1; }
+.tl-tag.ch     { background: rgba(40,189,216,.18);  color: #28bdd8; }
+.tl-tag.di     { background: rgba(255,200,40,.18);  color: #ffc828; }
+.tl-tag.co     { background: rgba(92,200,92,.18);   color: #5cc85c; }
+.tl-tag.fail   { background: rgba(255,123,92,.18);  color: #ff7b5c; }
+
+.status { display: inline-block; font-size: 9px; padding: 1px 5px; border-radius: 3px; }
+.status.done { background: rgba(92,200,92,.18); color: #5cc85c; }
+.status.todo { background: rgba(184,176,198,.12); color: #b8b0c6; }
+
+.tl-text { color: #8a8498; font-size: 11px; line-height: 1.55; margin-top: 6px; }
+.tl-text em { color: #28bdd8; font-style: normal; }
+.tl-text strong { color: #e6cfa1; font-weight: 600; }
+
+.tl-choices { margin-top: 6px; font-size: 11px; }
+.tl-choices span { color: #28bdd8; }
+.tl-choices .arrow { color: rgba(201,156,90,.35); margin: 0 3px; }
+
+/* branch fork */
+.tl-fork {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+  max-width: 900px; margin: 0 auto 20px; padding: 0 20px;
+}
+.tl-fork-label {
+  font-size: 11px; letter-spacing: .08em; text-transform: uppercase;
+  padding: 4px 10px; border-radius: 4px 4px 0 0; font-weight: 600; text-align: center;
+}
+.tl-fork-label.a { background: rgba(92,200,92,.12); color: #5cc85c; }
+.tl-fork-label.b { background: rgba(255,123,92,.12); color: #ff7b5c; }
+
+/* center label */
+.tl-center {
+  text-align: center; margin: 12px auto; max-width: 900px;
+  font-size: 11px; color: rgba(201,156,90,.35); letter-spacing: .08em;
+}
+
+/* img tag */
+.img-tag { display: inline-block; font-size: 9px; padding: 1px 5px; border-radius: 3px; margin-left: 4px; }
+.img-tag.ok   { background: rgba(92,200,92,.12); color: #5cc85c; }
+.img-tag.miss { background: rgba(255,123,92,.12); color: #ff7b5c; }
+.img-tag.myst { background: rgba(163,139,207,.12); color: #a38bcf; }
+
+/* legend */
+.legend {
+  display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+  margin-top: 40px; padding-top: 20px;
+  border-top: 1px solid rgba(201,156,90,.08);
+  max-width: 900px; margin-left: auto; margin-right: auto;
+}
+.legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #b8b0c6; }
+.legend-dot { width: 10px; height: 10px; border-radius: 3px; }
+
+/* image summary */
+.img-summary {
+  max-width: 900px; margin: 32px auto 0; padding: 14px 18px;
+  background: rgba(201,156,90,.04); border: 1px solid rgba(201,156,90,.10); border-radius: 6px;
+}
+.img-summary h3 { color: #c99c5a; font-size: 13px; margin-bottom: 10px; }
+.img-row { display: flex; align-items: center; gap: 8px; font-size: 11px; color: #b8b0c6; padding: 3px 0; }
+.img-row code { color: #e6cfa1; font-size: 10px; }
 </style>
 </head>
 <body>
 
-<h1>Apocalypse Express — Story Flowchart</h1>
-<p class="subtitle">Arc 1: Hell · Chapter 1: Null Meridian — synced 2026-04-06</p>
+<h1>Apocalypse Express</h1>
+<p class="subtitle">Arc 1: Hell · Chapter 1: Null Meridian · synced 2026-04-06</p>
 
-<!-- ═══════════════════════════════════════════ -->
+<!-- ═══════════════ MAIN TRUNK ═══════════════ -->
 <h2>Main Trunk</h2>
-<!-- ═══════════════════════════════════════════ -->
-<div class="flow">
+<div class="timeline">
 
-  <div class="node main">
-    <div class="node-id">cicero-monologue <span class="status done">DONE</span></div>
-    <span class="node-type continue">▶ wake up</span>
-    <div class="node-text"><strong>Cicero</strong>
-      <span class="full">Morning, noon, evening — twilight by day, darkness by night... Our life is a loop of shadow and light. An endless loop of — well. But what <em>is</em> a loop? A circuit where we wake up, go to work, then fall asleep. Every day, the same exact thing, around and around — like a hamster in a wheel.<br><br>A circuit where current builds forever... or — until it breaches a threshold? So we are in a loop until we reach... what? Death? Whatever the "desired effect" is? The loop won't change. We have to.<br><br>But what is the purpose of said loop? To keep something — us — in it. The whole thing rests on a single, fragile assumption: that we <em>choose</em>.<br><br>But whenever we do... it always feels one-sided, doesn't it? <em>Or did the loop decide for us?</em><br><br>Light follows darkness, darkness follows light. What if we step sideways — out of the loop entirely? Every loop ends with the same thing... learning. Becoming more than you were. Waking up...<br><br><em>Wake up.</em></span>
-    </div>
-  </div>
-  <div class="conn">│</div>
-
-  <div class="node main">
-    <div class="node-id">waking-up <span class="status done">DONE</span></div>
-    <span class="node-type continue">⛯ stand up</span>
-    <div class="node-text"><strong>Cicero</strong>
-      <span class="full">The mist is rising — slowly, deliberately — from the obsidian landscape. Something fully strange, yet awfully familiar. As if you had been here before... in a dream you never quite finished.<br><br>Two main roads once crossed here. Travellers stopped to drink from the fountain — an obsidian basin at the heart of the crossroads, its water still crystal-clear. The traces of the living have long since worn away. But the water remains. Pure. Patient.<br><br>The land did not decay. Only those who walked it. Now it waits — masterless — for a new soul. Out of the frying pan and into the fire, as they say.<br><br>So then — let us choose. Nothing simpler than that.<br><br><em>— Someone, somewhere.</em></span>
-    </div>
-  </div>
-  <div class="conn">│</div>
-
-  <div class="node main">
-    <div class="node-id">stand-up <span class="status done">DONE</span></div>
-    <span class="node-type continue">◎ look around</span>
-    <div class="node-text"><strong>Narrator</strong>
-      <span class="full">You stand. Your legs hold — barely. The mist curls around your ankles like something alive.<br><br>A vast obsidian plain stretches in every direction. Two roads cross here, cutting through the dark glass like old scars. At their centre: a fountain. Black stone, carved with symbols you can't read. Water spills from it — clear, impossibly clean.<br><br>Somewhere to your left, a voice. The old man — still talking. Still philosophising. His words drift through the fog like smoke, half-heard, half-understood.<br><br>The air smells of nothing. Not clean, not foul. Just... absent.</span>
-    </div>
-  </div>
-  <div class="conn">│</div>
-
-  <div class="node main">
-    <div class="node-id">crossroads-choice <span class="status done">DONE</span></div>
-    <span class="node-type choices">3 choices</span>
-    <div class="node-text">
-      <span class="full">You take it in. The obsidian ground reflects the mist above like a dark mirror. Everything here feels suspended — waiting for you to move first.<br><br>Three things demand your attention.</span>
-      <br><em>◎ Survey the landscape</em> → scout branch <span class="img-tag">ae-crossroads-wide.png</span> <span class="img-tag mystery">mystery</span><br>
-      <em>† Talk to the old man</em> → cicero branch <span class="img-tag missing">ae-cicero-close.png ✗</span><br>
-      <em>⊙ Examine the fountain</em> → fountain branch <span class="img-tag missing">ae-fountain-close.png ✗</span>
-    </div>
-  </div>
-
-</div>
-
-<!-- ═══════════════════════════════════════════ -->
-<h2>Scout Branch (◎ Survey the landscape)</h2>
-<!-- ═══════════════════════════════════════════ -->
-<div class="flow">
-
-  <div class="node narrator">
-    <div class="node-id">look-around <span class="status done">DONE</span></div>
-    <span class="node-type choices">2 choices</span>
-    <div class="node-text">
-      <span class="full">You look up — and the answer is right in front of you. A massive obelisk, carved from obsidian. Monstrous and immovable. It rises from the fountain like a black needle piercing the fog, its surface etched with spiralling symbols that catch no light.<br><br>From the top you would see everything. The roads, the horizon, whatever lies beyond this mist. It is the only sure vantage point — nothing else here comes close.<br><br>You could try to climb it. Or find another way up.</span>
-      <br><em>⊙ Climb the obelisk</em> <span class="img-tag">ae-obelisk-fountain.png</span><br>
-      <em>◎ Search for another way up</em> <span class="img-tag mystery">mystery</span>
-    </div>
-  </div>
-  <div class="conn">│</div>
-
-  <!-- ── CLIMB PATH ── -->
-  <div class="node dice">
-    <div class="node-id">climb-obelisk <span class="status done">DONE</span></div>
-    <span class="node-type dice-tag">🎲 d20 · DC 10 · Athletics</span>
-    <div class="node-text">
-      <span class="full">You step onto the fountain's edge and wade through the shallow water to the base of the obelisk. Cold seeps through your boots. The stone is slick, dark, featureless — until you run your fingers along it and find the first crack.<br><br>You climb. Slowly at first, testing each grip, each foothold. But the cracks are generous — deep enough to trust. Your confidence builds with every metre. The mist thins. The air sharpens. You can almost see over it.<br><br>Then — a flicker. Something moves in the corner of your eye. A shadow, shifting against the stone. You snap your head toward it and your hand slips on the wet surface.<br><br><em>What happens next is not entirely up to you.</em></span>
-    </div>
-  </div>
-
-  <div class="branches">
-    <div class="branch-col">
-      <div class="branch-label a">✓ Success (≥10)</div>
-      <div class="node outcome" style="border-radius: 0 0 6px 6px;">
-        <div class="node-text">→ <strong>climb-success</strong> (see below)</div>
-      </div>
-    </div>
-    <div class="branch-col">
-      <div class="branch-label b">✗ Fail (&lt;10)</div>
-      <div class="node outcome" style="border-radius: 0 0 6px 6px;">
-        <div class="node-id">climb-fail-1 <span class="status done">DONE</span></div>
-        <span class="node-type choices">2 choices</span>
-        <div class="node-text">
-          <span class="full">Your fingers scrape across the wet stone — and find nothing. The grip is gone. Your body tilts backward, slow at first, then all at once.<br><br>You fall. The mist swallows you for a heartbeat before the water catches you with a soft, merciful splash. The fountain basin is shallow but deep enough. Cold rushes through your clothes, your bones, your pride.<br><br>You stand up. Shake yourself off. Water drips from every part of you. The obelisk looms above — unmoved, unimpressed.<br><br>How do you proceed?</span>
-          <br><em>⊙ Try again</em> → climb-attempt-2<br>
-          <em>✕ That's enough</em> → crossroads-choice
-        </div>
+  <div class="tl-node left">
+    <div class="tl-card main">
+      <img class="tl-thumb" src="ae-null-meridian.png" alt="">
+      <div class="tl-body">
+        <div class="tl-id">cicero-monologue <span class="status done">DONE</span> <span class="tl-tag cont">▶ wake up</span></div>
+        <div class="tl-text"><strong>Cicero</strong> — Loops, free will, the nature of choice. <em>"Wake up."</em></div>
       </div>
     </div>
   </div>
 
-  <div class="conn" style="padding-left: 30px;">│</div>
-
-  <div class="node dice">
-    <div class="node-id">climb-attempt-2 <span class="status done">DONE</span></div>
-    <span class="node-type dice-tag">🎲 d20 · DC 15 · Athletics</span>
-    <div class="node-text">
-      <span class="full">You wade back through the fountain. Your palms are raw and wet — the stone remembers your last attempt, and so do your hands. The grooves that felt generous before now feel shallow. Uncooperative. As if the obelisk has <em>adjusted</em>.<br><br>This is the thing about choices: they leave marks. Not just on you — on the world around you. The stone is slicker because you made it slick. The carvings feel narrower because your fingers are swollen from the fall. Every decision reshapes the next one. The difficulty didn't change — <em>you</em> did.<br><br>You grit your teeth and climb. Higher this time, faster, before doubt can catch up. The wind bites harder up here. Your arms shake.</span>
-    </div>
-  </div>
-
-  <div class="branches">
-    <div class="branch-col">
-      <div class="branch-label a">✓ Success (≥15)</div>
-      <div class="node outcome" style="border-radius: 0 0 6px 6px;">
-        <div class="node-text">→ <strong>climb-success</strong></div>
-      </div>
-    </div>
-    <div class="branch-col">
-      <div class="branch-label b">✗ Fail (&lt;15)</div>
-      <div class="node outcome" style="border-radius: 0 0 6px 6px;">
-        <div class="node-id">climb-fail-2 <span class="status done">DONE</span></div>
-        <span class="node-type choices">2 choices</span>
-        <div class="node-text">
-          <span class="full">Your grip fails at the halfway point. The stone doesn't even pretend to hold you this time — it simply lets go. You slide, scraping skin and pride against the wet marble, and hit the water back-first.<br><br>The splash is louder this time. Or maybe it's quieter and you just feel it more. You float there for a moment, staring up at the peak dissolving into mist. It looks further away than it did before you started.<br><br>Your body is telling you to stop. Your arms are dead weight. Your fingers are bleeding. But there's something else — something stubborn, something <em>unreasonable</em> — that hasn't given up yet.<br><br>The obelisk has beaten you twice. If you go again, it won't be skill that gets you to the top. It'll be something else entirely.</span>
-          <br><em>⊙ One last time</em> → climb-attempt-3<br>
-          <em>✕ Accept defeat</em> → crossroads-choice
-        </div>
+  <div class="tl-node right">
+    <div class="tl-card main">
+      <img class="tl-thumb" src="ae-null-meridian-portrait.png" alt="">
+      <div class="tl-body">
+        <div class="tl-id">waking-up <span class="status done">DONE</span> <span class="tl-tag cont">⛯ stand up</span></div>
+        <div class="tl-text"><strong>Cicero</strong> — Obsidian crossroads, fountain, mist. <em>"Let us choose."</em></div>
       </div>
     </div>
   </div>
 
-  <div class="conn" style="padding-left: 30px;">│</div>
-
-  <div class="node dice">
-    <div class="node-id">climb-attempt-3 <span class="status done">DONE</span></div>
-    <span class="node-type dice-tag">🎲 d20 · DC 20 · Athletics</span>
-    <div class="node-text">
-      <span class="full">You don't think about it. If you think, you'll stop. You grab the stone with hands that can barely close and you <em>pull</em>.<br><br>The obelisk is different now. Not physically — the cracks are the same, the marble is the same. But it feels like it's watching. Like it's <em>waiting</em> to see what you do. Two failures have changed the equation. The difficulty isn't in the stone anymore. It's in you. In whether you have anything left that physics can't explain.<br><br>Your muscles scream. Your vision narrows. The wind doesn't howl — it <em>laughs</em>. Somewhere below, the fountain catches the last of the light.<br><br>This is not a test of strength. This is a test of something else.</span>
-    </div>
-  </div>
-
-  <div class="branches">
-    <div class="branch-col">
-      <div class="branch-label a">✓ Success (nat 20)</div>
-      <div class="node outcome" style="border-radius: 0 0 6px 6px;">
-        <div class="node-text">→ <strong>climb-success</strong></div>
-      </div>
-    </div>
-    <div class="branch-col">
-      <div class="branch-label b">✗ Fail (&lt;20)</div>
-      <div class="node outcome" style="border-radius: 0 0 6px 6px;">
-        <div class="node-text">→ <strong>climb-failed</strong> (lockout)</div>
+  <div class="tl-node left">
+    <div class="tl-card main">
+      <div class="tl-body">
+        <div class="tl-id">stand-up <span class="status done">DONE</span> <span class="tl-tag cont">◎ look around</span></div>
+        <div class="tl-text"><strong>Narrator</strong> — You stand. Mist, obsidian plain, fountain, old man mumbling. The air smells of nothing.</div>
       </div>
     </div>
   </div>
 
-  <div class="conn" style="padding-left: 30px;">│</div>
-
-  <!-- ── CLIMB ENDPOINTS ── -->
-  <div class="node coll">
-    <div class="node-id">climb-success <span class="status done">DONE</span></div>
-    <span class="node-type coll-tag">📜 collection: The Infinite Plane</span>
-    <span class="node-type continue" style="margin-left:6px">↩ return → crossroads-choice</span>
-    <div class="node-text">
-      <span class="full">You pull yourself over the final edge. The wind stops. The mist falls away beneath you like a veil being lifted — and for the first time, you <em>see</em>.<br><br>An endless obsidian plain. In every direction — the same. The same dark glass, the same ancient fractures, the same silence. Wherever you look, wherever you turn, the answer is identical. There is no edge. No boundary. No end.<br><br>Here and there, soil has gathered in the cracks — blown in from nowhere, accumulated over aeons. Patches of earth where stubborn things grow. Bushes. Trees. Whole groves in places, dark-leaved and strange, clinging to pockets of dirt that have no business being here. Life — temporary, borrowed, growing on borrowed ground.<br><br>This is an ancient plane. Older than anything you have words for. It operates on rules you do not recognise, built by something you cannot name. It is not hostile. It is not welcoming. It is simply <em>alien</em>. And above all else — it is <em>old</em>.<br><br>You have seen enough. You climb back down — slowly, carefully — and return to the crossroads. The view stays with you. It will not leave easily.</span>
-      <br>Mystery preview <strong>revealed</strong>. <span class="img-tag">ae-crossroads-wide.png</span>
-    </div>
-  </div>
-  <div class="conn" style="padding-left: 30px;">│</div>
-
-  <div class="node outcome">
-    <div class="node-id">climb-failed <span class="status done">DONE</span></div>
-    <span class="node-type continue">↩ give up → crossroads-choice</span>
-    <div class="node-text">
-      <span class="full">You fall. The water catches you — for the third time. But this time you don't get up.<br><br>You lie in the basin. The water is warm now, or maybe you've just stopped feeling the cold. Above you, the obelisk's peak disappears into the mist. Unreachable. Indifferent. It was never trying to stop you — it simply <em>is</em>, and you simply <em>aren't</em> enough.<br><br>Three chances. Three failures. Whatever sits at the top of that column — the view, the answers, the thing you needed to see — it stays hidden. The mist keeps its secrets. Some doors don't open on the third knock. Some doors don't open at all.<br><br>You drag yourself from the fountain. Water drains from your clothes in long, heavy streams. The crossroads waits — unchanged, unimpressed. As if nothing happened. As if you never tried.</span>
-      <br>Scout branch <strong>incomplete</strong>, mystery stays hidden.
-    </div>
-  </div>
-
-  <div class="conn" style="padding-left: 30px;">│</div>
-
-  <!-- ── WANDER EXPLORE (fallback) ── -->
-  <div class="node coll">
-    <div class="node-id">wander-explore <span class="status done">DONE</span></div>
-    <span class="node-type coll-tag">📜 collection: The Infinite Plane</span>
-    <span class="node-type continue" style="margin-left:6px">↩ return → crossroads-choice</span>
-    <div class="node-text">
-      <strong>Fallback</strong> — only available if both climb + tree paths exhausted.<br>
-      <span class="full">You walk. No plan, no target, no urgency. Just one foot in front of the other, through the mist, across the obsidian.<br><br>You walk for a long time. The crossroads shrinks behind you, then disappears. There is nothing ahead and nothing behind — just the same dark glass, the same grey air.<br><br>And slowly the truth arrives. Not from above. From the ground. From the monotony itself. <em>It's all the same.</em> Every direction, every road — the same. The landscape doesn't hide its secret behind fog or height. It hides it in <em>plain sight</em>. An infinite plane of ancient glass, repeating forever.<br><br>You didn't need to climb. You just needed to walk long enough to understand.</span>
-      <br>Same collection unlock as climb-success. Mystery <strong>revealed</strong>.
-    </div>
-  </div>
-
-  <div class="conn" style="padding-left: 30px;">│</div>
-
-  <!-- ── FIND RIDGE / TREE PATH ── -->
-  <div class="node narrator">
-    <div class="node-id">find-ridge <span class="status done">DONE</span></div>
-    <span class="node-type continue">◎ approach the tree</span>
-    <div class="node-text">
-      <span class="full">You turn away from the obelisk and walk into the mist. Carefully. Slowly. Never straying so far that you lose sight of the fountain's faint glow behind you.<br><br>The landscape doesn't change. The same obsidian underfoot, the same grey nothing in every direction. You walk for what feels like minutes but could be seconds — distance is meaningless here. The fog eats depth, swallows scale.<br><br>You're about to turn back when you spot it. A shape in the mist — solid, dark, not obsidian. A tree. Thick-trunked, dark-leaved, growing from a crack where soil has gathered over centuries. And at its base: a boulder. Large enough to stand on. High enough that you might — <em>just might</em> — reach the lowest branches.<br><br>It's not the obelisk. But it's something.</span>
-    </div>
-  </div>
-  <div class="conn" style="padding-left: 30px;">│</div>
-
-  <div class="node dice">
-    <div class="node-id">tree-climb <span class="status done">DONE</span></div>
-    <span class="node-type dice-tag">🎲 d20 · DC 15 · Athletics</span>
-    <div class="node-text">
-      <span class="full">You climb the boulder. From the top, the lowest branch hangs about a metre above your head. Thick as your thigh, dark and slick with condensation.<br><br>The tree is strange. Its bark is almost black, grooved in patterns that look deliberate. The leaves are broad, heavy, and they don't move — because there is no wind down here.<br><br>You coil your legs and jump. Your fingers brush the bark — wet, cold, uncertain. If the branch holds, you're up. If it doesn't...</span>
-    </div>
-  </div>
-
-  <div class="branches">
-    <div class="branch-col">
-      <div class="branch-label a">✓ Success (≥15)</div>
-      <div class="node coll" style="border-radius: 0 0 6px 6px;">
-        <div class="node-id">tree-success <span class="status done">DONE</span></div>
-        <span class="node-type coll-tag">📜 collection: A Glimpse Through the Fog</span>
-        <span class="node-type continue" style="margin-left:6px">↩ climb down → crossroads-choice</span>
-        <div class="node-text">
-          <span class="full">The branch holds. You swing, grip, pull — and you're up. You climb higher until the canopy opens and your head breaks through the fog.<br><br>You see... <em>something</em>. The roads below — four dark lines converging on the crossroads. The fountain, small from here. The obelisk, a black needle rising higher than you'll ever get from this tree.<br><br>But the horizon stays hidden. The fog is thinner up here, not gone. You can see the <em>shape</em> of the world — vast, flat, endless — but not its edges. Not its truth.<br><br>A glimpse. Not a view. But more than you had before.</span>
-          <br>Mystery preview <strong>revealed</strong> (partial). <span class="img-tag">ae-crossroads-wide.png</span>
-        </div>
-      </div>
-    </div>
-    <div class="branch-col">
-      <div class="branch-label b">✗ Fail (&lt;15) — LOCKED</div>
-      <div class="node outcome" style="border-radius: 0 0 6px 6px;">
-        <div class="node-id">tree-failed <span class="status done">DONE</span></div>
-        <span class="node-type continue">↩ return → crossroads-choice</span>
-        <div class="node-text">
-          <span class="full">Your fingers close around the branch — and it <em>cracks</em>. A sharp, wet snap that echoes through the fog like a gunshot.<br><br>The branch comes away in your hands. You fall — not far, just off the boulder — but you land hard on the obsidian. The remaining branches are higher now — impossibly so.<br><br>This path is closed. Whatever was up there — you won't be seeing it from this tree.</span>
-          <br>Tree <strong>destroyed</strong>. No retry possible.
+  <div class="tl-node right is-choice">
+    <div class="tl-card choice">
+      <div class="tl-body">
+        <div class="tl-id">crossroads-choice <span class="status done">DONE</span> <span class="tl-tag ch">3 choices</span></div>
+        <div class="tl-text">Three things demand your attention.</div>
+        <div class="tl-choices">
+          <span>◎ Survey the landscape</span> <span class="img-tag ok">ae-crossroads-wide</span> <span class="img-tag myst">mystery</span><br>
+          <span>† Talk to the old man</span> <span class="img-tag miss">missing img</span><br>
+          <span>⊙ Examine the fountain</span> <span class="img-tag miss">missing img</span>
         </div>
       </div>
     </div>
@@ -308,187 +217,325 @@ h2 { color: #e6cfa1; font-size: 18px; margin: 32px 0 16px; opacity: .8; }
 
 </div>
 
-<!-- ═══════════════════════════════════════════ -->
-<h2>Cicero Branch († Talk to the old man)</h2>
-<!-- ═══════════════════════════════════════════ -->
-<div class="flow">
+<!-- ═══════════════ SCOUT BRANCH ═══════════════ -->
+<h2>Scout Branch — Survey the Landscape</h2>
+<div class="timeline">
 
-  <div class="node narrator">
-    <div class="node-id">talk-cicero <span class="status done">DONE</span></div>
-    <span class="node-type continue">† call out → cicero-call-1</span>
-    <div class="node-text">
-      <span class="full">You approach the old man. Heavy cloak — dark, unremarkable, forgettable. Nothing striking. Except the quill — obsidian tip, gleaming. Moves across pages of a thick, expensive book. He writes without looking up.<br><br>The book doesn't belong here. Neither does the quill. But the man fits perfectly — as if the crossroads grew around him.</span>
+  <div class="tl-node left is-choice">
+    <div class="tl-card choice">
+      <div class="tl-body">
+        <div class="tl-id">look-around <span class="status done">DONE</span> <span class="tl-tag ch">2 choices</span></div>
+        <div class="tl-text">Obelisk visible. Need higher ground.</div>
+        <div class="tl-choices">
+          <span>⊙ Climb the obelisk</span> <span class="img-tag ok">ae-obelisk-fountain</span><br>
+          <span>◎ Search for another way</span> <span class="img-tag myst">mystery</span>
+        </div>
+      </div>
     </div>
   </div>
-  <div class="conn">│</div>
 
-  <div class="node narrator">
-    <div class="node-id">cicero-call-1 <span class="status done">DONE</span></div>
-    <span class="node-type continue">† try again → cicero-call-2</span>
-    <div class="node-text">
-      <span class="full">You call out. He stirs — barely. A tremor. The quill pauses for half a heartbeat, then resumes. He's not ignoring you. He's simply not entirely here. Like a man dreaming with his eyes open.</span>
-    </div>
-  </div>
-  <div class="conn">│</div>
-
-  <div class="node narrator">
-    <div class="node-id">cicero-call-2 <span class="status done">DONE</span></div>
-    <span class="node-type continue">◎ wait and listen → cicero-listen</span>
-    <div class="node-text">
-      <span class="full">You step closer. Raise your voice. Nothing. The quill doesn't even pause. His shadow falls too dark, too sharp — as if he is both here and somewhere else. He is unreachable. Perhaps a different approach.</span>
-    </div>
-  </div>
-  <div class="conn">│</div>
-
-  <div class="node narrator">
-    <div class="node-id">cicero-listen <span class="status done">DONE</span></div>
-    <span class="node-type continue">◎ listen closer → cicero-mumble</span>
-    <div class="node-text">
-      <span class="full">You stop trying. Stand and wait. Watch the quill. Listen to the scratch of obsidian on parchment. For a long time, nothing. Then — quietly — he speaks. Not to you. To the book. To himself.</span>
-    </div>
-  </div>
-  <div class="conn">│</div>
-
-  <div class="node main">
-    <div class="node-id">cicero-mumble <span class="status done">DONE</span></div>
-    <span class="node-type continue">↩ leave him be → cicero-leave</span>
-    <div class="node-text"><strong>Cicero</strong>
-      <span class="full">"...but a promise is a promise. He has to honour it. <em>They</em> have to honour it. They <em>cannot</em> lie — this is known. Not to me. Not them. So here we are..."<br><br>"...but for how much longer? Good stories don't keep you waiting — only me... but where am I? Hm..."<br><br>The quill resumes. The window closes.</span>
-    </div>
-  </div>
-  <div class="conn">│</div>
-
-  <div class="node narrator">
-    <div class="node-id">cicero-leave <span class="status done">DONE</span></div>
-    <span class="node-type continue">↩ return → crossroads-choice</span>
-    <div class="node-text">
-      <span class="full">A promise. Something that <em>cannot lie</em>. An obligation. And the old man — waiting, writing. For how long?<br><br>He's not ready to talk. Whatever holds his attention is stronger than you. You leave him to his pages. He'll be here when you come back.</span>
+  <!-- CLIMB PATH -->
+  <div class="tl-node right is-dice">
+    <div class="tl-card dice">
+      <img class="tl-thumb" src="ae-obelisk-fountain.png" alt="">
+      <div class="tl-body">
+        <div class="tl-id">climb-obelisk <span class="status done">DONE</span> <span class="tl-tag di">🎲 DC 10</span></div>
+        <div class="tl-text">Wade through fountain, find cracks, climb. Shadow flickers — hand slips. <em>"What happens next is not entirely up to you."</em></div>
+      </div>
     </div>
   </div>
 
 </div>
 
-<!-- ═══════════════════════════════════════════ -->
-<h2>Fountain Branch (⊙ Examine the fountain)</h2>
-<!-- ═══════════════════════════════════════════ -->
-<div class="flow">
-
-  <div class="node narrator">
-    <div class="node-id">examine-fountain <span class="status done">DONE</span></div>
-    <span class="node-type continue">⊙ look closer → fountain-close</span>
-    <div class="node-text">
-      <span class="full">You walk to the fountain. Up close, the strangeness sharpens. Basin carved from a single piece of obsidian. The water crystal-clear — clean the way a vacuum is clean. No algae, no sediment, no life. Remnants scattered at the edge.</span>
-    </div>
-  </div>
-  <div class="conn">│</div>
-
-  <div class="node narrator">
-    <div class="node-id">fountain-close <span class="status done">DONE</span></div>
-    <span class="node-type choices">keep searching vs move on</span>
-    <div class="node-text">
-      <span class="full">Coins on the bottom — copper, silver, something darker. Wishes thrown where no one listens. Water impossibly sterile. Around the basin: cloth rotted to threads, collapsed crates, a bone die, a metal button, a stone bead. Small personal things. Left by people who passed through — or stopped and never left.</span>
-      <br><em>◎ Keep searching</em> → roads-signs &nbsp;|&nbsp; <em>↩ Move on</em> → crossroads-choice
-    </div>
-  </div>
-  <div class="conn">│</div>
-
-  <div class="node narrator">
-    <div class="node-id">roads-signs <span class="status done">DONE</span></div>
-    <span class="node-type choices">keep searching vs move on</span>
-    <div class="node-text">
-      <span class="full">Four identical roads, same fog. Signs in unknown languages — distances to places that have <em>moved</em>. The world shifted. Those places may no longer exist. Signposts to nowhere. Directions to a dead world.</span>
-      <br><em>◎ Keep searching</em> → fountain-desk &nbsp;|&nbsp; <em>↩ Move on</em> → crossroads-choice
-    </div>
-  </div>
-  <div class="conn">│</div>
-
-  <div class="node narrator">
-    <div class="node-id">fountain-desk <span class="status done">DONE</span></div>
-    <span class="node-type choices">examine scrolls vs leave</span>
-    <div class="node-text">
-      <span class="full">A collapsed desk near the fountain. Two scrolls pinned under a stone. Parchment brittle, damp, the colour of old bone. One wrong move and they disintegrate. Whatever is written has survived centuries. Whether it survives <em>you</em> is another question.</span>
-      <br><em>⊙ Examine the scrolls</em> → scroll-check-1 &nbsp;|&nbsp; <em>↩ Leave them</em> → crossroads-choice
-    </div>
-  </div>
-  <div class="conn">│</div>
-
-  <div class="node dice">
-    <div class="node-id">scroll-check-1 <span class="status done">DONE</span></div>
-    <span class="node-type dice-tag">🎲 d20 · DC 10 · Delicacy</span>
-    <div class="node-text">
-      <span class="full">You reach for the first scroll. It creaks. The wax seal flakes away. You unroll slowly...</span>
-    </div>
-  </div>
-
-  <div class="branches">
-    <div class="branch-col">
-      <div class="branch-label a">✓ First scroll survives</div>
-      <div class="node dice" style="border-radius: 0 0 6px 6px;">
-        <div class="node-id">scroll-safe-1 <span class="status done">DONE</span></div>
-        <span class="node-type dice-tag">🎲 d20 · DC 10 · Delicacy (2nd scroll)</span>
-        <div class="node-text">
-          <span class="full">First survives! Set down carefully. Second scroll — worse condition, darker, damper...</span>
-          <br>✓ or ✗ → <strong>scroll-revelation</strong> (first scroll enough)
-        </div>
-      </div>
-    </div>
-    <div class="branch-col">
-      <div class="branch-label b">✗ First scroll crumbles</div>
-      <div class="node dice" style="border-radius: 0 0 6px 6px;">
-        <div class="node-id">scroll-lost-1 <span class="status done">DONE</span></div>
-        <span class="node-type dice-tag">🎲 d20 · DC 10 · Delicacy (2nd scroll)</span>
-        <div class="node-text">
-          <span class="full">First sighs apart — brown dust through your fingers. Gone. Only the second left...</span>
-          <br>✓ → scroll-revelation &nbsp;|&nbsp; ✗ → <strong>scrolls-dust</strong>
-        </div>
+<div class="tl-fork">
+  <div>
+    <div class="tl-fork-label a">✓ Success → climb-success</div>
+    <div class="tl-card coll" style="border-radius:0 0 6px 6px">
+      <img class="tl-thumb" src="ae-crossroads-wide.png" alt="">
+      <div class="tl-body">
+        <div class="tl-id">climb-success <span class="status done">DONE</span> <span class="tl-tag co">📜 The Infinite Plane</span></div>
+        <div class="tl-text">Endless obsidian plain. Ancient, alien, <em>old</em>. Borrowed earth, strange forests. Mystery <strong>revealed</strong>. ↩ crossroads</div>
       </div>
     </div>
   </div>
-  <div class="conn">│</div>
-
-  <div class="node coll">
-    <div class="node-id">scroll-revelation <span class="status done">DONE</span></div>
-    <span class="node-type coll-tag">📜 collection: The Unsent Letter</span>
-    <span class="node-type continue" style="margin-left:6px">↩ return → crossroads-choice</span>
-    <div class="node-text">
-      <span class="full">A ledger. Weapons orders — growing quantities. "Forest thickening. Night patrols doubled. Road to Ashenmere no longer safe after dusk." Shipments delayed, eastern road compromised.<br><br>At the bottom, different ink, shakier: <em>"Send word to my son. Tell them to stay home. Do not let his mother leave after twilight. Lock everything if I am not back by dark."</em><br><br>The message was never sent. No one read it. Until now.</span>
+  <div>
+    <div class="tl-fork-label b">✗ Fail → climb-fail-1</div>
+    <div class="tl-card outcome" style="border-radius:0 0 6px 6px">
+      <div class="tl-body">
+        <div class="tl-id">climb-fail-1 <span class="status done">DONE</span> <span class="tl-tag ch">2 choices</span></div>
+        <div class="tl-text">Soft splash. Stand up. Shake off. <span>⊙ Try again</span> <span class="arrow">→</span> DC 15 | <span>✕ Enough</span> <span class="arrow">→</span> crossroads</div>
+      </div>
     </div>
   </div>
-  <div class="conn">│</div>
+</div>
 
-  <div class="node outcome">
-    <div class="node-id">scrolls-dust <span class="status done">DONE</span></div>
-    <span class="node-type continue">↩ return → crossroads-choice</span>
-    <div class="node-text">
-      <span class="full">Both scrolls — dust. Two documents that survived centuries, undone by a single touch. Whatever was written — orders, letters, warnings — now dust on obsidian. Indistinguishable from the rest of this dead place.<br><br>Some things are not meant to be found. Or maybe they were — just not by you.</span>
+<div class="timeline">
+  <div class="tl-node left is-dice">
+    <div class="tl-card dice">
+      <div class="tl-body">
+        <div class="tl-id">climb-attempt-2 <span class="status done">DONE</span> <span class="tl-tag di">🎲 DC 15</span></div>
+        <div class="tl-text">Palms raw. Obelisk has <em>adjusted</em>. "The difficulty didn't change — <em>you</em> did."</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tl-node right is-outcome">
+    <div class="tl-card outcome">
+      <div class="tl-body">
+        <div class="tl-id">climb-fail-2 <span class="status done">DONE</span> <span class="tl-tag ch">2 choices</span></div>
+        <div class="tl-text">Back-first into water. Something <em>unreasonable</em> hasn't given up. <span>⊙ One last time</span> | <span>✕ Accept defeat</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tl-node left is-dice">
+    <div class="tl-card dice">
+      <div class="tl-body">
+        <div class="tl-id">climb-attempt-3 <span class="status done">DONE</span> <span class="tl-tag di">🎲 DC 20</span></div>
+        <div class="tl-text">Don't think — just pull. The obelisk is <em>watching</em>. Not a test of strength. A test of something else.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tl-node right is-outcome">
+    <div class="tl-card outcome">
+      <div class="tl-body">
+        <div class="tl-id">climb-failed <span class="status done">DONE</span> <span class="tl-tag fail">locked out</span></div>
+        <div class="tl-text">Third fall. Don't get up. "Some doors don't open at all." Mystery stays hidden. ↩ crossroads</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TREE PATH -->
+  <div class="tl-center">── alternative: Search for another way ──</div>
+
+  <div class="tl-node left">
+    <div class="tl-card narrator">
+      <div class="tl-body">
+        <div class="tl-id">find-ridge <span class="status done">DONE</span> <span class="tl-tag cont">◎ approach tree</span></div>
+        <div class="tl-text">Walk into mist. Same obsidian, same nothing. Then: a tree. A boulder at its base. Not the obelisk — but something.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tl-node right is-dice">
+    <div class="tl-card dice">
+      <div class="tl-body">
+        <div class="tl-id">tree-climb <span class="status done">DONE</span> <span class="tl-tag di">🎲 DC 15</span></div>
+        <div class="tl-text">Boulder → jump → grab branch. Dark bark, no wind. If it holds, you're up.</div>
+      </div>
     </div>
   </div>
 
 </div>
 
-<!-- ═══════════════════════════════════════════ -->
+<div class="tl-fork">
+  <div>
+    <div class="tl-fork-label a">✓ Branch holds</div>
+    <div class="tl-card coll" style="border-radius:0 0 6px 6px">
+      <div class="tl-body">
+        <div class="tl-id">tree-success <span class="status done">DONE</span> <span class="tl-tag co">📜 A Glimpse Through the Fog</span></div>
+        <div class="tl-text">Partial panorama. Roads visible, horizon hidden. "A glimpse. Not a view." ↩ crossroads</div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div class="tl-fork-label b">✗ Branch snaps — LOCKED</div>
+    <div class="tl-card outcome" style="border-radius:0 0 6px 6px">
+      <div class="tl-body">
+        <div class="tl-id">tree-failed <span class="status done">DONE</span> <span class="tl-tag fail">destroyed</span></div>
+        <div class="tl-text">Sharp wet snap. Branch comes away. Tree is done with you. No retry. ↩ crossroads</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="timeline">
+  <div class="tl-center">── fallback: both paths exhausted ──</div>
+
+  <div class="tl-node left is-coll">
+    <div class="tl-card coll">
+      <img class="tl-thumb" src="ae-crossroads-wide.png" alt="">
+      <div class="tl-body">
+        <div class="tl-id">wander-explore <span class="status done">DONE</span> <span class="tl-tag co">📜 The Infinite Plane</span></div>
+        <div class="tl-text">Just walk. No plan. The truth arrives from the ground: <em>it's all the same</em>. You didn't need to climb. ↩ crossroads</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ FOUNTAIN BRANCH ═══════════════ -->
+<h2>Fountain Branch — Examine the Fountain</h2>
+<div class="timeline">
+
+  <div class="tl-node right">
+    <div class="tl-card narrator">
+      <img class="tl-thumb" src="ae-obelisk-fountain.png" alt="">
+      <div class="tl-body">
+        <div class="tl-id">examine-fountain <span class="status done">DONE</span> <span class="tl-tag cont">⊙ look closer</span></div>
+        <div class="tl-text">Basin carved from single obsidian piece. Water crystal-clear — sterile. Remnants at the edge.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tl-node left is-choice">
+    <div class="tl-card choice">
+      <div class="tl-body">
+        <div class="tl-id">fountain-close <span class="status done">DONE</span> <span class="tl-tag ch">keep / move on</span></div>
+        <div class="tl-text">Coins — copper, silver, darker. Wishes where no one listens. Rotted cloth, bone die, stone bead. ◎ Keep <span class="arrow">→</span> roads | ↩ Move on</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tl-node right is-choice">
+    <div class="tl-card choice">
+      <div class="tl-body">
+        <div class="tl-id">roads-signs <span class="status done">DONE</span> <span class="tl-tag ch">keep / move on</span></div>
+        <div class="tl-text">4 identical roads. Signs in dead languages pointing to places that <em>moved</em>. Signposts to nowhere. ◎ Keep <span class="arrow">→</span> desk | ↩ Move on</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tl-node left is-choice">
+    <div class="tl-card choice">
+      <div class="tl-body">
+        <div class="tl-id">fountain-desk <span class="status done">DONE</span> <span class="tl-tag ch">examine / leave</span></div>
+        <div class="tl-text">Collapsed desk. Two scrolls pinned under stone. Brittle parchment. Whether it survives <em>you</em> is another question.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tl-node right is-dice">
+    <div class="tl-card dice">
+      <div class="tl-body">
+        <div class="tl-id">scroll-check-1 <span class="status done">DONE</span> <span class="tl-tag di">🎲 DC 10 Delicacy</span></div>
+        <div class="tl-text">First scroll. Wax flakes away. Unroll slowly...</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="tl-fork">
+  <div>
+    <div class="tl-fork-label a">✓ First survives</div>
+    <div class="tl-card dice" style="border-radius:0 0 6px 6px">
+      <div class="tl-body">
+        <div class="tl-id">scroll-safe-1 <span class="status done">DONE</span> <span class="tl-tag di">🎲 DC 10 (2nd)</span></div>
+        <div class="tl-text">First holds! Set down carefully. Second — worse condition... ✓ or ✗ → <strong>revelation</strong> (first enough)</div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div class="tl-fork-label b">✗ First crumbles</div>
+    <div class="tl-card dice" style="border-radius:0 0 6px 6px">
+      <div class="tl-body">
+        <div class="tl-id">scroll-lost-1 <span class="status done">DONE</span> <span class="tl-tag di">🎲 DC 10 (2nd)</span></div>
+        <div class="tl-text">First sighs apart — brown dust. Gone. Only the second left... ✓ → revelation | ✗ → <strong>dust</strong></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="timeline">
+  <div class="tl-node left is-coll">
+    <div class="tl-card coll">
+      <div class="tl-body">
+        <div class="tl-id">scroll-revelation <span class="status done">DONE</span> <span class="tl-tag co">📜 The Unsent Letter</span></div>
+        <div class="tl-text">Weapons orders. Forest thickening. Night patrols. <em>"Send word to my son. Lock everything if I am not back by dark."</em> Never sent. Never read. Until now.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tl-node right is-outcome">
+    <div class="tl-card outcome">
+      <div class="tl-body">
+        <div class="tl-id">scrolls-dust <span class="status done">DONE</span> <span class="tl-tag fail">lost forever</span></div>
+        <div class="tl-text">Both dust. Two documents that survived centuries, undone by a single touch. Some things are not meant to be found.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ CICERO BRANCH ═══════════════ -->
+<h2>Cicero Branch — Talk to the Old Man</h2>
+<div class="timeline">
+
+  <div class="tl-node right">
+    <div class="tl-card narrator">
+      <div class="tl-body">
+        <div class="tl-id">talk-cicero <span class="status done">DONE</span> <span class="tl-tag cont">† call out</span></div>
+        <div class="tl-text">Heavy cloak, forgettable. Obsidian quill gleams. Expensive book. He fits perfectly — crossroads grew around him.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tl-node left">
+    <div class="tl-card narrator">
+      <div class="tl-body">
+        <div class="tl-id">cicero-call-1 <span class="status done">DONE</span> <span class="tl-tag cont">† try louder</span></div>
+        <div class="tl-text">You call out. He stirs — barely. Like a sleeper shifting. Quill pauses, resumes. Not entirely here.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tl-node right">
+    <div class="tl-card narrator">
+      <div class="tl-body">
+        <div class="tl-id">cicero-call-2 <span class="status done">DONE</span> <span class="tl-tag cont">◎ wait and listen</span></div>
+        <div class="tl-text">Step closer. Raise voice. Nothing. Shadow falls too dark. He is <em>unreachable</em>.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tl-node left">
+    <div class="tl-card narrator">
+      <div class="tl-body">
+        <div class="tl-id">cicero-listen <span class="status done">DONE</span> <span class="tl-tag cont">◎ listen closer</span></div>
+        <div class="tl-text">Stop trying. Wait. Watch the quill. Then — quietly — he speaks. Not to you.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tl-node right">
+    <div class="tl-card main">
+      <div class="tl-body">
+        <div class="tl-id">cicero-mumble <span class="status done">DONE</span> <span class="tl-tag cont">↩ leave him be</span></div>
+        <div class="tl-text"><strong>Cicero</strong> — <em>"...a promise is a promise. They cannot lie — this is known. But for how much longer? Good stories don't keep you waiting — only me... but where am I?"</em></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tl-node left">
+    <div class="tl-card narrator">
+      <div class="tl-body">
+        <div class="tl-id">cicero-leave <span class="status done">DONE</span> <span class="tl-tag cont">↩ return</span></div>
+        <div class="tl-text">A promise. Something that <em>cannot lie</em>. He's not ready to talk. You leave him. He'll be here when you return.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════ ASSETS ═══════════════ -->
 <div class="img-summary">
   <h3>🖼 Image Assets</h3>
-  <div class="img-row"><span class="img-tag">EXISTS</span> <code>ae-null-meridian-portrait.png</code> — left panel background (2:3)</div>
-  <div class="img-row"><span class="img-tag">EXISTS</span> <code>ae-null-meridian.png</code> — scene frame bg (16:9)</div>
-  <div class="img-row"><span class="img-tag">EXISTS</span> <code>ae-crossroads-wide.png</code> — aerial crossroads panorama, scout preview + collection card</div>
-  <div class="img-row"><span class="img-tag">EXISTS</span> <code>ae-obelisk-fountain.png</code> — obelisk+fountain close-up, climb choice preview</div>
-  <div class="img-row"><span class="img-tag">EXISTS</span> <code>ae-s1-bg.png</code> — legacy bg</div>
-  <div class="img-row"><span class="img-tag">EXISTS</span> <code>ae-s1-waking.png</code> — legacy waking</div>
-  <div class="img-row"><span class="img-tag missing">MISSING</span> <code>ae-cicero-close.png</code> — Cicero portrait, talk choice preview</div>
-  <div class="img-row"><span class="img-tag missing">MISSING</span> <code>ae-fountain-close.png</code> — fountain close-up, examine choice preview</div>
+  <div class="img-row"><span class="img-tag ok">✓</span> <code>ae-null-meridian-portrait.png</code> — left panel bg (2:3)</div>
+  <div class="img-row"><span class="img-tag ok">✓</span> <code>ae-null-meridian.png</code> — scene frame bg (16:9)</div>
+  <div class="img-row"><span class="img-tag ok">✓</span> <code>ae-crossroads-wide.png</code> — panorama + collection</div>
+  <div class="img-row"><span class="img-tag ok">✓</span> <code>ae-obelisk-fountain.png</code> — obelisk, climb/fountain preview</div>
+  <div class="img-row"><span class="img-tag miss">✗</span> <code>ae-cicero-close.png</code> — Cicero portrait</div>
+  <div class="img-row"><span class="img-tag miss">✗</span> <code>ae-fountain-close.png</code> — fountain close-up</div>
 </div>
 
-<!-- ═══════════════════════════════════════════ -->
+<!-- ═══════════════ LEGEND ═══════════════ -->
 <div class="legend">
-  <div class="legend-item"><div class="legend-dot" style="background:rgba(201,156,90,.3)"></div> Main trunk</div>
-  <div class="legend-item"><div class="legend-dot" style="background:rgba(184,176,198,.2)"></div> Narrator</div>
-  <div class="legend-item"><div class="legend-dot" style="background:rgba(40,189,216,.2)"></div> Choice</div>
-  <div class="legend-item"><div class="legend-dot" style="background:rgba(255,123,92,.2)"></div> Outcome</div>
-  <div class="legend-item"><div class="legend-dot" style="background:rgba(201,156,90,.2)"></div> Dice check</div>
-  <div class="legend-item"><div class="legend-dot" style="background:rgba(92,200,92,.2)"></div> Collection</div>
-  <div class="legend-item"><span class="status done">DONE</span> <span class="status wip">WIP</span> <span class="status todo">TODO</span></div>
-  <div class="legend-item"><span class="img-tag">img ✓</span> <span class="img-tag missing">img ✗</span> <span class="img-tag mystery">mystery</span></div>
+  <div class="legend-item"><div class="legend-dot" style="background:rgba(201,156,90,.25)"></div> Main / narrator</div>
+  <div class="legend-item"><div class="legend-dot" style="background:rgba(40,189,216,.25)"></div> Choice</div>
+  <div class="legend-item"><div class="legend-dot" style="background:rgba(255,200,40,.25)"></div> Dice check</div>
+  <div class="legend-item"><div class="legend-dot" style="background:rgba(92,200,92,.25)"></div> Collection</div>
+  <div class="legend-item"><div class="legend-dot" style="background:rgba(255,123,92,.25)"></div> Outcome / fail</div>
+  <div class="legend-item"><span class="status done">DONE</span> <span class="status todo">TODO</span></div>
 </div>
 
 </body>
