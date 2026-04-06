@@ -1189,7 +1189,7 @@ html, body {
 
         <!-- narrative mode: continue button (rendered by JS) -->
         <div class="ae-continue-btn" tabindex="0" role="button" onclick="advanceScene()" id="continue-btn">
-          <span class="ae-continue-arrow">▶</span>
+          <span class="ae-continue-arrow" id="continue-arrow">▶</span>
           <span class="ae-continue-text" id="continue-text">wake up</span>
         </div>
 
@@ -1234,17 +1234,9 @@ const frames = [
       'So then — let us choose. Nothing simpler than that.',
       '<em class="standalone">— Someone, somewhere.</em>',
     ],
-    choices: [
-      { icon: '◎', tint: 'cyan', label: 'Where am I?',
-        preview: 'Fog. Half-light. A place that isn\'t a place. Nothing familiar — and yet somehow you feel it should have been.',
-        next: 'where-am-i' },
-      { icon: '†', tint: 'gold', label: 'Who\'s speaking?',
-        preview: 'An old man. A book in his hand — made of something dark. A quill. He writes as he watches. He has been watching you for some time.',
-        next: 'whos-speaking' },
-      { icon: '⊙', tint: 'ember', label: 'You sit up.',
-        preview: 'Your body is heavy. But it obeys. For now. Memories surface — dust, smoke, something that cracks — then nothing. Then this.',
-        next: 'sit-up' },
-    ],
+    continueLabel: 'stand up',
+    continueIcon: '⛯',
+    next: 'stand-up',
   },
 ];
 
@@ -1282,6 +1274,7 @@ function renderFrame(idx) {
     // narrative mode: continue gomb
     panel.classList.add('is-narrative');
     contText.textContent = f.continueLabel;
+    document.getElementById('continue-arrow').textContent = f.continueIcon || '▶';
   } else if (f.choices) {
     // choice mode: gombok
     panel.classList.remove('is-narrative');
