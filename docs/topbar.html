@@ -228,6 +228,7 @@ html, body {
   width: 20px; height: 20px;
   border-color: rgba(201,156,90,.28); border-style: solid;
   z-index: 2; pointer-events: none;
+  transition: opacity .4s ease;
 }
 .ae-img-panel::before { top: 14px; left: 14px;  border-width: 1px 0 0 1px; }
 .ae-img-panel::after  { top: 14px; right: 14px; border-width: 1px 1px 0 0; }
@@ -718,6 +719,43 @@ html, body {
 }
 .ae-sf-toggle:hover { opacity: .55; border-color: rgba(184,176,198,.25); }
 
+/* ── clean view toggle (bottom-left, image panel) ── */
+.ae-img-view-toggle {
+  position: absolute; bottom: 14px; left: 14px;
+  display: flex; align-items: center; gap: 6px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: var(--fs-ambient); letter-spacing: .14em; text-transform: uppercase;
+  color: var(--muted); opacity: .28;
+  background: rgba(5,4,10,.50); border: 1px solid rgba(184,176,198,.10);
+  border-radius: 2px; padding: 5px 10px;
+  cursor: pointer; z-index: 10;
+  transition: opacity .3s, border-color .3s, color .3s;
+  pointer-events: auto;
+}
+.ae-img-view-toggle:hover { opacity: .60; border-color: rgba(184,176,198,.25); }
+.ae-img-view-toggle:focus-visible { outline: 1px solid rgba(201,156,90,.45); outline-offset: -1px; }
+.ae-img-view-toggle svg { display: block; }
+
+/* clean view: hide all overlays */
+.ae-img-fade,
+.ae-img-caption,
+.ae-img-status,
+.ae-particles { transition: opacity .4s ease; }
+
+.ae-img-panel.clean-view .ae-img-fade,
+.ae-img-panel.clean-view .ae-img-caption,
+.ae-img-panel.clean-view .ae-img-status,
+.ae-img-panel.clean-view .ae-particles { opacity: 0; pointer-events: none; }
+
+.ae-img-panel.clean-view::before,
+.ae-img-panel.clean-view::after { opacity: 0; }
+
+.ae-img-panel.clean-view .ae-img-view-toggle {
+  opacity: .55; color: var(--gold);
+  border-color: rgba(201,156,90,.22);
+  background: rgba(5,4,10,.65);
+}
+
 /* ── vízszintes elválasztó ── */
 .ae-h-sep {
   height: 1px; flex-shrink: 0; position: relative;
@@ -993,6 +1031,11 @@ html, body {
           </div>
         </div>
       </div>
+
+      <button class="ae-img-view-toggle" onclick="toggleCleanView()" aria-label="Toggle background view">
+        <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" opacity=".7"><path fill-rule="evenodd" d="M1 8 C3.5 3.5,6 2,8 2 C10 2,12.5 3.5,15 8 C12.5 12.5,10 14,8 14 C6 14,3.5 12.5,1 8 Z M8 5.5 A2.5 2.5 0 1 0 8 10.5 A2.5 2.5 0 1 0 8 5.5 Z"/><circle cx="8" cy="8" r="1"/></svg>
+        <span>view</span>
+      </button>
     </div>
   </div>
 
@@ -1127,6 +1170,10 @@ html, body {
 <script>
 function toggleScene() {
   document.getElementById('scene-frame').classList.toggle('is-dialogue');
+}
+
+function toggleCleanView() {
+  document.querySelector('.ae-img-panel').classList.toggle('clean-view');
 }
 
 function advanceScene() {
