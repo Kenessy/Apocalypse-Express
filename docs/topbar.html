@@ -1693,24 +1693,6 @@ const collection = [
     hint: 'Climb the obelisk at the crossroads.',
     unlocked: false,
   },
-  {
-    id: 'obelisk-fountain',
-    title: 'The Obelisk',
-    img: 'ae-obelisk-fountain.png',
-    desc: 'A monolith of dark marble rising from an obsidian fountain. Its surface is carved with spiralling symbols — a staircase that forgot to be one. The water at its base is impossibly clear, patient, ancient.',
-    lore: 'A towering needle of carved obsidian, rising from a fountain at the crossroads. The carvings spiral upward — deep enough to grip, strange enough to unsettle. The water at its feet is crystal-clear. No one tends it. It does not need tending.',
-    hint: 'Survey the landscape at the crossroads.',
-    unlocked: false,
-  },
-  {
-    id: 'crossroads',
-    title: 'Null Meridian',
-    img: 'ae-null-meridian.png',
-    desc: 'Where two roads cross on an endless obsidian plain. A fountain marks the centre. The traces of travellers have long since worn away — but the water remains.',
-    lore: 'Two ancient roads crossing on a featureless obsidian plain. A fountain at the centre, still flowing after aeons. The footprints of every traveller who ever passed through have been erased. Only the roads remember.',
-    hint: 'Wake up.',
-    unlocked: false,
-  },
 ];
 
 function unlockCollection(id) {
@@ -1953,8 +1935,6 @@ function renderFrame(idx) {
 
   // collection unlocks
   const unlocks = {
-    'stand-up': 'crossroads',
-    'look-around': 'obelisk-fountain',
     'climb-success': 'panorama-void',
   };
   if (unlocks[f.id]) unlockCollection(unlocks[f.id]);
