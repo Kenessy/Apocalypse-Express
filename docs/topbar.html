@@ -857,8 +857,90 @@ html, body {
 /* narrative mode: continue gomb, choices elrejtve */
 .ae-bottom-panel.is-narrative .ae-action-label,
 .ae-bottom-panel.is-narrative .ae-action-div,
-.ae-bottom-panel.is-narrative .ae-choices-row { display: none; }
+.ae-bottom-panel.is-narrative .ae-choices-row,
+.ae-bottom-panel.is-narrative .ae-dice-area { display: none; }
 .ae-bottom-panel.is-narrative .ae-continue-btn { display: flex; }
+
+/* dice mode */
+.ae-bottom-panel.is-dice .ae-action-label,
+.ae-bottom-panel.is-dice .ae-action-div,
+.ae-bottom-panel.is-dice .ae-choices-row,
+.ae-bottom-panel.is-dice .ae-continue-btn { display: none; }
+.ae-bottom-panel.is-dice .ae-dice-area { display: flex; }
+
+.ae-dice-area {
+  display: none;
+  flex: 1; align-items: center; justify-content: center; gap: 16px;
+  border: 1px solid rgba(201,156,90,.18); border-radius: 4px;
+  background: rgba(201,156,90,.05);
+  box-shadow: 0 0 20px rgba(201,156,90,.08), inset 0 0 30px rgba(201,156,90,.03);
+  position: relative;
+}
+.ae-dice-label {
+  font: 400 var(--fs-caption)/1 'IBM Plex Mono';
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--muted); opacity: .55;
+  position: absolute; top: 8px; left: 14px;
+}
+.ae-dice-dc {
+  font: 500 var(--fs-caption)/1 'IBM Plex Mono';
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--gold); opacity: .65;
+  position: absolute; top: 8px; right: 14px;
+}
+.ae-dice-display {
+  font: 700 var(--fs-display)/1 'Cinzel', serif;
+  color: var(--gold2); opacity: .85;
+  letter-spacing: .06em;
+  min-width: 52px; text-align: center;
+  transition: color .3s, text-shadow .3s;
+}
+.ae-dice-display.rolling {
+  animation: ae-dice-flash .08s steps(1) infinite;
+}
+.ae-dice-display.success {
+  color: #5cc85c;
+  text-shadow: 0 0 20px rgba(92,200,92,.50), 0 0 40px rgba(92,200,92,.20);
+}
+.ae-dice-display.failed {
+  color: var(--ember);
+  text-shadow: 0 0 20px rgba(255,123,92,.50), 0 0 40px rgba(255,123,92,.20);
+}
+.ae-dice-roll-btn {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 18px; border-radius: 3px;
+  border: 1px solid rgba(201,156,90,.25);
+  background: rgba(201,156,90,.08);
+  cursor: pointer;
+  transition: background .2s, border-color .2s;
+}
+.ae-dice-roll-btn:hover {
+  background: rgba(201,156,90,.15);
+  border-color: rgba(201,156,90,.40);
+}
+.ae-dice-roll-btn .ae-continue-text {
+  font: 500 var(--fs-label)/1 'IBM Plex Mono';
+  letter-spacing: .18em; text-transform: uppercase;
+  color: var(--gold); opacity: .80;
+}
+.ae-dice-roll-btn .ae-continue-arrow {
+  animation: none; opacity: .80;
+}
+.ae-dice-result {
+  font: 700 var(--fs-caption)/1 'IBM Plex Mono';
+  letter-spacing: .18em; text-transform: uppercase;
+  position: absolute; bottom: 8px; left: 50%;
+  transform: translateX(-50%);
+  opacity: 0; transition: opacity .3s;
+}
+.ae-dice-result.show { opacity: 1; }
+.ae-dice-result.success { color: #5cc85c; text-shadow: 0 0 12px rgba(92,200,92,.40); }
+.ae-dice-result.failed { color: var(--ember); text-shadow: 0 0 12px rgba(255,123,92,.40); }
+
+@keyframes ae-dice-flash {
+  0%   { opacity: .90; }
+  50%  { opacity: .50; }
+}
 
 /* continue gomb */
 .ae-continue-btn {
@@ -1210,6 +1292,18 @@ html, body {
         <!-- choice mode: buttons (rendered by JS) -->
         <div class="ae-choices-row" id="choices-row">
         </div>
+
+        <!-- dice mode -->
+        <div class="ae-dice-area" id="dice-area">
+          <span class="ae-dice-label" id="dice-label">Athletics</span>
+          <span class="ae-dice-dc" id="dice-dc">DC 10</span>
+          <span class="ae-dice-display" id="dice-display">d20</span>
+          <div class="ae-dice-roll-btn" id="dice-roll-btn" tabindex="0" role="button" onclick="rollDice()">
+            <span class="ae-continue-arrow">🎲</span>
+            <span class="ae-continue-text">roll</span>
+          </div>
+          <span class="ae-dice-result" id="dice-result"></span>
+        </div>
       </div>
     </div>
 
@@ -1310,6 +1404,101 @@ const frames = [
         next: 'find-ridge' },
     ],
   },
+  {
+    id: 'climb-obelisk',
+    speaker: null,
+    text: [
+      'You place your hands on the obelisk. The stone is cold — colder than the air. The carvings are deep enough to grip, the symbols spiralling upward like a staircase that forgot to be one.',
+      'You pull yourself up. One handhold, then another. The marble is slick with condensation but the grooves hold. Below you, the fountain water catches what little light there is.',
+      'The mist thickens as you climb. Your arms burn. The wind picks up — a low, steady howl that wasn\'t there at ground level.',
+    ],
+    diceCheck: {
+      type: 'd20', dc: 10,
+      label: 'Athletics',
+      successNext: 'climb-success',
+      failNext: 'climb-fail-1',
+    },
+  },
+  {
+    id: 'climb-fail-1',
+    speaker: null,
+    text: [
+      'Your hand slips. The condensation wins. For a single, weightless moment you hang in the air — then gravity takes over.',
+      'You hit the water. Hard. The fountain basin catches you — the impact knocks the breath from your lungs but the water is deep enough. Cold. Shockingly cold. You surface, gasping.',
+      'Nothing broken. Nothing bleeding. The obelisk stands above you, indifferent. The carvings seem to shift in the mist, as if rearranging themselves.',
+      'You pull yourself out of the basin. Soaked. Shivering. But alive.',
+    ],
+    continueLabel: 'try again',
+    continueIcon: '⊙',
+    next: 'climb-attempt-2',
+  },
+  {
+    id: 'climb-attempt-2',
+    speaker: null,
+    text: [
+      'You approach the obelisk again. The stone is even slicker now — your wet hands slide across the surface. The grooves feel narrower, the carvings less cooperative.',
+      'You grit your teeth and climb. Higher this time. The carvings bite into your fingers. The wind screams.',
+    ],
+    diceCheck: {
+      type: 'd20', dc: 15,
+      label: 'Athletics',
+      successNext: 'climb-success',
+      failNext: 'climb-fail-2',
+    },
+  },
+  {
+    id: 'climb-fail-2',
+    speaker: null,
+    text: [
+      'Again. The stone rejects you. This time you slide — fingernails scraping marble — and fall backward into the basin with a tremendous splash.',
+      'The water is no warmer the second time. You float for a moment, staring up at the obelisk\'s peak vanishing into the mist. It feels further away than before.',
+      'One more try. That\'s all you have in you.',
+    ],
+    continueLabel: 'one last time',
+    continueIcon: '⊙',
+    next: 'climb-attempt-3',
+  },
+  {
+    id: 'climb-attempt-3',
+    speaker: null,
+    text: [
+      'Last chance. Your muscles ache. Your clothes are heavy with water. The carvings are almost invisible under the condensation.',
+      'You climb. Every handhold is a negotiation. Every metre is a war. The wind doesn\'t howl anymore — it <em class="inline">laughs</em>.',
+    ],
+    diceCheck: {
+      type: 'd20', dc: 20,
+      label: 'Athletics',
+      successNext: 'climb-success',
+      failNext: 'climb-failed',
+    },
+  },
+  {
+    id: 'climb-success',
+    speaker: null,
+    text: [
+      'You reach the top. The wind dies. The mist falls away beneath you like a curtain being drawn.',
+      'And you see it — <em class="inline">everything</em>.',
+      'An endless obsidian plateau, stretching to the horizon in every direction. The same dark glass, fractured and ancient, as far as the eye can reach. No edge. No end. Trees grow in patches where dirt has gathered in the cracks — stubborn, dark-leaved things clinging to pockets of soil. The roads cut through it all like old veins, converging at crossroads identical to this one. Faint lights in the distance — other fountains? Other obelisks?',
+      'The sky above is a bruise — purples and deep oranges pressing against a ceiling of cloud. Not a sunrise. Not a sunset. Something else entirely.',
+      'You have seen enough. The world is vast, and it is all the same. You climb back down slowly, carefully, and return to the crossroads.',
+    ],
+    continueLabel: 'return',
+    continueIcon: '↩',
+    next: 'crossroads-choice',
+  },
+  {
+    id: 'climb-failed',
+    speaker: null,
+    text: [
+      'You fall. Again. The water catches you. Again. But this time you don\'t get up right away.',
+      'You lie in the basin, staring up at the obelisk through the fog. It doesn\'t care. It never did.',
+      'Your body is done. Whatever is at the top of that column — you won\'t be seeing it today. The mist closes in around you, patient, indifferent.',
+      'You drag yourself out of the fountain and return to the crossroads. Bruised. Empty-handed.',
+    ],
+    continueLabel: 'give up',
+    continueIcon: '↩',
+    next: 'crossroads-choice',
+  },
 ];
 
 let currentFrameIdx = 0;
@@ -1342,14 +1531,29 @@ function renderFrame(idx) {
   const contText = document.getElementById('continue-text');
   const choicesRow = document.getElementById('choices-row');
 
-  if (f.continueLabel) {
+  // reset panel modes
+  panel.classList.remove('is-narrative', 'is-dice');
+
+  if (f.diceCheck) {
+    // dice mode
+    panel.classList.add('is-dice');
+    document.getElementById('dice-label').textContent = f.diceCheck.label || 'Skill Check';
+    document.getElementById('dice-dc').textContent = 'DC ' + f.diceCheck.dc;
+    const display = document.getElementById('dice-display');
+    display.textContent = 'd20';
+    display.className = 'ae-dice-display';
+    const result = document.getElementById('dice-result');
+    result.textContent = '';
+    result.className = 'ae-dice-result';
+    document.getElementById('dice-roll-btn').style.display = 'flex';
+    window._currentDice = f.diceCheck;
+  } else if (f.continueLabel) {
     // narrative mode: continue gomb
     panel.classList.add('is-narrative');
     contText.textContent = f.continueLabel;
     document.getElementById('continue-arrow').textContent = f.continueIcon || '▶';
   } else if (f.choices) {
     // choice mode: gombok
-    panel.classList.remove('is-narrative');
     choicesRow.innerHTML = f.choices.map(c => `
       <div class="ae-choice-btn" tabindex="0" role="button"
            data-icon="${c.icon}" data-tint="${c.tint}"
@@ -1378,6 +1582,44 @@ function advanceScene() {
   }
   // fallback: choice mode ha nincs next
   document.querySelector('.ae-bottom-panel').classList.remove('is-narrative');
+}
+
+function rollDice() {
+  const dice = window._currentDice;
+  if (!dice) return;
+  const btn = document.getElementById('dice-roll-btn');
+  const display = document.getElementById('dice-display');
+  const result = document.getElementById('dice-result');
+  btn.style.display = 'none';
+  display.classList.add('rolling');
+
+  // animate: flash random numbers for 1.2s
+  let ticks = 0;
+  const interval = setInterval(() => {
+    display.textContent = Math.floor(Math.random() * 20) + 1;
+    ticks++;
+    if (ticks > 15) {
+      clearInterval(interval);
+      // final roll
+      const roll = Math.floor(Math.random() * 20) + 1;
+      display.textContent = roll;
+      display.classList.remove('rolling');
+      const success = roll >= dice.dc;
+      display.classList.add(success ? 'success' : 'failed');
+      result.textContent = success ? (roll === 20 ? 'NAT 20!' : 'SUCCESS') : 'FAILED';
+      result.className = 'ae-dice-result show ' + (success ? 'success' : 'failed');
+      // navigate after delay
+      setTimeout(() => {
+        const nextId = success ? dice.successNext : dice.failNext;
+        const nextIdx = frames.findIndex(fr => fr.id === nextId);
+        if (nextIdx >= 0) renderFrame(nextIdx);
+        else {
+          const inner = document.getElementById('dialogue-inner');
+          inner.innerHTML = '<p class="ae-sf-text" style="opacity:.4;text-align:center">[ scene not yet written ]</p>';
+        }
+      }, 1800);
+    }
+  }, 80);
 }
 
 function chooseOption(nextId) {
