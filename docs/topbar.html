@@ -1140,15 +1140,9 @@ html, body {
         <img src="ae-null-meridian.png" alt="Null Meridian — The Obelisk">
       </div>
 
-      <!-- dialogue layer -->
+      <!-- dialogue layer (rendered by JS from frames[]) -->
       <div class="ae-sf-dialogue">
-        <div class="ae-sf-dialogue-inner">
-          <div class="ae-sf-speaker-row">
-            <span class="ae-sf-speaker-glyph">†</span>
-            <span class="ae-sf-speaker-name">Cicero</span>
-            <div class="ae-sf-speaker-line"></div>
-          </div>
-          <p class="ae-sf-text">Morning, noon, evening — twilight by day, darkness by night... Our life is a loop of shadow and light. An endless loop of — well. But what <em class="inline">is</em> a loop? A circuit where we wake up, go to work, then fall asleep. Every day, the same exact thing, around and around — like a hamster in a wheel. Neuron A fires to B, B fires to C, C fires back to A, forever repeating the same cycle.<br><br>A circuit where current builds forever... or — until it breaches a threshold? In the brain, a synapse... the signal arcs, spikes, cascades — finally shattering its own cycle. So we are in a loop until we reach... what? Death? Whatever the "desired effect" is? We quit? We die? We get promoted? Anything — <em class="inline">anything</em> — to break the loop. But here is the thing: the loop won't change. We have to. This is why I was right earlier — in a stable loop, structure emerges. And we organise our entire lives around it.<br><br>But what is the purpose of said loop? To keep something — us — in it. As long as necessary. We are the same as our brains: looped through space and time, returning to the same place, processing vast amounts in our connections — giving our time and devotion to those we deem worthy, and ignoring those we don't. The whole thing rests on a single, fragile assumption: that we <em class="inline">choose</em>.<br><br>But whenever we do... it always feels one-sided, doesn't it? We didn't really have a choice. Did we? <em class="standalone">Or did the loop decide for us?</em><br><br>Light follows darkness, darkness follows light. What is it that breaks us free? What if we step sideways — out of the loop entirely? Anything that breaks the flow is enough. And every loop ends with the same thing... learning. Becoming more than you were, by any means necessary. Learning... ascending.... ascension... opening your eyes and seeing... understanding... waking up... becoming... something more?<br><br><em class="standalone cyan">Wake up.</em></p>
+        <div class="ae-sf-dialogue-inner" id="dialogue-inner">
         </div>
       </div>
 
@@ -1193,37 +1187,14 @@ html, body {
         <span class="ae-action-label">choose</span>
         <div class="ae-action-div"></div>
 
-        <!-- narrative mode: single continue button -->
-        <div class="ae-continue-btn" tabindex="0" role="button" onclick="advanceScene()">
+        <!-- narrative mode: continue button (rendered by JS) -->
+        <div class="ae-continue-btn" tabindex="0" role="button" onclick="advanceScene()" id="continue-btn">
           <span class="ae-continue-arrow">▶</span>
-          <span class="ae-continue-text">wake up</span>
+          <span class="ae-continue-text" id="continue-text">wake up</span>
         </div>
 
-        <div class="ae-choices-row">
-          <div class="ae-choice-btn" tabindex="0" role="button"
-               data-icon="◎" data-tint="cyan"
-               data-preview-img="ae-null-meridian.png"
-               data-preview-label="Where am I?"
-               data-preview-text="Fog. Half-light. A place that isn't a place. Nothing familiar — and yet somehow you feel it should have been.">
-            <span class="ae-cb-icon ae-cb-icon--cyan">◎</span>
-            <span class="ae-cb-text">Where am I?</span>
-          </div>
-          <div class="ae-choice-btn" tabindex="0" role="button"
-               data-icon="†" data-tint="gold"
-               data-preview-img="ae-null-meridian.png"
-               data-preview-label="Who's speaking?"
-               data-preview-text="An old man. A book in his hand — made of something dark. A quill. He writes as he watches. He has been watching you for some time.">
-            <span class="ae-cb-icon ae-cb-icon--gold">†</span>
-            <span class="ae-cb-text">Who's speaking?</span>
-          </div>
-          <div class="ae-choice-btn" tabindex="0" role="button"
-               data-icon="⊙" data-tint="ember"
-               data-preview-img="ae-null-meridian.png"
-               data-preview-label="You sit up."
-               data-preview-text="Your body is heavy. But it obeys. For now. Memories surface — dust, smoke, something that cracks — then nothing. Then this.">
-            <span class="ae-cb-icon ae-cb-icon--ember">⊙</span>
-            <span class="ae-cb-text">You sit up.</span>
-          </div>
+        <!-- choice mode: buttons (rendered by JS) -->
+        <div class="ae-choices-row" id="choices-row">
         </div>
       </div>
     </div>
@@ -1234,6 +1205,120 @@ html, body {
 
 
 <script>
+/* ══════════════════════════════════════
+   STORY FRAMES
+══════════════════════════════════════ */
+const frames = [
+  {
+    id: 'cicero-monologue',
+    speaker: { name: 'Cicero', glyph: '†' },
+    text: [
+      'Morning, noon, evening — twilight by day, darkness by night... Our life is a loop of shadow and light. An endless loop of — well. But what <em class="inline">is</em> a loop? A circuit where we wake up, go to work, then fall asleep. Every day, the same exact thing, around and around — like a hamster in a wheel. Neuron A fires to B, B fires to C, C fires back to A, forever repeating the same cycle.',
+      'A circuit where current builds forever... or — until it breaches a threshold? In the brain, a synapse... the signal arcs, spikes, cascades — finally shattering its own cycle. So we are in a loop until we reach... what? Death? Whatever the "desired effect" is? We quit? We die? We get promoted? Anything — <em class="inline">anything</em> — to break the loop. But here is the thing: the loop won\'t change. We have to. This is why I was right earlier — in a stable loop, structure emerges. And we organise our entire lives around it.',
+      'But what is the purpose of said loop? To keep something — us — in it. As long as necessary. We are the same as our brains: looped through space and time, returning to the same place, processing vast amounts in our connections — giving our time and devotion to those we deem worthy, and ignoring those we don\'t. The whole thing rests on a single, fragile assumption: that we <em class="inline">choose</em>.',
+      'But whenever we do... it always feels one-sided, doesn\'t it? We didn\'t really have a choice. Did we? <em class="standalone">Or did the loop decide for us?</em>',
+      'Light follows darkness, darkness follows light. What is it that breaks us free? What if we step sideways — out of the loop entirely? Anything that breaks the flow is enough. And every loop ends with the same thing... learning. Becoming more than you were, by any means necessary. Learning... ascending.... ascension... opening your eyes and seeing... understanding... waking up... becoming... something more?',
+      '<em class="standalone cyan">Wake up.</em>',
+    ],
+    continueLabel: 'wake up',
+    next: 'waking-up',
+  },
+  {
+    id: 'waking-up',
+    speaker: null,  // narrátor, nincs speaker
+    text: [
+      'Your eyes open. Not slowly — all at once, like a switch being thrown.',
+      'Above you: nothing. Not darkness, not light. A sky that refuses to commit to either.',
+      'The ground beneath you is cold. Hard. You can feel it through... whatever you\'re wearing. You don\'t look down yet.',
+    ],
+    choices: [
+      { icon: '◎', tint: 'cyan', label: 'Where am I?',
+        preview: 'Fog. Half-light. A place that isn\'t a place. Nothing familiar — and yet somehow you feel it should have been.',
+        next: 'where-am-i' },
+      { icon: '†', tint: 'gold', label: 'Who\'s speaking?',
+        preview: 'An old man. A book in his hand — made of something dark. A quill. He writes as he watches. He has been watching you for some time.',
+        next: 'whos-speaking' },
+      { icon: '⊙', tint: 'ember', label: 'You sit up.',
+        preview: 'Your body is heavy. But it obeys. For now. Memories surface — dust, smoke, something that cracks — then nothing. Then this.',
+        next: 'sit-up' },
+    ],
+  },
+];
+
+let currentFrameIdx = 0;
+
+/* ── render engine ── */
+function renderFrame(idx) {
+  const f = frames[idx];
+  if (!f) return;
+  currentFrameIdx = idx;
+
+  // dialogue inner
+  const inner = document.getElementById('dialogue-inner');
+  let html = '';
+
+  // speaker row (ha van)
+  if (f.speaker) {
+    html += `<div class="ae-sf-speaker-row">
+      <span class="ae-sf-speaker-glyph">${f.speaker.glyph}</span>
+      <span class="ae-sf-speaker-name">${f.speaker.name}</span>
+      <div class="ae-sf-speaker-line"></div>
+    </div>`;
+  }
+
+  // text paragraphs
+  html += '<p class="ae-sf-text">' + f.text.join('<br><br>') + '</p>';
+  inner.innerHTML = html;
+
+  // bottom panel
+  const panel = document.querySelector('.ae-bottom-panel');
+  const contText = document.getElementById('continue-text');
+  const choicesRow = document.getElementById('choices-row');
+
+  if (f.continueLabel) {
+    // narrative mode: continue gomb
+    panel.classList.add('is-narrative');
+    contText.textContent = f.continueLabel;
+  } else if (f.choices) {
+    // choice mode: gombok
+    panel.classList.remove('is-narrative');
+    choicesRow.innerHTML = f.choices.map(c => `
+      <div class="ae-choice-btn" tabindex="0" role="button"
+           data-icon="${c.icon}" data-tint="${c.tint}"
+           data-preview-img="ae-null-meridian.png"
+           data-preview-label="${c.label}"
+           data-preview-text="${c.preview}"
+           data-next="${c.next}">
+        <span class="ae-cb-icon ae-cb-icon--${c.tint}">${c.icon}</span>
+        <span class="ae-cb-text">${c.label}</span>
+      </div>
+    `).join('');
+    initChoiceEvents();
+  }
+
+  // scene frame dialogue módba
+  document.getElementById('scene-frame').classList.add('is-dialogue');
+}
+
+function advanceScene() {
+  const f = frames[currentFrameIdx];
+  if (!f) return;
+  if (f.next) {
+    const nextIdx = frames.findIndex(fr => fr.id === f.next);
+    if (nextIdx >= 0) { renderFrame(nextIdx); return; }
+  }
+  // fallback: choice mode ha nincs next
+  document.querySelector('.ae-bottom-panel').classList.remove('is-narrative');
+}
+
+function chooseOption(nextId) {
+  const nextIdx = frames.findIndex(fr => fr.id === nextId);
+  if (nextIdx >= 0) { renderFrame(nextIdx); return; }
+  // frame még nem létezik — placeholder
+  const inner = document.getElementById('dialogue-inner');
+  inner.innerHTML = '<p class="ae-sf-text" style="opacity:.4;text-align:center">[ scene not yet written ]</p>';
+}
+
 function toggleScene() {
   document.getElementById('scene-frame').classList.toggle('is-dialogue');
 }
@@ -1244,12 +1329,6 @@ function toggleCleanView() {
 
 function toggleSceneCleanView() {
   document.getElementById('scene-frame').classList.toggle('clean-view');
-}
-
-function advanceScene() {
-  // narrative → choice mode: continue gomb eltűnik, choices megjelennek
-  const panel = document.querySelector('.ae-bottom-panel');
-  panel.classList.remove('is-narrative');
 }
 
 (function initParticles() {
@@ -1296,7 +1375,20 @@ function advanceScene() {
   }
 })();
 
-(function initChoicePreview() {
+const previewTints = {
+  ember:  'rgba(255,123,92,.22)',
+  cyan:   'rgba(40,189,216,.16)',
+  gold:   'rgba(201,156,90,.16)',
+  purple: 'rgba(163,139,207,.18)',
+};
+const previewIconColors = {
+  ember:  'var(--ember)',
+  cyan:   'var(--cyan)',
+  gold:   'var(--gold)',
+  purple: 'var(--purple2)',
+};
+
+function initChoiceEvents() {
   const frame    = document.getElementById('scene-frame');
   const prevImg  = document.getElementById('sf-prev-img');
   const prevTint = document.getElementById('sf-prev-tint');
@@ -1304,26 +1396,13 @@ function advanceScene() {
   const prevLbl  = document.getElementById('sf-prev-label');
   const prevTxt  = document.getElementById('sf-prev-text');
 
-  const tints = {
-    ember:  'rgba(255,123,92,.22)',
-    cyan:   'rgba(40,189,216,.16)',
-    gold:   'rgba(201,156,90,.16)',
-    purple: 'rgba(163,139,207,.18)',
-  };
-  const iconColors = {
-    ember:  'var(--ember)',
-    cyan:   'var(--cyan)',
-    gold:   'var(--gold)',
-    purple: 'var(--purple2)',
-  };
-
   function showPreview(btn) {
     const tint = btn.dataset.tint || 'gold';
     prevImg.src              = btn.dataset.previewImg || '';
-    prevTint.style.background = tints[tint] || tints.gold;
+    prevTint.style.background = previewTints[tint] || previewTints.gold;
     prevIcon.textContent     = btn.dataset.icon || '▶';
-    prevIcon.style.color     = iconColors[tint] || iconColors.gold;
-    prevLbl.textContent      = btn.dataset.previewLabel || btn.querySelector('.ae-cb-text').textContent;
+    prevIcon.style.color     = previewIconColors[tint] || previewIconColors.gold;
+    prevLbl.textContent      = btn.dataset.previewLabel || '';
     prevTxt.textContent      = btn.dataset.previewText || '';
     frame.classList.add('is-preview');
   }
@@ -1337,8 +1416,12 @@ function advanceScene() {
     btn.addEventListener('mouseleave', hidePreview);
     btn.addEventListener('focus',      () => showPreview(btn));
     btn.addEventListener('blur',       hidePreview);
+    btn.addEventListener('click',      () => chooseOption(btn.dataset.next));
   });
-})();
+}
+
+// init first frame
+renderFrame(0);
 </script>
 </body>
 </html>
