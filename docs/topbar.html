@@ -968,32 +968,63 @@ html, body {
   color: var(--muted); opacity: .55;
 }
 
-/* d20 SVG */
+/* d20 3D wireframe */
 .ae-d20-wrap {
   position: relative;
   width: 160px; height: 160px;
   display: flex; align-items: center; justify-content: center;
+  perspective: 500px;
 }
-.ae-d20-svg {
-  width: 160px; height: 160px;
-  filter: drop-shadow(0 0 20px rgba(201,156,90,.30)) drop-shadow(0 0 50px rgba(201,156,90,.10));
-  transition: filter .3s;
+.ae-d20-3d {
+  width: 140px; height: 140px;
+  position: relative;
+  transform-style: preserve-3d;
+  animation: ae-d20-idle 12s linear infinite;
+  transition: filter .4s;
+  filter: drop-shadow(0 0 20px rgba(201,156,90,.25)) drop-shadow(0 0 50px rgba(201,156,90,.08));
 }
-.ae-d20-svg.rolling {
-  animation: ae-d20-spin 1.2s ease-out;
+.ae-d20-face {
+  position: absolute; inset: 0;
+  border: 1.5px solid rgba(201,156,90,.45);
+  background: rgba(201,156,90,.03);
+  clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
+  backface-visibility: visible;
 }
-.ae-d20-svg.success {
-  filter: drop-shadow(0 0 24px rgba(92,200,92,.50)) drop-shadow(0 0 60px rgba(92,200,92,.20));
+.ae-d20-face:nth-child(1) { transform: rotateX(0deg); }
+.ae-d20-face:nth-child(2) { transform: rotateX(60deg); }
+.ae-d20-face:nth-child(3) { transform: rotateX(120deg); }
+.ae-d20-face:nth-child(4) { transform: rotateY(90deg); }
+.ae-d20-face:nth-child(5) { transform: rotateY(90deg) rotateX(60deg); }
+.ae-d20-face:nth-child(6) { transform: rotateY(90deg) rotateX(120deg); }
+
+@keyframes ae-d20-idle {
+  0%   { transform: rotateX(0deg)   rotateY(0deg)   rotateZ(0deg); }
+  100% { transform: rotateX(360deg) rotateY(360deg) rotateZ(180deg); }
 }
-.ae-d20-svg.failed {
-  filter: drop-shadow(0 0 24px rgba(255,123,92,.50)) drop-shadow(0 0 60px rgba(255,123,92,.20));
+.ae-d20-3d.rolling {
+  animation: ae-d20-roll 1.2s cubic-bezier(.2,.8,.3,1);
 }
-@keyframes ae-d20-spin {
-  0%   { transform: rotate(0deg) scale(1); }
-  25%  { transform: rotate(90deg) scale(1.05); }
-  50%  { transform: rotate(200deg) scale(.98); }
-  75%  { transform: rotate(320deg) scale(1.02); }
-  100% { transform: rotate(360deg) scale(1); }
+@keyframes ae-d20-roll {
+  0%   { transform: rotateX(0deg)    rotateY(0deg)    rotateZ(0deg)    scale(1); }
+  20%  { transform: rotateX(180deg)  rotateY(90deg)   rotateZ(45deg)   scale(1.08); }
+  45%  { transform: rotateX(400deg)  rotateY(250deg)  rotateZ(120deg)  scale(.95); }
+  70%  { transform: rotateX(600deg)  rotateY(500deg)  rotateZ(200deg)  scale(1.03); }
+  90%  { transform: rotateX(700deg)  rotateY(680deg)  rotateZ(340deg)  scale(1); }
+  100% { transform: rotateX(720deg)  rotateY(720deg)  rotateZ(360deg)  scale(1); }
+}
+.ae-d20-3d.success {
+  filter: drop-shadow(0 0 28px rgba(92,200,92,.50)) drop-shadow(0 0 60px rgba(92,200,92,.18));
+}
+.ae-d20-3d.success .ae-d20-face {
+  border-color: rgba(92,200,92,.50);
+  background: rgba(92,200,92,.04);
+}
+.ae-d20-3d.failed {
+  filter: drop-shadow(0 0 28px rgba(255,123,92,.50)) drop-shadow(0 0 60px rgba(255,123,92,.18));
+}
+.ae-d20-3d.failed .ae-d20-face {
+  border-color: rgba(255,123,92,.50);
+  background: rgba(255,123,92,.04);
 }
 
 .ae-d20-number {
@@ -1004,6 +1035,7 @@ html, body {
   letter-spacing: .04em;
   text-shadow: 0 0 16px rgba(201,156,90,.40);
   transition: color .3s, text-shadow .3s;
+  z-index: 2;
 }
 .ae-d20-number.rolling {
   animation: ae-dice-flash .08s steps(1) infinite;
@@ -1278,17 +1310,14 @@ html, body {
       <div class="ae-dice-overlay" id="dice-overlay">
         <span class="ae-dice-overlay-label" id="dice-ov-label">Athletics</span>
         <div class="ae-d20-wrap">
-          <svg class="ae-d20-svg" id="d20-svg" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- d20 icosahedron projection -->
-            <polygon points="80,8 152,56 152,112 80,152 8,112 8,56" stroke="currentColor" stroke-width="1.5" fill="rgba(201,156,90,.06)" />
-            <line x1="80" y1="8" x2="80" y2="152" stroke="currentColor" stroke-width="0.6" opacity=".15"/>
-            <line x1="8" y1="56" x2="152" y2="112" stroke="currentColor" stroke-width="0.6" opacity=".15"/>
-            <line x1="152" y1="56" x2="8" y2="112" stroke="currentColor" stroke-width="0.6" opacity=".15"/>
-            <line x1="80" y1="8" x2="8" y2="112" stroke="currentColor" stroke-width="0.6" opacity=".12"/>
-            <line x1="80" y1="8" x2="152" y2="112" stroke="currentColor" stroke-width="0.6" opacity=".12"/>
-            <line x1="80" y1="152" x2="8" y2="56" stroke="currentColor" stroke-width="0.6" opacity=".12"/>
-            <line x1="80" y1="152" x2="152" y2="56" stroke="currentColor" stroke-width="0.6" opacity=".12"/>
-          </svg>
+          <div class="ae-d20-3d" id="d20-3d">
+            <div class="ae-d20-face"></div>
+            <div class="ae-d20-face"></div>
+            <div class="ae-d20-face"></div>
+            <div class="ae-d20-face"></div>
+            <div class="ae-d20-face"></div>
+            <div class="ae-d20-face"></div>
+          </div>
           <span class="ae-d20-number" id="d20-number">d20</span>
         </div>
         <span class="ae-dice-overlay-dc" id="dice-ov-dc">DC 10</span>
@@ -1661,8 +1690,8 @@ function renderFrame(idx) {
     const d20num = document.getElementById('d20-number');
     d20num.textContent = 'd20';
     d20num.className = 'ae-d20-number';
-    const d20svg = document.getElementById('d20-svg');
-    d20svg.className.baseVal = 'ae-d20-svg';
+    const d20svg = document.getElementById('d20-3d');
+    d20svg.className = 'ae-d20-3d';
     d20svg.style.color = 'var(--gold)';
     const ovResult = document.getElementById('dice-ov-result');
     ovResult.textContent = '';
@@ -1716,7 +1745,7 @@ function rollDice() {
   const result = document.getElementById('dice-result');
   // overlay elements
   const d20num = document.getElementById('d20-number');
-  const d20svg = document.getElementById('d20-svg');
+  const d20svg = document.getElementById('d20-3d');
   const ovResult = document.getElementById('dice-ov-result');
 
   btn.style.display = 'none';
