@@ -248,9 +248,48 @@ h2 { color: #e6cfa1; font-size: 18px; margin: 32px 0 16px; opacity: .8; }
 
   <div class="conn" style="padding-left: 30px;">│</div>
 
-  <div class="node narrator" style="opacity: .5;">
-    <div class="node-id">find-ridge <span class="status todo">TODO</span></div>
-    <div class="node-text"><em>Alternative scout path — not yet planned</em></div>
+  <!-- ── FIND RIDGE / TREE PATH ── -->
+  <div class="node narrator">
+    <div class="node-id">find-ridge <span class="status done">DONE</span></div>
+    <span class="node-type continue">◎ approach the tree</span>
+    <div class="node-text">
+      <span class="full">You turn away from the obelisk and walk into the mist. Carefully. Slowly. Never straying so far that you lose sight of the fountain's faint glow behind you.<br><br>The landscape doesn't change. The same obsidian underfoot, the same grey nothing in every direction. You walk for what feels like minutes but could be seconds — distance is meaningless here. The fog eats depth, swallows scale.<br><br>You're about to turn back when you spot it. A shape in the mist — solid, dark, not obsidian. A tree. Thick-trunked, dark-leaved, growing from a crack where soil has gathered over centuries. And at its base: a boulder. Large enough to stand on. High enough that you might — <em>just might</em> — reach the lowest branches.<br><br>It's not the obelisk. But it's something.</span>
+    </div>
+  </div>
+  <div class="conn" style="padding-left: 30px;">│</div>
+
+  <div class="node dice">
+    <div class="node-id">tree-climb <span class="status done">DONE</span></div>
+    <span class="node-type dice-tag">🎲 d20 · DC 15 · Athletics</span>
+    <div class="node-text">
+      <span class="full">You climb the boulder. From the top, the lowest branch hangs about a metre above your head. Thick as your thigh, dark and slick with condensation.<br><br>The tree is strange. Its bark is almost black, grooved in patterns that look deliberate. The leaves are broad, heavy, and they don't move — because there is no wind down here.<br><br>You coil your legs and jump. Your fingers brush the bark — wet, cold, uncertain. If the branch holds, you're up. If it doesn't...</span>
+    </div>
+  </div>
+
+  <div class="branches">
+    <div class="branch-col">
+      <div class="branch-label a">✓ Success (≥15)</div>
+      <div class="node coll" style="border-radius: 0 0 6px 6px;">
+        <div class="node-id">tree-success <span class="status done">DONE</span></div>
+        <span class="node-type coll-tag">📜 collection: A Glimpse Through the Fog</span>
+        <span class="node-type continue" style="margin-left:6px">↩ climb down → crossroads-choice</span>
+        <div class="node-text">
+          <span class="full">The branch holds. You swing, grip, pull — and you're up. You climb higher until the canopy opens and your head breaks through the fog.<br><br>You see... <em>something</em>. The roads below — four dark lines converging on the crossroads. The fountain, small from here. The obelisk, a black needle rising higher than you'll ever get from this tree.<br><br>But the horizon stays hidden. The fog is thinner up here, not gone. You can see the <em>shape</em> of the world — vast, flat, endless — but not its edges. Not its truth.<br><br>A glimpse. Not a view. But more than you had before.</span>
+          <br>Mystery preview <strong>revealed</strong> (partial). <span class="img-tag">ae-crossroads-wide.png</span>
+        </div>
+      </div>
+    </div>
+    <div class="branch-col">
+      <div class="branch-label b">✗ Fail (&lt;15) — LOCKED</div>
+      <div class="node outcome" style="border-radius: 0 0 6px 6px;">
+        <div class="node-id">tree-failed <span class="status done">DONE</span></div>
+        <span class="node-type continue">↩ return → crossroads-choice</span>
+        <div class="node-text">
+          <span class="full">Your fingers close around the branch — and it <em>cracks</em>. A sharp, wet snap that echoes through the fog like a gunshot.<br><br>The branch comes away in your hands. You fall — not far, just off the boulder — but you land hard on the obsidian. The remaining branches are higher now — impossibly so.<br><br>This path is closed. Whatever was up there — you won't be seeing it from this tree.</span>
+          <br>Tree <strong>destroyed</strong>. No retry possible.
+        </div>
+      </div>
+    </div>
   </div>
 
 </div>

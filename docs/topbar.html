@@ -1693,6 +1693,15 @@ const collection = [
     hint: 'Climb the obelisk at the crossroads.',
     unlocked: false,
   },
+  {
+    id: 'glimpse-fog',
+    title: 'A Glimpse Through the Fog',
+    img: 'ae-crossroads-wide.png',
+    desc: 'A partial view from a treetop — just high enough to see the roads converge, but not high enough to see where they lead. The horizon stays hidden. You know there is more. You just can\'t see it.',
+    lore: 'From the crown of a dark-leaved tree, barely above the fog line. The crossroads spreads below — roads cutting through obsidian like old scars. But the edges of the world stay out of reach. A glimpse is not a view. It\'s a promise.',
+    hint: 'Find another way up at the crossroads.',
+    unlocked: false,
+  },
 ];
 
 function unlockCollection(id) {
@@ -1934,6 +1943,62 @@ const frames = [
     continueIcon: '↩',
     next: 'crossroads-choice',
   },
+  // ── FIND RIDGE BRANCH ──
+  {
+    id: 'find-ridge',
+    speaker: null,
+    text: [
+      'You turn away from the obelisk and walk into the mist. Carefully. Slowly. Never straying so far that you lose sight of the fountain\'s faint glow behind you.',
+      'The landscape doesn\'t change. The same obsidian underfoot, the same grey nothing in every direction. You walk for what feels like minutes but could be seconds — distance is meaningless here. The fog eats depth, swallows scale. Everything is always the same distance away: <em class="inline">too far to see</em>.',
+      'You\'re about to turn back when you spot it. A shape in the mist — solid, dark, not obsidian. A tree. Thick-trunked, dark-leaved, growing from a crack where soil has gathered over centuries. And at its base: a boulder. Large enough to stand on. High enough that you might — <em class="inline">just might</em> — reach the lowest branches.',
+      'It\'s not the obelisk. But it\'s something.',
+    ],
+    continueLabel: 'approach the tree',
+    continueIcon: '◎',
+    next: 'tree-climb',
+  },
+  {
+    id: 'tree-climb',
+    speaker: null,
+    text: [
+      'You climb the boulder. The stone is rough — easier than obsidian, at least. From the top, the lowest branch hangs about a metre above your head. Thick as your thigh, dark and slick with condensation.',
+      'The tree is strange. Its bark is almost black, grooved in patterns that look deliberate. The leaves are broad, heavy, and they don\'t move in the wind — because there is no wind down here. Everything is still.',
+      'You coil your legs and jump. Your fingers brush the bark — wet, cold, uncertain. If the branch holds, you\'re up. If it doesn\'t...',
+    ],
+    diceCheck: {
+      type: 'd20', dc: 15,
+      label: 'Athletics',
+      successNext: 'tree-success',
+      failNext: 'tree-failed',
+    },
+  },
+  {
+    id: 'tree-success',
+    speaker: null,
+    text: [
+      'The branch holds. You swing, grip, pull — and you\'re up. The bark bites into your palms but it\'s solid. You climb higher, branch by branch, until the canopy opens and your head breaks through the fog.',
+      'You see... <em class="inline">something</em>. The roads below — four dark lines converging on the crossroads, stretching outward into grey. The fountain, small from here, still catching light. The obelisk, a black needle rising higher than you\'ll ever get from this tree.',
+      'But the horizon — the horizon stays hidden. The fog is thinner up here, not gone. You can see the <em class="inline">shape</em> of the world — vast, flat, endless — but not its edges. Not its truth. You know there is more out there. You just can\'t see it from here.',
+      'A glimpse. Not a view. But more than you had before.',
+      'You climb down carefully. The branches creak but hold. The boulder accepts you back without comment.',
+    ],
+    continueLabel: 'climb down',
+    continueIcon: '↩',
+    next: 'crossroads-choice',
+  },
+  {
+    id: 'tree-failed',
+    speaker: null,
+    text: [
+      'Your fingers close around the branch — and it <em class="inline">cracks</em>. Not a slow groan, not a warning. A sharp, wet snap that echoes through the fog like a gunshot.',
+      'The branch comes away in your hands. You fall — not far, just off the boulder — but you land hard on the obsidian. The broken branch lands beside you, trailing splinters and dark sap.',
+      'You look up. Where the branch was, a pale wound in the bark. The remaining branches are higher now — impossibly so. Even if you climbed the boulder again, there\'s nothing to grab. The tree is done with you.',
+      'This path is closed. Whatever was up there — you won\'t be seeing it from this tree.',
+    ],
+    continueLabel: 'return',
+    continueIcon: '↩',
+    next: 'crossroads-choice',
+  },
 ];
 
 let currentFrameIdx = 0;
@@ -1947,6 +2012,7 @@ function renderFrame(idx) {
   // collection unlocks
   const unlocks = {
     'climb-success': 'panorama-void',
+    'tree-success': 'glimpse-fog',
   };
   if (unlocks[f.id]) unlockCollection(unlocks[f.id]);
 
@@ -2039,7 +2105,7 @@ function advanceScene() {
   const f = frames[currentFrameIdx];
   if (!f) return;
   // track completed branches
-  if (f.id === 'climb-success') window._scoutDone = true;
+  if (f.id === 'climb-success' || f.id === 'tree-success') window._scoutDone = true;
   if (f.next) {
     const nextIdx = frames.findIndex(fr => fr.id === f.next);
     if (nextIdx >= 0) { renderFrame(nextIdx); return; }
