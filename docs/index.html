@@ -2254,13 +2254,25 @@ const frames = [
 
 let currentFrameIdx = 0;
 const visitedFrames = new Set();
+const completedBranches = new Set(); // tracks which crossroads branches are done
 
 /* ── render engine ── */
 function renderFrame(idx) {
   const f = frames[idx];
   if (!f) return;
+  const prevFrameId = currentFrameIdx >= 0 ? frames[currentFrameIdx]?.id : null;
   currentFrameIdx = idx;
   visitedFrames.add(f.id);
+
+  // track completed branches when returning to crossroads
+  if (f.id === 'crossroads-choice' && prevFrameId) {
+    const scoutFrames = ['climb-success','climb-failed','tree-success','tree-failed','wander-explore','look-around'];
+    const ciceroFrames = ['cicero-leave'];
+    const fountainFrames = ['fountain-close','roads-signs','fountain-desk','scroll-revelation','scrolls-dust'];
+    if (scoutFrames.includes(prevFrameId)) completedBranches.add('scout');
+    if (ciceroFrames.includes(prevFrameId)) completedBranches.add('cicero');
+    if (fountainFrames.includes(prevFrameId)) completedBranches.add('fountain');
+  }
 
   // collection unlocks
   const unlocks = {
@@ -2341,8 +2353,21 @@ function renderFrame(idx) {
   } else if (f.choices) {
     // choice mode: gombok
     diceOverlay.classList.remove('active');
-    // dynamic choices for look-around when both scout paths exhausted
+    // filter out completed branches at crossroads
     let choices = f.choices;
+    if (f.id === 'crossroads-choice') {
+      const branchMap = { 'look-around': 'scout', 'talk-cicero': 'cicero', 'examine-fountain': 'fountain' };
+      choices = f.choices.filter(c => !completedBranches.has(branchMap[c.next]));
+      if (choices.length === 0) {
+        // all branches done — chapter end placeholder
+        panel.classList.add('is-narrative');
+        contText.textContent = 'what now?';
+        document.getElementById('continue-arrow').textContent = '…';
+        document.getElementById('scene-frame').classList.add('is-dialogue');
+        return;
+      }
+    }
+    // dynamic choices for look-around when both scout paths exhausted
     if (f.id === 'look-around') {
       const climbDone = visitedFrames.has('climb-obelisk');
       const treeDone = visitedFrames.has('tree-climb');
