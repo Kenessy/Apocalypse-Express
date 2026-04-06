@@ -287,43 +287,43 @@ html, body {
     linear-gradient(to top,    rgba(5,4,10,.40) 0%, transparent 14%);
 }
 /* ── location title card ── */
+/* ── location title card ── */
 .ae-img-caption {
   position: absolute; bottom: 0; left: 0; right: 0;
-  padding: 72px 24px 28px;
+  padding: 72px 28px 26px 22px;
   background: linear-gradient(to top,
     rgba(5,4,10,.94) 0%,
     rgba(5,4,10,.72) 38%,
     transparent 100%);
-  display: flex; flex-direction: column; align-items: center; gap: 10px;
-  pointer-events: none; text-align: center;
+  display: flex; flex-direction: column; align-items: flex-start; gap: 8px;
+  pointer-events: none;
 }
 .ae-loc-rule {
-  width: 36px; height: 1px;
-  background: linear-gradient(to right, transparent, rgba(201,156,90,.55), transparent);
-  margin: 0 auto 2px;
+  width: 48px; height: 1px;
+  background: linear-gradient(to right, rgba(201,156,90,.50), transparent);
+  margin-bottom: 1px;
 }
 .ae-loc-name {
   font-family: 'Cinzel', serif;
   font-size: var(--fs-display); font-weight: 700; line-height: 1;
-  letter-spacing: .28em;
-  color: rgba(242,232,212,.66);
+  letter-spacing: .22em;
+  color: rgba(235,220,195,.60);
   text-shadow:
-    0 2px 18px rgba(0,0,0,.90),
-    0 0  60px rgba(5,4,10,.95);
+    0 1px 12px rgba(0,0,0,.95),
+    0 0  40px rgba(5,4,10,.98);
   text-transform: uppercase;
 }
 .ae-loc-moods {
-  display: flex; align-items: center; justify-content: center;
-  gap: 10px; flex-wrap: wrap;
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
 }
 .ae-loc-mood {
   font-family: 'IBM Plex Mono', monospace;
-  font-size: var(--fs-caption); letter-spacing: .16em; text-transform: uppercase;
-  color: var(--muted); opacity: .55;
+  font-size: var(--fs-caption); letter-spacing: .14em; text-transform: lowercase;
+  color: var(--muted); opacity: .48;
   display: flex; align-items: center; gap: 4px;
 }
-.ae-loc-mood b { color: var(--gold); opacity: .72; font-weight: 400; }
-.ae-loc-msep { color: rgba(201,156,90,.25); font-size: var(--fs-caption); }
+.ae-loc-mood b { color: var(--gold); opacity: .60; font-weight: 400; }
+.ae-loc-msep { color: rgba(201,156,90,.20); font-size: var(--fs-caption); }
 .ae-col-content {
   flex: 1; min-width: 0; background: rgba(14,12,24,.22);
   display: flex; flex-direction: column;
@@ -764,7 +764,7 @@ html, body {
         <div class="ae-loc-moods">
           <span class="ae-loc-mood"><b>◎</b> safe — mostly</span>
           <span class="ae-loc-msep">·</span>
-          <span class="ae-loc-mood"><b>○</b> morning, presumably</span>
+          <span class="ae-loc-mood"><b>○</b> morning, likely</span>
           <span class="ae-loc-msep">·</span>
           <span class="ae-loc-mood"><b>◈</b> obsidian · void</span>
         </div>
