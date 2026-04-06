@@ -1785,6 +1785,7 @@ const frames = [
   {
     id: 'stand-up',
     speaker: null,
+    sceneBg: 'ae-standup-crossroads.png',
     text: [
       'You stand. Your legs hold — barely. The mist curls around your ankles like something alive.',
       'A vast obsidian plain stretches in every direction. Two roads cross here, cutting through the dark glass like old scars. At their centre: a fountain. Black stone, carved with symbols you can\'t read. Water spills from it — clear, impossibly clean — pooling in a basin that no one has tended for what looks like centuries.',
@@ -1798,6 +1799,7 @@ const frames = [
   {
     id: 'crossroads-choice',
     speaker: null,
+    sceneBg: 'ae-standup-crossroads.png',
     text: [
       'You take it in. The obsidian ground reflects the mist above like a dark mirror. Everything here feels suspended — waiting for you to move first.',
       'Three things demand your attention.',
@@ -2268,6 +2270,11 @@ function renderFrame(idx) {
     'scroll-revelation': 'unsent-letter',
   };
   if (unlocks[f.id]) unlockCollection(unlocks[f.id]);
+
+  // scene frame background
+  if (f.sceneBg) {
+    document.querySelector('.ae-sf-image img').src = f.sceneBg;
+  }
 
   // dialogue inner
   const inner = document.getElementById('dialogue-inner');
