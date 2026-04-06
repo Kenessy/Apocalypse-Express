@@ -1288,6 +1288,26 @@ const frames = [
         next: 'examine-fountain' },
     ],
   },
+  {
+    id: 'look-around',
+    speaker: null,
+    text: [
+      'You turn slowly. The mist swallows everything beyond thirty paces — roads, horizon, whatever else might be out there. At ground level, you are blind.',
+      'But the obelisk. It rises from the fountain like a black needle, maybe fifteen metres tall. Its surface is rough — carved with deep symbols, grooves wide enough for fingers. It could be climbed. It <em class="inline">wants</em> to be climbed.',
+      'Or — off to your right, a ridge. Broken obsidian plates pushed upward at an angle, like the ground tried to shrug and froze mid-gesture. Not tall, but enough to see over the worst of the fog.',
+    ],
+    choices: [
+      { icon: '⊙', tint: 'ember', label: 'Climb the obelisk',
+        preview: 'Fifteen metres of carved black stone. The symbols almost burn under your fingers. The wind gets worse the higher you go — but the view from the top would be absolute.',
+        previewImg: 'ae-crossroads-wide.png',
+        next: 'climb-obelisk' },
+      { icon: '◎', tint: 'cyan', label: 'Head for the ridge',
+        preview: 'A safer bet. Broken obsidian slabs, tilted upward — a natural ramp. You won\'t see everything, but you\'ll see enough.',
+        previewImg: 'ae-crossroads-wide.png',
+        mystery: true,
+        next: 'find-ridge' },
+    ],
+  },
 ];
 
 let currentFrameIdx = 0;
