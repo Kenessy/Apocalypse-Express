@@ -228,33 +228,20 @@ html, body {
   z-index: 2; pointer-events: none; overflow: hidden;
 }
 .ae-p {
-  position: absolute; top: -6px; border-radius: 50%;
+  position: absolute; top: 0; border-radius: 50%;
   animation: ae-fall linear infinite;
+  will-change: transform;
 }
 @keyframes ae-fall {
-  0%   { transform: translateY(0)    translateX(0px)          rotate(0deg);   opacity: 0; }
+  0%   { transform: translateY(-20px); opacity: 0; }
   8%   { opacity: 1; }
-  88%  { opacity: .65; }
-  100% { transform: translateY(108%) translateX(var(--drift))  rotate(var(--rot)); opacity: 0; }
+  88%  { opacity: .72; }
+  100% { transform: translateY(110%); opacity: 0; }
 }
-/* ash — Null Meridian */
-.ae-particles[data-type="ash"] .ae-p {
-  background: rgba(184,176,198,.80);
-}
-/* embers — fire/hell zones */
-.ae-particles[data-type="embers"] .ae-p {
-  background: var(--ember);
-  box-shadow: 0 0 4px rgba(255,123,92,.55), 0 0 8px rgba(255,123,92,.20);
-}
-/* snow */
-.ae-particles[data-type="snow"] .ae-p {
-  background: rgba(248,245,240,.82);
-}
-/* leaves */
-.ae-particles[data-type="leaves"] .ae-p {
-  background: #7a9c52;
-  border-radius: 2px 8px 2px 8px;
-}
+.ae-particles[data-type="ash"]    .ae-p { background: rgba(200,195,215,.85); }
+.ae-particles[data-type="embers"] .ae-p { background: var(--ember); box-shadow: 0 0 5px rgba(255,123,92,.6); }
+.ae-particles[data-type="snow"]   .ae-p { background: rgba(248,245,240,.88); }
+.ae-particles[data-type="leaves"] .ae-p { background: #7a9c52; border-radius: 2px 8px 2px 8px; }
 .ae-img-fade {
   position: absolute; inset: 0;
   pointer-events: none; z-index: 1;
@@ -856,20 +843,17 @@ function advanceScene() {
 (function initParticles() {
   const container = document.querySelector('.ae-particles');
   if (!container) return;
-  for (let i = 0; i < 22; i++) {
-    const p = document.createElement('span');
+  for (let i = 0; i < 28; i++) {
+    const p   = document.createElement('span');
     p.className = 'ae-p';
-    const size  = (1 + Math.random() * 2.2).toFixed(1);
-    const drift = ((Math.random() - 0.35) * 38).toFixed(0);
-    const rot   = (Math.random() * 320).toFixed(0);
+    const dur  = 7 + Math.random() * 9;
+    const size = (2.5 + Math.random() * 3).toFixed(1);
     p.style.cssText = [
-      `left:${(Math.random()*98).toFixed(1)}%`,
+      `left:${(Math.random()*95).toFixed(1)}%`,
       `width:${size}px`,
       `height:${size}px`,
-      `animation-delay:${(Math.random()*14).toFixed(1)}s`,
-      `animation-duration:${(7+Math.random()*10).toFixed(1)}s`,
-      `--drift:${drift}px`,
-      `--rot:${rot}deg`,
+      `animation-duration:${dur.toFixed(1)}s`,
+      `animation-delay:-${(Math.random()*dur).toFixed(1)}s`,
     ].join(';');
     container.appendChild(p);
   }
