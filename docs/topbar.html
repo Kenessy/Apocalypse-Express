@@ -1238,6 +1238,27 @@ const frames = [
     continueIcon: '⛯',
     next: 'stand-up',
   },
+  {
+    id: 'stand-up',
+    speaker: null,
+    text: [
+      'You stand. Your legs hold — barely. The mist curls around your ankles like something alive.',
+      'A vast obsidian plain stretches in every direction. Two roads cross here, cutting through the dark glass like old scars. At their centre: a fountain. Black stone, carved with symbols you can\'t read. Water spills from it — clear, impossibly clean — pooling in a basin that no one has tended for what looks like centuries.',
+      'Somewhere to your left, a voice. The old man — still talking. Still philosophising. He hasn\'t stopped since you woke up. His words drift through the fog like smoke, half-heard, half-understood.',
+      'The air smells of nothing. Not clean, not foul. Just... absent. As if scent itself gave up on this place long ago.',
+    ],
+    choices: [
+      { icon: '◎', tint: 'cyan', label: 'Survey the landscape',
+        preview: 'Two roads. Endless obsidian. The mist hides more than it reveals — but if you look carefully, there are shapes out there. Structures. Maybe even movement.',
+        next: 'look-around' },
+      { icon: '†', tint: 'gold', label: 'Talk to the old man',
+        preview: 'He stands a few paces away, quill in hand, muttering to himself. A thick book rests open against his forearm. He knows you\'re awake. He hasn\'t looked up yet.',
+        next: 'talk-cicero' },
+      { icon: '⊙', tint: 'ember', label: 'Examine the fountain',
+        preview: 'The obsidian basin is old — ancient. But the water is pristine. Objects glint beneath the surface. Someone left things here. Or something did.',
+        next: 'examine-fountain' },
+    ],
+  },
 ];
 
 let currentFrameIdx = 0;
