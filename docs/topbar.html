@@ -590,14 +590,14 @@ html, body {
 }
 /* mystery mode: almost fully dark, spotlight around text */
 .ae-sf-preview.is-mystery .ae-sf-preview-tint {
-  background: rgba(5,4,10,.88) !important;
+  background: radial-gradient(ellipse 44% 40% at 50% 52%,
+    rgba(5,4,10,.10) 0%,
+    rgba(5,4,10,.50) 28%,
+    rgba(5,4,10,.92) 52%,
+    rgba(5,4,10,.97) 100%) !important;
 }
 .ae-sf-preview.is-mystery .ae-sf-preview-body {
-  background: radial-gradient(ellipse 42% 38% at 50% 52%,
-    rgba(5,4,10,.15) 0%,
-    rgba(5,4,10,.45) 25%,
-    rgba(5,4,10,.92) 50%,
-    rgba(5,4,10,.97) 100%);
+  background: none;
 }
 .ae-sf-preview-header {
   display: flex; align-items: center; gap: 12px;
