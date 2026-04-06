@@ -1943,6 +1943,23 @@ const frames = [
     continueIcon: '↩',
     next: 'crossroads-choice',
   },
+  // ── WANDER EXPLORE (fallback scout) ──
+  {
+    id: 'wander-explore',
+    speaker: null,
+    text: [
+      'You walk. No plan, no target, no urgency. Just one foot in front of the other, through the mist, across the obsidian.',
+      'You walk for a long time. The crossroads shrinks behind you, then disappears. The fountain\'s glow fades. There is nothing ahead and nothing behind — just the same dark glass, the same grey air, the same silence that has been here since before anything had a name.',
+      'And slowly — so slowly you almost miss it — the truth arrives. Not from above. Not from a vantage point. From the ground. From your feet. From the monotony itself.',
+      '<em class="inline">It\'s all the same.</em>',
+      'Every direction, every road, every crack in the obsidian — the same. The landscape doesn\'t hide its secret behind fog or height. It hides it in <em class="inline">plain sight</em>. There is nothing to see because there is nothing <em class="inline">different</em> to see. An infinite plane of ancient glass, repeating forever, older than thought, indifferent to exploration.',
+      'You didn\'t need to climb. You just needed to walk long enough to understand.',
+      'You turn around. The crossroads finds you again — or you find it. The fountain glows. The obelisk stands. Nothing has changed. But you have.',
+    ],
+    continueLabel: 'return',
+    continueIcon: '↩',
+    next: 'crossroads-choice',
+  },
   // ── FIND RIDGE BRANCH ──
   {
     id: 'find-ridge',
@@ -2002,17 +2019,20 @@ const frames = [
 ];
 
 let currentFrameIdx = 0;
+const visitedFrames = new Set();
 
 /* ── render engine ── */
 function renderFrame(idx) {
   const f = frames[idx];
   if (!f) return;
   currentFrameIdx = idx;
+  visitedFrames.add(f.id);
 
   // collection unlocks
   const unlocks = {
     'climb-success': 'panorama-void',
     'tree-success': 'glimpse-fog',
+    'wander-explore': 'panorama-void',
   };
   if (unlocks[f.id]) unlockCollection(unlocks[f.id]);
 
@@ -2081,7 +2101,33 @@ function renderFrame(idx) {
   } else if (f.choices) {
     // choice mode: gombok
     diceOverlay.classList.remove('active');
-    choicesRow.innerHTML = f.choices.map(c => {
+    // dynamic choices for look-around when both scout paths exhausted
+    let choices = f.choices;
+    if (f.id === 'look-around') {
+      const climbDone = visitedFrames.has('climb-obelisk');
+      const treeDone = visitedFrames.has('tree-climb');
+      if (climbDone && treeDone && !window._scoutDone) {
+        // both paths tried and failed — offer wander or give up
+        choices = [
+          { icon: '◎', tint: 'gold', label: 'Take your time. Walk.',
+            preview: 'No shortcuts. No climbing. Just walk until the fog gives up its secrets — or until you understand that it already has.',
+            previewImg: 'ae-crossroads-wide.png',
+            next: 'wander-explore' },
+          { icon: '✕', tint: 'cyan', label: 'Give up. You\'ve seen enough.',
+            preview: 'You don\'t need the view. Whatever is out there — it can wait. Or it can stay hidden forever.',
+            previewImg: 'ae-null-meridian.png',
+            next: 'crossroads-choice' },
+        ];
+      } else {
+        // filter out exhausted paths
+        choices = f.choices.filter(c => {
+          if (c.next === 'climb-obelisk' && climbDone) return false;
+          if (c.next === 'find-ridge' && treeDone) return false;
+          return true;
+        });
+      }
+    }
+    choicesRow.innerHTML = choices.map(c => {
       const isMystery = c.mystery && !window._scoutDone;
       return `<div class="ae-choice-btn" tabindex="0" role="button"
            data-icon="${c.icon}" data-tint="${c.tint}"
@@ -2105,7 +2151,7 @@ function advanceScene() {
   const f = frames[currentFrameIdx];
   if (!f) return;
   // track completed branches
-  if (f.id === 'climb-success' || f.id === 'tree-success') window._scoutDone = true;
+  if (f.id === 'climb-success' || f.id === 'tree-success' || f.id === 'wander-explore') window._scoutDone = true;
   if (f.next) {
     const nextIdx = frames.findIndex(fr => fr.id === f.next);
     if (nextIdx >= 0) { renderFrame(nextIdx); return; }
