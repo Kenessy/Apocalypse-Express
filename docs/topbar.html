@@ -287,43 +287,71 @@ html, body {
     linear-gradient(to top,    rgba(5,4,10,.40) 0%, transparent 14%);
 }
 /* ── location title card ── */
-/* ── location title card ── */
 .ae-img-caption {
   position: absolute; bottom: 0; left: 0; right: 0;
-  padding: 72px 28px 26px 22px;
+  padding: 72px 20px 26px;
   background: linear-gradient(to top,
-    rgba(5,4,10,.94) 0%,
-    rgba(5,4,10,.72) 38%,
+    rgba(5,4,10,.96) 0%,
+    rgba(5,4,10,.74) 40%,
     transparent 100%);
-  display: flex; flex-direction: column; align-items: flex-start; gap: 8px;
-  pointer-events: none;
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  pointer-events: none; text-align: center;
 }
 .ae-loc-rule {
-  width: 48px; height: 1px;
-  background: linear-gradient(to right, rgba(201,156,90,.50), transparent);
-  margin-bottom: 1px;
+  width: 40px; height: 1px;
+  background: linear-gradient(to right, transparent, rgba(201,156,90,.50), transparent);
 }
 .ae-loc-name {
   font-family: 'Cinzel', serif;
   font-size: var(--fs-display); font-weight: 700; line-height: 1;
   letter-spacing: .22em;
-  color: rgba(235,220,195,.60);
-  text-shadow:
-    0 1px 12px rgba(0,0,0,.95),
-    0 0  40px rgba(5,4,10,.98);
+  color: rgba(235,220,195,.62);
+  text-shadow: 0 1px 14px rgba(0,0,0,.95), 0 0 40px rgba(5,4,10,.98);
   text-transform: uppercase;
 }
-.ae-loc-moods {
-  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+/* status table — centered rows */
+.ae-loc-table {
+  display: flex; flex-direction: column; gap: 5px;
+  align-items: flex-start; /* rows left-aligned as a block */
 }
-.ae-loc-mood {
+.ae-loc-row {
+  display: flex; align-items: center; gap: 8px;
   font-family: 'IBM Plex Mono', monospace;
-  font-size: var(--fs-caption); letter-spacing: .14em; text-transform: lowercase;
-  color: var(--muted); opacity: .48;
-  display: flex; align-items: center; gap: 4px;
+  font-size: var(--fs-caption); letter-spacing: .10em;
 }
-.ae-loc-mood b { color: var(--gold); opacity: .60; font-weight: 400; }
-.ae-loc-msep { color: rgba(201,156,90,.20); font-size: var(--fs-caption); }
+.ae-loc-row-icon {
+  font-size: 10px; flex-shrink: 0; width: 14px; text-align: center;
+}
+.ae-loc-row-key {
+  text-transform: uppercase; letter-spacing: .14em;
+  color: var(--muted); opacity: .40; width: 52px; flex-shrink: 0;
+}
+.ae-loc-row-val {
+  color: var(--muted); opacity: .72;
+  text-transform: lowercase;
+}
+/* status colour presets
+   usage: add class to .ae-loc-row
+   ──────────────────────────────────────
+   .s-safe       safe — confirmed    green
+   .s-likely     safe — likely       soft green
+   .s-caution    caution — possible  amber
+   .s-danger     dangerous — likely  orange
+   .s-lethal     lethal — confirmed  red
+   .s-unknown    unknown             grey
+   ────────────────────────────────────── */
+.ae-loc-row.s-safe    .ae-loc-row-icon { color: #5ecf8a; text-shadow: 0 0 8px rgba(94,207,138,.45); }
+.ae-loc-row.s-likely  .ae-loc-row-icon { color: #4aab6f; text-shadow: 0 0 6px rgba(74,171,111,.35); }
+.ae-loc-row.s-caution .ae-loc-row-icon { color: #c9973a; text-shadow: 0 0 8px rgba(201,151,58,.40); }
+.ae-loc-row.s-danger  .ae-loc-row-icon { color: #d4623a; text-shadow: 0 0 8px rgba(212,98,58,.45); }
+.ae-loc-row.s-lethal  .ae-loc-row-icon { color: #c44040; text-shadow: 0 0 10px rgba(196,64,64,.55); }
+.ae-loc-row.s-unknown .ae-loc-row-icon { color: #6a6280; }
+.ae-loc-row.s-safe    .ae-loc-row-val  { color: #5ecf8a; opacity: .72; }
+.ae-loc-row.s-likely  .ae-loc-row-val  { color: #7ecfa0; opacity: .65; }
+.ae-loc-row.s-caution .ae-loc-row-val  { color: #c9973a; opacity: .72; }
+.ae-loc-row.s-danger  .ae-loc-row-val  { color: #d4623a; opacity: .72; }
+.ae-loc-row.s-lethal  .ae-loc-row-val  { color: #c44040; opacity: .80; }
+.ae-loc-row.s-unknown .ae-loc-row-val  { color: var(--muted); opacity: .42; }
 .ae-col-content {
   flex: 1; min-width: 0; background: rgba(14,12,24,.22);
   display: flex; flex-direction: column;
@@ -761,12 +789,22 @@ html, body {
       <div class="ae-img-caption">
         <div class="ae-loc-rule"></div>
         <span class="ae-loc-name">Null Meridian</span>
-        <div class="ae-loc-moods">
-          <span class="ae-loc-mood"><b>◎</b> safe — mostly</span>
-          <span class="ae-loc-msep">·</span>
-          <span class="ae-loc-mood"><b>○</b> morning, likely</span>
-          <span class="ae-loc-msep">·</span>
-          <span class="ae-loc-mood"><b>◈</b> obsidian · void</span>
+        <div class="ae-loc-table">
+          <div class="ae-loc-row s-likely">
+            <span class="ae-loc-row-icon">◉</span>
+            <span class="ae-loc-row-key">threat</span>
+            <span class="ae-loc-row-val">safe — likely</span>
+          </div>
+          <div class="ae-loc-row s-unknown">
+            <span class="ae-loc-row-icon">○</span>
+            <span class="ae-loc-row-key">time</span>
+            <span class="ae-loc-row-val">morning — likely</span>
+          </div>
+          <div class="ae-loc-row s-unknown">
+            <span class="ae-loc-row-icon">◈</span>
+            <span class="ae-loc-row-key">zone</span>
+            <span class="ae-loc-row-val">obsidian · void</span>
+          </div>
         </div>
       </div>
     </div>
