@@ -948,9 +948,9 @@ html, body {
   opacity: .20; transition: opacity .3s, color .3s;
   color: var(--muted);
 }
-/* locked state */
+/* locked state (visually dim but still clickable for dev) */
 .ae-dice-out-btn.locked {
-  pointer-events: none; opacity: .55;
+  opacity: .55; cursor: pointer;
 }
 /* unlocked: succeed */
 .ae-dice-out-btn.unlocked.is-succeed {
@@ -1795,6 +1795,8 @@ function renderFrame(idx) {
     ovResult.textContent = '';
     ovResult.className = 'ae-dice-overlay-result';
     window._currentDice = f.diceCheck;
+    window._diceSuccessNext = f.diceCheck.successNext;
+    window._diceFailNext = f.diceCheck.failNext;
   } else if (f.continueLabel) {
     diceOverlay.classList.remove('active');
     // narrative mode: continue gomb
