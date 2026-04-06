@@ -395,7 +395,7 @@ html, body {
   50%       { background: radial-gradient(circle, rgba(230,207,161,.07) 30%, transparent 75%); }
 }
 .ae-time-icon {
-  font-size: 20px; line-height: 1;
+  font-size: 22px; line-height: 1;
   /* inactive: dark icon, soft muted glow */
   color: rgba(18,14,28,.88);
   text-shadow:
@@ -414,14 +414,6 @@ html, body {
   text-shadow:
     0 0 10px rgba(201,156,90,.22),
     0 0 18px rgba(201,156,90,.10);
-}
-/* midnight cloud: tiny ☁ floats above the moon */
-.ae-time-pip[data-t="midnight"] { position: relative; }
-.ae-time-pip[data-t="midnight"]::before {
-  content: '☁';
-  position: absolute; top: -7px; right: -2px;
-  font-size: 9px; opacity: .55; color: var(--muted);
-  transition: opacity .3s;
 }
 /* detail row colours — same gold→ember palette */
 .ae-loc-row.s-safe    .ae-loc-row-icon { color: #e6cfa1; }
@@ -934,22 +926,22 @@ html, body {
           </div>
           <div class="ae-time-strip">
             <div class="ae-time-pip" data-t="dawn">
-              <span class="ae-time-icon">✦</span>
+              <span class="ae-time-icon">★</span>
             </div>
             <div class="ae-time-pip active likely" data-t="morning">
               <span class="ae-time-icon">☀</span>
             </div>
             <div class="ae-time-pip adjacent" data-t="noon">
-              <span class="ae-time-icon">⊙</span>
+              <span class="ae-time-icon">◉</span>
             </div>
             <div class="ae-time-pip" data-t="afternoon">
-              <span class="ae-time-icon">◐</span>
+              <span class="ae-time-icon">◕</span>
             </div>
             <div class="ae-time-pip" data-t="evening">
-              <span class="ae-time-icon">☽</span>
+              <span class="ae-time-icon">◑</span>
             </div>
             <div class="ae-time-pip" data-t="midnight">
-              <span class="ae-time-icon">☾</span>
+              <span class="ae-time-icon">●</span>
             </div>
           </div>
         </div>
