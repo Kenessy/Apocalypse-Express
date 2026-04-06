@@ -870,23 +870,44 @@ html, body {
 
 .ae-dice-area {
   display: none;
-  flex: 1; align-items: center; justify-content: center; gap: 16px;
+  flex: 1; align-items: center; justify-content: center; gap: 0;
   border: 1px solid rgba(201,156,90,.18); border-radius: 4px;
   background: rgba(201,156,90,.05);
   box-shadow: 0 0 20px rgba(201,156,90,.08), inset 0 0 30px rgba(201,156,90,.03);
   position: relative;
 }
-.ae-dice-label {
-  font: 400 var(--fs-caption)/1 'IBM Plex Mono';
-  letter-spacing: .14em; text-transform: uppercase;
-  color: var(--muted); opacity: .55;
-  position: absolute; top: 8px; left: 14px;
+
+/* left: d20 icon + fate roll label */
+.ae-dice-left {
+  display: flex; align-items: center; gap: 10px;
+  padding: 0 18px;
+  border-right: 1px solid rgba(201,156,90,.10);
+  height: 100%;
 }
-.ae-dice-dc {
-  font: 500 var(--fs-caption)/1 'IBM Plex Mono';
-  letter-spacing: .14em; text-transform: uppercase;
+.ae-dice-d20-icon {
   color: var(--gold); opacity: .65;
-  position: absolute; top: 8px; right: 14px;
+  flex-shrink: 0; line-height: 0;
+  filter: drop-shadow(0 0 8px rgba(201,156,90,.25));
+}
+.ae-dice-d20-icon svg { display: block; }
+.ae-dice-left-text {
+  display: flex; flex-direction: column; gap: 3px;
+}
+.ae-dice-label {
+  font: 500 var(--fs-label)/1 'IBM Plex Mono';
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--gold); opacity: .72;
+}
+.ae-dice-sublabel {
+  font: 400 var(--fs-caption)/1 'IBM Plex Mono';
+  letter-spacing: .10em; text-transform: uppercase;
+  color: var(--muted); opacity: .45;
+}
+
+/* center: roll display */
+.ae-dice-center {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  position: relative;
 }
 .ae-dice-display {
   font: 700 var(--fs-display)/1 'Cinzel', serif;
@@ -906,17 +927,50 @@ html, body {
   color: var(--ember);
   text-shadow: 0 0 20px rgba(255,123,92,.50), 0 0 40px rgba(255,123,92,.20);
 }
+.ae-dice-result {
+  font: 700 var(--fs-caption)/1 'IBM Plex Mono';
+  letter-spacing: .18em; text-transform: uppercase;
+  position: absolute; bottom: 4px; left: 50%;
+  transform: translateX(-50%);
+  opacity: 0; transition: opacity .3s;
+}
+.ae-dice-result.show { opacity: 1; }
+.ae-dice-result.success { color: #5cc85c; text-shadow: 0 0 12px rgba(92,200,92,.40); }
+.ae-dice-result.failed { color: var(--ember); text-shadow: 0 0 12px rgba(255,123,92,.40); }
+
+/* right: DC display + roll button */
+.ae-dice-right {
+  display: flex; align-items: center; gap: 14px;
+  padding: 0 14px;
+  border-left: 1px solid rgba(201,156,90,.10);
+  height: 100%;
+}
+.ae-dice-dc-block {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+}
+.ae-dice-dc-label {
+  font: 400 var(--fs-ambient)/1 'IBM Plex Mono';
+  letter-spacing: .12em; text-transform: uppercase;
+  color: var(--muted); opacity: .40;
+}
+.ae-dice-dc {
+  font: 700 var(--fs-title)/1 'Cinzel', serif;
+  color: var(--gold2); opacity: .80;
+  letter-spacing: .04em;
+  text-shadow: 0 0 10px rgba(201,156,90,.25);
+}
 .ae-dice-roll-btn {
   display: flex; align-items: center; gap: 8px;
   padding: 8px 18px; border-radius: 3px;
   border: 1px solid rgba(201,156,90,.25);
   background: rgba(201,156,90,.08);
   cursor: pointer;
-  transition: background .2s, border-color .2s;
+  transition: background .2s, border-color .2s, box-shadow .2s;
 }
 .ae-dice-roll-btn:hover {
   background: rgba(201,156,90,.15);
   border-color: rgba(201,156,90,.40);
+  box-shadow: 0 0 16px rgba(201,156,90,.12);
 }
 .ae-dice-roll-btn .ae-continue-text {
   font: 500 var(--fs-label)/1 'IBM Plex Mono';
@@ -924,18 +978,8 @@ html, body {
   color: var(--gold); opacity: .80;
 }
 .ae-dice-roll-btn .ae-continue-arrow {
-  animation: none; opacity: .80;
+  animation: none; opacity: .80; font-size: var(--fs-label);
 }
-.ae-dice-result {
-  font: 700 var(--fs-caption)/1 'IBM Plex Mono';
-  letter-spacing: .18em; text-transform: uppercase;
-  position: absolute; bottom: 8px; left: 50%;
-  transform: translateX(-50%);
-  opacity: 0; transition: opacity .3s;
-}
-.ae-dice-result.show { opacity: 1; }
-.ae-dice-result.success { color: #5cc85c; text-shadow: 0 0 12px rgba(92,200,92,.40); }
-.ae-dice-result.failed { color: var(--ember); text-shadow: 0 0 12px rgba(255,123,92,.40); }
 
 @keyframes ae-dice-flash {
   0%   { opacity: .90; }
@@ -1429,14 +1473,37 @@ html, body {
 
         <!-- dice mode -->
         <div class="ae-dice-area" id="dice-area">
-          <span class="ae-dice-label" id="dice-label">Athletics</span>
-          <span class="ae-dice-dc" id="dice-dc">DC 10</span>
-          <span class="ae-dice-display" id="dice-display">d20</span>
-          <div class="ae-dice-roll-btn" id="dice-roll-btn" tabindex="0" role="button" onclick="rollDice()">
-            <span class="ae-continue-arrow">🎲</span>
-            <span class="ae-continue-text">roll</span>
+          <!-- left: d20 icon + labels -->
+          <div class="ae-dice-left">
+            <div class="ae-dice-d20-icon">
+              <svg width="28" height="32" viewBox="0 0 28 32" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round">
+                <polygon points="14,1 27,9 27,23 14,31 1,23 1,9"/>
+                <line x1="14" y1="1" x2="14" y2="31"/>
+                <line x1="1" y1="9" x2="27" y2="23"/>
+                <line x1="27" y1="9" x2="1" y2="23"/>
+              </svg>
+            </div>
+            <div class="ae-dice-left-text">
+              <span class="ae-dice-label" id="dice-label">fate roll</span>
+              <span class="ae-dice-sublabel" id="dice-sublabel">Athletics</span>
+            </div>
           </div>
-          <span class="ae-dice-result" id="dice-result"></span>
+          <!-- center: roll display -->
+          <div class="ae-dice-center">
+            <span class="ae-dice-display" id="dice-display">d20</span>
+            <span class="ae-dice-result" id="dice-result"></span>
+          </div>
+          <!-- right: DC + roll button -->
+          <div class="ae-dice-right">
+            <div class="ae-dice-dc-block">
+              <span class="ae-dice-dc-label">target</span>
+              <span class="ae-dice-dc" id="dice-dc">10</span>
+            </div>
+            <div class="ae-dice-roll-btn" id="dice-roll-btn" tabindex="0" role="button" onclick="rollDice()">
+              <span class="ae-continue-arrow">🎲</span>
+              <span class="ae-continue-text">roll</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -1674,8 +1741,9 @@ function renderFrame(idx) {
   if (f.diceCheck) {
     // dice mode — bottom panel
     panel.classList.add('is-dice');
-    document.getElementById('dice-label').textContent = f.diceCheck.label || 'Skill Check';
-    document.getElementById('dice-dc').textContent = 'DC ' + f.diceCheck.dc;
+    document.getElementById('dice-label').textContent = 'fate roll';
+    document.getElementById('dice-sublabel').textContent = f.diceCheck.label || 'Skill Check';
+    document.getElementById('dice-dc').textContent = f.diceCheck.dc;
     const display = document.getElementById('dice-display');
     display.textContent = 'd20';
     display.className = 'ae-dice-display';
