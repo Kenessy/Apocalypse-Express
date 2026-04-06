@@ -942,6 +942,90 @@ html, body {
   50%  { opacity: .50; }
 }
 
+/* ── dice overlay (left image panel) ── */
+.ae-dice-overlay {
+  position: absolute; inset: 0; z-index: 20;
+  display: none; flex-direction: column;
+  align-items: center; justify-content: center; gap: 16px;
+  background: radial-gradient(ellipse 55% 50% at 50% 48%,
+    rgba(5,4,10,.60) 0%,
+    rgba(5,4,10,.90) 55%,
+    rgba(5,4,10,.96) 100%);
+  pointer-events: none;
+  opacity: 0; transition: opacity .4s ease;
+}
+.ae-dice-overlay.active {
+  display: flex; opacity: 1; pointer-events: auto;
+}
+.ae-dice-overlay-label {
+  font: 400 var(--fs-caption)/1 'IBM Plex Mono';
+  letter-spacing: .18em; text-transform: uppercase;
+  color: var(--gold); opacity: .55;
+}
+.ae-dice-overlay-dc {
+  font: 500 var(--fs-label)/1 'IBM Plex Mono';
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--muted); opacity: .55;
+}
+
+/* d20 SVG */
+.ae-d20-wrap {
+  position: relative;
+  width: 160px; height: 160px;
+  display: flex; align-items: center; justify-content: center;
+}
+.ae-d20-svg {
+  width: 160px; height: 160px;
+  filter: drop-shadow(0 0 20px rgba(201,156,90,.30)) drop-shadow(0 0 50px rgba(201,156,90,.10));
+  transition: filter .3s;
+}
+.ae-d20-svg.rolling {
+  animation: ae-d20-spin 1.2s ease-out;
+}
+.ae-d20-svg.success {
+  filter: drop-shadow(0 0 24px rgba(92,200,92,.50)) drop-shadow(0 0 60px rgba(92,200,92,.20));
+}
+.ae-d20-svg.failed {
+  filter: drop-shadow(0 0 24px rgba(255,123,92,.50)) drop-shadow(0 0 60px rgba(255,123,92,.20));
+}
+@keyframes ae-d20-spin {
+  0%   { transform: rotate(0deg) scale(1); }
+  25%  { transform: rotate(90deg) scale(1.05); }
+  50%  { transform: rotate(200deg) scale(.98); }
+  75%  { transform: rotate(320deg) scale(1.02); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+.ae-d20-number {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font: 700 48px/1 'Cinzel', serif;
+  color: var(--gold2);
+  letter-spacing: .04em;
+  text-shadow: 0 0 16px rgba(201,156,90,.40);
+  transition: color .3s, text-shadow .3s;
+}
+.ae-d20-number.rolling {
+  animation: ae-dice-flash .08s steps(1) infinite;
+}
+.ae-d20-number.success {
+  color: #5cc85c;
+  text-shadow: 0 0 20px rgba(92,200,92,.60);
+}
+.ae-d20-number.failed {
+  color: var(--ember);
+  text-shadow: 0 0 20px rgba(255,123,92,.60);
+}
+
+.ae-dice-overlay-result {
+  font: 700 var(--fs-label)/1 'IBM Plex Mono';
+  letter-spacing: .22em; text-transform: uppercase;
+  opacity: 0; transition: opacity .4s;
+}
+.ae-dice-overlay-result.show { opacity: 1; }
+.ae-dice-overlay-result.success { color: #5cc85c; text-shadow: 0 0 14px rgba(92,200,92,.40); }
+.ae-dice-overlay-result.failed { color: var(--ember); text-shadow: 0 0 14px rgba(255,123,92,.40); }
+
 /* continue gomb */
 .ae-continue-btn {
   display: none;   /* default: rejtett, choice mode az alap */
@@ -1188,6 +1272,27 @@ html, body {
             </div>
           </div>
         </div>
+      </div>
+
+      <!-- dice overlay -->
+      <div class="ae-dice-overlay" id="dice-overlay">
+        <span class="ae-dice-overlay-label" id="dice-ov-label">Athletics</span>
+        <div class="ae-d20-wrap">
+          <svg class="ae-d20-svg" id="d20-svg" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- d20 icosahedron projection -->
+            <polygon points="80,8 152,56 152,112 80,152 8,112 8,56" stroke="currentColor" stroke-width="1.5" fill="rgba(201,156,90,.06)" />
+            <line x1="80" y1="8" x2="80" y2="152" stroke="currentColor" stroke-width="0.6" opacity=".15"/>
+            <line x1="8" y1="56" x2="152" y2="112" stroke="currentColor" stroke-width="0.6" opacity=".15"/>
+            <line x1="152" y1="56" x2="8" y2="112" stroke="currentColor" stroke-width="0.6" opacity=".15"/>
+            <line x1="80" y1="8" x2="8" y2="112" stroke="currentColor" stroke-width="0.6" opacity=".12"/>
+            <line x1="80" y1="8" x2="152" y2="112" stroke="currentColor" stroke-width="0.6" opacity=".12"/>
+            <line x1="80" y1="152" x2="8" y2="56" stroke="currentColor" stroke-width="0.6" opacity=".12"/>
+            <line x1="80" y1="152" x2="152" y2="56" stroke="currentColor" stroke-width="0.6" opacity=".12"/>
+          </svg>
+          <span class="ae-d20-number" id="d20-number">d20</span>
+        </div>
+        <span class="ae-dice-overlay-dc" id="dice-ov-dc">DC 10</span>
+        <span class="ae-dice-overlay-result" id="dice-ov-result"></span>
       </div>
 
       <button class="ae-img-view-toggle" onclick="toggleCleanView()" aria-label="Toggle background view">
@@ -1534,8 +1639,11 @@ function renderFrame(idx) {
   // reset panel modes
   panel.classList.remove('is-narrative', 'is-dice');
 
+  // dice overlay on left panel
+  const diceOverlay = document.getElementById('dice-overlay');
+
   if (f.diceCheck) {
-    // dice mode
+    // dice mode — bottom panel
     panel.classList.add('is-dice');
     document.getElementById('dice-label').textContent = f.diceCheck.label || 'Skill Check';
     document.getElementById('dice-dc').textContent = 'DC ' + f.diceCheck.dc;
@@ -1546,14 +1654,29 @@ function renderFrame(idx) {
     result.textContent = '';
     result.className = 'ae-dice-result';
     document.getElementById('dice-roll-btn').style.display = 'flex';
+    // dice overlay — left panel
+    diceOverlay.classList.add('active');
+    document.getElementById('dice-ov-label').textContent = f.diceCheck.label || 'Skill Check';
+    document.getElementById('dice-ov-dc').textContent = 'DC ' + f.diceCheck.dc;
+    const d20num = document.getElementById('d20-number');
+    d20num.textContent = 'd20';
+    d20num.className = 'ae-d20-number';
+    const d20svg = document.getElementById('d20-svg');
+    d20svg.className.baseVal = 'ae-d20-svg';
+    d20svg.style.color = 'var(--gold)';
+    const ovResult = document.getElementById('dice-ov-result');
+    ovResult.textContent = '';
+    ovResult.className = 'ae-dice-overlay-result';
     window._currentDice = f.diceCheck;
   } else if (f.continueLabel) {
+    diceOverlay.classList.remove('active');
     // narrative mode: continue gomb
     panel.classList.add('is-narrative');
     contText.textContent = f.continueLabel;
     document.getElementById('continue-arrow').textContent = f.continueIcon || '▶';
   } else if (f.choices) {
     // choice mode: gombok
+    diceOverlay.classList.remove('active');
     choicesRow.innerHTML = f.choices.map(c => `
       <div class="ae-choice-btn" tabindex="0" role="button"
            data-icon="${c.icon}" data-tint="${c.tint}"
@@ -1587,27 +1710,47 @@ function advanceScene() {
 function rollDice() {
   const dice = window._currentDice;
   if (!dice) return;
+  // bottom panel elements
   const btn = document.getElementById('dice-roll-btn');
   const display = document.getElementById('dice-display');
   const result = document.getElementById('dice-result');
+  // overlay elements
+  const d20num = document.getElementById('d20-number');
+  const d20svg = document.getElementById('d20-svg');
+  const ovResult = document.getElementById('dice-ov-result');
+
   btn.style.display = 'none';
   display.classList.add('rolling');
+  d20num.classList.add('rolling');
+  d20svg.classList.add('rolling');
 
   // animate: flash random numbers for 1.2s
   let ticks = 0;
   const interval = setInterval(() => {
-    display.textContent = Math.floor(Math.random() * 20) + 1;
+    const n = Math.floor(Math.random() * 20) + 1;
+    display.textContent = n;
+    d20num.textContent = n;
     ticks++;
     if (ticks > 15) {
       clearInterval(interval);
       // final roll
       const roll = Math.floor(Math.random() * 20) + 1;
       display.textContent = roll;
+      d20num.textContent = roll;
       display.classList.remove('rolling');
+      d20num.classList.remove('rolling');
+      d20svg.classList.remove('rolling');
       const success = roll >= dice.dc;
-      display.classList.add(success ? 'success' : 'failed');
-      result.textContent = success ? (roll === 20 ? 'NAT 20!' : 'SUCCESS') : 'FAILED';
-      result.className = 'ae-dice-result show ' + (success ? 'success' : 'failed');
+      const cls = success ? 'success' : 'failed';
+      display.classList.add(cls);
+      d20num.classList.add(cls);
+      d20svg.classList.add(cls);
+      d20svg.style.color = success ? '#5cc85c' : 'var(--ember)';
+      const txt = success ? (roll === 20 ? 'NAT 20!' : 'SUCCESS') : 'FAILED';
+      result.textContent = txt;
+      result.className = 'ae-dice-result show ' + cls;
+      ovResult.textContent = txt;
+      ovResult.className = 'ae-dice-overlay-result show ' + cls;
       // navigate after delay
       setTimeout(() => {
         const nextId = success ? dice.successNext : dice.failNext;
