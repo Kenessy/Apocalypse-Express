@@ -330,28 +330,24 @@ html, body {
   color: var(--muted); opacity: .72;
   text-transform: lowercase;
 }
-/* status colour presets
-   usage: add class to .ae-loc-row
-   ──────────────────────────────────────
-   .s-safe       safe — confirmed    green
-   .s-likely     safe — likely       soft green
-   .s-caution    caution — possible  amber
-   .s-danger     dangerous — likely  orange
-   .s-lethal     lethal — confirmed  red
-   .s-unknown    unknown             grey
-   ────────────────────────────────────── */
-.ae-loc-row.s-safe    .ae-loc-row-icon { color: #5ecf8a; text-shadow: 0 0 8px rgba(94,207,138,.45); }
-.ae-loc-row.s-likely  .ae-loc-row-icon { color: #4aab6f; text-shadow: 0 0 6px rgba(74,171,111,.35); }
-.ae-loc-row.s-caution .ae-loc-row-icon { color: #c9973a; text-shadow: 0 0 8px rgba(201,151,58,.40); }
-.ae-loc-row.s-danger  .ae-loc-row-icon { color: #d4623a; text-shadow: 0 0 8px rgba(212,98,58,.45); }
-.ae-loc-row.s-lethal  .ae-loc-row-icon { color: #c44040; text-shadow: 0 0 10px rgba(196,64,64,.55); }
+/* status colour presets — 5 states
+   ─────────────────────────────────────────────────────
+   .s-safe     safe · confirmed          bright green
+   .s-calm     unknown · seems peaceful  grey→green
+   .s-unknown  unknown                   grey
+   .s-ominous  unknown · seems dangerous grey→red
+   .s-danger   dangerous · confirmed     red
+   ───────────────────────────────────────────────────── */
+.ae-loc-row.s-safe    .ae-loc-row-icon { color: #5ecf8a; text-shadow: 0 0 8px rgba(94,207,138,.50); }
+.ae-loc-row.s-calm    .ae-loc-row-icon { color: #7ab898; text-shadow: 0 0 6px rgba(122,184,152,.30); }
 .ae-loc-row.s-unknown .ae-loc-row-icon { color: #6a6280; }
-.ae-loc-row.s-safe    .ae-loc-row-val  { color: #5ecf8a; opacity: .72; }
-.ae-loc-row.s-likely  .ae-loc-row-val  { color: #7ecfa0; opacity: .65; }
-.ae-loc-row.s-caution .ae-loc-row-val  { color: #c9973a; opacity: .72; }
-.ae-loc-row.s-danger  .ae-loc-row-val  { color: #d4623a; opacity: .72; }
-.ae-loc-row.s-lethal  .ae-loc-row-val  { color: #c44040; opacity: .80; }
-.ae-loc-row.s-unknown .ae-loc-row-val  { color: var(--muted); opacity: .42; }
+.ae-loc-row.s-ominous .ae-loc-row-icon { color: #a06060; text-shadow: 0 0 6px rgba(160,96,96,.30); }
+.ae-loc-row.s-danger  .ae-loc-row-icon { color: #c44040; text-shadow: 0 0 10px rgba(196,64,64,.55); }
+.ae-loc-row.s-safe    .ae-loc-row-val  { color: #5ecf8a; opacity: .75; }
+.ae-loc-row.s-calm    .ae-loc-row-val  { color: #7ab898; opacity: .65; }
+.ae-loc-row.s-unknown .ae-loc-row-val  { color: var(--muted); opacity: .40; }
+.ae-loc-row.s-ominous .ae-loc-row-val  { color: #a06060; opacity: .65; }
+.ae-loc-row.s-danger  .ae-loc-row-val  { color: #c44040; opacity: .80; }
 .ae-col-content {
   flex: 1; min-width: 0; background: rgba(14,12,24,.22);
   display: flex; flex-direction: column;
@@ -790,10 +786,10 @@ html, body {
         <div class="ae-loc-rule"></div>
         <span class="ae-loc-name">Null Meridian</span>
         <div class="ae-loc-table">
-          <div class="ae-loc-row s-likely">
+          <div class="ae-loc-row s-calm">
             <span class="ae-loc-row-icon">◉</span>
             <span class="ae-loc-row-key">threat</span>
-            <span class="ae-loc-row-val">safe — likely</span>
+            <span class="ae-loc-row-val">unknown · seems peaceful</span>
           </div>
           <div class="ae-loc-row s-unknown">
             <span class="ae-loc-row-icon">○</span>
