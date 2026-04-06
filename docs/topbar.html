@@ -1588,6 +1588,7 @@ const frames = [
   {
     id: 'crossroads-choice',
     speaker: null,
+    bg: 'ae-null-meridian-portrait.png',
     text: [
       'You take it in. The obsidian ground reflects the mist above like a dark mirror. Everything here feels suspended — waiting for you to move first.',
       'Three things demand your attention.',
@@ -1611,6 +1612,7 @@ const frames = [
   {
     id: 'look-around',
     speaker: null,
+    bg: 'ae-obelisk-fountain.png',
     text: [
       'You come to your senses slowly. Eyes adjusting. Everything here is shrouded in mystery. The ground-level mist devours every beam of light within paces — your eyes have nothing to feast on.',
       'The obelisk is obvious — a solid column of dark marble rising from the fountain, impossible to miss. Beyond it, though... shapes. A few trees of varying size, the faint outline of a rise in the land, barely visible through the shifting folds of fog.',
@@ -1633,6 +1635,7 @@ const frames = [
   {
     id: 'climb-obelisk',
     speaker: null,
+    bg: 'ae-obelisk-fountain.png',
     text: [
       'You place your hands on the obelisk. The stone is cold — colder than the air. The carvings are deep enough to grip, the symbols spiralling upward like a staircase that forgot to be one.',
       'You pull yourself up. One handhold, then another. The marble is slick with condensation but the grooves hold. Below you, the fountain water catches what little light there is.',
@@ -1734,6 +1737,11 @@ function renderFrame(idx) {
   const f = frames[idx];
   if (!f) return;
   currentFrameIdx = idx;
+
+  // update background image if frame has one
+  if (f.bg) {
+    document.querySelector('.ae-img-bg').src = f.bg;
+  }
 
   // dialogue inner
   const inner = document.getElementById('dialogue-inner');
