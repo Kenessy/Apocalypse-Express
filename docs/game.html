@@ -289,11 +289,109 @@
     /* ══ TRANSITION OVERLAY ══ */
     #overlay { position: fixed; inset: 0; z-index: 400; background: var(--void); opacity: 0; pointer-events: none; transition: opacity .4s ease; }
     #overlay.on { opacity: 1; pointer-events: all; }
+
+    /* ══ OBELISK CLOCK ══ */
+    #obelisk-hud {
+      display: none; position: fixed; top: 48px; right: 16px; z-index: 45;
+      text-align: right;
+    }
+    #obelisk-hud.vis { display: block; animation: hudIn .8s ease both; }
+    @keyframes hudIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+    .clock-wrap {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 14px;
+      background: rgba(5,4,10,.88);
+      border: 1px solid rgba(201,156,90,.15);
+      border-radius: 6px;
+      backdrop-filter: blur(8px);
+    }
+    .clock-icon {
+      font-size: 16px; color: var(--gold); opacity: .6;
+      animation: clockPulse 2s ease-in-out infinite;
+    }
+    @keyframes clockPulse {
+      0%,100% { opacity: .4; } 50% { opacity: .9; }
+    }
+    .clock-digits {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 18px; font-weight: 500;
+      letter-spacing: .12em; color: var(--gold2);
+      min-width: 64px;
+    }
+    .clock-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 7px; letter-spacing: .2em; text-transform: uppercase;
+      color: var(--gold); opacity: .4; margin-top: 4px;
+    }
+    .clock-wrap.urgent { border-color: rgba(255,123,92,.35); }
+    .clock-wrap.urgent .clock-digits { color: var(--ember); }
+    .clock-wrap.urgent .clock-icon { color: var(--ember); animation-duration: .8s; }
+
+    /* ══ POSTCARD FLOAT ══ */
+    #postcard-float {
+      display: none; margin-top: 10px;
+      padding: 10px 14px;
+      background: rgba(5,4,10,.88);
+      border: 1px solid rgba(163,139,207,.18);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: border-color .3s, box-shadow .3s;
+    }
+    #postcard-float.vis {
+      display: block; animation: postcardIn 1.2s ease both;
+    }
+    #postcard-float:hover {
+      border-color: rgba(201,156,90,.4);
+      box-shadow: 0 0 18px rgba(201,156,90,.12);
+    }
+    @keyframes postcardIn {
+      from { opacity: 0; transform: translateY(8px) rotate(2deg); }
+      to   { opacity: 1; transform: translateY(0) rotate(0deg); }
+    }
+    .pc-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 7px; letter-spacing: .2em; text-transform: uppercase;
+      color: var(--ember); opacity: .6; margin-bottom: 4px;
+    }
+    .pc-text {
+      font-family: 'Cinzel', serif; font-size: 11px; font-weight: 700;
+      color: var(--gold2); opacity: .8; letter-spacing: .04em;
+    }
+    .pc-sub {
+      font-family: 'IBM Plex Mono', monospace; font-size: 8px;
+      color: var(--muted); opacity: .35; margin-top: 3px;
+    }
+
+    /* postcard picked up state */
+    #postcard-float.picked {
+      border-color: rgba(201,156,90,.3);
+      background: rgba(201,156,90,.08);
+      cursor: default;
+    }
+    #postcard-float.picked .pc-label { color: var(--gold); }
+    #postcard-float.picked .pc-sub { color: var(--gold); opacity: .4; }
   </style>
 </head>
 <body>
 
 <div id="overlay"></div>
+
+<!-- OBELISK HUD (clock + postcard) -->
+<div id="obelisk-hud">
+  <div class="clock-wrap" id="clock-wrap">
+    <span class="clock-icon">&#x29d6;</span>
+    <div>
+      <div class="clock-digits" id="clock-digits">--:--</div>
+      <div class="clock-label">UNTIL DEPARTURE</div>
+    </div>
+  </div>
+  <div id="postcard-float" onclick="pickUpPostcard()">
+    <div class="pc-label">&#x2709; ITEM FOUND</div>
+    <div class="pc-text">A Postcard, Face-Down</div>
+    <div class="pc-sub">tap to examine</div>
+  </div>
+</div>
 
 <div id="game">
 
@@ -456,20 +554,73 @@ var S = {
   obelisk:{
     id:'obelisk', chapter:'CHAPTER A \u00b7 NULL MERIDIAN', title:'The Obelisk',
     narrator:'READ ALOUD',
+    layered: true,
     text:[
       'The rhythm shifts.',
-      'A shape rises from the platform \u2014 you are certain it was not there before. An obelisk, perhaps, or something that has decided to look like one. Black stone. Engraved with marks you almost recognise.',
-      'Beside it: a clock with no hands.',
-      'Below the clock, face-down on the stone \u2014 a postcard.',
-      'The void has not changed. But something inside it has made an <em>appointment</em>.'
+      'A shape rises from the platform \u2014 you are certain it was not there before. An obelisk, perhaps, or something that has decided to look like one. Black stone. Engraved with marks you almost recognise.'
     ],
-    choices:[{id:'end', icon:'\u2192', type:'DECIDE', label:'Approach the obelisk', decide:true}]
+    layers:[
+      { delay: 2800, text: 'Then \u2014 at its peak \u2014 something ignites. A clock face, burning into the stone like a brand. No hands. No numerals. Just a ring of light that begins to <em>move</em>.', showClock: true },
+      { delay: 5600, text: 'Below the clock, something flutters to the ground as if dropped from nowhere. A postcard, landing face-down on the stone. The edges are singed. It was not there a moment ago.', showPostcard: true },
+      { delay: 8200, text: 'The void has not changed. But something inside it has made an <em>appointment</em>.' }
+    ],
+    choices:[
+      {id:'ob-clock',    icon:'\u29d6', type:'EXAMINE',  label:'Study the clock'},
+      {id:'ob-markings', icon:'\u25c8', type:'EXAMINE',  label:'Touch the markings'},
+      {id:'ob-postcard', icon:'\u2709', type:'ITEM',     label:'Pick up the postcard', decide:true}
+    ]
+  },
+  'ob-clock':{
+    id:'ob-clock', title:'The Clock',
+    text:[
+      'You look up at the clock face.',
+      'It has no hands \u2014 but it is not still. The ring of light crawls along an invisible track, slow and absolute, like the last grain falling through an hourglass.',
+      'You cannot read it. You do not know what unit it counts, or what happens when it reaches zero. But your body knows. Something in the marrow of whatever you are <em>knows</em>.',
+      'It is not counting time. It is counting <em>you</em>.'
+    ], back:'obelisk'
+  },
+  'ob-markings':{
+    id:'ob-markings', title:'The Markings',
+    text:[
+      'You press your palm to the stone.',
+      'The engravings are deep \u2014 too deep for any chisel. They spiral upward in patterns that almost resolve into language, then twist away. Your fingers trace a line and it <em>warms</em>.',
+      'For one heartbeat the marks glow faintly \u2014 the colour of embers in dead ash. A single symbol holds: a circle bisected by two parallel lines. <em>Rails.</em>',
+      'Then the glow fades. The stone goes cold. But the symbol stays behind your eyelids when you blink.'
+    ], back:'obelisk'
+  },
+  'ob-postcard':{
+    id:'ob-postcard', title:'The Postcard',
+    narrator:'ITEM ACQUIRED',
+    postcardPickup: true,
+    text:[
+      'You kneel and turn the postcard over.',
+      'The front shows a landscape you do not recognise \u2014 green hills, a winding river, a sky so blue it hurts. A place that has never existed here. Or a place that <em>stopped</em> existing.',
+      'On the back, in handwriting that looks rushed, almost frantic:',
+      '<em>\u201cBoard the train. Do not look back. The next stop is not optional.\u201d</em>',
+      'No signature. No address. No stamp. Just a message for whoever finds it \u2014 for <em>you</em>.',
+      'You pocket the postcard. It is warm against your side, warmer than anything in this place has a right to be.'
+    ],
+    choices:[{id:'ob-depart', icon:'\u2192', type:'DECIDE', label:'Turn toward the sound of rails', decide:true}]
+  },
+  'ob-depart':{
+    id:'ob-depart', title:'Departure',
+    narrator:'READ ALOUD',
+    text:[
+      'The countdown reaches its last breath.',
+      'From the edge of the void \u2014 the direction you could never quite see \u2014 two lines of red light burn into existence. Rails. Real rails. Stretching from nowhere to <em>here</em>.',
+      'A sound follows. Not mechanical. Not alive. Something in between. A low, building roar that shakes the platform and makes the other shapes look up for the first time.',
+      'The clock shatters. Glass and light rain down like slow confetti.',
+      'From the dark, headlamp first, the <em>Apocalypse Express</em> arrives.'
+    ],
+    choices:[{id:'end', icon:'\u2605', type:'DECIDE', label:'Board the train', decide:true}]
   },
   end:{
     id:'end', title:'To Be Continued',
     text:[
-      '<em>Scene A2 \u2014 Obelisk, Clock &amp; Postcards</em>',
-      'This scene is coming soon.'
+      'You step aboard. The doors close behind you with a sound like a sealed promise.',
+      'The postcard in your pocket pulses once \u2014 warm, insistent \u2014 then goes still.',
+      '<em>Scene A2 \u2014 The Apocalypse Express</em>',
+      'The next stop is not optional.'
     ], final:true
   }
 };
@@ -484,7 +635,7 @@ var EMOTIONS = {
 var EXPLORE_IDS = ['look','edge','call','memory','ability','scan'];
 
 /* ── STATE ── */
-var G = { cur:'start', hist:[], visited:{}, unlocked:false, emotionDone:false };
+var G = { cur:'start', hist:[], visited:{}, unlocked:false, emotionDone:false, postcardPicked:false };
 
 /* ── NAVIGATE ── */
 function go(id, push) {
@@ -534,7 +685,28 @@ function render(id) {
     eq.classList.remove('vis'); eg.classList.remove('vis');
   }
 
-  buildChoices(node);
+  // postcard pickup handling
+  if (node.postcardPickup) {
+    G.postcardPicked = true;
+    var pc = document.getElementById('postcard-float');
+    pc.classList.add('picked');
+    pc.querySelector('.pc-text').textContent = 'Postcard · Acquired';
+    pc.querySelector('.pc-sub').textContent = '"Board the train."';
+    pc.onclick = null;
+  }
+
+  // layered scenes: delay choices, reveal layers over time
+  if (node.layered) {
+    // don't build choices yet — renderLayers handles timing
+    renderLayers(node);
+  } else {
+    buildChoices(node);
+  }
+
+  // hide clock HUD when leaving obelisk area (except ob- sub-scenes)
+  var inObelisk = (node.id === 'obelisk' || node.id.indexOf('ob-') === 0);
+  if (!inObelisk) { hideClock(); }
+
   document.getElementById('s-body').scrollTop = 0;
 }
 
@@ -606,6 +778,81 @@ function buildChoices(node) {
     lbl.style.display = 'none';
     grid.innerHTML = '';
   }
+}
+
+/* ── LAYERED REVEAL ── */
+function renderLayers(node) {
+  var layers = node.layers || [];
+  layers.forEach(function(layer) {
+    setTimeout(function(){
+      // add text
+      var c = document.getElementById('s-text');
+      var p = document.createElement('p');
+      p.innerHTML = layer.text;
+      c.appendChild(p);
+      setTimeout(function(){ p.classList.add('vis'); }, 60);
+
+      // show clock HUD
+      if (layer.showClock) { startClock(); }
+
+      // show postcard float
+      if (layer.showPostcard) { showPostcardFloat(); }
+    }, layer.delay);
+  });
+
+  // show choices after all layers
+  var lastDelay = layers.length ? layers[layers.length - 1].delay + 1800 : 1200;
+  setTimeout(function(){ buildChoices(node); }, lastDelay);
+}
+
+/* ── COUNTDOWN CLOCK ── */
+var CLOCK_TOTAL = 300; // 5 minutes in seconds
+var clockRemaining = CLOCK_TOTAL;
+var clockInterval = null;
+
+function startClock() {
+  var hud = document.getElementById('obelisk-hud');
+  hud.classList.add('vis');
+  clockRemaining = CLOCK_TOTAL;
+  updateClockDisplay();
+  if (clockInterval) clearInterval(clockInterval);
+  clockInterval = setInterval(function(){
+    clockRemaining--;
+    if (clockRemaining <= 0) { clockRemaining = 0; clearInterval(clockInterval); }
+    updateClockDisplay();
+  }, 1000);
+}
+
+function updateClockDisplay() {
+  var m = Math.floor(clockRemaining / 60);
+  var s = clockRemaining % 60;
+  var str = (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+  document.getElementById('clock-digits').textContent = str;
+
+  var wrap = document.getElementById('clock-wrap');
+  if (clockRemaining <= 60) {
+    wrap.classList.add('urgent');
+  } else {
+    wrap.classList.remove('urgent');
+  }
+}
+
+function hideClock() {
+  if (clockInterval) clearInterval(clockInterval);
+  document.getElementById('obelisk-hud').classList.remove('vis');
+}
+
+/* ── POSTCARD FLOAT ── */
+function showPostcardFloat() {
+  var pc = document.getElementById('postcard-float');
+  pc.classList.add('vis');
+  pc.classList.remove('picked');
+}
+
+function pickUpPostcard() {
+  if (G.postcardPicked) return;
+  // navigate to postcard scene
+  go('ob-postcard');
 }
 
 /* ── EMOTION ── */
