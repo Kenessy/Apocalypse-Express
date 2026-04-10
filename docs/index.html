@@ -185,6 +185,33 @@ html, body {
   position:absolute; top:38px; left:0; right:0; bottom:0;
   overflow:hidden; cursor:grab; user-select:none;
   -webkit-user-select:none;
+  /* layered grid: fine dots + medium lines + large lines */
+  background-color: #07060e;
+  background-image:
+    /* fine dot grid */
+    radial-gradient(circle, rgba(201,156,90,.06) 1px, transparent 1px),
+    /* medium grid lines */
+    linear-gradient(rgba(201,156,90,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201,156,90,.04) 1px, transparent 1px),
+    /* large grid lines */
+    linear-gradient(rgba(201,156,90,.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201,156,90,.07) 1px, transparent 1px),
+    /* subtle radial vignette */
+    radial-gradient(ellipse at 50% 50%, rgba(20,15,35,.0) 0%, rgba(4,3,8,.6) 100%);
+  background-size:
+    20px 20px,
+    40px 40px,
+    40px 40px,
+    200px 200px,
+    200px 200px,
+    100% 100%;
+  background-position:
+    10px 10px,
+    0 0,
+    0 0,
+    0 0,
+    0 0,
+    0 0;
 }
 .ae-sandbox-canvas.dragging { cursor:grabbing; }
 
