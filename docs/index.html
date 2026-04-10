@@ -189,99 +189,17 @@ html, body {
 }
 .ae-sandbox-canvas.dragging { cursor:grabbing; }
 
+/* WebGL shader fills the entire canvas area */
+#sandbox-gl {
+  position:absolute; inset:0; z-index:0;
+}
+
+/* node overlay layer — sits on top of shader */
 .ae-sandbox-grid {
   position:absolute; top:0; left:0;
   transform-origin:0 0;
   will-change:transform;
-
-  /* ── obsidian surface texture ── */
-  background-color:#0a0814;
-  background-image:
-    /* fine etched dot grid */
-    radial-gradient(circle, rgba(201,156,90,.07) 1px, transparent 1px),
-    /* medium rune lines */
-    linear-gradient(rgba(201,156,90,.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(201,156,90,.035) 1px, transparent 1px),
-    /* major grid — stone slab edges */
-    linear-gradient(rgba(201,156,90,.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(201,156,90,.08) 1px, transparent 1px),
-    /* surface noise — subtle marble veins */
-    radial-gradient(ellipse at 20% 30%, rgba(90,60,140,.08) 0%, transparent 50%),
-    radial-gradient(ellipse at 70% 60%, rgba(140,100,60,.06) 0%, transparent 45%),
-    radial-gradient(ellipse at 45% 80%, rgba(60,80,120,.07) 0%, transparent 40%),
-    /* center glow — like a lamp overhead */
-    radial-gradient(ellipse at 50% 40%, rgba(201,156,90,.06) 0%, transparent 60%);
-  background-size:
-    20px 20px,
-    40px 40px, 40px 40px,
-    200px 200px, 200px 200px,
-    800px 600px, 700px 500px, 600px 700px,
-    100% 100%;
-  background-position:
-    10px 10px,
-    0 0, 0 0,
-    0 0, 0 0,
-    0 0, 0 0, 0 0,
-    0 0;
-  /* edge fade */
-  border-radius:4px;
-}
-
-/* ── floating light shimmer — moves across the surface ── */
-.ae-sandbox-grid::before {
-  content:''; position:absolute; inset:0; pointer-events:none; z-index:0;
-  background:
-    /* primary shimmer — slow diagonal sweep */
-    linear-gradient(
-      115deg,
-      transparent 0%, transparent 40%,
-      rgba(201,156,90,.04) 45%,
-      rgba(220,180,120,.07) 50%,
-      rgba(201,156,90,.04) 55%,
-      transparent 60%, transparent 100%
-    ),
-    /* secondary shimmer — offset, slower */
-    linear-gradient(
-      -65deg,
-      transparent 0%, transparent 45%,
-      rgba(163,139,207,.03) 50%,
-      rgba(180,160,220,.05) 53%,
-      rgba(163,139,207,.03) 56%,
-      transparent 61%, transparent 100%
-    );
-  background-size: 200% 200%, 250% 250%;
-  animation: sb-shimmer 12s ease-in-out infinite alternate, sb-shimmer2 18s ease-in-out infinite alternate-reverse;
-}
-@keyframes sb-shimmer {
-  0%   { background-position: -50% -30%, 0% 0%; }
-  100% { background-position: 150% 130%, 0% 0%; }
-}
-@keyframes sb-shimmer2 {
-  0%   { background-position: 0% 0%, -60% -40%; }
-  100% { background-position: 0% 0%, 160% 140%; }
-}
-
-/* ── subtle particle sparkles ── */
-.ae-sandbox-grid::after {
-  content:''; position:absolute; inset:0; pointer-events:none; z-index:0;
-  background-image:
-    radial-gradient(1px 1px at 15% 25%, rgba(255,220,150,.25) 50%, transparent 100%),
-    radial-gradient(1px 1px at 72% 18%, rgba(255,220,150,.20) 50%, transparent 100%),
-    radial-gradient(1px 1px at 38% 62%, rgba(200,180,255,.22) 50%, transparent 100%),
-    radial-gradient(1px 1px at 85% 71%, rgba(255,220,150,.18) 50%, transparent 100%),
-    radial-gradient(1px 1px at 52% 43%, rgba(200,180,255,.15) 50%, transparent 100%),
-    radial-gradient(1.5px 1.5px at 25% 82%, rgba(255,200,100,.20) 50%, transparent 100%),
-    radial-gradient(1px 1px at 63% 91%, rgba(201,156,90,.22) 50%, transparent 100%),
-    radial-gradient(1px 1px at 8% 55%, rgba(220,200,255,.18) 50%, transparent 100%),
-    radial-gradient(1.5px 1.5px at 91% 38%, rgba(255,210,130,.15) 50%, transparent 100%),
-    radial-gradient(1px 1px at 44% 12%, rgba(201,156,90,.20) 50%, transparent 100%);
-  background-size: 400px 350px;
-  animation: sb-sparkle 8s ease-in-out infinite alternate;
-}
-@keyframes sb-sparkle {
-  0%   { opacity:.4; }
-  50%  { opacity:.9; }
-  100% { opacity:.5; }
+  z-index:1;
 }
 
 /* zoom indicator */
@@ -2159,6 +2077,7 @@ html, body {
       </div>
     </div>
     <div class="ae-sandbox-canvas" id="sandbox-canvas">
+      <canvas id="sandbox-gl"></canvas>
       <div class="ae-sandbox-grid" id="sandbox-grid">
         <svg class="ae-sandbox-edges" id="sandbox-edges"></svg>
       </div>
@@ -3616,36 +3535,33 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') { e.preventDefault(); fcGo(-1); }
 });
 
-/* ══ SANDBOX — tree node view with pan/zoom ══ */
+/* ══ SANDBOX — WebGL shader canvas with pan/zoom ══ */
 let sandboxDevMode = false;
 let sbZoom = 1;
 let sbPanX = 0, sbPanY = 0;
 let sbGridW = 0, sbGridH = 0;
 let sbDragging = false, sbDragStartX = 0, sbDragStartY = 0, sbPanStartX = 0, sbPanStartY = 0;
 let sbInitialized = false;
+let sbGl = null, sbProgram = null, sbAnimId = null;
+let sbMouseX = 0.5, sbMouseY = 0.5;
 
 document.getElementById('sandbox-dev-toggle').addEventListener('click', function() {
   sandboxDevMode = !sandboxDevMode;
   this.classList.toggle('active', sandboxDevMode);
-  renderSandbox();
 });
 
 // zoom buttons
 document.getElementById('sandbox-zoom-in').addEventListener('click', () => sbSetZoom(sbZoom * 1.25));
 document.getElementById('sandbox-zoom-out').addEventListener('click', () => sbSetZoom(sbZoom / 1.25));
-document.getElementById('sandbox-zoom-fit').addEventListener('click', sbFitToScreen);
+document.getElementById('sandbox-zoom-fit').addEventListener('click', () => { sbZoom = 1; sbPanX = 0; sbPanY = 0; sbApplyTransform(); document.getElementById('sandbox-zoom-level').textContent = '100%'; });
 
 function sbSetZoom(z, pivotX, pivotY) {
-  const canvas = document.getElementById('sandbox-canvas');
   const oldZ = sbZoom;
   sbZoom = Math.max(0.15, Math.min(3, z));
-
-  // zoom toward pivot point (mouse position or center)
   if (pivotX !== undefined) {
     sbPanX = pivotX - (pivotX - sbPanX) * (sbZoom / oldZ);
     sbPanY = pivotY - (pivotY - sbPanY) * (sbZoom / oldZ);
   }
-
   sbApplyTransform();
   document.getElementById('sandbox-zoom-level').textContent = Math.round(sbZoom * 100) + '%';
 }
@@ -3655,226 +3571,232 @@ function sbApplyTransform() {
   grid.style.transform = 'translate(' + sbPanX + 'px,' + sbPanY + 'px) scale(' + sbZoom + ')';
 }
 
-function sbFitToScreen() {
-  const canvas = document.getElementById('sandbox-canvas');
-  const cw = canvas.clientWidth, ch = canvas.clientHeight;
-  if (!sbGridW || !sbGridH) return;
-  const scaleX = cw / sbGridW;
-  const scaleY = ch / sbGridH;
-  sbZoom = Math.min(scaleX, scaleY) * 0.9;
-  sbZoom = Math.max(0.15, Math.min(3, sbZoom));
-  sbPanX = (cw - sbGridW * sbZoom) / 2;
-  sbPanY = (ch - sbGridH * sbZoom) / 2;
-  sbApplyTransform();
-  document.getElementById('sandbox-zoom-level').textContent = Math.round(sbZoom * 100) + '%';
-}
-
-// mouse drag to pan
+// mouse drag to pan + track mouse for shader
 (function() {
-  const canvas = document.getElementById('sandbox-canvas');
+  const container = document.getElementById('sandbox-canvas');
 
-  canvas.addEventListener('mousedown', function(e) {
+  container.addEventListener('mousedown', function(e) {
     if (e.button !== 0) return;
     sbDragging = true;
-    sbDragStartX = e.clientX;
-    sbDragStartY = e.clientY;
-    sbPanStartX = sbPanX;
-    sbPanStartY = sbPanY;
-    canvas.classList.add('dragging');
+    sbDragStartX = e.clientX; sbDragStartY = e.clientY;
+    sbPanStartX = sbPanX; sbPanStartY = sbPanY;
+    container.classList.add('dragging');
     e.preventDefault();
   });
-
   window.addEventListener('mousemove', function(e) {
+    // track mouse for shader parallax
+    const rect = document.getElementById('sandbox-canvas').getBoundingClientRect();
+    sbMouseX = (e.clientX - rect.left) / rect.width;
+    sbMouseY = (e.clientY - rect.top) / rect.height;
     if (!sbDragging) return;
     sbPanX = sbPanStartX + (e.clientX - sbDragStartX);
     sbPanY = sbPanStartY + (e.clientY - sbDragStartY);
     sbApplyTransform();
   });
-
   window.addEventListener('mouseup', function() {
     if (!sbDragging) return;
     sbDragging = false;
-    canvas.classList.remove('dragging');
+    container.classList.remove('dragging');
   });
-
-  // scroll wheel to zoom
-  canvas.addEventListener('wheel', function(e) {
+  container.addEventListener('wheel', function(e) {
     e.preventDefault();
-    const rect = canvas.getBoundingClientRect();
-    const mx = e.clientX - rect.left;
-    const my = e.clientY - rect.top;
-    const factor = e.deltaY < 0 ? 1.12 : 1 / 1.12;
-    sbSetZoom(sbZoom * factor, mx, my);
+    const rect = container.getBoundingClientRect();
+    const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+    sbSetZoom(sbZoom * (e.deltaY < 0 ? 1.12 : 1/1.12), mx, my);
   }, { passive: false });
 
-  // touch: pinch-to-zoom + drag
-  let sbTouches = [];
-  let sbTouchDist = 0;
-  let sbTouchZoomStart = 1;
-
-  canvas.addEventListener('touchstart', function(e) {
-    sbTouches = Array.from(e.touches);
-    if (sbTouches.length === 1) {
+  // touch support
+  let sbTouchDist = 0, sbTouchZoomStart = 1;
+  container.addEventListener('touchstart', function(e) {
+    const t = Array.from(e.touches);
+    if (t.length === 1) {
       sbDragging = true;
-      sbDragStartX = sbTouches[0].clientX;
-      sbDragStartY = sbTouches[0].clientY;
-      sbPanStartX = sbPanX;
-      sbPanStartY = sbPanY;
-    } else if (sbTouches.length === 2) {
+      sbDragStartX = t[0].clientX; sbDragStartY = t[0].clientY;
+      sbPanStartX = sbPanX; sbPanStartY = sbPanY;
+    } else if (t.length === 2) {
       sbDragging = false;
-      sbTouchDist = Math.hypot(sbTouches[1].clientX - sbTouches[0].clientX, sbTouches[1].clientY - sbTouches[0].clientY);
+      sbTouchDist = Math.hypot(t[1].clientX-t[0].clientX, t[1].clientY-t[0].clientY);
       sbTouchZoomStart = sbZoom;
     }
     e.preventDefault();
   }, { passive: false });
-
-  canvas.addEventListener('touchmove', function(e) {
-    const touches = Array.from(e.touches);
-    if (touches.length === 1 && sbDragging) {
-      sbPanX = sbPanStartX + (touches[0].clientX - sbDragStartX);
-      sbPanY = sbPanStartY + (touches[0].clientY - sbDragStartY);
+  container.addEventListener('touchmove', function(e) {
+    const t = Array.from(e.touches);
+    if (t.length === 1 && sbDragging) {
+      sbPanX = sbPanStartX + (t[0].clientX - sbDragStartX);
+      sbPanY = sbPanStartY + (t[0].clientY - sbDragStartY);
       sbApplyTransform();
-    } else if (touches.length === 2) {
-      const dist = Math.hypot(touches[1].clientX - touches[0].clientX, touches[1].clientY - touches[0].clientY);
-      const rect = canvas.getBoundingClientRect();
-      const mx = (touches[0].clientX + touches[1].clientX) / 2 - rect.left;
-      const my = (touches[0].clientY + touches[1].clientY) / 2 - rect.top;
-      sbSetZoom(sbTouchZoomStart * (dist / sbTouchDist), mx, my);
+    } else if (t.length === 2) {
+      const d = Math.hypot(t[1].clientX-t[0].clientX, t[1].clientY-t[0].clientY);
+      const rect = container.getBoundingClientRect();
+      sbSetZoom(sbTouchZoomStart*(d/sbTouchDist), (t[0].clientX+t[1].clientX)/2-rect.left, (t[0].clientY+t[1].clientY)/2-rect.top);
     }
     e.preventDefault();
   }, { passive: false });
-
-  canvas.addEventListener('touchend', function() { sbDragging = false; });
+  container.addEventListener('touchend', function() { sbDragging = false; });
 })();
 
-function buildTreeLayout() {
-  const nodes = [];
-  const edges = [];
-  let nextId = 0;
+/* ── WebGL shader engine ── */
+function initSandboxGL() {
+  const canvas = document.getElementById('sandbox-gl');
+  const gl = canvas.getContext('webgl', { alpha: false, antialias: false });
+  if (!gl) return;
+  sbGl = gl;
 
-  const COL_W = 160;
-  const ROW_H = 80;
+  const vs = gl.createShader(gl.VERTEX_SHADER);
+  gl.shaderSource(vs, 'attribute vec2 p;void main(){gl_Position=vec4(p,0,1);}');
+  gl.compileShader(vs);
 
-  function addNode(id, label, type, x, y) {
-    const nid = nextId++;
-    nodes.push({ nid, id, label, type, x, y });
-    return nid;
+  const fs = gl.createShader(gl.FRAGMENT_SHADER);
+  gl.shaderSource(fs, `
+precision highp float;
+uniform vec2 u_res;
+uniform float u_time;
+uniform vec2 u_mouse;
+uniform vec2 u_pan;
+uniform float u_zoom;
+
+// simplex-ish noise
+vec3 mod289(vec3 x){return x-floor(x*(1./289.))*289.;}
+vec2 mod289(vec2 x){return x-floor(x*(1./289.))*289.;}
+vec3 permute(vec3 x){return mod289(((x*34.)+1.)*x);}
+float snoise(vec2 v){
+  const vec4 C=vec4(.211324865405187,.366025403784439,-.577350269189626,.024390243902439);
+  vec2 i=floor(v+dot(v,C.yy));
+  vec2 x0=v-i+dot(i,C.xx);
+  vec2 i1;i1=(x0.x>x0.y)?vec2(1,0):vec2(0,1);
+  vec4 x12=x0.xyxy+C.xxzz;x12.xy-=i1;
+  i=mod289(i);
+  vec3 p=permute(permute(i.y+vec3(0,i1.y,1.))+i.x+vec3(0,i1.x,1.));
+  vec3 m=max(.5-vec3(dot(x0,x0),dot(x12.xy,x12.xy),dot(x12.zw,x12.zw)),0.);
+  m=m*m;m=m*m;
+  vec3 x=2.*fract(p*C.www)-1.;
+  vec3 h=abs(x)-.5;
+  vec3 ox=floor(x+.5);
+  vec3 a0=x-ox;
+  m*=1.79284291400159-.85373472095314*(a0*a0+h*h);
+  vec3 g;
+  g.x=a0.x*x0.x+h.x*x0.y;
+  g.yz=a0.yz*x12.xz+h.yz*x12.yw;
+  return 130.*dot(m,g);
+}
+
+// fractal brownian motion
+float fbm(vec2 p){
+  float f=0., a=.5;
+  for(int i=0;i<5;i++){
+    f+=a*snoise(p);
+    p*=2.07;a*=.48;
   }
-  function addEdge(from, to, cls) {
-    edges.push({ from, to, cls: cls || '' });
+  return f;
+}
+
+void main(){
+  vec2 uv=gl_FragCoord.xy/u_res;
+  // world-space UV: account for pan and zoom
+  vec2 wuv=(gl_FragCoord.xy-u_pan*vec2(1,-1))/u_zoom/u_res;
+
+  float t=u_time*.08;
+
+  // domain-warped noise for obsidian surface
+  vec2 q=vec2(fbm(wuv*3.+t*.3), fbm(wuv*3.+vec2(5.2,1.3)));
+  vec2 r=vec2(fbm(wuv*4.+q*4.+vec2(1.7,9.2)+t*.15), fbm(wuv*4.+q*4.+vec2(8.3,2.8)+t*.12));
+  float f=fbm(wuv*3.+r*1.5);
+
+  // base color: deep obsidian with purple/gold undertones
+  vec3 col=vec3(.02,.015,.04);
+  // layer 1: dark purple veins
+  col=mix(col, vec3(.06,.02,.10), smoothstep(-.2,.6,f));
+  // layer 2: gold traces in the stone
+  col=mix(col, vec3(.12,.08,.03), smoothstep(.1,.8,f)*smoothstep(.9,.3,f)*.6);
+  // layer 3: deep blue cracks
+  col=mix(col, vec3(.015,.03,.08), smoothstep(.3,.7,r.x)*.4);
+
+  // grid lines — world-space, scale with zoom
+  vec2 gp=(gl_FragCoord.xy-u_pan*vec2(1,-1))/u_zoom;
+  // fine grid
+  vec2 fg=abs(fract(gp/40.)-.5);
+  float fgLine=1.-smoothstep(0.,.03/u_zoom, min(fg.x,fg.y));
+  col+=vec3(.12,.09,.05)*fgLine*.15;
+  // major grid
+  vec2 mg=abs(fract(gp/200.)-.5);
+  float mgLine=1.-smoothstep(0.,.02/u_zoom, min(mg.x,mg.y));
+  col+=vec3(.15,.11,.06)*mgLine*.25;
+
+  // caustic light ripples
+  float c1=snoise(wuv*8.+t*1.2);
+  float c2=snoise(wuv*12.-t*.9+vec2(3.1,7.4));
+  float caustic=smoothstep(.3,.8,c1*c2+.5)*.12;
+  col+=vec3(.14,.10,.06)*caustic;
+
+  // mouse-reactive light cone
+  vec2 mPos=u_mouse;
+  float mDist=length(uv-mPos);
+  float light=exp(-mDist*mDist*6.)*.08;
+  col+=vec3(.16,.13,.08)*light;
+  // secondary purple highlight from mouse
+  col+=vec3(.05,.03,.10)*exp(-mDist*mDist*10.)*.12;
+
+  // subtle sparkle particles
+  float sp=snoise(wuv*60.+t*2.);
+  float sp2=snoise(wuv*80.-t*1.5);
+  float sparkle=smoothstep(.92,.98,sp)*smoothstep(.9,.96,sp2);
+  col+=vec3(.25,.20,.12)*sparkle;
+
+  // edge vignette
+  vec2 vig=uv*(1.-uv);
+  col*=smoothstep(0.,.15,vig.x*vig.y)*1.1+.15;
+
+  // very subtle breathing
+  col*=.95+.05*sin(t*3.);
+
+  gl_FragColor=vec4(col,1.);
+}
+`);
+  gl.compileShader(fs);
+
+  sbProgram = gl.createProgram();
+  gl.attachShader(sbProgram, vs);
+  gl.attachShader(sbProgram, fs);
+  gl.linkProgram(sbProgram);
+  gl.useProgram(sbProgram);
+
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,1,-1,-1,1,1,1]), gl.STATIC_DRAW);
+  const p = gl.getAttribLocation(sbProgram, 'p');
+  gl.enableVertexAttribArray(p);
+  gl.vertexAttribPointer(p, 2, gl.FLOAT, false, 0, 0);
+}
+
+function sbRenderLoop() {
+  if (activeTab !== 'sandbox') { sbAnimId = null; return; }
+  const gl = sbGl;
+  const canvas = document.getElementById('sandbox-gl');
+  const container = document.getElementById('sandbox-canvas');
+
+  // resize canvas to container
+  const w = container.clientWidth, h = container.clientHeight;
+  if (canvas.width !== w || canvas.height !== h) {
+    canvas.width = w; canvas.height = h;
+    gl.viewport(0, 0, w, h);
   }
 
-  // intro chain — centered, vertical
-  const introX = 0;
-  const introNodes = [];
-  fcIntro.forEach((n, i) => {
-    introNodes.push(addNode(n.id, n.label, n.type, introX, i));
-  });
-  for (let i = 1; i < introNodes.length; i++) {
-    addEdge(introNodes[i-1], introNodes[i], '');
-  }
+  const t = performance.now() / 1000;
+  gl.uniform2f(gl.getUniformLocation(sbProgram, 'u_res'), w, h);
+  gl.uniform1f(gl.getUniformLocation(sbProgram, 'u_time'), t);
+  gl.uniform2f(gl.getUniformLocation(sbProgram, 'u_mouse'), sbMouseX, sbMouseY);
+  gl.uniform2f(gl.getUniformLocation(sbProgram, 'u_pan'), sbPanX, sbPanY);
+  gl.uniform1f(gl.getUniformLocation(sbProgram, 'u_zoom'), sbZoom);
 
-  // branches spread out from crossroads
-  const branchOffsets = [-3, 0, 3];
-  const crossroadsNid = introNodes[introNodes.length - 1];
-  const branchStartY = fcIntro.length;
-
-  fcColumns.forEach((col, ci) => {
-    const baseX = branchOffsets[ci];
-
-    const firstNid = addNode(col.nodes[0].id, col.nodes[0].label, col.nodes[0].type, baseX, branchStartY);
-    addEdge(crossroadsNid, firstNid, '');
-
-    function layoutNodes(parentNid, nodeList, startIdx, bx, by) {
-      let prevNid = parentNid;
-      for (let i = startIdx; i < nodeList.length; i++) {
-        const n = nodeList[i];
-        by++;
-        const nid = addNode(n.refId || n.id, n.label, n.type, bx, by);
-        addEdge(prevNid, nid, '');
-        prevNid = nid;
-
-        if (n.fork) {
-          layoutFork(nid, n.fork, bx, by);
-        }
-      }
-    }
-
-    function layoutFork(parentNid, fork, bx, by) {
-      const spread = 1;
-      fork.forEach((arm, ai) => {
-        const armX = bx + (ai - (fork.length-1)/2) * spread;
-        const edgeCls = /✓|Holds|Safe/.test(arm.label) ? 'fork-success'
-          : /✗|Snaps|Lost/.test(arm.label) ? 'fork-fail' : '';
-
-        let prevNid = parentNid;
-        let armY = by;
-        arm.nodes.forEach(an => {
-          armY++;
-          const anid = addNode(an.refId || an.id, an.label, an.type, armX, armY);
-          addEdge(prevNid, anid, edgeCls);
-          prevNid = anid;
-          if (an.fork) layoutFork(anid, an.fork, armX, armY);
-        });
-      });
-    }
-
-    layoutNodes(firstNid, col.nodes, 1, baseX, branchStartY);
-  });
-
-  // normalize coordinates
-  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-  nodes.forEach(n => {
-    if (n.x < minX) minX = n.x;
-    if (n.y < minY) minY = n.y;
-    if (n.x > maxX) maxX = n.x;
-    if (n.y > maxY) maxY = n.y;
-  });
-
-  const padX = 120, padY = 80;
-  nodes.forEach(n => {
-    n.px = (n.x - minX) * COL_W + padX;
-    n.py = (n.y - minY) * ROW_H + padY;
-  });
-
-  const gridW = (maxX - minX) * COL_W + padX * 2 + COL_W;
-  const gridH = (maxY - minY) * ROW_H + padY * 2 + ROW_H;
-
-  return { nodes, edges, gridW, gridH };
+  gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+  sbAnimId = requestAnimationFrame(sbRenderLoop);
 }
 
 function renderSandbox() {
-  // texture-only mode — large canvas to pan/zoom around
-  sbGridW = 3000;
-  sbGridH = 2000;
-
-  const grid = document.getElementById('sandbox-grid');
-  const svgEl = document.getElementById('sandbox-edges');
-
-  grid.querySelectorAll('.ae-sandbox-node, .ae-sandbox-branch-label').forEach(e => e.remove());
-  svgEl.innerHTML = '';
-
-  grid.style.width = sbGridW + 'px';
-  grid.style.height = sbGridH + 'px';
-  svgEl.setAttribute('width', sbGridW);
-  svgEl.setAttribute('height', sbGridH);
-  svgEl.style.width = sbGridW + 'px';
-  svgEl.style.height = sbGridH + 'px';
-
+  if (!sbGl) initSandboxGL();
+  if (!sbAnimId && sbGl) sbAnimId = requestAnimationFrame(sbRenderLoop);
   document.getElementById('sandbox-stats').textContent = 'texture preview';
-
-  if (!sbInitialized) {
-    sbInitialized = true;
-    // center the canvas
-    const canvas = document.getElementById('sandbox-canvas');
-    sbZoom = 1;
-    sbPanX = (canvas.clientWidth - sbGridW) / 2;
-    sbPanY = (canvas.clientHeight - sbGridH) / 2;
-    sbApplyTransform();
-    document.getElementById('sandbox-zoom-level').textContent = '100%';
-  } else {
-    sbApplyTransform();
-  }
 }
 
 // image focus hints per image file
