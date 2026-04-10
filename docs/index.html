@@ -156,19 +156,170 @@ html, body {
   transition: opacity .3s, border-color .3s;
 }
 
-/* ══ MAP FULL PANEL ══ */
-.ae-map-full {
-  flex: 1;
-  background: rgba(14,12,24,.95);
+/* ══ FLOWCHART MAP PANEL ══ */
+.ae-fc {
+  flex: 1; overflow: auto; -webkit-overflow-scrolling: touch;
+  background: rgba(8,6,16,.98);
+  position: relative;
+}
+.ae-fc-scroll {
+  display: flex; align-items: flex-start;
+  min-height: 100%; padding: 48px 60px 48px 48px;
+  gap: 0; position: relative;
+}
+/* chapter label */
+.ae-fc-chapter {
+  position: absolute; top: 16px; left: 20px;
+  font: 700 11px/1 'Cinzel', serif;
+  letter-spacing: .08em; color: var(--gold); opacity: .30;
+}
+/* column = one story beat */
+.ae-fc-col {
   display: flex; flex-direction: column;
-  align-items: center; justify-content: center; gap: 14px;
+  align-items: center; gap: 0;
+  flex-shrink: 0; position: relative;
+  min-width: 120px;
 }
-.ae-map-icon { font-size: 36px; opacity: .08; color: var(--muted); }
-.ae-map-label {
-  font: 400 var(--fs-caption)/1 'IBM Plex Mono';
-  letter-spacing: .18em; text-transform: uppercase;
-  color: var(--muted); opacity: .18;
+/* connector line between columns */
+.ae-fc-line {
+  width: 56px; height: 2px; flex-shrink: 0;
+  align-self: center;
+  background: linear-gradient(to right, rgba(201,156,90,.18), rgba(201,156,90,.12));
+  margin-top: 28px; /* align with node center */
+  position: relative;
 }
+.ae-fc-line.visited {
+  background: linear-gradient(to right, rgba(201,156,90,.45), rgba(201,156,90,.35));
+  box-shadow: 0 0 8px rgba(201,156,90,.10);
+}
+.ae-fc-line.locked {
+  background: repeating-linear-gradient(to right,
+    rgba(184,176,198,.08) 0px, rgba(184,176,198,.08) 4px,
+    transparent 4px, transparent 8px);
+}
+/* branch connector (vertical + horizontal) */
+.ae-fc-branch {
+  display: flex; flex-direction: column; align-items: center;
+  position: relative;
+}
+.ae-fc-branch-row {
+  display: flex; align-items: flex-start; gap: 0;
+}
+.ae-fc-branch-arm {
+  display: flex; flex-direction: column; align-items: center;
+}
+.ae-fc-vline {
+  width: 2px; height: 32px; flex-shrink: 0;
+  background: rgba(201,156,90,.12);
+}
+.ae-fc-vline.visited { background: rgba(201,156,90,.40); }
+.ae-fc-vline.locked { background: repeating-linear-gradient(to bottom, rgba(184,176,198,.06) 0px, rgba(184,176,198,.06) 3px, transparent 3px, transparent 6px); }
+
+/* node */
+.ae-fc-node {
+  width: 56px; height: 56px; flex-shrink: 0;
+  border-radius: 50%; position: relative;
+  display: flex; align-items: center; justify-content: center;
+  border: 1.5px solid rgba(184,176,198,.12);
+  background: rgba(14,12,24,.80);
+  cursor: default;
+  transition: border-color .3s, background .3s, box-shadow .3s, transform .2s;
+}
+.ae-fc-node:hover { transform: scale(1.08); }
+
+/* node states */
+.ae-fc-node.visited {
+  border-color: rgba(201,156,90,.35);
+  background: rgba(201,156,90,.06);
+  box-shadow: 0 0 16px rgba(201,156,90,.10);
+}
+.ae-fc-node.current {
+  border-color: var(--gold);
+  background: rgba(201,156,90,.12);
+  box-shadow: 0 0 24px rgba(201,156,90,.20), 0 0 48px rgba(201,156,90,.06);
+  animation: ae-fc-pulse 2.8s ease-in-out infinite;
+}
+@keyframes ae-fc-pulse {
+  0%,100% { box-shadow: 0 0 24px rgba(201,156,90,.20), 0 0 48px rgba(201,156,90,.06); }
+  50%     { box-shadow: 0 0 32px rgba(201,156,90,.30), 0 0 56px rgba(201,156,90,.10); }
+}
+.ae-fc-node.locked {
+  border-color: rgba(184,176,198,.06);
+  background: rgba(14,12,24,.50);
+  opacity: .30;
+}
+/* node type colors */
+.ae-fc-node.type-narrator.visited { border-color: rgba(201,156,90,.40); }
+.ae-fc-node.type-choice.visited   { border-color: rgba(163,139,207,.40); background: rgba(163,139,207,.06); box-shadow: 0 0 16px rgba(163,139,207,.08); }
+.ae-fc-node.type-dice.visited     { border-color: rgba(255,200,40,.40); background: rgba(255,200,40,.05); box-shadow: 0 0 16px rgba(255,200,40,.08); }
+.ae-fc-node.type-collect.visited  { border-color: rgba(92,200,92,.40); background: rgba(92,200,92,.05); box-shadow: 0 0 16px rgba(92,200,92,.08); }
+.ae-fc-node.type-fail.visited     { border-color: rgba(255,123,92,.35); background: rgba(255,123,92,.05); }
+
+/* node icon */
+.ae-fc-node svg {
+  width: 22px; height: 22px;
+  color: var(--muted); opacity: .30;
+  transition: opacity .3s, color .3s;
+}
+.ae-fc-node.visited svg  { opacity: .65; color: var(--gold2); }
+.ae-fc-node.current svg  { opacity: .85; color: var(--gold2); }
+.ae-fc-node.type-choice.visited svg  { color: var(--purple2); }
+.ae-fc-node.type-dice.visited svg    { color: #ffc828; }
+.ae-fc-node.type-collect.visited svg { color: #5cc85c; }
+.ae-fc-node.type-fail.visited svg    { color: var(--ember); }
+
+/* node label */
+.ae-fc-label {
+  position: absolute; top: calc(100% + 8px); left: 50%;
+  transform: translateX(-50%);
+  font: 500 8px/1.3 'IBM Plex Mono';
+  letter-spacing: .08em; text-transform: uppercase;
+  color: var(--muted); opacity: .25;
+  white-space: nowrap; text-align: center;
+  max-width: 100px; overflow: hidden; text-overflow: ellipsis;
+  pointer-events: none;
+  transition: opacity .3s;
+}
+.ae-fc-node:hover .ae-fc-label { opacity: .65; }
+.ae-fc-node.visited .ae-fc-label { opacity: .40; }
+.ae-fc-node.current .ae-fc-label { opacity: .65; color: var(--gold); }
+
+/* node hover tooltip */
+.ae-fc-tip {
+  position: absolute; bottom: calc(100% + 12px); left: 50%;
+  transform: translateX(-50%);
+  font: 400 10px/1.5 'IBM Plex Mono';
+  color: var(--text); opacity: 0;
+  background: rgba(5,4,10,.96); border: 1px solid rgba(201,156,90,.15);
+  padding: 8px 12px; border-radius: 4px;
+  white-space: nowrap; pointer-events: none; z-index: 10;
+  box-shadow: 0 6px 24px rgba(0,0,0,.6);
+  transition: opacity .2s;
+  max-width: 240px; white-space: normal;
+}
+.ae-fc-node:hover .ae-fc-tip { opacity: 1; }
+
+/* choice path indicator */
+.ae-fc-path-tag {
+  position: absolute; top: -6px; right: -6px;
+  width: 14px; height: 14px; border-radius: 50%;
+  font: 700 7px/1 'IBM Plex Mono';
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid; z-index: 2;
+}
+.ae-fc-path-tag.chosen {
+  background: rgba(92,200,92,.15); border-color: rgba(92,200,92,.40);
+  color: #5cc85c;
+}
+.ae-fc-path-tag.missed {
+  background: rgba(184,176,198,.06); border-color: rgba(184,176,198,.15);
+  color: var(--muted); opacity: .40;
+}
+
+/* scrollbar */
+.ae-fc::-webkit-scrollbar { height: 4px; }
+.ae-fc::-webkit-scrollbar-track { background: transparent; }
+.ae-fc::-webkit-scrollbar-thumb { background: rgba(201,156,90,.15); border-radius: 2px; }
 
 /* ══════════════════════════════════════
    TOP BAR  ·  44px fixed
@@ -1598,12 +1749,11 @@ html, body {
   </div>
 </div>
 
-<!-- ══ MAP PANEL ══ -->
+<!-- ══ MAP / FLOWCHART PANEL ══ -->
 <div class="ae-panel" id="panel-map" data-panel="map">
-  <div class="ae-map-full">
-    <div class="ae-map-icon">&#x25c9;</div>
-    <div class="ae-map-label">Map unavailable</div>
-    <div class="ae-map-label" style="opacity:.10;margin-top:2px">Board the train to unlock navigation</div>
+  <div class="ae-fc" id="fc-container">
+    <div class="ae-fc-chapter">Chapter A &middot; Null Meridian</div>
+    <div class="ae-fc-scroll" id="fc-scroll"></div>
   </div>
 </div>
 
@@ -2833,6 +2983,7 @@ function switchTab(tab) {
   storyLayout.style.display = (tab === 'story') ? 'flex' : 'none';
   // render tab content
   if (tab === 'collections') renderCollectionFull();
+  if (tab === 'map') renderFlowchart();
 }
 
 function renderCollectionFull() {
@@ -2861,6 +3012,199 @@ function renderCollectionFull() {
   });
   html += '</div>';
   body.innerHTML = html;
+}
+
+/* ══════════════════════════════════════
+   FLOWCHART MAP
+══════════════════════════════════════ */
+const flowchart = [
+  // linear intro
+  { id:'cicero-monologue', label:'Cicero', type:'narrator', tip:'Cicero\'s opening monologue — loops, choice, waking up' },
+  { id:'waking-up', label:'Waking', type:'narrator', tip:'The mist rises from the obsidian landscape' },
+  { id:'stand-up', label:'Stand Up', type:'narrator', tip:'You stand. The crossroads reveals itself.' },
+  // hub
+  { id:'crossroads-choice', label:'Crossroads', type:'choice', tip:'Three paths diverge at the fountain',
+    branches: [
+      // Scout branch
+      { label:'Scout', nodes:[
+        { id:'look-around', label:'Survey', type:'narrator', tip:'The obelisk dominates the view' },
+        { id:'climb-obelisk', label:'Climb', type:'dice', tip:'Athletics DC 10 — scale the obelisk',
+          branches:[
+            { label:'Success', nodes:[
+              { id:'climb-success', label:'The View', type:'collect', tip:'You see the infinite obsidian plane' }
+            ]},
+            { label:'Fail', nodes:[
+              { id:'climb-fail-1', label:'Fall', type:'fail', tip:'You fall into the fountain' },
+              { id:'climb-attempt-2', label:'Retry', type:'dice', tip:'Athletics DC 15 — harder this time',
+                branches:[
+                  { label:'Success', nodes:[
+                    { id:'climb-success-2', refId:'climb-success', label:'The View', type:'collect', tip:'You see the infinite plane' }
+                  ]},
+                  { label:'Fail', nodes:[
+                    { id:'climb-fail-2', label:'Fall x2', type:'fail', tip:'Second fall. One more try?' },
+                    { id:'climb-attempt-3', label:'Last Try', type:'dice', tip:'Athletics DC 20 — everything or nothing' }
+                  ]}
+                ]
+              }
+            ]}
+          ]
+        },
+        { id:'find-ridge', label:'Tree', type:'narrator', tip:'A dark tree grows from a crack in the obsidian' },
+        { id:'tree-climb', label:'Branch', type:'dice', tip:'Athletics DC 15 — grab the branch',
+          branches:[
+            { label:'Holds', nodes:[
+              { id:'tree-success', label:'Glimpse', type:'collect', tip:'A partial view through the fog' }
+            ]},
+            { label:'Snaps', nodes:[
+              { id:'tree-failed', label:'Closed', type:'fail', tip:'The tree is done with you' }
+            ]}
+          ]
+        },
+        { id:'wander-explore', label:'Walk', type:'narrator', tip:'Just walk until you understand' }
+      ]},
+      // Cicero branch
+      { label:'Cicero', nodes:[
+        { id:'talk-cicero', label:'Approach', type:'narrator', tip:'The old man with the obsidian quill' },
+        { id:'cicero-call-1', label:'Call Out', type:'narrator', tip:'He stirs — barely' },
+        { id:'cicero-call-2', label:'Louder', type:'narrator', tip:'He is unreachable' },
+        { id:'cicero-listen', label:'Listen', type:'narrator', tip:'You stop trying. You wait.' },
+        { id:'cicero-mumble', label:'Promise', type:'narrator', tip:'"A promise is a promise..."' },
+        { id:'cicero-leave', label:'Leave', type:'narrator', tip:'He\'ll be here when you return' }
+      ]},
+      // Fountain branch
+      { label:'Fountain', nodes:[
+        { id:'examine-fountain', label:'Fountain', type:'narrator', tip:'Crystal-clear water in an obsidian basin' },
+        { id:'fountain-close', label:'Coins', type:'narrator', tip:'Wishes thrown where no one listens' },
+        { id:'roads-signs', label:'Signs', type:'narrator', tip:'Signposts to a dead world' },
+        { id:'fountain-desk', label:'Desk', type:'narrator', tip:'Two scrolls pinned under stone' },
+        { id:'scroll-check-1', label:'Scroll', type:'dice', tip:'Delicacy DC 10 — unroll carefully',
+          branches:[
+            { label:'Survives', nodes:[
+              { id:'scroll-revelation', label:'Letter', type:'collect', tip:'The Unsent Letter — weapons orders, a father\'s warning' }
+            ]},
+            { label:'Dust', nodes:[
+              { id:'scrolls-dust', label:'Lost', type:'fail', tip:'Both scrolls crumble to nothing' }
+            ]}
+          ]
+        }
+      ]}
+    ]
+  }
+];
+
+// SVG icon templates per type
+const fcIcons = {
+  narrator: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',
+  choice:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v4m0 12v4M2 12h4m12 0h4M5.6 5.6l2.8 2.8m7.2 7.2l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8"/></svg>',
+  dice:     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.2" fill="currentColor" stroke="none"/><circle cx="15.5" cy="8.5" r="1.2" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/><circle cx="8.5" cy="15.5" r="1.2" fill="currentColor" stroke="none"/><circle cx="15.5" cy="15.5" r="1.2" fill="currentColor" stroke="none"/></svg>',
+  collect:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg>',
+  fail:     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>',
+};
+
+function renderFlowchart() {
+  const scroll = document.getElementById('fc-scroll');
+  scroll.innerHTML = '';
+  renderFcNodes(flowchart, scroll, false);
+}
+
+function renderFcNodes(nodes, container, isBranch) {
+  nodes.forEach((node, i) => {
+    // connector line before node (except first in a branch)
+    if (i > 0 || isBranch) {
+      const line = document.createElement('div');
+      line.className = 'ae-fc-line' + (isNodeVisited(node.id) ? ' visited' : (isNodeLocked(node) ? ' locked' : ''));
+      container.appendChild(line);
+    }
+
+    // the node itself
+    const col = document.createElement('div');
+    col.className = 'ae-fc-col';
+
+    const nd = document.createElement('div');
+    const nodeType = node.type || 'narrator';
+    const vis = isNodeVisited(node.refId || node.id);
+    const cur = isNodeCurrent(node.refId || node.id);
+    const locked = !vis && !cur && isNodeLocked(node);
+    nd.className = 'ae-fc-node type-' + nodeType
+      + (cur ? ' current' : (vis ? ' visited' : ''))
+      + (locked ? ' locked' : '');
+    nd.innerHTML = fcIcons[nodeType] || fcIcons.narrator;
+
+    // label
+    const lbl = document.createElement('span');
+    lbl.className = 'ae-fc-label';
+    lbl.textContent = node.label;
+    nd.appendChild(lbl);
+
+    // tooltip
+    if (node.tip && (vis || cur)) {
+      const tip = document.createElement('span');
+      tip.className = 'ae-fc-tip';
+      tip.textContent = node.tip;
+      nd.appendChild(tip);
+    }
+
+    col.appendChild(nd);
+    container.appendChild(col);
+
+    // branches
+    if (node.branches && node.branches.length) {
+      const line2 = document.createElement('div');
+      line2.className = 'ae-fc-line' + (isAnyBranchVisited(node.branches) ? ' visited' : ' locked');
+      container.appendChild(line2);
+
+      const branchWrap = document.createElement('div');
+      branchWrap.className = 'ae-fc-branch';
+
+      const branchRow = document.createElement('div');
+      branchRow.className = 'ae-fc-branch-row';
+
+      node.branches.forEach((branch, bi) => {
+        const arm = document.createElement('div');
+        arm.className = 'ae-fc-branch-arm';
+
+        // vertical line down
+        const vl = document.createElement('div');
+        const branchVis = branch.nodes.some(n => isNodeVisited(n.refId || n.id));
+        vl.className = 'ae-fc-vline' + (branchVis ? ' visited' : ' locked');
+        arm.appendChild(vl);
+
+        // branch label
+        const bLabel = document.createElement('div');
+        bLabel.style.cssText = 'font:500 7px/1 "IBM Plex Mono";letter-spacing:.12em;text-transform:uppercase;color:var(--muted);opacity:.25;margin:4px 0 6px;text-align:center';
+        if (branchVis) bLabel.style.opacity = '.50';
+        bLabel.textContent = branch.label;
+        arm.appendChild(bLabel);
+
+        // nodes in this branch (horizontal)
+        const branchLine = document.createElement('div');
+        branchLine.style.cssText = 'display:flex;align-items:flex-start;gap:0';
+        renderFcNodes(branch.nodes, branchLine, true);
+        arm.appendChild(branchLine);
+
+        branchRow.appendChild(arm);
+      });
+
+      branchWrap.appendChild(branchRow);
+      container.appendChild(branchWrap);
+    }
+  });
+}
+
+function isNodeVisited(id) {
+  return visitedFrames.has(id);
+}
+
+function isNodeCurrent(id) {
+  return frames[currentFrameIdx] && frames[currentFrameIdx].id === id;
+}
+
+function isNodeLocked(node) {
+  return !isNodeVisited(node.refId || node.id) && !isNodeCurrent(node.refId || node.id);
+}
+
+function isAnyBranchVisited(branches) {
+  return branches.some(b => b.nodes.some(n => isNodeVisited(n.refId || n.id)));
 }
 
 function updateTabBadge() {
