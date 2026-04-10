@@ -200,18 +200,19 @@ html, body {
 .ae-fc-block-img-wrap::after {
   content: ''; position: absolute; inset: 0; pointer-events: none;
   background:
-    linear-gradient(to top, rgba(8,6,16,.95) 0%, rgba(8,6,16,.5) 30%, transparent 60%),
-    linear-gradient(to right, rgba(8,6,16,.4) 0%, transparent 40%);
+    linear-gradient(to top, rgba(8,6,16,.92) 0%, rgba(8,6,16,.4) 25%, transparent 50%),
+    linear-gradient(to right, rgba(8,6,16,.3) 0%, transparent 35%);
 }
 .ae-fc-block-img-wrap .ae-fc-block-img {
   width: 100%; height: 100%; position: absolute; inset: 0;
 }
-/* text body — overlaid on image, bottom-left */
+/* text body — overlaid on image, bottom-left (within image area) */
 .ae-fc-block-body {
-  position: relative; z-index: 2;
-  margin-top: auto;
-  padding: 0 32px 28px;
+  position: absolute; bottom: 0; left: 0; right: 42%; z-index: 2;
+  padding: 0 28px 24px;
 }
+.ae-fc-viewport[data-count="2"] .ae-fc-block-body { right: 55%; padding: 0 20px 20px; }
+.ae-fc-viewport[data-count="3"] .ae-fc-block-body { right: 65%; padding: 0 14px 16px; }
 .ae-fc-block-type {
   font: 500 8px/1 'IBM Plex Mono';
   letter-spacing: .16em; text-transform: uppercase;
@@ -245,26 +246,30 @@ html, body {
   border-left: 1px solid rgba(201,156,90,.08);
 }
 
-/* ── story content overlay ── */
+/* ── story content — right-side panel ── */
 .ae-fc-block-content {
-  position: absolute; inset: 0; z-index: 4;
+  position: absolute; top: 0; right: 0; bottom: 0;
+  width: 42%; max-width: 480px; min-width: 280px;
+  z-index: 4;
   display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  padding: 60px 40px 70px;
-  background: rgba(5,4,10,.78);
-  backdrop-filter: blur(12px) saturate(.6);
-  -webkit-backdrop-filter: blur(12px) saturate(.6);
-  opacity: 0; transition: opacity .35s ease;
+  justify-content: center;
+  padding: 40px 28px 50px;
+  background: rgba(5,4,10,.82);
+  backdrop-filter: blur(16px) saturate(.5);
+  -webkit-backdrop-filter: blur(16px) saturate(.5);
+  border-left: 1px solid rgba(201,156,90,.08);
   overflow-y: auto;
 }
-.ae-fc-block:hover .ae-fc-block-content,
-.ae-fc-block.show-content .ae-fc-block-content { opacity: 1; }
 .ae-fc-block-content::-webkit-scrollbar { width: 2px; }
 .ae-fc-block-content::-webkit-scrollbar-thumb { background: rgba(201,156,90,.18); border-radius: 2px; }
 
 .ae-fc-block-content-inner {
-  max-width: 600px; width: 100%;
+  width: 100%;
 }
+
+/* multi-card: panel takes more width since cards are narrower */
+.ae-fc-viewport[data-count="2"] .ae-fc-block-content { width: 55%; padding: 30px 20px 40px; }
+.ae-fc-viewport[data-count="3"] .ae-fc-block-content { width: 65%; min-width: 0; padding: 24px 14px 34px; }
 
 .ae-fc-block-speaker {
   display: flex; align-items: center; gap: 10px;
