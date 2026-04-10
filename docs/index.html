@@ -245,6 +245,86 @@ html, body {
   border-left: 1px solid rgba(201,156,90,.08);
 }
 
+/* ── story content on card ── */
+.ae-fc-block-content {
+  position: relative; z-index: 2;
+  padding: 0 32px 0; margin-top: 12px;
+  max-height: 35vh; overflow-y: auto;
+  mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+}
+.ae-fc-block-content::-webkit-scrollbar { width: 2px; }
+.ae-fc-block-content::-webkit-scrollbar-thumb { background: rgba(201,156,90,.15); border-radius: 2px; }
+
+.ae-fc-block-speaker {
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-bottom: 10px;
+}
+.ae-fc-block-speaker-glyph {
+  font-size: 10px; color: var(--gold); opacity: .45;
+}
+.ae-fc-block-speaker-name {
+  font: 700 13px/1 'Cinzel', serif;
+  letter-spacing: .05em; color: var(--gold2); opacity: .70;
+}
+.ae-fc-block-prose {
+  font: 400 11px/1.75 'IBM Plex Mono';
+  color: var(--prose); opacity: .55;
+}
+.ae-fc-block-prose em { color: var(--cyan); font-style: italic; opacity: .80; }
+.ae-fc-block-prose p { margin-bottom: .6em; }
+
+/* choices */
+.ae-fc-block-choices {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  margin-top: 10px;
+}
+.ae-fc-block-choice {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 4px 10px; border-radius: 3px;
+  border: 1px solid rgba(201,156,90,.12);
+  background: rgba(201,156,90,.04);
+  font: 500 9px/1 'IBM Plex Mono';
+  letter-spacing: .04em; color: var(--gold); opacity: .55;
+}
+.ae-fc-block-choice-icon { font-size: 10px; opacity: .50; }
+
+/* dice check badge */
+.ae-fc-block-dice {
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-top: 10px; padding: 5px 12px; border-radius: 3px;
+  border: 1px solid rgba(255,200,40,.15);
+  background: rgba(255,200,40,.04);
+}
+.ae-fc-block-dice-icon { font-size: 12px; }
+.ae-fc-block-dice-label {
+  font: 500 9px/1 'IBM Plex Mono';
+  letter-spacing: .08em; text-transform: uppercase;
+  color: #ffc828; opacity: .60;
+}
+.ae-fc-block-dice-dc {
+  font: 700 11px/1 'Cinzel', serif;
+  color: #ffc828; opacity: .70;
+}
+
+/* continue label */
+.ae-fc-block-continue {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-top: 10px;
+  font: 500 9px/1 'IBM Plex Mono';
+  letter-spacing: .10em; text-transform: uppercase;
+  color: var(--gold); opacity: .35;
+}
+.ae-fc-block-continue-arrow { font-size: 10px; opacity: .50; }
+
+/* multi-card: less content space */
+.ae-fc-viewport[data-count="2"] .ae-fc-block-content { padding: 0 24px 0; max-height: 30vh; }
+.ae-fc-viewport[data-count="2"] .ae-fc-block-prose { font-size: 10px; }
+.ae-fc-viewport[data-count="3"] .ae-fc-block-content { padding: 0 18px 0; max-height: 25vh; }
+.ae-fc-viewport[data-count="3"] .ae-fc-block-prose { font-size: 9px; line-height: 1.6; }
+.ae-fc-viewport[data-count="3"] .ae-fc-block-choices { gap: 4px; }
+.ae-fc-viewport[data-count="3"] .ae-fc-block-choice { font-size: 8px; padding: 3px 7px; }
+
 /* left accent bar */
 .ae-fc-block::before {
   content: ''; position: absolute; top: 0; left: 0; bottom: 0;
@@ -3237,6 +3317,65 @@ function mkBlock(n) {
     body.appendChild(tip);
   }
   el.appendChild(body);
+
+  // look up frame content and add it
+  const fid = n.refId || n.id;
+  const frame = frames.find(f => f.id === fid);
+  if (frame && !locked) {
+    const content = document.createElement('div');
+    content.className = 'ae-fc-block-content';
+
+    // speaker
+    if (frame.speaker) {
+      const sp = document.createElement('div');
+      sp.className = 'ae-fc-block-speaker';
+      sp.innerHTML = '<span class="ae-fc-block-speaker-glyph">' + frame.speaker.glyph + '</span>'
+        + '<span class="ae-fc-block-speaker-name">' + frame.speaker.name + '</span>';
+      content.appendChild(sp);
+    }
+
+    // story text
+    if (frame.text && frame.text.length) {
+      const prose = document.createElement('div');
+      prose.className = 'ae-fc-block-prose';
+      prose.innerHTML = frame.text.map(t => '<p>' + t + '</p>').join('');
+      content.appendChild(prose);
+    }
+
+    // choices
+    if (frame.choices && frame.choices.length) {
+      const cw = document.createElement('div');
+      cw.className = 'ae-fc-block-choices';
+      frame.choices.forEach(c => {
+        const ch = document.createElement('span');
+        ch.className = 'ae-fc-block-choice';
+        ch.innerHTML = '<span class="ae-fc-block-choice-icon">' + c.icon + '</span> ' + c.label;
+        cw.appendChild(ch);
+      });
+      content.appendChild(cw);
+    }
+
+    // dice check
+    if (frame.diceCheck) {
+      const dc = document.createElement('div');
+      dc.className = 'ae-fc-block-dice';
+      dc.innerHTML = '<span class="ae-fc-block-dice-icon">\ud83c\udfb2</span>'
+        + '<span class="ae-fc-block-dice-label">' + (frame.diceCheck.label || 'Skill Check') + '</span>'
+        + '<span class="ae-fc-block-dice-dc">DC ' + frame.diceCheck.dc + '</span>';
+      content.appendChild(dc);
+    }
+
+    // continue label
+    if (frame.continueLabel && !frame.choices && !frame.diceCheck) {
+      const cont = document.createElement('div');
+      cont.className = 'ae-fc-block-continue';
+      cont.innerHTML = '<span class="ae-fc-block-continue-arrow">\u25b6</span> ' + frame.continueLabel;
+      content.appendChild(cont);
+    }
+
+    el.appendChild(content);
+  }
+
   return el;
 }
 
