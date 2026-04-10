@@ -165,16 +165,16 @@ html, body {
 /* viewport that holds all cards for current set */
 .ae-fc-viewport {
   position: absolute; inset: 0;
-  display: flex; gap: 10px;
-  align-items: stretch; justify-content: center;
-  padding: 16px 20px 52px;
+  display: flex; gap: 8px;
+  align-items: stretch;
+  padding: 8px 8px 44px;
   transition: opacity .35s ease;
 }
 .ae-fc-viewport.out { opacity: 0; }
 
 /* individual card — fills equal share of viewport */
 .ae-fc-block {
-  flex: 1; min-width: 0; max-width: 400px;
+  flex: 1; min-width: 0;
   border: 1px solid rgba(184,176,198,.06);
   border-radius: 6px; overflow: hidden;
   background: rgba(14,12,24,.80);
@@ -182,16 +182,16 @@ html, body {
   display: flex; flex-direction: column;
   transition: border-color .3s, box-shadow .3s;
 }
-/* image fills top portion */
+/* image fills all available space */
 .ae-fc-block-img {
   width: 100%; flex: 1; min-height: 0;
   object-fit: cover; display: block;
   filter: brightness(.40) saturate(.7);
   transition: filter .3s;
 }
-/* text body at bottom */
+/* text body pinned to bottom */
 .ae-fc-block-body {
-  padding: 10px 14px 12px; flex-shrink: 0;
+  padding: 12px 18px 14px; flex-shrink: 0;
 }
 .ae-fc-block-type {
   font: 500 7px/1 'IBM Plex Mono';
