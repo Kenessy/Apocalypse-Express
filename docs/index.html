@@ -3012,72 +3012,128 @@ function renderCollectionFull() {
    FLOWCHART MAP
 ══════════════════════════════════════ */
 const flowchart = [
-  // linear intro
+  // ── LINEAR INTRO ──
   { id:'cicero-monologue', label:'Cicero', type:'narrator', tip:'Cicero\'s opening monologue — loops, choice, waking up' },
   { id:'waking-up', label:'Waking', type:'narrator', tip:'The mist rises from the obsidian landscape' },
   { id:'stand-up', label:'Stand Up', type:'narrator', tip:'You stand. The crossroads reveals itself.' },
-  // hub
+  // ── HUB ──
   { id:'crossroads-choice', label:'Crossroads', type:'choice', tip:'Three paths diverge at the fountain',
     branches: [
-      // Scout branch
+      // ── SCOUT BRANCH ──
       { label:'Scout', nodes:[
-        { id:'look-around', label:'Survey', type:'narrator', tip:'The obelisk dominates the view' },
-        { id:'climb-obelisk', label:'Climb', type:'dice', tip:'Athletics DC 10 — scale the obelisk',
+        { id:'look-around', label:'Survey', type:'choice', tip:'The obelisk dominates — climb it or find another way up',
           branches:[
-            { label:'Success', nodes:[
-              { id:'climb-success', label:'The View', type:'collect', tip:'You see the infinite obsidian plane' }
-            ]},
-            { label:'Fail', nodes:[
-              { id:'climb-fail-1', label:'Fall', type:'fail', tip:'You fall into the fountain' },
-              { id:'climb-attempt-2', label:'Retry', type:'dice', tip:'Athletics DC 15 — harder this time',
+            // Obelisk climb path
+            { label:'Obelisk', nodes:[
+              { id:'climb-obelisk', label:'Climb', type:'dice', tip:'Athletics DC 10 — scale the obelisk',
                 branches:[
-                  { label:'Success', nodes:[
-                    { id:'climb-success-2', refId:'climb-success', label:'The View', type:'collect', tip:'You see the infinite plane' }
+                  { label:'\u2713', nodes:[
+                    { id:'climb-success', label:'The View', type:'collect', tip:'The infinite obsidian plane revealed' }
                   ]},
-                  { label:'Fail', nodes:[
-                    { id:'climb-fail-2', label:'Fall x2', type:'fail', tip:'Second fall. One more try?' },
-                    { id:'climb-attempt-3', label:'Last Try', type:'dice', tip:'Athletics DC 20 — everything or nothing' }
+                  { label:'\u2717', nodes:[
+                    { id:'climb-fail-1', label:'Fall #1', type:'fail', tip:'You fall into the fountain',
+                      branches:[
+                        { label:'Retry', nodes:[
+                          { id:'climb-attempt-2', label:'DC 15', type:'dice', tip:'Athletics DC 15 — the stone is slicker now',
+                            branches:[
+                              { label:'\u2713', nodes:[
+                                { id:'climb-success-2', refId:'climb-success', label:'The View', type:'collect', tip:'The infinite plane revealed' }
+                              ]},
+                              { label:'\u2717', nodes:[
+                                { id:'climb-fail-2', label:'Fall #2', type:'fail', tip:'Your arms are dead weight',
+                                  branches:[
+                                    { label:'Last try', nodes:[
+                                      { id:'climb-attempt-3', label:'DC 20', type:'dice', tip:'Athletics DC 20 — not skill, something else',
+                                        branches:[
+                                          { label:'\u2713', nodes:[
+                                            { id:'climb-success-3', refId:'climb-success', label:'The View', type:'collect', tip:'Against all odds' }
+                                          ]},
+                                          { label:'\u2717', nodes:[
+                                            { id:'climb-failed', label:'Defeat', type:'fail', tip:'Three chances. Three failures. The obelisk wins.' }
+                                          ]}
+                                        ]
+                                      }
+                                    ]},
+                                    { label:'Give up', nodes:[
+                                      { id:'climb-quit-2', refId:'crossroads-choice', label:'Return', type:'narrator', tip:'Twice is enough' }
+                                    ]}
+                                  ]
+                                }
+                              ]}
+                            ]
+                          }
+                        ]},
+                        { label:'Quit', nodes:[
+                          { id:'climb-quit-1', refId:'crossroads-choice', label:'Return', type:'narrator', tip:'You\'re soaked and no closer' }
+                        ]}
+                      ]
+                    }
                   ]}
                 ]
               }
-            ]}
-          ]
-        },
-        { id:'find-ridge', label:'Tree', type:'narrator', tip:'A dark tree grows from a crack in the obsidian' },
-        { id:'tree-climb', label:'Branch', type:'dice', tip:'Athletics DC 15 — grab the branch',
-          branches:[
-            { label:'Holds', nodes:[
-              { id:'tree-success', label:'Glimpse', type:'collect', tip:'A partial view through the fog' }
             ]},
-            { label:'Snaps', nodes:[
-              { id:'tree-failed', label:'Closed', type:'fail', tip:'The tree is done with you' }
+            // Tree path
+            { label:'Tree', nodes:[
+              { id:'find-ridge', label:'Find Tree', type:'narrator', tip:'A dark tree growing from a crack in obsidian' },
+              { id:'tree-climb', label:'Jump', type:'dice', tip:'Athletics DC 15 — grab the branch',
+                branches:[
+                  { label:'Holds', nodes:[
+                    { id:'tree-success', label:'Glimpse', type:'collect', tip:'A partial view through the fog' }
+                  ]},
+                  { label:'Snaps', nodes:[
+                    { id:'tree-failed', label:'Closed', type:'fail', tip:'The tree is done with you' }
+                  ]}
+                ]
+              }
+            ]},
+            // Walk path (fallback)
+            { label:'Walk', nodes:[
+              { id:'wander-explore', label:'Walk', type:'narrator', tip:'Just walk until you understand — it\'s all the same' }
             ]}
           ]
-        },
-        { id:'wander-explore', label:'Walk', type:'narrator', tip:'Just walk until you understand' }
+        }
       ]},
-      // Cicero branch
+      // ── CICERO BRANCH ──
       { label:'Cicero', nodes:[
         { id:'talk-cicero', label:'Approach', type:'narrator', tip:'The old man with the obsidian quill' },
         { id:'cicero-call-1', label:'Call Out', type:'narrator', tip:'He stirs — barely' },
-        { id:'cicero-call-2', label:'Louder', type:'narrator', tip:'He is unreachable' },
+        { id:'cicero-call-2', label:'Louder', type:'narrator', tip:'He is simply unreachable' },
         { id:'cicero-listen', label:'Listen', type:'narrator', tip:'You stop trying. You wait.' },
-        { id:'cicero-mumble', label:'Promise', type:'narrator', tip:'"A promise is a promise..."' },
+        { id:'cicero-mumble', label:'Promise', type:'narrator', tip:'"A promise is a promise. They cannot lie..."' },
         { id:'cicero-leave', label:'Leave', type:'narrator', tip:'He\'ll be here when you return' }
       ]},
-      // Fountain branch
+      // ── FOUNTAIN BRANCH ──
       { label:'Fountain', nodes:[
-        { id:'examine-fountain', label:'Fountain', type:'narrator', tip:'Crystal-clear water in an obsidian basin' },
+        { id:'examine-fountain', label:'Examine', type:'narrator', tip:'Crystal-clear water in an obsidian basin' },
         { id:'fountain-close', label:'Coins', type:'narrator', tip:'Wishes thrown where no one listens' },
         { id:'roads-signs', label:'Signs', type:'narrator', tip:'Signposts to a dead world' },
-        { id:'fountain-desk', label:'Desk', type:'narrator', tip:'Two scrolls pinned under stone' },
-        { id:'scroll-check-1', label:'Scroll', type:'dice', tip:'Delicacy DC 10 — unroll carefully',
+        { id:'fountain-desk', label:'Desk', type:'narrator', tip:'Two scrolls pinned beneath stone' },
+        { id:'scroll-check-1', label:'Scroll #1', type:'dice', tip:'Delicacy DC 10 — unroll the first scroll',
           branches:[
             { label:'Survives', nodes:[
-              { id:'scroll-revelation', label:'Letter', type:'collect', tip:'The Unsent Letter — weapons orders, a father\'s warning' }
+              { id:'scroll-safe-1', label:'Scroll #2', type:'dice', tip:'Delicacy DC 10 — the second is worse',
+                branches:[
+                  { label:'\u2713', nodes:[
+                    { id:'scroll-revelation', label:'Letter', type:'collect', tip:'The Unsent Letter — weapons orders, a father\'s warning' }
+                  ]},
+                  { label:'\u2717', nodes:[
+                    { id:'scroll-rev-partial', refId:'scroll-revelation', label:'Letter', type:'collect', tip:'First scroll enough to read — the letter survives' }
+                  ]}
+                ]
+              }
             ]},
-            { label:'Dust', nodes:[
-              { id:'scrolls-dust', label:'Lost', type:'fail', tip:'Both scrolls crumble to nothing' }
+            { label:'Crumbles', nodes:[
+              { id:'scroll-lost-1', label:'Lost #1', type:'fail', tip:'The first scroll sighs apart to dust' },
+              { id:'scroll-lost-check', refId:'scroll-check-1', label:'Scroll #2', type:'dice', tip:'Delicacy DC 10 — last chance',
+                branches:[
+                  { label:'\u2713', nodes:[
+                    { id:'scroll-rev-2', refId:'scroll-revelation', label:'Letter', type:'collect', tip:'The surviving scroll yields its secrets' }
+                  ]},
+                  { label:'\u2717', nodes:[
+                    { id:'scrolls-dust', label:'All Lost', type:'fail', tip:'Both scrolls crumble. Some things are not meant to be found.' }
+                  ]}
+                ]
+              }
             ]}
           ]
         }
@@ -3130,8 +3186,8 @@ function renderFcNodes(nodes, container, isBranch) {
     lbl.textContent = node.label;
     nd.appendChild(lbl);
 
-    // tooltip (left side)
-    if (node.tip && (vis || cur)) {
+    // tooltip (left side) — always show, even on locked nodes
+    if (node.tip) {
       const tip = document.createElement('span');
       tip.className = 'ae-fc-tip';
       tip.textContent = node.tip;
@@ -3185,8 +3241,11 @@ function renderFcNodes(nodes, container, isBranch) {
   });
 }
 
+// all frame IDs that have written content
+const writtenFrames = new Set(frames.map(f => f.id));
+
 function isNodeVisited(id) {
-  return visitedFrames.has(id);
+  return writtenFrames.has(id);
 }
 
 function isNodeCurrent(id) {
@@ -3194,7 +3253,7 @@ function isNodeCurrent(id) {
 }
 
 function isNodeLocked(node) {
-  return !isNodeVisited(node.refId || node.id) && !isNodeCurrent(node.refId || node.id);
+  return !isNodeVisited(node.refId || node.id);
 }
 
 function isAnyBranchVisited(branches) {
