@@ -3059,31 +3059,47 @@ const fcTypeLabels = {
 /* ── build slides: each slide = array of card data ── */
 function buildFcSlides() {
   const slides = [];
-  // intro: each node = 1 slide
+
+  // intro: each node = 1 fullscreen slide
   fcIntro.forEach(n => slides.push({ label: n.label, cards: [n] }));
-  // branch tops: first node of each branch in one slide
+
+  // branch entry: first node of each branch (3 cards = 33% each)
   slides.push({
     label: 'Branches',
     cards: fcColumns.map(col => ({ ...col.nodes[0], colLabel: col.label }))
   });
-  // layer by layer through branches — depth 1, 2, 3...
-  const maxDepth = Math.max(...fcColumns.map(c => c.nodes.length));
-  for (let d = 1; d < maxDepth; d++) {
-    const layerCards = [];
-    fcColumns.forEach(col => {
-      if (col.nodes[d]) {
-        layerCards.push({ ...col.nodes[d], colLabel: col.label });
-        // also add fork outcomes as extra cards in same slide
-        if (col.nodes[d].fork) {
-          col.nodes[d].fork.forEach(arm => {
-            arm.nodes.forEach(fn => layerCards.push({ ...fn, colLabel: arm.label }));
+
+  // walk each branch as its own sequence of slides
+  fcColumns.forEach(col => {
+    for (let i = 1; i < col.nodes.length; i++) {
+      const n = col.nodes[i];
+      // the node itself = 1 slide
+      slides.push({ label: col.label + ' \u00b7 ' + n.label, cards: [{ ...n, colLabel: col.label }] });
+      // if it has a fork, show fork outcomes as next slide
+      if (n.fork) {
+        const forkCards = [];
+        flattenFork(n.fork, forkCards, col.label);
+        // group fork cards into slides of max 3
+        for (let j = 0; j < forkCards.length; j += 3) {
+          slides.push({
+            label: col.label + ' \u00b7 outcomes',
+            cards: forkCards.slice(j, j + 3)
           });
         }
       }
-    });
-    if (layerCards.length) slides.push({ label: 'Depth ' + (d+1), cards: layerCards });
-  }
+    }
+  });
+
   return slides;
+}
+
+function flattenFork(arms, out, parentLabel) {
+  arms.forEach(arm => {
+    arm.nodes.forEach(n => {
+      out.push({ ...n, colLabel: parentLabel + ' \u00b7 ' + arm.label });
+      if (n.fork) flattenFork(n.fork, out, parentLabel);
+    });
+  });
 }
 
 let fcSlides = [];
