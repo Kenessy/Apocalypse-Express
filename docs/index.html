@@ -206,7 +206,7 @@ html, body {
 .ae-fc-block-img-wrap .ae-fc-block-img {
   width: 100%; height: 100%; position: absolute; inset: 0;
 }
-/* text body — hidden, title is in the content panel now */
+/* text body — hidden when content panel exists */
 .ae-fc-block-body { display: none; }
 .ae-fc-block-type {
   font: 500 8px/1 'IBM Plex Mono';
@@ -241,38 +241,37 @@ html, body {
   border-left: 1px solid rgba(201,156,90,.08);
 }
 
-/* ── story content — left-side panel ── */
+/* ── story content — bottom-left floating block ── */
 .ae-fc-block-content {
-  position: absolute; top: 0; left: 0; bottom: 0;
-  width: 42%; max-width: 480px; min-width: 280px;
+  position: absolute; bottom: 12px; left: 12px;
+  width: 380px; max-width: calc(100% - 24px);
+  max-height: calc(100% - 70px);
   z-index: 4;
   display: flex; flex-direction: column;
-  justify-content: flex-start;
-  padding: 28px 28px 50px;
+  padding: 16px 20px 14px;
   background: rgba(5,4,10,.82);
   backdrop-filter: blur(16px) saturate(.5);
   -webkit-backdrop-filter: blur(16px) saturate(.5);
-  border-right: 1px solid rgba(201,156,90,.08);
+  border: 1px solid rgba(201,156,90,.10);
+  border-radius: 6px;
   overflow-y: auto;
 }
 .ae-fc-block-content::-webkit-scrollbar { width: 2px; }
 .ae-fc-block-content::-webkit-scrollbar-thumb { background: rgba(201,156,90,.18); border-radius: 2px; }
 
-.ae-fc-block-content-inner {
-  width: 100%;
-}
+.ae-fc-block-content-inner { width: 100%; }
 .ae-fc-block-panel-title {
-  font: 700 22px/1.15 'Cinzel', serif;
+  font: 700 16px/1.15 'Cinzel', serif;
   letter-spacing: .04em; color: var(--gold2); opacity: .90;
-  margin-bottom: 18px; padding-bottom: 14px;
-  border-bottom: 1px solid rgba(201,156,90,.12);
+  margin-bottom: 10px; padding-bottom: 8px;
+  border-bottom: 1px solid rgba(201,156,90,.10);
 }
-.ae-fc-viewport[data-count="2"] .ae-fc-block-panel-title { font-size: 17px; margin-bottom: 12px; }
-.ae-fc-viewport[data-count="3"] .ae-fc-block-panel-title { font-size: 14px; margin-bottom: 10px; }
 
-/* multi-card: panel takes more width since cards are narrower */
-.ae-fc-viewport[data-count="2"] .ae-fc-block-content { width: 55%; padding: 30px 20px 40px; }
-.ae-fc-viewport[data-count="3"] .ae-fc-block-content { width: 65%; min-width: 0; padding: 24px 14px 34px; }
+/* multi-card: smaller block */
+.ae-fc-viewport[data-count="2"] .ae-fc-block-content { width: 260px; padding: 12px 16px 10px; }
+.ae-fc-viewport[data-count="2"] .ae-fc-block-panel-title { font-size: 13px; }
+.ae-fc-viewport[data-count="3"] .ae-fc-block-content { width: 200px; padding: 10px 12px 8px; }
+.ae-fc-viewport[data-count="3"] .ae-fc-block-panel-title { font-size: 11px; }
 
 .ae-fc-block-speaker {
   display: flex; align-items: center; gap: 10px;
@@ -373,37 +372,28 @@ html, body {
 .ae-fc-block.locked .ae-fc-block-img { filter: brightness(.08) saturate(0); }
 .ae-fc-block.locked .ae-fc-block-title { opacity: .30; }
 
-/* ── navigation — bottom of left panel ── */
+/* ── navigation — inline at bottom of content block ── */
 .ae-fc-nav {
-  position: absolute; bottom: 0; left: 0;
-  width: 42%; max-width: 480px; min-width: 280px;
-  height: 48px; z-index: 12;
-  display: flex; align-items: center; justify-content: center; gap: 18px;
-  background: rgba(5,4,10,.90);
+  display: flex; align-items: center; gap: 12px;
+  margin-top: 12px; padding-top: 10px;
   border-top: 1px solid rgba(201,156,90,.06);
-  border-right: 1px solid rgba(201,156,90,.08);
+  flex-shrink: 0;
 }
 .ae-fc-nav-btn {
-  width: 36px; height: 36px;
+  width: 28px; height: 28px;
   display: flex; align-items: center; justify-content: center;
-  background: none; border: 1px solid rgba(201,156,90,.15);
-  border-radius: 5px; cursor: pointer;
-  color: var(--gold); font-size: 13px; opacity: .45;
-  transition: opacity .2s, border-color .2s, background .2s, transform .15s;
+  background: none; border: 1px solid rgba(201,156,90,.14);
+  border-radius: 4px; cursor: pointer;
+  color: var(--gold); font-size: 11px; opacity: .42;
+  transition: opacity .2s, border-color .2s, background .2s;
 }
-.ae-fc-nav-btn:hover { opacity: .85; border-color: rgba(201,156,90,.40); background: rgba(201,156,90,.08); transform: scale(1.05); }
+.ae-fc-nav-btn:hover { opacity: .80; border-color: rgba(201,156,90,.35); background: rgba(201,156,90,.06); }
 .ae-fc-nav-btn.disabled { opacity: .08; pointer-events: none; }
 .ae-fc-nav-counter {
-  font: 500 11px/1 'IBM Plex Mono';
-  letter-spacing: .14em; color: var(--gold); opacity: .32;
-  min-width: 55px; text-align: center;
+  font: 500 9px/1 'IBM Plex Mono';
+  letter-spacing: .12em; color: var(--gold); opacity: .28;
 }
-.ae-fc-nav-label {
-  font: 400 9px/1 'IBM Plex Mono';
-  letter-spacing: .10em; text-transform: uppercase;
-  color: var(--muted); opacity: .22;
-  position: absolute; bottom: 14px; right: -200px;
-}
+.ae-fc-nav-label { display: none; }
 
 /* ══════════════════════════════════════
    TOP BAR  ·  44px fixed
@@ -1837,12 +1827,6 @@ html, body {
 <div class="ae-panel" id="panel-map" data-panel="map">
   <div class="ae-fc" id="fc-container">
     <div class="ae-fc-viewport" id="fc-viewport"></div>
-    <div class="ae-fc-nav" id="fc-nav">
-      <button class="ae-fc-nav-btn" id="fc-prev" onclick="fcGo(-1)">&#x25B2;</button>
-      <span class="ae-fc-nav-counter" id="fc-counter">1 / 1</span>
-      <button class="ae-fc-nav-btn" id="fc-next" onclick="fcGo(1)">&#x25BC;</button>
-    </div>
-    <span class="ae-fc-nav-label" id="fc-label"></span>
   </div>
 </div>
 
@@ -3253,15 +3237,30 @@ function renderFcSlide() {
   if (!slide) return;
 
   vp.setAttribute('data-count', slide.cards.length);
+  let firstContent = null;
   slide.cards.forEach(n => {
-    vp.appendChild(mkBlock(n));
+    const block = mkBlock(n);
+    vp.appendChild(block);
+    if (!firstContent) {
+      firstContent = block.querySelector('.ae-fc-block-content');
+    }
   });
 
-  // update nav
-  document.getElementById('fc-counter').textContent = (fcIdx + 1) + ' / ' + fcSlides.length;
-  document.getElementById('fc-prev').classList.toggle('disabled', fcIdx === 0);
-  document.getElementById('fc-next').classList.toggle('disabled', fcIdx >= fcSlides.length - 1);
-  document.getElementById('fc-label').textContent = slide.label || '';
+  // add nav into the first card's content block (or create standalone)
+  const nav = document.createElement('div');
+  nav.className = 'ae-fc-nav';
+  nav.innerHTML = '<button class="ae-fc-nav-btn' + (fcIdx === 0 ? ' disabled' : '') + '" onclick="fcGo(-1)">\u25C0</button>'
+    + '<span class="ae-fc-nav-counter">' + (fcIdx + 1) + ' / ' + fcSlides.length + '</span>'
+    + '<button class="ae-fc-nav-btn' + (fcIdx >= fcSlides.length - 1 ? ' disabled' : '') + '" onclick="fcGo(1)">\u25B6</button>';
+
+  if (firstContent) {
+    firstContent.appendChild(nav);
+  } else {
+    nav.style.position = 'absolute';
+    nav.style.bottom = '12px';
+    nav.style.left = '12px';
+    vp.appendChild(nav);
+  }
 }
 
 function fcGo(dir) {
