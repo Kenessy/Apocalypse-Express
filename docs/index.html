@@ -3179,7 +3179,7 @@ const fcColumns = [
     { id:'find-ridge', label:'Find Tree', type:'narrator', img:'ae-tree-find.png' },
     { id:'tree-climb', label:'Jump', type:'dice', img:'ae-tree-climb.png',
       fork:[
-        { label:'Holds', nodes:[{ id:'tree-success', label:'Glimpse', type:'collect' }]},
+        { label:'Holds', nodes:[{ id:'tree-success', label:'Glimpse', type:'collect', img:'ae-tree-top.png' }]},
         { label:'Snaps', nodes:[{ id:'tree-failed', label:'Closed', type:'fail' }]}
       ]
     },
@@ -3333,6 +3333,7 @@ const imgFocus = {
   'ae-climb-defeat.png': 'center 50%',
   'ae-tree-climb.png': 'center 35%',
   'ae-tree-find.png': 'center 40%',
+  'ae-tree-top.png': 'center 45%',
 };
 
 function mkBlock(n) {
