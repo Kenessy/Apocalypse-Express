@@ -156,188 +156,119 @@ html, body {
   transition: opacity .3s, border-color .3s;
 }
 
-/* ══ FLOWCHART MAP — full-screen slides ══ */
+/* ══ FLOWCHART — fullscreen presentation ══ */
 .ae-fc {
-  flex: 1; overflow-y: auto; overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
+  flex: 1; position: relative; overflow: hidden;
   background: rgba(8,6,16,.98);
-  scroll-snap-type: y mandatory;
-  scroll-behavior: smooth;
 }
 
-/* ── slide (each = full viewport height) ── */
-.ae-fc-slide {
-  min-height: 100%;
-  scroll-snap-align: start;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  padding: 24px 20px;
-  position: relative;
+/* viewport that holds all cards for current set */
+.ae-fc-viewport {
+  position: absolute; inset: 0;
+  display: flex; gap: 10px;
+  align-items: stretch; justify-content: center;
+  padding: 16px 20px 52px;
+  transition: opacity .35s ease;
 }
-/* slide connector arrow at bottom */
-.ae-fc-slide::after {
-  content: '\25BE';
-  position: absolute; bottom: 12px; left: 50%;
-  transform: translateX(-50%);
-  font-size: 14px; color: var(--gold); opacity: .15;
-  animation: ae-fc-arrow 2s ease-in-out infinite;
-}
-.ae-fc-slide:last-child::after { display: none; }
-@keyframes ae-fc-arrow {
-  0%,100% { opacity: .10; transform: translateX(-50%) translateY(0); }
-  50%     { opacity: .25; transform: translateX(-50%) translateY(4px); }
-}
-/* slide label (top) */
-.ae-fc-slide-label {
-  font: 700 9px/1 'IBM Plex Mono';
-  letter-spacing: .18em; text-transform: uppercase;
-  color: var(--gold); opacity: .22;
-  margin-bottom: 16px;
-}
+.ae-fc-viewport.out { opacity: 0; }
 
-/* ── single card slide (big image) ── */
-.ae-fc-card-full {
-  width: 340px; max-width: 90vw;
+/* individual card — fills equal share of viewport */
+.ae-fc-block {
+  flex: 1; min-width: 0; max-width: 400px;
   border: 1px solid rgba(184,176,198,.06);
   border-radius: 6px; overflow: hidden;
   background: rgba(14,12,24,.80);
   position: relative;
+  display: flex; flex-direction: column;
+  transition: border-color .3s, box-shadow .3s;
 }
-.ae-fc-card-full-img {
-  width: 100%; aspect-ratio: 16/9;
+/* image fills top portion */
+.ae-fc-block-img {
+  width: 100%; flex: 1; min-height: 0;
   object-fit: cover; display: block;
-  filter: brightness(.45) saturate(.7);
+  filter: brightness(.40) saturate(.7);
+  transition: filter .3s;
 }
-.ae-fc-card-full-body { padding: 12px 16px 14px; }
-.ae-fc-card-full-type {
+/* text body at bottom */
+.ae-fc-block-body {
+  padding: 10px 14px 12px; flex-shrink: 0;
+}
+.ae-fc-block-type {
   font: 500 7px/1 'IBM Plex Mono';
   letter-spacing: .14em; text-transform: uppercase;
-  color: var(--muted); opacity: .28; margin-bottom: 4px;
+  color: var(--muted); opacity: .25; margin-bottom: 4px;
 }
-.ae-fc-card-full-title {
-  font: 700 16px/1.2 'Cinzel', serif;
-  letter-spacing: .04em; color: var(--muted); opacity: .45;
+.ae-fc-block-title {
+  font: 700 14px/1.2 'Cinzel', serif;
+  letter-spacing: .04em; color: var(--muted); opacity: .40;
 }
-.ae-fc-card-full-tip {
-  font: 400 11px/1.5 'IBM Plex Mono';
-  color: var(--muted); opacity: .25; margin-top: 6px;
+.ae-fc-block-tip {
+  font: 400 10px/1.5 'IBM Plex Mono';
+  color: var(--muted); opacity: .22; margin-top: 5px;
 }
-/* left accent */
-.ae-fc-card-full::before {
+/* left accent bar */
+.ae-fc-block::before {
   content: ''; position: absolute; top: 0; left: 0; bottom: 0;
-  width: 3px; background: rgba(184,176,198,.05);
+  width: 3px; background: rgba(184,176,198,.05); z-index: 2;
 }
-/* states */
-.ae-fc-card-full.visited {
+
+/* ── states ── */
+.ae-fc-block.visited {
   border-color: rgba(201,156,90,.18);
   background: rgba(201,156,90,.02);
 }
-.ae-fc-card-full.visited .ae-fc-card-full-title { color: var(--gold2); opacity: .82; }
-.ae-fc-card-full.visited .ae-fc-card-full-type  { color: var(--gold); opacity: .42; }
-.ae-fc-card-full.visited .ae-fc-card-full-tip   { opacity: .40; }
-.ae-fc-card-full.visited .ae-fc-card-full-img   { filter: brightness(.6) saturate(.85); }
-.ae-fc-card-full.visited::before                 { background: rgba(201,156,90,.30); }
-.ae-fc-card-full.visited.type-choice::before     { background: rgba(163,139,207,.35); }
-.ae-fc-card-full.current {
+.ae-fc-block.visited .ae-fc-block-title { color: var(--gold2); opacity: .80; }
+.ae-fc-block.visited .ae-fc-block-type  { color: var(--gold); opacity: .42; }
+.ae-fc-block.visited .ae-fc-block-tip   { opacity: .38; }
+.ae-fc-block.visited .ae-fc-block-img   { filter: brightness(.55) saturate(.85); }
+.ae-fc-block.visited::before             { background: rgba(201,156,90,.30); }
+
+.ae-fc-block.visited.type-choice::before  { background: rgba(163,139,207,.35); }
+.ae-fc-block.visited.type-dice::before    { background: rgba(255,200,40,.40); }
+.ae-fc-block.visited.type-collect::before { background: rgba(92,200,92,.35); }
+.ae-fc-block.visited.type-fail::before    { background: rgba(255,123,92,.35); }
+
+.ae-fc-block.current {
   border-color: var(--gold);
   background: rgba(201,156,90,.05);
-  box-shadow: 0 0 20px rgba(201,156,90,.12);
+  box-shadow: 0 0 20px rgba(201,156,90,.12), 0 0 40px rgba(201,156,90,.04);
 }
-.ae-fc-card-full.current .ae-fc-card-full-title  { color: var(--gold2); opacity: .95; }
-.ae-fc-card-full.current .ae-fc-card-full-img    { filter: brightness(.75) saturate(1); }
-.ae-fc-card-full.current::before                  { background: var(--gold); }
-.ae-fc-card-full.locked {
+.ae-fc-block.current .ae-fc-block-title { color: var(--gold2); opacity: .95; }
+.ae-fc-block.current .ae-fc-block-img   { filter: brightness(.70) saturate(1); }
+.ae-fc-block.current::before             { background: var(--gold); box-shadow: 0 0 8px rgba(201,156,90,.25); }
+
+.ae-fc-block.locked {
   border-color: rgba(184,176,198,.03);
-  background: rgba(14,12,24,.40); opacity: .18;
+  background: rgba(14,12,24,.40); opacity: .15;
 }
-.ae-fc-card-full.locked .ae-fc-card-full-img { filter: brightness(.12) saturate(0); }
+.ae-fc-block.locked .ae-fc-block-img { filter: brightness(.10) saturate(0); }
 
-/* ── small card (for multi-card slides) ── */
-.ae-fc-card {
-  width: 100%; flex-shrink: 0;
-  border: 1px solid rgba(184,176,198,.06);
-  border-radius: 5px; overflow: hidden;
-  background: rgba(14,12,24,.80);
-  position: relative;
+/* ── navigation arrows ── */
+.ae-fc-nav {
+  position: absolute; bottom: 10px; left: 50%;
+  transform: translateX(-50%);
+  display: flex; align-items: center; gap: 16px; z-index: 10;
 }
-.ae-fc-card-img {
-  width: 100%; height: 44px;
-  object-fit: cover; display: block;
-  filter: brightness(.45) saturate(.7);
+.ae-fc-nav-btn {
+  width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(5,4,10,.80); border: 1px solid rgba(201,156,90,.12);
+  border-radius: 4px; cursor: pointer;
+  color: var(--gold); font-size: 14px; opacity: .45;
+  transition: opacity .2s, border-color .2s, background .2s;
 }
-.ae-fc-card-body { padding: 5px 8px 6px; }
-.ae-fc-card-type {
-  font: 500 5.5px/1 'IBM Plex Mono';
-  letter-spacing: .12em; text-transform: uppercase;
-  color: var(--muted); opacity: .28; margin-bottom: 2px;
+.ae-fc-nav-btn:hover { opacity: .80; border-color: rgba(201,156,90,.30); background: rgba(201,156,90,.06); }
+.ae-fc-nav-btn.disabled { opacity: .12; pointer-events: none; }
+.ae-fc-nav-counter {
+  font: 500 9px/1 'IBM Plex Mono';
+  letter-spacing: .12em; color: var(--gold); opacity: .30;
 }
-.ae-fc-card-title {
-  font: 700 9px/1.2 'Cinzel', serif;
-  letter-spacing: .02em; color: var(--muted); opacity: .45;
-}
-.ae-fc-card::before {
-  content: ''; position: absolute; top: 0; left: 0; bottom: 0;
-  width: 2px; background: rgba(184,176,198,.05);
-}
-.ae-fc-card.visited { border-color: rgba(201,156,90,.15); background: rgba(201,156,90,.02); }
-.ae-fc-card.visited .ae-fc-card-title { color: var(--gold2); opacity: .75; }
-.ae-fc-card.visited .ae-fc-card-type  { color: var(--gold); opacity: .40; }
-.ae-fc-card.visited .ae-fc-card-img   { filter: brightness(.6) saturate(.8); }
-.ae-fc-card.visited::before            { background: rgba(201,156,90,.28); }
-.ae-fc-card.visited.type-dice::before    { background: rgba(255,200,40,.38); }
-.ae-fc-card.visited.type-collect::before { background: rgba(92,200,92,.32); }
-.ae-fc-card.visited.type-fail::before    { background: rgba(255,123,92,.32); }
-.ae-fc-card.current { border-color: var(--gold); background: rgba(201,156,90,.05); box-shadow: 0 0 14px rgba(201,156,90,.10); }
-.ae-fc-card.current .ae-fc-card-title { color: var(--gold2); opacity: .92; }
-.ae-fc-card.current::before { background: var(--gold); }
-.ae-fc-card.locked { border-color: rgba(184,176,198,.03); background: rgba(14,12,24,.40); opacity: .18; }
-.ae-fc-card.locked .ae-fc-card-img { filter: brightness(.12) saturate(0); }
-
-/* ── connector ── */
-.ae-fc-vl {
-  width: 2px; height: 12px; flex-shrink: 0; align-self: center;
-  background: rgba(201,156,90,.10);
-}
-.ae-fc-vl.v { background: rgba(201,156,90,.28); }
-.ae-fc-vl.l { background: repeating-linear-gradient(to bottom, rgba(184,176,198,.04) 0px, rgba(184,176,198,.04) 3px, transparent 3px, transparent 6px); }
-
-/* ── columns (branches side by side in a slide) ── */
-.ae-fc-cols {
-  display: flex; align-items: flex-start;
-  gap: 12px; width: 100%; max-width: 680px;
-}
-.ae-fc-col {
-  flex: 1; min-width: 0;
-  display: flex; flex-direction: column; align-items: center; gap: 0;
-}
-.ae-fc-col-label {
-  font: 700 8px/1 'IBM Plex Mono';
-  letter-spacing: .14em; text-transform: uppercase;
-  color: var(--gold); opacity: .32;
-  margin-bottom: 6px; padding: 3px 10px;
-  border: 1px solid rgba(201,156,90,.10);
-  border-radius: 3px; background: rgba(201,156,90,.03);
-}
-
-/* ── fork (dice ✓/✗) ── */
-.ae-fc-fork {
-  display: flex; gap: 4px; align-items: flex-start; width: 100%;
-}
-.ae-fc-fork-arm {
-  flex: 1; min-width: 0;
-  display: flex; flex-direction: column; align-items: center; gap: 0;
-}
-.ae-fc-fork-label {
-  font: 500 7px/1 'IBM Plex Mono';
+.ae-fc-nav-label {
+  font: 400 8px/1 'IBM Plex Mono';
   letter-spacing: .10em; text-transform: uppercase;
-  color: var(--muted); opacity: .18; margin: 1px 0 2px;
+  color: var(--muted); opacity: .25;
+  position: absolute; bottom: 10px; right: 16px;
 }
-.ae-fc-fork-label.v { opacity: .38; color: var(--gold); }
-
-/* ── scrollbar ── */
-.ae-fc::-webkit-scrollbar { width: 3px; }
-.ae-fc::-webkit-scrollbar-track { background: transparent; }
-.ae-fc::-webkit-scrollbar-thumb { background: rgba(201,156,90,.12); border-radius: 2px; }
 
 /* ══════════════════════════════════════
    TOP BAR  ·  44px fixed
@@ -1770,8 +1701,13 @@ html, body {
 <!-- ══ MAP / FLOWCHART PANEL ══ -->
 <div class="ae-panel" id="panel-map" data-panel="map">
   <div class="ae-fc" id="fc-container">
-    <div class="ae-fc-chapter">Chapter A &middot; Null Meridian</div>
-    <div class="ae-fc-scroll" id="fc-scroll"></div>
+    <div class="ae-fc-viewport" id="fc-viewport"></div>
+    <div class="ae-fc-nav" id="fc-nav">
+      <button class="ae-fc-nav-btn" id="fc-prev" onclick="fcGo(-1)">&#x25B2;</button>
+      <span class="ae-fc-nav-counter" id="fc-counter">1 / 1</span>
+      <button class="ae-fc-nav-btn" id="fc-next" onclick="fcGo(1)">&#x25BC;</button>
+    </div>
+    <span class="ae-fc-nav-label" id="fc-label"></span>
   </div>
 </div>
 
@@ -3120,151 +3056,120 @@ const fcTypeLabels = {
   narrator:'narrative', choice:'choice', dice:'dice check', collect:'collection', fail:'outcome'
 };
 
-function renderFlowchart() {
-  const scroll = document.getElementById('fc-scroll');
-  scroll.innerHTML = '';
-
-  // each intro node = its own full-screen slide
-  fcIntro.forEach(n => {
-    const slide = mkSlide();
-    slide.appendChild(mkFullCard(n));
-    scroll.appendChild(slide);
+/* ── build slides: each slide = array of card data ── */
+function buildFcSlides() {
+  const slides = [];
+  // intro: each node = 1 slide
+  fcIntro.forEach(n => slides.push({ label: n.label, cards: [n] }));
+  // branch tops: first node of each branch in one slide
+  slides.push({
+    label: 'Branches',
+    cards: fcColumns.map(col => ({ ...col.nodes[0], colLabel: col.label }))
   });
-
-  // the 3 branches = one big slide with columns
-  const branchSlide = mkSlide('Branches');
-  const cols = document.createElement('div');
-  cols.className = 'ae-fc-cols';
-
-  fcColumns.forEach(col => {
-    const colEl = document.createElement('div');
-    colEl.className = 'ae-fc-col';
-    const lbl = document.createElement('div');
-    lbl.className = 'ae-fc-col-label';
-    lbl.textContent = col.label;
-    colEl.appendChild(lbl);
-    col.nodes.forEach((n, i) => {
-      if (i > 0) colEl.appendChild(mkVl(n.id));
-      colEl.appendChild(mkCard(n));
-      if (n.fork) {
-        colEl.appendChild(mkVl(null, isAnyForkVis(n.fork)));
-        colEl.appendChild(mkFork(n.fork));
+  // layer by layer through branches — depth 1, 2, 3...
+  const maxDepth = Math.max(...fcColumns.map(c => c.nodes.length));
+  for (let d = 1; d < maxDepth; d++) {
+    const layerCards = [];
+    fcColumns.forEach(col => {
+      if (col.nodes[d]) {
+        layerCards.push({ ...col.nodes[d], colLabel: col.label });
+        // also add fork outcomes as extra cards in same slide
+        if (col.nodes[d].fork) {
+          col.nodes[d].fork.forEach(arm => {
+            arm.nodes.forEach(fn => layerCards.push({ ...fn, colLabel: arm.label }));
+          });
+        }
       }
     });
-    cols.appendChild(colEl);
+    if (layerCards.length) slides.push({ label: 'Depth ' + (d+1), cards: layerCards });
+  }
+  return slides;
+}
+
+let fcSlides = [];
+let fcIdx = 0;
+
+function renderFlowchart() {
+  fcSlides = buildFcSlides();
+  fcIdx = 0;
+  renderFcSlide();
+}
+
+function renderFcSlide() {
+  const vp = document.getElementById('fc-viewport');
+  vp.innerHTML = '';
+  const slide = fcSlides[fcIdx];
+  if (!slide) return;
+
+  slide.cards.forEach(n => {
+    vp.appendChild(mkBlock(n));
   });
 
-  branchSlide.appendChild(cols);
-  scroll.appendChild(branchSlide);
+  // update nav
+  document.getElementById('fc-counter').textContent = (fcIdx + 1) + ' / ' + fcSlides.length;
+  document.getElementById('fc-prev').classList.toggle('disabled', fcIdx === 0);
+  document.getElementById('fc-next').classList.toggle('disabled', fcIdx >= fcSlides.length - 1);
+  document.getElementById('fc-label').textContent = slide.label || '';
 }
 
-function mkSlide(label) {
-  const s = document.createElement('div');
-  s.className = 'ae-fc-slide';
-  if (label) {
-    const l = document.createElement('div');
-    l.className = 'ae-fc-slide-label';
-    l.textContent = label;
-    s.appendChild(l);
-  }
-  return s;
+function fcGo(dir) {
+  const next = fcIdx + dir;
+  if (next < 0 || next >= fcSlides.length) return;
+  const vp = document.getElementById('fc-viewport');
+  vp.classList.add('out');
+  setTimeout(() => {
+    fcIdx = next;
+    renderFcSlide();
+    vp.classList.remove('out');
+  }, 200);
 }
 
-function mkFullCard(n) {
+// keyboard nav
+document.addEventListener('keydown', e => {
+  if (activeTab !== 'map') return;
+  if (e.key === 'ArrowDown' || e.key === 'ArrowRight') { e.preventDefault(); fcGo(1); }
+  if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') { e.preventDefault(); fcGo(-1); }
+});
+
+function mkBlock(n) {
   const vis = isNodeVisited(n.refId || n.id);
   const cur = isNodeCurrent(n.refId || n.id);
   const locked = !vis && !cur;
-  const card = document.createElement('div');
-  card.className = 'ae-fc-card-full type-' + (n.type||'narrator')
+  const el = document.createElement('div');
+  el.className = 'ae-fc-block type-' + (n.type || 'narrator')
     + (cur ? ' current' : vis ? ' visited' : '')
     + (locked ? ' locked' : '');
   if (n.img) {
     const img = document.createElement('img');
-    img.className = 'ae-fc-card-full-img'; img.src = n.img;
-    img.alt = n.label; img.loading = 'lazy';
-    card.appendChild(img);
+    img.className = 'ae-fc-block-img'; img.src = n.img;
+    img.alt = n.label; card_img_load: img.loading = 'eager';
+    el.appendChild(img);
   }
   const body = document.createElement('div');
-  body.className = 'ae-fc-card-full-body';
+  body.className = 'ae-fc-block-body';
+  if (n.colLabel) {
+    const cl = document.createElement('div');
+    cl.className = 'ae-fc-block-type';
+    cl.style.color = 'var(--gold)'; cl.style.opacity = '.50';
+    cl.textContent = n.colLabel;
+    body.appendChild(cl);
+  }
   const t = document.createElement('div');
-  t.className = 'ae-fc-card-full-type';
+  t.className = 'ae-fc-block-type';
   t.textContent = fcTypeLabels[n.type] || 'narrative';
   body.appendChild(t);
   const title = document.createElement('div');
-  title.className = 'ae-fc-card-full-title';
+  title.className = 'ae-fc-block-title';
   title.textContent = n.label;
   body.appendChild(title);
   if (n.tip) {
     const tip = document.createElement('div');
-    tip.className = 'ae-fc-card-full-tip';
+    tip.className = 'ae-fc-block-tip';
     tip.textContent = n.tip;
     body.appendChild(tip);
   }
-  card.appendChild(body);
-  return card;
-}
-
-function mkCard(n) {
-  const vis = isNodeVisited(n.refId || n.id);
-  const cur = isNodeCurrent(n.refId || n.id);
-  const locked = !vis && !cur;
-  const card = document.createElement('div');
-  card.className = 'ae-fc-card type-' + (n.type||'narrator')
-    + (cur ? ' current' : vis ? ' visited' : '')
-    + (locked ? ' locked' : '');
-  if (n.img) {
-    const img = document.createElement('img');
-    img.className = 'ae-fc-card-img'; img.src = n.img;
-    img.alt = n.label; img.loading = 'lazy';
-    card.appendChild(img);
-  }
-  const body = document.createElement('div');
-  body.className = 'ae-fc-card-body';
-  const t = document.createElement('div');
-  t.className = 'ae-fc-card-type';
-  t.textContent = fcTypeLabels[n.type] || 'narrative';
-  body.appendChild(t);
-  const title = document.createElement('div');
-  title.className = 'ae-fc-card-title';
-  title.textContent = n.label;
-  body.appendChild(title);
-  card.appendChild(body);
-  return card;
-}
-
-function mkVl(id, forceVis) {
-  const vl = document.createElement('div');
-  vl.className = 'ae-fc-vl' + (forceVis || (id && isNodeVisited(id)) ? ' v' : ' l');
-  return vl;
-}
-
-function mkFork(arms) {
-  const wrap = document.createElement('div');
-  wrap.className = 'ae-fc-fork';
-  arms.forEach(arm => {
-    const armEl = document.createElement('div');
-    armEl.className = 'ae-fc-fork-arm';
-    const vis = arm.nodes.some(n => isNodeVisited(n.refId || n.id));
-    const lbl = document.createElement('div');
-    lbl.className = 'ae-fc-fork-label' + (vis ? ' v' : '');
-    lbl.textContent = arm.label;
-    armEl.appendChild(lbl);
-    armEl.appendChild(mkVl(null, vis));
-    arm.nodes.forEach((n, i) => {
-      if (i > 0) armEl.appendChild(mkVl(n.id));
-      armEl.appendChild(mkCard(n));
-      if (n.fork) {
-        armEl.appendChild(mkVl(null, isAnyForkVis(n.fork)));
-        armEl.appendChild(mkFork(n.fork));
-      }
-    });
-    wrap.appendChild(armEl);
-  });
-  return wrap;
-}
-
-function isAnyForkVis(arms) {
-  return arms.some(a => a.nodes.some(n => isNodeVisited(n.refId || n.id)));
+  el.appendChild(body);
+  return el;
 }
 
 // all frame IDs that have written content
