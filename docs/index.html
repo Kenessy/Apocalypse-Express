@@ -156,161 +156,133 @@ html, body {
   transition: opacity .3s, border-color .3s;
 }
 
-/* ══ FLOWCHART MAP PANEL — vertical top-to-bottom ══ */
+/* ══ FLOWCHART MAP — card-based tree ══ */
 .ae-fc {
-  flex: 1; overflow-y: auto; overflow-x: hidden;
+  flex: 1; overflow-y: auto; overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   background: rgba(8,6,16,.98);
   position: relative;
 }
 .ae-fc-scroll {
   display: flex; flex-direction: column; align-items: center;
-  min-width: 100%; padding: 48px 24px 80px;
+  min-width: 100%; padding: 36px 24px 80px;
   gap: 0; position: relative;
 }
-/* chapter label */
 .ae-fc-chapter {
   font: 700 13px/1 'Cinzel', serif;
   letter-spacing: .08em; color: var(--gold); opacity: .30;
-  margin-bottom: 32px; text-align: center;
+  margin-bottom: 28px; text-align: center;
 }
-/* row = one story beat (vertical) */
-.ae-fc-col {
-  display: flex; flex-direction: column;
-  align-items: center; gap: 0;
-  flex-shrink: 0; position: relative;
+
+/* ── card node ── */
+.ae-fc-card {
+  width: 180px; flex-shrink: 0;
+  border: 1px solid rgba(184,176,198,.08);
+  border-radius: 6px; overflow: hidden;
+  background: rgba(14,12,24,.85);
+  cursor: default; position: relative;
+  transition: border-color .3s, background .3s, box-shadow .3s, transform .15s;
 }
-/* connector line between nodes (vertical) */
-.ae-fc-line {
-  width: 2px; height: 40px; flex-shrink: 0;
-  align-self: center;
-  background: linear-gradient(to bottom, rgba(201,156,90,.18), rgba(201,156,90,.12));
-  position: relative;
+.ae-fc-card:hover { transform: translateY(-2px); }
+
+/* card image */
+.ae-fc-card-img {
+  width: 100%; aspect-ratio: 16/9;
+  object-fit: cover; display: block;
+  filter: brightness(.6) saturate(.8);
+  transition: filter .3s;
 }
-.ae-fc-line.visited {
-  background: linear-gradient(to bottom, rgba(201,156,90,.45), rgba(201,156,90,.35));
-  box-shadow: 0 0 8px rgba(201,156,90,.10);
+.ae-fc-card:hover .ae-fc-card-img { filter: brightness(.75) saturate(.9); }
+
+/* card body */
+.ae-fc-card-body { padding: 10px 12px 10px; }
+.ae-fc-card-type {
+  font: 500 7px/1 'IBM Plex Mono';
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--muted); opacity: .35;
+  margin-bottom: 5px;
 }
-.ae-fc-line.locked {
-  background: repeating-linear-gradient(to bottom,
-    rgba(184,176,198,.08) 0px, rgba(184,176,198,.08) 4px,
-    transparent 4px, transparent 8px);
+.ae-fc-card-title {
+  font: 700 11px/1.3 'Cinzel', serif;
+  letter-spacing: .04em;
+  color: var(--muted); opacity: .55;
 }
-/* branch group */
+.ae-fc-card-tip {
+  font: 400 9px/1.4 'IBM Plex Mono';
+  color: var(--muted); opacity: .30;
+  margin-top: 5px;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ── card states ── */
+.ae-fc-card.visited {
+  border-color: rgba(201,156,90,.20);
+  background: rgba(201,156,90,.03);
+}
+.ae-fc-card.visited .ae-fc-card-title { color: var(--gold2); opacity: .80; }
+.ae-fc-card.visited .ae-fc-card-type  { color: var(--gold); opacity: .50; }
+.ae-fc-card.visited .ae-fc-card-tip   { opacity: .45; }
+.ae-fc-card.visited .ae-fc-card-img   { filter: brightness(.7) saturate(.9); }
+
+.ae-fc-card.current {
+  border-color: var(--gold);
+  background: rgba(201,156,90,.06);
+  box-shadow: 0 0 20px rgba(201,156,90,.15), 0 0 40px rgba(201,156,90,.05);
+}
+.ae-fc-card.current .ae-fc-card-title { color: var(--gold2); opacity: .95; }
+.ae-fc-card.current .ae-fc-card-type  { color: var(--gold); opacity: .65; }
+.ae-fc-card.current .ae-fc-card-img   { filter: brightness(.85) saturate(1); }
+
+.ae-fc-card.locked {
+  border-color: rgba(184,176,198,.04);
+  background: rgba(14,12,24,.50);
+  opacity: .25;
+}
+.ae-fc-card.locked .ae-fc-card-img { filter: brightness(.2) saturate(0) blur(2px); }
+
+/* type accent on left edge */
+.ae-fc-card::before {
+  content: ''; position: absolute; top: 0; left: 0; bottom: 0;
+  width: 3px; background: rgba(184,176,198,.08);
+  transition: background .3s;
+}
+.ae-fc-card.visited::before              { background: rgba(201,156,90,.35); }
+.ae-fc-card.visited.type-choice::before  { background: rgba(163,139,207,.40); }
+.ae-fc-card.visited.type-dice::before    { background: rgba(255,200,40,.45); }
+.ae-fc-card.visited.type-collect::before { background: rgba(92,200,92,.40); }
+.ae-fc-card.visited.type-fail::before    { background: rgba(255,123,92,.40); }
+.ae-fc-card.current::before              { background: var(--gold); box-shadow: 0 0 8px rgba(201,156,90,.30); }
+
+/* ── connector lines ── */
+.ae-fc-vline {
+  width: 2px; height: 32px; flex-shrink: 0; align-self: center;
+  background: rgba(201,156,90,.12);
+}
+.ae-fc-vline.visited { background: rgba(201,156,90,.35); box-shadow: 0 0 6px rgba(201,156,90,.08); }
+.ae-fc-vline.locked  { background: repeating-linear-gradient(to bottom, rgba(184,176,198,.06) 0px, rgba(184,176,198,.06) 3px, transparent 3px, transparent 6px); }
+
+/* ── branch layout ── */
 .ae-fc-branch {
   display: flex; flex-direction: column; align-items: center;
-  position: relative; width: 100%;
+  width: 100%;
 }
 .ae-fc-branch-row {
   display: flex; align-items: flex-start; justify-content: center;
-  gap: 16px; width: 100%;
+  gap: 20px; flex-wrap: wrap;
 }
 .ae-fc-branch-arm {
   display: flex; flex-direction: column; align-items: center;
-  flex: 0 1 auto; min-width: 70px;
 }
-/* horizontal line into branch arm */
-.ae-fc-hline {
-  width: 2px; height: 28px; flex-shrink: 0;
-  background: rgba(201,156,90,.12);
-}
-.ae-fc-hline.visited { background: rgba(201,156,90,.40); }
-.ae-fc-hline.locked { background: repeating-linear-gradient(to bottom, rgba(184,176,198,.06) 0px, rgba(184,176,198,.06) 3px, transparent 3px, transparent 6px); }
-
-/* node */
-.ae-fc-node {
-  width: 52px; height: 52px; flex-shrink: 0;
-  border-radius: 50%; position: relative;
-  display: flex; align-items: center; justify-content: center;
-  border: 1.5px solid rgba(184,176,198,.12);
-  background: rgba(14,12,24,.80);
-  cursor: default;
-  transition: border-color .3s, background .3s, box-shadow .3s, transform .2s;
-}
-.ae-fc-node:hover { transform: scale(1.08); }
-
-/* node states */
-.ae-fc-node.visited {
-  border-color: rgba(201,156,90,.35);
-  background: rgba(201,156,90,.06);
-  box-shadow: 0 0 16px rgba(201,156,90,.10);
-}
-.ae-fc-node.current {
-  border-color: var(--gold);
-  background: rgba(201,156,90,.12);
-  box-shadow: 0 0 24px rgba(201,156,90,.20), 0 0 48px rgba(201,156,90,.06);
-  animation: ae-fc-pulse 2.8s ease-in-out infinite;
-}
-@keyframes ae-fc-pulse {
-  0%,100% { box-shadow: 0 0 24px rgba(201,156,90,.20), 0 0 48px rgba(201,156,90,.06); }
-  50%     { box-shadow: 0 0 32px rgba(201,156,90,.30), 0 0 56px rgba(201,156,90,.10); }
-}
-.ae-fc-node.locked {
-  border-color: rgba(184,176,198,.06);
-  background: rgba(14,12,24,.50);
-  opacity: .30;
-}
-/* node type colors */
-.ae-fc-node.type-narrator.visited { border-color: rgba(201,156,90,.40); }
-.ae-fc-node.type-choice.visited   { border-color: rgba(163,139,207,.40); background: rgba(163,139,207,.06); box-shadow: 0 0 16px rgba(163,139,207,.08); }
-.ae-fc-node.type-dice.visited     { border-color: rgba(255,200,40,.40); background: rgba(255,200,40,.05); box-shadow: 0 0 16px rgba(255,200,40,.08); }
-.ae-fc-node.type-collect.visited  { border-color: rgba(92,200,92,.40); background: rgba(92,200,92,.05); box-shadow: 0 0 16px rgba(92,200,92,.08); }
-.ae-fc-node.type-fail.visited     { border-color: rgba(255,123,92,.35); background: rgba(255,123,92,.05); }
-
-/* node icon */
-.ae-fc-node svg {
-  width: 20px; height: 20px;
-  color: var(--muted); opacity: .30;
-  transition: opacity .3s, color .3s;
-}
-.ae-fc-node.visited svg  { opacity: .65; color: var(--gold2); }
-.ae-fc-node.current svg  { opacity: .85; color: var(--gold2); }
-.ae-fc-node.type-choice.visited svg  { color: var(--purple2); }
-.ae-fc-node.type-dice.visited svg    { color: #ffc828; }
-.ae-fc-node.type-collect.visited svg { color: #5cc85c; }
-.ae-fc-node.type-fail.visited svg    { color: var(--ember); }
-
-/* node label — right side */
-.ae-fc-label {
-  position: absolute; left: calc(100% + 10px); top: 50%;
-  transform: translateY(-50%);
-  font: 500 8px/1.3 'IBM Plex Mono';
-  letter-spacing: .08em; text-transform: uppercase;
-  color: var(--muted); opacity: .25;
-  white-space: nowrap; text-align: left;
-  pointer-events: none;
-  transition: opacity .3s;
-}
-.ae-fc-node:hover .ae-fc-label { opacity: .65; }
-.ae-fc-node.visited .ae-fc-label { opacity: .40; }
-.ae-fc-node.current .ae-fc-label { opacity: .65; color: var(--gold); }
-
-/* node hover tooltip — left side */
-.ae-fc-tip {
-  position: absolute; right: calc(100% + 14px); top: 50%;
-  transform: translateY(-50%);
-  font: 400 10px/1.5 'IBM Plex Mono';
-  color: var(--text); opacity: 0;
-  background: rgba(5,4,10,.96); border: 1px solid rgba(201,156,90,.15);
-  padding: 8px 12px; border-radius: 4px;
-  pointer-events: none; z-index: 10;
-  box-shadow: 0 6px 24px rgba(0,0,0,.6);
-  transition: opacity .2s;
-  max-width: 220px; white-space: normal;
-}
-.ae-fc-node:hover .ae-fc-tip { opacity: 1; }
-
-/* branch label */
 .ae-fc-blabel {
-  font: 500 7px/1 'IBM Plex Mono';
+  font: 500 8px/1 'IBM Plex Mono';
   letter-spacing: .12em; text-transform: uppercase;
   color: var(--muted); opacity: .25;
-  margin: 4px 0 6px; text-align: center;
-  transition: opacity .3s;
+  margin: 2px 0 4px; text-align: center;
 }
-.ae-fc-blabel.visited { opacity: .50; }
+.ae-fc-blabel.visited { opacity: .50; color: var(--gold); }
 
-/* scrollbar */
+/* ── scrollbar ── */
 .ae-fc::-webkit-scrollbar { width: 4px; }
 .ae-fc::-webkit-scrollbar-track { background: transparent; }
 .ae-fc::-webkit-scrollbar-thumb { background: rgba(201,156,90,.15); border-radius: 2px; }
@@ -3013,22 +2985,22 @@ function renderCollectionFull() {
 ══════════════════════════════════════ */
 const flowchart = [
   // ── LINEAR INTRO ──
-  { id:'cicero-monologue', label:'Cicero', type:'narrator', tip:'Cicero\'s opening monologue — loops, choice, waking up' },
-  { id:'waking-up', label:'Waking', type:'narrator', tip:'The mist rises from the obsidian landscape' },
-  { id:'stand-up', label:'Stand Up', type:'narrator', tip:'You stand. The crossroads reveals itself.' },
+  { id:'cicero-monologue', label:'Cicero', type:'narrator', tip:'Opening monologue — loops, choice, waking up', img:'ae-null-meridian.png' },
+  { id:'waking-up', label:'Waking', type:'narrator', tip:'The mist rises from the obsidian landscape', img:'ae-null-meridian.png' },
+  { id:'stand-up', label:'Stand Up', type:'narrator', tip:'You stand. The crossroads reveals itself.', img:'ae-standup-crossroads.png' },
   // ── HUB ──
-  { id:'crossroads-choice', label:'Crossroads', type:'choice', tip:'Three paths diverge at the fountain',
+  { id:'crossroads-choice', label:'Crossroads', type:'choice', tip:'Three paths diverge at the fountain', img:'ae-standup-crossroads.png',
     branches: [
       // ── SCOUT BRANCH ──
       { label:'Scout', nodes:[
-        { id:'look-around', label:'Survey', type:'choice', tip:'The obelisk dominates — climb it or find another way up',
+        { id:'look-around', label:'Survey', type:'choice', tip:'The obelisk dominates — climb it or find another way up', img:'ae-obelisk-fountain.png',
           branches:[
             // Obelisk climb path
             { label:'Obelisk', nodes:[
-              { id:'climb-obelisk', label:'Climb', type:'dice', tip:'Athletics DC 10 — scale the obelisk',
+              { id:'climb-obelisk', label:'Climb', type:'dice', tip:'Athletics DC 10 — scale the obelisk', img:'ae-obelisk-fountain.png',
                 branches:[
                   { label:'\u2713', nodes:[
-                    { id:'climb-success', label:'The View', type:'collect', tip:'The infinite obsidian plane revealed' }
+                    { id:'climb-success', label:'The View', type:'collect', tip:'The infinite obsidian plane revealed', img:'ae-crossroads-wide.png' }
                   ]},
                   { label:'\u2717', nodes:[
                     { id:'climb-fail-1', label:'Fall #1', type:'fail', tip:'You fall into the fountain',
@@ -3074,7 +3046,7 @@ const flowchart = [
             ]},
             // Tree path
             { label:'Tree', nodes:[
-              { id:'find-ridge', label:'Find Tree', type:'narrator', tip:'A dark tree growing from a crack in obsidian' },
+              { id:'find-ridge', label:'Find Tree', type:'narrator', tip:'A dark tree growing from a crack in obsidian', img:'ae-crossroads-wide.png' },
               { id:'tree-climb', label:'Jump', type:'dice', tip:'Athletics DC 15 — grab the branch',
                 branches:[
                   { label:'Holds', nodes:[
@@ -3095,7 +3067,7 @@ const flowchart = [
       ]},
       // ── CICERO BRANCH ──
       { label:'Cicero', nodes:[
-        { id:'talk-cicero', label:'Approach', type:'narrator', tip:'The old man with the obsidian quill' },
+        { id:'talk-cicero', label:'Approach', type:'narrator', tip:'The old man with the obsidian quill', img:'ae-cicero-close.png' },
         { id:'cicero-call-1', label:'Call Out', type:'narrator', tip:'He stirs — barely' },
         { id:'cicero-call-2', label:'Louder', type:'narrator', tip:'He is simply unreachable' },
         { id:'cicero-listen', label:'Listen', type:'narrator', tip:'You stop trying. You wait.' },
@@ -3104,7 +3076,7 @@ const flowchart = [
       ]},
       // ── FOUNTAIN BRANCH ──
       { label:'Fountain', nodes:[
-        { id:'examine-fountain', label:'Examine', type:'narrator', tip:'Crystal-clear water in an obsidian basin' },
+        { id:'examine-fountain', label:'Examine', type:'narrator', tip:'Crystal-clear water in an obsidian basin', img:'ae-fountain-close.png' },
         { id:'fountain-close', label:'Coins', type:'narrator', tip:'Wishes thrown where no one listens' },
         { id:'roads-signs', label:'Signs', type:'narrator', tip:'Signposts to a dead world' },
         { id:'fountain-desk', label:'Desk', type:'narrator', tip:'Two scrolls pinned beneath stone' },
@@ -3142,13 +3114,9 @@ const flowchart = [
   }
 ];
 
-// SVG icon templates per type
-const fcIcons = {
-  narrator: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',
-  choice:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v4m0 12v4M2 12h4m12 0h4M5.6 5.6l2.8 2.8m7.2 7.2l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8"/></svg>',
-  dice:     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.2" fill="currentColor" stroke="none"/><circle cx="15.5" cy="8.5" r="1.2" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/><circle cx="8.5" cy="15.5" r="1.2" fill="currentColor" stroke="none"/><circle cx="15.5" cy="15.5" r="1.2" fill="currentColor" stroke="none"/></svg>',
-  collect:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg>',
-  fail:     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>',
+// type labels
+const fcTypeLabels = {
+  narrator:'narrative', choice:'choice', dice:'dice check', collect:'collection', fail:'outcome'
 };
 
 function renderFlowchart() {
@@ -3159,49 +3127,62 @@ function renderFlowchart() {
 
 function renderFcNodes(nodes, container, isBranch) {
   nodes.forEach((node, i) => {
-    // connector line before node
+    // vertical connector line
     if (i > 0 || isBranch) {
-      const line = document.createElement('div');
-      line.className = 'ae-fc-line' + (isNodeVisited(node.id) ? ' visited' : (isNodeLocked(node) ? ' locked' : ''));
-      container.appendChild(line);
+      const vl = document.createElement('div');
+      vl.className = 'ae-fc-vline' + (isNodeVisited(node.id) ? ' visited' : (isNodeLocked(node) ? ' locked' : ''));
+      container.appendChild(vl);
     }
 
-    // the node
-    const col = document.createElement('div');
-    col.className = 'ae-fc-col';
-
-    const nd = document.createElement('div');
+    // card
+    const card = document.createElement('div');
     const nodeType = node.type || 'narrator';
     const vis = isNodeVisited(node.refId || node.id);
     const cur = isNodeCurrent(node.refId || node.id);
-    const locked = !vis && !cur && isNodeLocked(node);
-    nd.className = 'ae-fc-node type-' + nodeType
+    const locked = !vis && !cur;
+    card.className = 'ae-fc-card type-' + nodeType
       + (cur ? ' current' : (vis ? ' visited' : ''))
       + (locked ? ' locked' : '');
-    nd.innerHTML = fcIcons[nodeType] || fcIcons.narrator;
 
-    // label (right side)
-    const lbl = document.createElement('span');
-    lbl.className = 'ae-fc-label';
-    lbl.textContent = node.label;
-    nd.appendChild(lbl);
-
-    // tooltip (left side) — always show, even on locked nodes
-    if (node.tip) {
-      const tip = document.createElement('span');
-      tip.className = 'ae-fc-tip';
-      tip.textContent = node.tip;
-      nd.appendChild(tip);
+    // image (if available)
+    if (node.img) {
+      const img = document.createElement('img');
+      img.className = 'ae-fc-card-img';
+      img.src = node.img;
+      img.alt = node.label;
+      img.loading = 'lazy';
+      card.appendChild(img);
     }
 
-    col.appendChild(nd);
-    container.appendChild(col);
+    // body
+    const body = document.createElement('div');
+    body.className = 'ae-fc-card-body';
 
-    // branches — fan out horizontally, each arm goes down
+    const type = document.createElement('div');
+    type.className = 'ae-fc-card-type';
+    type.textContent = fcTypeLabels[nodeType] || nodeType;
+    body.appendChild(type);
+
+    const title = document.createElement('div');
+    title.className = 'ae-fc-card-title';
+    title.textContent = node.label;
+    body.appendChild(title);
+
+    if (node.tip) {
+      const tip = document.createElement('div');
+      tip.className = 'ae-fc-card-tip';
+      tip.textContent = node.tip;
+      body.appendChild(tip);
+    }
+
+    card.appendChild(body);
+    container.appendChild(card);
+
+    // branches
     if (node.branches && node.branches.length) {
-      const line2 = document.createElement('div');
-      line2.className = 'ae-fc-line' + (isAnyBranchVisited(node.branches) ? ' visited' : ' locked');
-      container.appendChild(line2);
+      const vl2 = document.createElement('div');
+      vl2.className = 'ae-fc-vline' + (isAnyBranchVisited(node.branches) ? ' visited' : ' locked');
+      container.appendChild(vl2);
 
       const branchWrap = document.createElement('div');
       branchWrap.className = 'ae-fc-branch';
@@ -3221,12 +3202,13 @@ function renderFcNodes(nodes, container, isBranch) {
         bLabel.textContent = branch.label;
         arm.appendChild(bLabel);
 
-        // vertical connector into branch
+        // vertical connector
         const hl = document.createElement('div');
-        hl.className = 'ae-fc-hline' + (branchVis ? ' visited' : ' locked');
+        hl.className = 'ae-fc-vline' + (branchVis ? ' visited' : ' locked');
+        hl.style.height = '20px';
         arm.appendChild(hl);
 
-        // nodes going down in this arm
+        // nodes going down
         const armCol = document.createElement('div');
         armCol.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:0';
         renderFcNodes(branch.nodes, armCol, true);
