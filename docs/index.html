@@ -303,18 +303,9 @@ html, body {
 .ae-fc-block-content::-webkit-scrollbar-thumb { background: rgba(201,156,90,.18); border-radius: 2px; }
 
 .ae-fc-block-content-inner { width: 100%; }
-.ae-fc-block-panel-title {
-  font: 700 16px/1.15 'Cinzel', serif;
-  letter-spacing: .04em; color: var(--gold2); opacity: .90;
-  margin-bottom: 10px; padding-bottom: 8px;
-  border-bottom: 1px solid rgba(201,156,90,.10);
-}
-
 /* multi-card: smaller block */
 .ae-fc-viewport[data-count="2"] .ae-fc-block-content { width: 260px; padding: 12px 16px 10px; }
-.ae-fc-viewport[data-count="2"] .ae-fc-block-panel-title { font-size: 13px; }
 .ae-fc-viewport[data-count="3"] .ae-fc-block-content { width: 200px; padding: 10px 12px 8px; }
-.ae-fc-viewport[data-count="3"] .ae-fc-block-panel-title { font-size: 11px; }
 
 .ae-fc-block-speaker {
   display: flex; align-items: center; gap: 10px;
@@ -389,10 +380,49 @@ html, body {
 .ae-fc-viewport[data-count="3"] .ae-fc-block-prose { font-size: 10px; line-height: 1.7; }
 .ae-fc-viewport[data-count="3"] .ae-fc-block-choice { font-size: 8px; padding: 4px 10px; }
 
+/* ── card title strip (top of each card) ── */
+.ae-fc-block-strip {
+  position: absolute; top: 0; left: 0; right: 0; z-index: 5;
+  height: 32px;
+  display: flex; align-items: center; gap: 8px;
+  padding: 0 14px;
+  background: rgba(5,4,10,.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(201,156,90,.06);
+}
+.ae-fc-block-strip-icon {
+  font-size: 11px; opacity: .50; flex-shrink: 0;
+}
+.ae-fc-block-strip-type {
+  font: 500 6px/1 'IBM Plex Mono';
+  letter-spacing: .12em; text-transform: uppercase;
+  color: var(--gold); opacity: .35; flex-shrink: 0;
+}
+.ae-fc-block-strip-title {
+  font: 700 11px/1 'Cinzel', serif;
+  letter-spacing: .03em; color: var(--gold2); opacity: .80;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.ae-fc-block-strip-sep {
+  flex: 1; height: 1px; min-width: 8px;
+  background: linear-gradient(to right, rgba(201,156,90,.15), transparent);
+}
+/* type color accents */
+.ae-fc-block.type-choice .ae-fc-block-strip   { border-bottom-color: rgba(163,139,207,.12); }
+.ae-fc-block.type-dice .ae-fc-block-strip      { border-bottom-color: rgba(255,200,40,.12); }
+.ae-fc-block.type-collect .ae-fc-block-strip   { border-bottom-color: rgba(92,200,92,.10); }
+.ae-fc-block.type-fail .ae-fc-block-strip      { border-bottom-color: rgba(255,123,92,.10); }
+.ae-fc-block.type-choice .ae-fc-block-strip-icon  { color: var(--purple2); }
+.ae-fc-block.type-dice .ae-fc-block-strip-icon     { color: #ffc828; }
+.ae-fc-block.type-collect .ae-fc-block-strip-icon  { color: #5cc85c; }
+.ae-fc-block.type-fail .ae-fc-block-strip-icon     { color: var(--ember); }
+.ae-fc-block.visited .ae-fc-block-strip-icon       { opacity: .65; }
+
 /* left accent bar */
 .ae-fc-block::before {
   content: ''; position: absolute; top: 0; left: 0; bottom: 0;
-  width: 3px; background: rgba(184,176,198,.04); z-index: 3;
+  width: 3px; background: rgba(184,176,198,.04); z-index: 6;
 }
 
 /* ── states ── */
@@ -3320,6 +3350,16 @@ function mkBlock(n) {
     + (cur ? ' current' : vis ? ' visited' : '')
     + (locked ? ' locked' : '');
 
+  // title strip at top
+  const typeIcons = { narrator:'\u270E', choice:'\u2726', dice:'\uD83C\uDFB2', collect:'\u2605', fail:'\u2717' };
+  const strip = document.createElement('div');
+  strip.className = 'ae-fc-block-strip';
+  strip.innerHTML = '<span class="ae-fc-block-strip-icon">' + (typeIcons[n.type] || '\u25c8') + '</span>'
+    + '<span class="ae-fc-block-strip-type">' + (fcTypeLabels[n.type] || 'narrative') + '</span>'
+    + '<div class="ae-fc-block-strip-sep"></div>'
+    + '<span class="ae-fc-block-strip-title">' + n.label + '</span>';
+  el.appendChild(strip);
+
   if (n.img) {
     const wrap = document.createElement('div');
     wrap.className = 'ae-fc-block-img-wrap';
@@ -3335,30 +3375,6 @@ function mkBlock(n) {
     el.appendChild(ph);
   }
 
-  const body = document.createElement('div');
-  body.className = 'ae-fc-block-body';
-  if (n.colLabel) {
-    const cl = document.createElement('div');
-    cl.className = 'ae-fc-block-type';
-    cl.style.color = 'var(--gold)'; cl.style.opacity = '.50';
-    cl.textContent = n.colLabel;
-    body.appendChild(cl);
-  }
-  const t = document.createElement('div');
-  t.className = 'ae-fc-block-type';
-  t.textContent = fcTypeLabels[n.type] || 'narrative';
-  body.appendChild(t);
-  const title = document.createElement('div');
-  title.className = 'ae-fc-block-title';
-  title.textContent = n.label;
-  body.appendChild(title);
-  if (n.tip) {
-    const tip = document.createElement('div');
-    tip.className = 'ae-fc-block-tip';
-    tip.textContent = n.tip;
-    body.appendChild(tip);
-  }
-  el.appendChild(body);
 
   // look up frame content — shown as blur overlay on hover
   const fid = n.refId || n.id;
