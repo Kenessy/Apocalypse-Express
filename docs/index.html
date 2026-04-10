@@ -156,122 +156,137 @@ html, body {
   transition: opacity .3s, border-color .3s;
 }
 
-/* ══ FLOWCHART MAP — card tree ══ */
+/* ══ FLOWCHART MAP — column-based ══ */
 .ae-fc {
-  flex: 1; overflow: auto;
+  flex: 1; overflow-y: auto; overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   background: rgba(8,6,16,.98);
 }
 .ae-fc-scroll {
   display: flex; flex-direction: column; align-items: center;
-  padding: 28px 16px 80px;
-  gap: 0; min-width: min-content;
+  padding: 24px 16px 80px; gap: 0;
 }
 .ae-fc-chapter {
   font: 700 11px/1 'Cinzel', serif;
   letter-spacing: .08em; color: var(--gold); opacity: .25;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
+}
+
+/* ── intro (linear, centered) ── */
+.ae-fc-intro {
+  display: flex; flex-direction: column; align-items: center; gap: 0;
 }
 
 /* ── card ── */
 .ae-fc-card {
-  width: 150px; flex-shrink: 0;
+  width: 200px; flex-shrink: 0;
   border: 1px solid rgba(184,176,198,.06);
   border-radius: 5px; overflow: hidden;
   background: rgba(14,12,24,.80);
   position: relative;
-  transition: border-color .3s, box-shadow .3s, transform .15s;
+  transition: border-color .3s, box-shadow .3s;
 }
-.ae-fc-card:hover { transform: translateY(-1px); }
 .ae-fc-card-img {
-  width: 100%; height: 56px;
+  width: 100%; height: 48px;
   object-fit: cover; display: block;
-  filter: brightness(.5) saturate(.7);
-  transition: filter .3s;
+  filter: brightness(.45) saturate(.7);
 }
-.ae-fc-card:hover .ae-fc-card-img { filter: brightness(.7) saturate(.85); }
-.ae-fc-card-body { padding: 7px 9px 8px; }
+.ae-fc-card-body { padding: 6px 9px 7px; }
 .ae-fc-card-type {
-  font: 500 6px/1 'IBM Plex Mono';
-  letter-spacing: .14em; text-transform: uppercase;
-  color: var(--muted); opacity: .30; margin-bottom: 3px;
+  font: 500 5.5px/1 'IBM Plex Mono';
+  letter-spacing: .12em; text-transform: uppercase;
+  color: var(--muted); opacity: .28; margin-bottom: 2px;
 }
 .ae-fc-card-title {
-  font: 700 10px/1.25 'Cinzel', serif;
-  letter-spacing: .03em; color: var(--muted); opacity: .45;
+  font: 700 9.5px/1.2 'Cinzel', serif;
+  letter-spacing: .02em; color: var(--muted); opacity: .45;
 }
-.ae-fc-card-tip {
-  font: 400 8px/1.3 'IBM Plex Mono';
-  color: var(--muted); opacity: .22; margin-top: 3px;
-  display: -webkit-box; -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical; overflow: hidden;
-}
-
 /* left accent */
 .ae-fc-card::before {
   content: ''; position: absolute; top: 0; left: 0; bottom: 0;
-  width: 2px; background: rgba(184,176,198,.06);
-  transition: background .3s;
+  width: 2px; background: rgba(184,176,198,.05);
 }
 
-/* ── states ── */
+/* states */
 .ae-fc-card.visited {
-  border-color: rgba(201,156,90,.18);
-  background: rgba(201,156,90,.025);
+  border-color: rgba(201,156,90,.15);
+  background: rgba(201,156,90,.02);
 }
-.ae-fc-card.visited .ae-fc-card-title { color: var(--gold2); opacity: .78; }
-.ae-fc-card.visited .ae-fc-card-type  { color: var(--gold); opacity: .45; }
-.ae-fc-card.visited .ae-fc-card-tip   { opacity: .38; }
-.ae-fc-card.visited .ae-fc-card-img   { filter: brightness(.65) saturate(.85); }
-.ae-fc-card.visited::before            { background: rgba(201,156,90,.30); }
-
-.ae-fc-card.visited.type-choice::before  { background: rgba(163,139,207,.35); }
-.ae-fc-card.visited.type-dice::before    { background: rgba(255,200,40,.40); }
-.ae-fc-card.visited.type-collect::before { background: rgba(92,200,92,.35); }
-.ae-fc-card.visited.type-fail::before    { background: rgba(255,123,92,.35); }
+.ae-fc-card.visited .ae-fc-card-title { color: var(--gold2); opacity: .75; }
+.ae-fc-card.visited .ae-fc-card-type  { color: var(--gold); opacity: .40; }
+.ae-fc-card.visited .ae-fc-card-img   { filter: brightness(.6) saturate(.8); }
+.ae-fc-card.visited::before            { background: rgba(201,156,90,.28); }
+.ae-fc-card.visited.type-choice::before  { background: rgba(163,139,207,.32); }
+.ae-fc-card.visited.type-dice::before    { background: rgba(255,200,40,.38); }
+.ae-fc-card.visited.type-collect::before { background: rgba(92,200,92,.32); }
+.ae-fc-card.visited.type-fail::before    { background: rgba(255,123,92,.32); }
 
 .ae-fc-card.current {
   border-color: var(--gold);
-  background: rgba(201,156,90,.06);
-  box-shadow: 0 0 18px rgba(201,156,90,.15), 0 0 36px rgba(201,156,90,.04);
+  background: rgba(201,156,90,.05);
+  box-shadow: 0 0 16px rgba(201,156,90,.12);
 }
-.ae-fc-card.current .ae-fc-card-title { color: var(--gold2); opacity: .95; }
-.ae-fc-card.current .ae-fc-card-img   { filter: brightness(.8) saturate(1); }
-.ae-fc-card.current::before            { background: var(--gold); box-shadow: 0 0 6px rgba(201,156,90,.25); }
+.ae-fc-card.current .ae-fc-card-title { color: var(--gold2); opacity: .92; }
+.ae-fc-card.current .ae-fc-card-img   { filter: brightness(.75) saturate(1); }
+.ae-fc-card.current::before            { background: var(--gold); }
 
 .ae-fc-card.locked {
   border-color: rgba(184,176,198,.03);
-  background: rgba(14,12,24,.45);
-  opacity: .20;
+  background: rgba(14,12,24,.40);
+  opacity: .18;
 }
-.ae-fc-card.locked .ae-fc-card-img { filter: brightness(.15) saturate(0) blur(1px); }
+.ae-fc-card.locked .ae-fc-card-img { filter: brightness(.12) saturate(0); }
 
 /* ── connector ── */
-.ae-fc-vline {
-  width: 2px; height: 24px; flex-shrink: 0; align-self: center;
+.ae-fc-vl {
+  width: 2px; height: 14px; flex-shrink: 0; align-self: center;
   background: rgba(201,156,90,.10);
 }
-.ae-fc-vline.visited { background: rgba(201,156,90,.30); }
-.ae-fc-vline.locked  { background: repeating-linear-gradient(to bottom, rgba(184,176,198,.05) 0px, rgba(184,176,198,.05) 3px, transparent 3px, transparent 6px); }
+.ae-fc-vl.v { background: rgba(201,156,90,.28); }
+.ae-fc-vl.l { background: repeating-linear-gradient(to bottom, rgba(184,176,198,.04) 0px, rgba(184,176,198,.04) 3px, transparent 3px, transparent 6px); }
 
-/* ── branch ── */
-.ae-fc-branch { display: inline-flex; flex-direction: column; align-items: center; }
-.ae-fc-branch-row {
-  display: inline-flex; align-items: flex-start;
-  gap: 8px;
+/* ── columns container (the 3 main branches) ── */
+.ae-fc-cols {
+  display: flex; align-items: flex-start;
+  gap: 10px; margin-top: 0;
 }
-.ae-fc-branch-arm {
+.ae-fc-col {
   display: flex; flex-direction: column; align-items: center;
+  gap: 0; width: 200px; flex-shrink: 0;
 }
-.ae-fc-blabel {
+.ae-fc-col-label {
+  font: 700 8px/1 'IBM Plex Mono';
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--gold); opacity: .35;
+  margin-bottom: 6px;
+  padding: 3px 10px;
+  border: 1px solid rgba(201,156,90,.10);
+  border-radius: 3px; background: rgba(201,156,90,.03);
+}
+
+/* ── dice fork (compact ✓/✗ within a column) ── */
+.ae-fc-fork {
+  display: flex; gap: 6px; align-items: flex-start;
+  margin: 0;
+}
+.ae-fc-fork-arm {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 0; width: 97px;
+}
+.ae-fc-fork-arm .ae-fc-card { width: 97px; }
+.ae-fc-fork-arm .ae-fc-card-img { height: 32px; }
+.ae-fc-fork-arm .ae-fc-card-title { font-size: 8px; }
+.ae-fc-fork-arm .ae-fc-card-type { font-size: 5px; }
+.ae-fc-fork-label {
   font: 500 7px/1 'IBM Plex Mono';
   letter-spacing: .10em; text-transform: uppercase;
-  color: var(--muted); opacity: .20; margin: 2px 0 2px;
+  color: var(--muted); opacity: .20;
+  margin: 1px 0 2px;
 }
-.ae-fc-blabel.visited { opacity: .45; color: var(--gold); }
+.ae-fc-fork-label.v { opacity: .40; color: var(--gold); }
 
 /* ── scrollbar ── */
-.ae-fc::-webkit-scrollbar { width: 3px; height: 3px; }
+.ae-fc::-webkit-scrollbar { width: 3px; }
 .ae-fc::-webkit-scrollbar-track { background: transparent; }
 .ae-fc::-webkit-scrollbar-thumb { background: rgba(201,156,90,.12); border-radius: 2px; }
 
@@ -2971,138 +2986,87 @@ function renderCollectionFull() {
 /* ══════════════════════════════════════
    FLOWCHART MAP
 ══════════════════════════════════════ */
-const flowchart = [
-  // ── LINEAR INTRO ──
-  { id:'cicero-monologue', label:'Cicero', type:'narrator', tip:'Opening monologue — loops, choice, waking up', img:'ae-null-meridian.png' },
-  { id:'waking-up', label:'Waking', type:'narrator', tip:'The mist rises from the obsidian landscape', img:'ae-null-meridian.png' },
-  { id:'stand-up', label:'Stand Up', type:'narrator', tip:'You stand. The crossroads reveals itself.', img:'ae-standup-crossroads.png' },
-  // ── HUB ──
-  { id:'crossroads-choice', label:'Crossroads', type:'choice', tip:'Three paths diverge at the fountain', img:'ae-standup-crossroads.png',
-    branches: [
-      // ── SCOUT BRANCH ──
-      { label:'Scout', nodes:[
-        { id:'look-around', label:'Survey', type:'choice', tip:'The obelisk dominates — climb it or find another way up', img:'ae-obelisk-fountain.png',
-          branches:[
-            // Obelisk climb path
-            { label:'Obelisk', nodes:[
-              { id:'climb-obelisk', label:'Climb', type:'dice', tip:'Athletics DC 10 — scale the obelisk', img:'ae-obelisk-fountain.png',
-                branches:[
-                  { label:'\u2713', nodes:[
-                    { id:'climb-success', label:'The View', type:'collect', tip:'The infinite obsidian plane revealed', img:'ae-crossroads-wide.png' }
-                  ]},
-                  { label:'\u2717', nodes:[
-                    { id:'climb-fail-1', label:'Fall #1', type:'fail', tip:'You fall into the fountain',
-                      branches:[
-                        { label:'Retry', nodes:[
-                          { id:'climb-attempt-2', label:'DC 15', type:'dice', tip:'Athletics DC 15 — the stone is slicker now',
-                            branches:[
-                              { label:'\u2713', nodes:[
-                                { id:'climb-success-2', refId:'climb-success', label:'The View', type:'collect', tip:'The infinite plane revealed' }
-                              ]},
-                              { label:'\u2717', nodes:[
-                                { id:'climb-fail-2', label:'Fall #2', type:'fail', tip:'Your arms are dead weight',
-                                  branches:[
-                                    { label:'Last try', nodes:[
-                                      { id:'climb-attempt-3', label:'DC 20', type:'dice', tip:'Athletics DC 20 — not skill, something else',
-                                        branches:[
-                                          { label:'\u2713', nodes:[
-                                            { id:'climb-success-3', refId:'climb-success', label:'The View', type:'collect', tip:'Against all odds' }
-                                          ]},
-                                          { label:'\u2717', nodes:[
-                                            { id:'climb-failed', label:'Defeat', type:'fail', tip:'Three chances. Three failures. The obelisk wins.' }
-                                          ]}
-                                        ]
-                                      }
-                                    ]},
-                                    { label:'Give up', nodes:[
-                                      { id:'climb-quit-2', refId:'crossroads-choice', label:'Return', type:'narrator', tip:'Twice is enough' }
-                                    ]}
-                                  ]
-                                }
-                              ]}
-                            ]
-                          }
-                        ]},
-                        { label:'Quit', nodes:[
-                          { id:'climb-quit-1', refId:'crossroads-choice', label:'Return', type:'narrator', tip:'You\'re soaked and no closer' }
-                        ]}
-                      ]
-                    }
-                  ]}
-                ]
-              }
-            ]},
-            // Tree path
-            { label:'Tree', nodes:[
-              { id:'find-ridge', label:'Find Tree', type:'narrator', tip:'A dark tree growing from a crack in obsidian', img:'ae-crossroads-wide.png' },
-              { id:'tree-climb', label:'Jump', type:'dice', tip:'Athletics DC 15 — grab the branch',
-                branches:[
-                  { label:'Holds', nodes:[
-                    { id:'tree-success', label:'Glimpse', type:'collect', tip:'A partial view through the fog' }
-                  ]},
-                  { label:'Snaps', nodes:[
-                    { id:'tree-failed', label:'Closed', type:'fail', tip:'The tree is done with you' }
-                  ]}
-                ]
-              }
-            ]},
-            // Walk path (fallback)
-            { label:'Walk', nodes:[
-              { id:'wander-explore', label:'Walk', type:'narrator', tip:'Just walk until you understand — it\'s all the same' }
-            ]}
-          ]
-        }
-      ]},
-      // ── CICERO BRANCH ──
-      { label:'Cicero', nodes:[
-        { id:'talk-cicero', label:'Approach', type:'narrator', tip:'The old man with the obsidian quill', img:'ae-cicero-close.png' },
-        { id:'cicero-call-1', label:'Call Out', type:'narrator', tip:'He stirs — barely' },
-        { id:'cicero-call-2', label:'Louder', type:'narrator', tip:'He is simply unreachable' },
-        { id:'cicero-listen', label:'Listen', type:'narrator', tip:'You stop trying. You wait.' },
-        { id:'cicero-mumble', label:'Promise', type:'narrator', tip:'"A promise is a promise. They cannot lie..."' },
-        { id:'cicero-leave', label:'Leave', type:'narrator', tip:'He\'ll be here when you return' }
-      ]},
-      // ── FOUNTAIN BRANCH ──
-      { label:'Fountain', nodes:[
-        { id:'examine-fountain', label:'Examine', type:'narrator', tip:'Crystal-clear water in an obsidian basin', img:'ae-fountain-close.png' },
-        { id:'fountain-close', label:'Coins', type:'narrator', tip:'Wishes thrown where no one listens' },
-        { id:'roads-signs', label:'Signs', type:'narrator', tip:'Signposts to a dead world' },
-        { id:'fountain-desk', label:'Desk', type:'narrator', tip:'Two scrolls pinned beneath stone' },
-        { id:'scroll-check-1', label:'Scroll #1', type:'dice', tip:'Delicacy DC 10 — unroll the first scroll',
-          branches:[
-            { label:'Survives', nodes:[
-              { id:'scroll-safe-1', label:'Scroll #2', type:'dice', tip:'Delicacy DC 10 — the second is worse',
-                branches:[
-                  { label:'\u2713', nodes:[
-                    { id:'scroll-revelation', label:'Letter', type:'collect', tip:'The Unsent Letter — weapons orders, a father\'s warning' }
-                  ]},
-                  { label:'\u2717', nodes:[
-                    { id:'scroll-rev-partial', refId:'scroll-revelation', label:'Letter', type:'collect', tip:'First scroll enough to read — the letter survives' }
-                  ]}
-                ]
-              }
-            ]},
-            { label:'Crumbles', nodes:[
-              { id:'scroll-lost-1', label:'Lost #1', type:'fail', tip:'The first scroll sighs apart to dust' },
-              { id:'scroll-lost-check', refId:'scroll-check-1', label:'Scroll #2', type:'dice', tip:'Delicacy DC 10 — last chance',
-                branches:[
-                  { label:'\u2713', nodes:[
-                    { id:'scroll-rev-2', refId:'scroll-revelation', label:'Letter', type:'collect', tip:'The surviving scroll yields its secrets' }
-                  ]},
-                  { label:'\u2717', nodes:[
-                    { id:'scrolls-dust', label:'All Lost', type:'fail', tip:'Both scrolls crumble. Some things are not meant to be found.' }
-                  ]}
-                ]
-              }
-            ]}
-          ]
-        }
-      ]}
-    ]
-  }
+/* ── flowchart data: flat column structure ── */
+const fcIntro = [
+  { id:'cicero-monologue', label:'Cicero', type:'narrator', img:'ae-null-meridian.png' },
+  { id:'waking-up', label:'Waking', type:'narrator', img:'ae-null-meridian.png' },
+  { id:'stand-up', label:'Stand Up', type:'narrator', img:'ae-standup-crossroads.png' },
+  { id:'crossroads-choice', label:'Crossroads', type:'choice', img:'ae-standup-crossroads.png' },
 ];
 
-// type labels
+const fcColumns = [
+  { label:'Scout', nodes:[
+    { id:'look-around', label:'Survey', type:'choice', img:'ae-obelisk-fountain.png' },
+    { id:'climb-obelisk', label:'Climb Obelisk', type:'dice', img:'ae-obelisk-fountain.png',
+      fork:[
+        { label:'\u2713', nodes:[
+          { id:'climb-success', label:'The View', type:'collect', img:'ae-crossroads-wide.png' },
+        ]},
+        { label:'\u2717', nodes:[
+          { id:'climb-fail-1', label:'Fall #1', type:'fail' },
+          { id:'climb-attempt-2', label:'Retry DC15', type:'dice',
+            fork:[
+              { label:'\u2713', nodes:[{ id:'climb-success-2', refId:'climb-success', label:'The View', type:'collect' }]},
+              { label:'\u2717', nodes:[
+                { id:'climb-fail-2', label:'Fall #2', type:'fail' },
+                { id:'climb-attempt-3', label:'Last DC20', type:'dice',
+                  fork:[
+                    { label:'\u2713', nodes:[{ id:'climb-success-3', refId:'climb-success', label:'The View', type:'collect' }]},
+                    { label:'\u2717', nodes:[{ id:'climb-failed', label:'Defeat', type:'fail' }]}
+                  ]
+                },
+              ]}
+            ]
+          },
+        ]}
+      ]
+    },
+    { id:'find-ridge', label:'Find Tree', type:'narrator', img:'ae-crossroads-wide.png' },
+    { id:'tree-climb', label:'Jump', type:'dice',
+      fork:[
+        { label:'Holds', nodes:[{ id:'tree-success', label:'Glimpse', type:'collect' }]},
+        { label:'Snaps', nodes:[{ id:'tree-failed', label:'Closed', type:'fail' }]}
+      ]
+    },
+    { id:'wander-explore', label:'Walk', type:'narrator' },
+  ]},
+  { label:'Cicero', nodes:[
+    { id:'talk-cicero', label:'Approach', type:'narrator', img:'ae-cicero-close.png' },
+    { id:'cicero-call-1', label:'Call Out', type:'narrator' },
+    { id:'cicero-call-2', label:'Louder', type:'narrator' },
+    { id:'cicero-listen', label:'Listen', type:'narrator' },
+    { id:'cicero-mumble', label:'Promise', type:'narrator' },
+    { id:'cicero-leave', label:'Leave', type:'narrator' },
+  ]},
+  { label:'Fountain', nodes:[
+    { id:'examine-fountain', label:'Examine', type:'narrator', img:'ae-fountain-close.png' },
+    { id:'fountain-close', label:'Coins', type:'narrator' },
+    { id:'roads-signs', label:'Signs', type:'narrator' },
+    { id:'fountain-desk', label:'Desk', type:'narrator' },
+    { id:'scroll-check-1', label:'Scroll #1', type:'dice',
+      fork:[
+        { label:'Safe', nodes:[
+          { id:'scroll-safe-1', label:'Scroll #2', type:'dice',
+            fork:[
+              { label:'\u2713', nodes:[{ id:'scroll-revelation', label:'Letter', type:'collect' }]},
+              { label:'\u2717', nodes:[{ id:'scroll-rev-partial', refId:'scroll-revelation', label:'Letter', type:'collect' }]}
+            ]
+          }
+        ]},
+        { label:'Lost', nodes:[
+          { id:'scroll-lost-1', label:'Lost #1', type:'fail' },
+          { id:'scroll-lost-check', refId:'scroll-check-1', label:'Last Chance', type:'dice',
+            fork:[
+              { label:'\u2713', nodes:[{ id:'scroll-rev-2', refId:'scroll-revelation', label:'Letter', type:'collect' }]},
+              { label:'\u2717', nodes:[{ id:'scrolls-dust', label:'All Lost', type:'fail' }]}
+            ]
+          }
+        ]}
+      ]
+    },
+  ]},
+];
+
 const fcTypeLabels = {
   narrator:'narrative', choice:'choice', dice:'dice check', collect:'collection', fail:'outcome'
 };
@@ -3110,105 +3074,108 @@ const fcTypeLabels = {
 function renderFlowchart() {
   const scroll = document.getElementById('fc-scroll');
   scroll.innerHTML = '';
-  renderFcNodes(flowchart, scroll, false);
+
+  // intro (centered column)
+  const intro = document.createElement('div');
+  intro.className = 'ae-fc-intro';
+  fcIntro.forEach((n, i) => {
+    if (i > 0) intro.appendChild(mkVl(n.id));
+    intro.appendChild(mkCard(n));
+  });
+  scroll.appendChild(intro);
+
+  // connector to columns
+  scroll.appendChild(mkVl(null, true));
+
+  // 3 columns side by side
+  const cols = document.createElement('div');
+  cols.className = 'ae-fc-cols';
+
+  fcColumns.forEach(col => {
+    const colEl = document.createElement('div');
+    colEl.className = 'ae-fc-col';
+
+    const lbl = document.createElement('div');
+    lbl.className = 'ae-fc-col-label';
+    lbl.textContent = col.label;
+    colEl.appendChild(lbl);
+
+    col.nodes.forEach((n, i) => {
+      if (i > 0) colEl.appendChild(mkVl(n.id));
+      colEl.appendChild(mkCard(n));
+      // inline fork (dice outcomes)
+      if (n.fork) {
+        colEl.appendChild(mkVl(null, isAnyForkVis(n.fork)));
+        colEl.appendChild(mkFork(n.fork));
+      }
+    });
+    cols.appendChild(colEl);
+  });
+
+  scroll.appendChild(cols);
 }
 
-function renderFcNodes(nodes, container, isBranch) {
-  nodes.forEach((node, i) => {
-    // vertical connector line
-    if (i > 0 || isBranch) {
-      const vl = document.createElement('div');
-      vl.className = 'ae-fc-vline' + (isNodeVisited(node.id) ? ' visited' : (isNodeLocked(node) ? ' locked' : ''));
-      container.appendChild(vl);
-    }
+function mkCard(n) {
+  const vis = isNodeVisited(n.refId || n.id);
+  const cur = isNodeCurrent(n.refId || n.id);
+  const locked = !vis && !cur;
+  const card = document.createElement('div');
+  card.className = 'ae-fc-card type-' + (n.type||'narrator')
+    + (cur ? ' current' : vis ? ' visited' : '')
+    + (locked ? ' locked' : '');
+  if (n.img) {
+    const img = document.createElement('img');
+    img.className = 'ae-fc-card-img'; img.src = n.img;
+    img.alt = n.label; img.loading = 'lazy';
+    card.appendChild(img);
+  }
+  const body = document.createElement('div');
+  body.className = 'ae-fc-card-body';
+  const t = document.createElement('div');
+  t.className = 'ae-fc-card-type';
+  t.textContent = fcTypeLabels[n.type] || n.type || 'narrative';
+  body.appendChild(t);
+  const title = document.createElement('div');
+  title.className = 'ae-fc-card-title';
+  title.textContent = n.label;
+  body.appendChild(title);
+  card.appendChild(body);
+  return card;
+}
 
-    // card
-    const card = document.createElement('div');
-    const nodeType = node.type || 'narrator';
-    const vis = isNodeVisited(node.refId || node.id);
-    const cur = isNodeCurrent(node.refId || node.id);
-    const locked = !vis && !cur;
-    card.className = 'ae-fc-card type-' + nodeType
-      + (cur ? ' current' : (vis ? ' visited' : ''))
-      + (locked ? ' locked' : '');
+function mkVl(id, forceVis) {
+  const vl = document.createElement('div');
+  vl.className = 'ae-fc-vl' + (forceVis || (id && isNodeVisited(id)) ? ' v' : ' l');
+  return vl;
+}
 
-    // image (if available)
-    if (node.img) {
-      const img = document.createElement('img');
-      img.className = 'ae-fc-card-img';
-      img.src = node.img;
-      img.alt = node.label;
-      img.loading = 'lazy';
-      card.appendChild(img);
-    }
-
-    // body
-    const body = document.createElement('div');
-    body.className = 'ae-fc-card-body';
-
-    const type = document.createElement('div');
-    type.className = 'ae-fc-card-type';
-    type.textContent = fcTypeLabels[nodeType] || nodeType;
-    body.appendChild(type);
-
-    const title = document.createElement('div');
-    title.className = 'ae-fc-card-title';
-    title.textContent = node.label;
-    body.appendChild(title);
-
-    if (node.tip) {
-      const tip = document.createElement('div');
-      tip.className = 'ae-fc-card-tip';
-      tip.textContent = node.tip;
-      body.appendChild(tip);
-    }
-
-    card.appendChild(body);
-    container.appendChild(card);
-
-    // branches
-    if (node.branches && node.branches.length) {
-      const vl2 = document.createElement('div');
-      vl2.className = 'ae-fc-vline' + (isAnyBranchVisited(node.branches) ? ' visited' : ' locked');
-      container.appendChild(vl2);
-
-      const branchWrap = document.createElement('div');
-      branchWrap.className = 'ae-fc-branch';
-
-      const branchRow = document.createElement('div');
-      branchRow.className = 'ae-fc-branch-row';
-
-      node.branches.forEach((branch) => {
-        const arm = document.createElement('div');
-        arm.className = 'ae-fc-branch-arm';
-
-        const branchVis = branch.nodes.some(n => isNodeVisited(n.refId || n.id));
-
-        // branch label
-        const bLabel = document.createElement('div');
-        bLabel.className = 'ae-fc-blabel' + (branchVis ? ' visited' : '');
-        bLabel.textContent = branch.label;
-        arm.appendChild(bLabel);
-
-        // vertical connector
-        const hl = document.createElement('div');
-        hl.className = 'ae-fc-vline' + (branchVis ? ' visited' : ' locked');
-        hl.style.height = '20px';
-        arm.appendChild(hl);
-
-        // nodes going down
-        const armCol = document.createElement('div');
-        armCol.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:0';
-        renderFcNodes(branch.nodes, armCol, true);
-        arm.appendChild(armCol);
-
-        branchRow.appendChild(arm);
-      });
-
-      branchWrap.appendChild(branchRow);
-      container.appendChild(branchWrap);
-    }
+function mkFork(arms) {
+  const wrap = document.createElement('div');
+  wrap.className = 'ae-fc-fork';
+  arms.forEach(arm => {
+    const armEl = document.createElement('div');
+    armEl.className = 'ae-fc-fork-arm';
+    const vis = arm.nodes.some(n => isNodeVisited(n.refId || n.id));
+    const lbl = document.createElement('div');
+    lbl.className = 'ae-fc-fork-label' + (vis ? ' v' : '');
+    lbl.textContent = arm.label;
+    armEl.appendChild(lbl);
+    armEl.appendChild(mkVl(null, vis));
+    arm.nodes.forEach((n, i) => {
+      if (i > 0) armEl.appendChild(mkVl(n.id));
+      armEl.appendChild(mkCard(n));
+      if (n.fork) {
+        armEl.appendChild(mkVl(null, isAnyForkVis(n.fork)));
+        armEl.appendChild(mkFork(n.fork));
+      }
+    });
+    wrap.appendChild(armEl);
   });
+  return wrap;
+}
+
+function isAnyForkVis(arms) {
+  return arms.some(a => a.nodes.some(n => isNodeVisited(n.refId || n.id)));
 }
 
 // all frame IDs that have written content
