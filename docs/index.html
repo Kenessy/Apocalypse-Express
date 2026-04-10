@@ -40,6 +40,117 @@ html, body {
 }
 
 /* ══════════════════════════════════════
+   TAB BAR  ·  32px fixed, below topbar
+══════════════════════════════════════ */
+.ae-tab-bar {
+  position: fixed; top: 44px; left: 0; right: 0; z-index: 99;
+  height: 32px;
+  background: rgba(5,4,10,.94);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(201,156,90,.07);
+  display: flex; align-items: stretch;
+  padding: 0 14px; gap: 2px;
+}
+.ae-tab {
+  background: none; border: none; cursor: pointer;
+  padding: 0 16px; position: relative;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--muted); opacity: .30;
+  transition: opacity .25s, color .25s;
+  display: flex; align-items: center; gap: 7px;
+}
+.ae-tab:hover { opacity: .55; }
+.ae-tab.active { opacity: .80; color: var(--gold); }
+.ae-tab.active::after {
+  content: ''; position: absolute; bottom: 0; left: 10px; right: 10px;
+  height: 1px; background: var(--gold); opacity: .55;
+}
+.ae-tab-icon { font-size: 10px; opacity: .65; }
+.ae-tab-badge {
+  font-size: 7px; min-width: 13px; height: 13px;
+  background: rgba(255,123,92,.15); border: 1px solid rgba(255,123,92,.25);
+  color: var(--ember); border-radius: 99px;
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 0 3px; font-family: 'IBM Plex Mono', monospace;
+  letter-spacing: 0; opacity: 0; transition: opacity .4s;
+}
+.ae-tab-badge.has { opacity: 1; }
+
+/* ══ MAIN PANELS (tab content) ══ */
+.ae-panel {
+  position: fixed;
+  top: 76px; left: 0; right: 0; bottom: 0;
+  display: none;
+  z-index: 50;
+}
+.ae-panel.active { display: flex; }
+
+/* ══ COLLECTIONS FULL PANEL ══ */
+.ae-coll-full {
+  flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
+  background: rgba(14,12,24,.95);
+  padding: 32px 40px;
+  display: flex; flex-direction: column; align-items: center;
+}
+.ae-coll-full-header {
+  width: 100%; max-width: 720px; margin-bottom: 28px;
+}
+.ae-coll-full-title {
+  font: 700 20px/1 'Cinzel', serif;
+  color: var(--gold2); letter-spacing: .06em; opacity: .80;
+}
+.ae-coll-full-sub {
+  font: 400 var(--fs-caption)/1 'IBM Plex Mono';
+  letter-spacing: .16em; text-transform: uppercase;
+  color: var(--muted); opacity: .30; margin-top: 8px;
+}
+.ae-coll-full-grid {
+  width: 100%; max-width: 720px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+}
+@media (max-width: 640px) { .ae-coll-full-grid { grid-template-columns: 1fr; } }
+.ae-coll-full-grid .ae-coll-card { margin: 0; }
+
+/* ══ CARGO FULL PANEL ══ */
+.ae-cargo-full {
+  flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
+  background: rgba(14,12,24,.95);
+  padding: 32px 40px;
+  display: flex; flex-direction: column; align-items: center;
+}
+.ae-cargo-slots {
+  width: 100%; max-width: 480px;
+  display: grid; grid-template-columns: repeat(4,1fr); gap: 10px;
+  margin-top: 20px;
+}
+.ae-cargo-slot {
+  aspect-ratio: 1;
+  background: rgba(184,176,198,.02);
+  border: 1px solid rgba(184,176,198,.08);
+  border-radius: 6px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 5px;
+  font-size: 22px; opacity: .14; color: var(--muted);
+  transition: opacity .3s, border-color .3s;
+}
+
+/* ══ MAP FULL PANEL ══ */
+.ae-map-full {
+  flex: 1;
+  background: rgba(14,12,24,.95);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 14px;
+}
+.ae-map-icon { font-size: 36px; opacity: .08; color: var(--muted); }
+.ae-map-label {
+  font: 400 var(--fs-caption)/1 'IBM Plex Mono';
+  letter-spacing: .18em; text-transform: uppercase;
+  color: var(--muted); opacity: .18;
+}
+
+/* ══════════════════════════════════════
    TOP BAR  ·  44px fixed
 ══════════════════════════════════════ */
 .topbar {
@@ -207,9 +318,9 @@ html, body {
 ══════════════════════════════════════ */
 .ae-layout {
   position: fixed;
-  top: 44px; left: 0; right: 0; bottom: 0;
+  top: 76px; left: 0; right: 0; bottom: 0;
   display: flex; flex-direction: row;
-  z-index: 50;
+  z-index: 48;
 }
 .ae-col {
   display: flex; flex-direction: column;
@@ -1405,8 +1516,59 @@ html, body {
   </div>
 </div>
 
-<!-- ══ LAYOUT ══ -->
-<div class="ae-layout">
+<!-- ══ TAB BAR ══ -->
+<div class="ae-tab-bar" id="tab-bar">
+  <button class="ae-tab active" data-tab="story">
+    <span class="ae-tab-icon">&#x25b6;</span> Story
+  </button>
+  <button class="ae-tab" data-tab="collections">
+    <span class="ae-tab-icon">&#x2727;</span> Collections
+    <span class="ae-tab-badge" id="tab-coll-badge">0</span>
+  </button>
+  <button class="ae-tab" data-tab="cargo">
+    <span class="ae-tab-icon">&#x2b21;</span> Cargo
+  </button>
+  <button class="ae-tab" data-tab="map">
+    <span class="ae-tab-icon">&#x25c9;</span> Map
+  </button>
+</div>
+
+<!-- ══ COLLECTIONS PANEL ══ -->
+<div class="ae-panel" id="panel-collections" data-panel="collections">
+  <div class="ae-coll-full" id="coll-full-body"></div>
+</div>
+
+<!-- ══ CARGO PANEL ══ -->
+<div class="ae-panel" id="panel-cargo" data-panel="cargo">
+  <div class="ae-cargo-full">
+    <div class="ae-coll-full-header">
+      <div class="ae-coll-full-title">Cargo Pockets</div>
+      <div class="ae-coll-full-sub">0 / 8 slots &mdash; Board the Train to unlock</div>
+    </div>
+    <div class="ae-cargo-slots">
+      <div class="ae-cargo-slot">&#x25a1;</div>
+      <div class="ae-cargo-slot">&#x25a1;</div>
+      <div class="ae-cargo-slot">&#x25a1;</div>
+      <div class="ae-cargo-slot">&#x25a1;</div>
+      <div class="ae-cargo-slot">&#x25a1;</div>
+      <div class="ae-cargo-slot">&#x25a1;</div>
+      <div class="ae-cargo-slot">&#x25a1;</div>
+      <div class="ae-cargo-slot">&#x25a1;</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MAP PANEL ══ -->
+<div class="ae-panel" id="panel-map" data-panel="map">
+  <div class="ae-map-full">
+    <div class="ae-map-icon">&#x25c9;</div>
+    <div class="ae-map-label">Map unavailable</div>
+    <div class="ae-map-label" style="opacity:.10;margin-top:2px">Board the train to unlock navigation</div>
+  </div>
+</div>
+
+<!-- ══ LAYOUT (story panel) ══ -->
+<div class="ae-layout" id="panel-story" data-panel="story">
 
   <!-- bal: kép 2:3, tölti a teljes magasságot -->
   <div class="ae-col ae-col-img">
@@ -2603,8 +2765,81 @@ function initChoiceEvents() {
   });
 }
 
+/* ══════════════════════════════════════
+   TAB NAVIGATION
+══════════════════════════════════════ */
+let activeTab = 'story';
+
+document.getElementById('tab-bar').addEventListener('click', function(e) {
+  const btn = e.target.closest('.ae-tab');
+  if (!btn) return;
+  const tab = btn.dataset.tab;
+  if (tab === activeTab) return;
+  switchTab(tab);
+});
+
+function switchTab(tab) {
+  activeTab = tab;
+  // tab buttons
+  document.querySelectorAll('.ae-tab').forEach(b => {
+    b.classList.toggle('active', b.dataset.tab === tab);
+  });
+  // panels
+  document.querySelectorAll('.ae-panel').forEach(p => {
+    p.classList.toggle('active', p.dataset.panel === tab);
+  });
+  // story layout (ae-layout) is special — show/hide via display
+  const storyLayout = document.getElementById('panel-story');
+  storyLayout.style.display = (tab === 'story') ? 'flex' : 'none';
+  // render tab content
+  if (tab === 'collections') renderCollectionFull();
+}
+
+function renderCollectionFull() {
+  const body = document.getElementById('coll-full-body');
+  const unlocked = collection.filter(c => c.unlocked).length;
+  const total = collection.length;
+  let html = '<div class="ae-coll-full-header">'
+    + '<div class="ae-coll-full-title">Collections</div>'
+    + '<div class="ae-coll-full-sub">' + unlocked + ' / ' + total + ' discovered</div>'
+    + '</div><div class="ae-coll-full-grid">';
+  collection.forEach(c => {
+    const overlayText = c.unlocked ? c.lore : c.hint;
+    html += `<div class="ae-coll-card${c.unlocked ? '' : ' locked'}">
+      <div class="ae-coll-card-img-wrap">
+        <img class="ae-coll-card-img" src="${c.img}" alt="${c.title}">
+        <div class="ae-coll-card-img-overlay">
+          <span class="ae-coll-card-img-overlay-text">${overlayText}</span>
+        </div>
+      </div>
+      <div class="ae-coll-card-body">
+        <div class="ae-coll-card-title">${c.unlocked ? c.title : '???'}</div>
+        <div class="ae-coll-card-desc">${c.desc}</div>
+        <div class="ae-coll-card-hint">${c.unlocked ? '✓ Discovered' : c.hint}</div>
+      </div>
+    </div>`;
+  });
+  html += '</div>';
+  body.innerHTML = html;
+}
+
+function updateTabBadge() {
+  const unlocked = collection.filter(c => c.unlocked).length;
+  const badge = document.getElementById('tab-coll-badge');
+  badge.textContent = unlocked;
+  badge.classList.toggle('has', unlocked > 0);
+}
+
+// patch unlockCollection to update tab badge
+const _origUnlockCollection = unlockCollection;
+unlockCollection = function(id) {
+  _origUnlockCollection(id);
+  updateTabBadge();
+};
+
 // init first frame
 renderCollection();
+updateTabBadge();
 renderFrame(0);
 </script>
 </body>
