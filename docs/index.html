@@ -156,134 +156,183 @@ html, body {
   transition: opacity .3s, border-color .3s;
 }
 
-/* ══ FLOWCHART MAP — column-based ══ */
+/* ══ FLOWCHART MAP — full-screen slides ══ */
 .ae-fc {
   flex: 1; overflow-y: auto; overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   background: rgba(8,6,16,.98);
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
 }
-.ae-fc-scroll {
-  display: flex; flex-direction: column; align-items: center;
-  padding: 24px 16px 80px; gap: 0;
+
+/* ── slide (each = full viewport height) ── */
+.ae-fc-slide {
+  min-height: 100%;
+  scroll-snap-align: start;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 24px 20px;
+  position: relative;
 }
-.ae-fc-chapter {
-  font: 700 11px/1 'Cinzel', serif;
-  letter-spacing: .08em; color: var(--gold); opacity: .25;
+/* slide connector arrow at bottom */
+.ae-fc-slide::after {
+  content: '\25BE';
+  position: absolute; bottom: 12px; left: 50%;
+  transform: translateX(-50%);
+  font-size: 14px; color: var(--gold); opacity: .15;
+  animation: ae-fc-arrow 2s ease-in-out infinite;
+}
+.ae-fc-slide:last-child::after { display: none; }
+@keyframes ae-fc-arrow {
+  0%,100% { opacity: .10; transform: translateX(-50%) translateY(0); }
+  50%     { opacity: .25; transform: translateX(-50%) translateY(4px); }
+}
+/* slide label (top) */
+.ae-fc-slide-label {
+  font: 700 9px/1 'IBM Plex Mono';
+  letter-spacing: .18em; text-transform: uppercase;
+  color: var(--gold); opacity: .22;
   margin-bottom: 16px;
 }
 
-/* ── intro (linear, centered) ── */
-.ae-fc-intro {
-  display: flex; flex-direction: column; align-items: center; gap: 0;
+/* ── single card slide (big image) ── */
+.ae-fc-card-full {
+  width: 340px; max-width: 90vw;
+  border: 1px solid rgba(184,176,198,.06);
+  border-radius: 6px; overflow: hidden;
+  background: rgba(14,12,24,.80);
+  position: relative;
 }
+.ae-fc-card-full-img {
+  width: 100%; aspect-ratio: 16/9;
+  object-fit: cover; display: block;
+  filter: brightness(.45) saturate(.7);
+}
+.ae-fc-card-full-body { padding: 12px 16px 14px; }
+.ae-fc-card-full-type {
+  font: 500 7px/1 'IBM Plex Mono';
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--muted); opacity: .28; margin-bottom: 4px;
+}
+.ae-fc-card-full-title {
+  font: 700 16px/1.2 'Cinzel', serif;
+  letter-spacing: .04em; color: var(--muted); opacity: .45;
+}
+.ae-fc-card-full-tip {
+  font: 400 11px/1.5 'IBM Plex Mono';
+  color: var(--muted); opacity: .25; margin-top: 6px;
+}
+/* left accent */
+.ae-fc-card-full::before {
+  content: ''; position: absolute; top: 0; left: 0; bottom: 0;
+  width: 3px; background: rgba(184,176,198,.05);
+}
+/* states */
+.ae-fc-card-full.visited {
+  border-color: rgba(201,156,90,.18);
+  background: rgba(201,156,90,.02);
+}
+.ae-fc-card-full.visited .ae-fc-card-full-title { color: var(--gold2); opacity: .82; }
+.ae-fc-card-full.visited .ae-fc-card-full-type  { color: var(--gold); opacity: .42; }
+.ae-fc-card-full.visited .ae-fc-card-full-tip   { opacity: .40; }
+.ae-fc-card-full.visited .ae-fc-card-full-img   { filter: brightness(.6) saturate(.85); }
+.ae-fc-card-full.visited::before                 { background: rgba(201,156,90,.30); }
+.ae-fc-card-full.visited.type-choice::before     { background: rgba(163,139,207,.35); }
+.ae-fc-card-full.current {
+  border-color: var(--gold);
+  background: rgba(201,156,90,.05);
+  box-shadow: 0 0 20px rgba(201,156,90,.12);
+}
+.ae-fc-card-full.current .ae-fc-card-full-title  { color: var(--gold2); opacity: .95; }
+.ae-fc-card-full.current .ae-fc-card-full-img    { filter: brightness(.75) saturate(1); }
+.ae-fc-card-full.current::before                  { background: var(--gold); }
+.ae-fc-card-full.locked {
+  border-color: rgba(184,176,198,.03);
+  background: rgba(14,12,24,.40); opacity: .18;
+}
+.ae-fc-card-full.locked .ae-fc-card-full-img { filter: brightness(.12) saturate(0); }
 
-/* ── card ── */
+/* ── small card (for multi-card slides) ── */
 .ae-fc-card {
-  width: 200px; flex-shrink: 0;
+  width: 100%; flex-shrink: 0;
   border: 1px solid rgba(184,176,198,.06);
   border-radius: 5px; overflow: hidden;
   background: rgba(14,12,24,.80);
   position: relative;
-  transition: border-color .3s, box-shadow .3s;
 }
 .ae-fc-card-img {
-  width: 100%; height: 48px;
+  width: 100%; height: 44px;
   object-fit: cover; display: block;
   filter: brightness(.45) saturate(.7);
 }
-.ae-fc-card-body { padding: 6px 9px 7px; }
+.ae-fc-card-body { padding: 5px 8px 6px; }
 .ae-fc-card-type {
   font: 500 5.5px/1 'IBM Plex Mono';
   letter-spacing: .12em; text-transform: uppercase;
   color: var(--muted); opacity: .28; margin-bottom: 2px;
 }
 .ae-fc-card-title {
-  font: 700 9.5px/1.2 'Cinzel', serif;
+  font: 700 9px/1.2 'Cinzel', serif;
   letter-spacing: .02em; color: var(--muted); opacity: .45;
 }
-/* left accent */
 .ae-fc-card::before {
   content: ''; position: absolute; top: 0; left: 0; bottom: 0;
   width: 2px; background: rgba(184,176,198,.05);
 }
-
-/* states */
-.ae-fc-card.visited {
-  border-color: rgba(201,156,90,.15);
-  background: rgba(201,156,90,.02);
-}
+.ae-fc-card.visited { border-color: rgba(201,156,90,.15); background: rgba(201,156,90,.02); }
 .ae-fc-card.visited .ae-fc-card-title { color: var(--gold2); opacity: .75; }
 .ae-fc-card.visited .ae-fc-card-type  { color: var(--gold); opacity: .40; }
 .ae-fc-card.visited .ae-fc-card-img   { filter: brightness(.6) saturate(.8); }
 .ae-fc-card.visited::before            { background: rgba(201,156,90,.28); }
-.ae-fc-card.visited.type-choice::before  { background: rgba(163,139,207,.32); }
 .ae-fc-card.visited.type-dice::before    { background: rgba(255,200,40,.38); }
 .ae-fc-card.visited.type-collect::before { background: rgba(92,200,92,.32); }
 .ae-fc-card.visited.type-fail::before    { background: rgba(255,123,92,.32); }
-
-.ae-fc-card.current {
-  border-color: var(--gold);
-  background: rgba(201,156,90,.05);
-  box-shadow: 0 0 16px rgba(201,156,90,.12);
-}
+.ae-fc-card.current { border-color: var(--gold); background: rgba(201,156,90,.05); box-shadow: 0 0 14px rgba(201,156,90,.10); }
 .ae-fc-card.current .ae-fc-card-title { color: var(--gold2); opacity: .92; }
-.ae-fc-card.current .ae-fc-card-img   { filter: brightness(.75) saturate(1); }
-.ae-fc-card.current::before            { background: var(--gold); }
-
-.ae-fc-card.locked {
-  border-color: rgba(184,176,198,.03);
-  background: rgba(14,12,24,.40);
-  opacity: .18;
-}
+.ae-fc-card.current::before { background: var(--gold); }
+.ae-fc-card.locked { border-color: rgba(184,176,198,.03); background: rgba(14,12,24,.40); opacity: .18; }
 .ae-fc-card.locked .ae-fc-card-img { filter: brightness(.12) saturate(0); }
 
 /* ── connector ── */
 .ae-fc-vl {
-  width: 2px; height: 14px; flex-shrink: 0; align-self: center;
+  width: 2px; height: 12px; flex-shrink: 0; align-self: center;
   background: rgba(201,156,90,.10);
 }
 .ae-fc-vl.v { background: rgba(201,156,90,.28); }
 .ae-fc-vl.l { background: repeating-linear-gradient(to bottom, rgba(184,176,198,.04) 0px, rgba(184,176,198,.04) 3px, transparent 3px, transparent 6px); }
 
-/* ── columns container (the 3 main branches) ── */
+/* ── columns (branches side by side in a slide) ── */
 .ae-fc-cols {
   display: flex; align-items: flex-start;
-  gap: 10px; margin-top: 0;
+  gap: 12px; width: 100%; max-width: 680px;
 }
 .ae-fc-col {
-  display: flex; flex-direction: column; align-items: center;
-  gap: 0; width: 200px; flex-shrink: 0;
+  flex: 1; min-width: 0;
+  display: flex; flex-direction: column; align-items: center; gap: 0;
 }
 .ae-fc-col-label {
   font: 700 8px/1 'IBM Plex Mono';
   letter-spacing: .14em; text-transform: uppercase;
-  color: var(--gold); opacity: .35;
-  margin-bottom: 6px;
-  padding: 3px 10px;
+  color: var(--gold); opacity: .32;
+  margin-bottom: 6px; padding: 3px 10px;
   border: 1px solid rgba(201,156,90,.10);
   border-radius: 3px; background: rgba(201,156,90,.03);
 }
 
-/* ── dice fork (compact ✓/✗ within a column) ── */
+/* ── fork (dice ✓/✗) ── */
 .ae-fc-fork {
-  display: flex; gap: 6px; align-items: flex-start;
-  margin: 0;
+  display: flex; gap: 4px; align-items: flex-start; width: 100%;
 }
 .ae-fc-fork-arm {
-  display: flex; flex-direction: column; align-items: center;
-  gap: 0; width: 97px;
+  flex: 1; min-width: 0;
+  display: flex; flex-direction: column; align-items: center; gap: 0;
 }
-.ae-fc-fork-arm .ae-fc-card { width: 97px; }
-.ae-fc-fork-arm .ae-fc-card-img { height: 32px; }
-.ae-fc-fork-arm .ae-fc-card-title { font-size: 8px; }
-.ae-fc-fork-arm .ae-fc-card-type { font-size: 5px; }
 .ae-fc-fork-label {
   font: 500 7px/1 'IBM Plex Mono';
   letter-spacing: .10em; text-transform: uppercase;
-  color: var(--muted); opacity: .20;
-  margin: 1px 0 2px;
+  color: var(--muted); opacity: .18; margin: 1px 0 2px;
 }
-.ae-fc-fork-label.v { opacity: .40; color: var(--gold); }
+.ae-fc-fork-label.v { opacity: .38; color: var(--gold); }
 
 /* ── scrollbar ── */
 .ae-fc::-webkit-scrollbar { width: 3px; }
@@ -2988,10 +3037,10 @@ function renderCollectionFull() {
 ══════════════════════════════════════ */
 /* ── flowchart data: flat column structure ── */
 const fcIntro = [
-  { id:'cicero-monologue', label:'Cicero', type:'narrator', img:'ae-null-meridian.png' },
-  { id:'waking-up', label:'Waking', type:'narrator', img:'ae-null-meridian.png' },
-  { id:'stand-up', label:'Stand Up', type:'narrator', img:'ae-standup-crossroads.png' },
-  { id:'crossroads-choice', label:'Crossroads', type:'choice', img:'ae-standup-crossroads.png' },
+  { id:'cicero-monologue', label:'Cicero', type:'narrator', img:'ae-null-meridian.png', tip:'Opening monologue — loops, free will, the nature of choice' },
+  { id:'waking-up', label:'Waking', type:'narrator', img:'ae-null-meridian.png', tip:'The mist rises from the obsidian landscape' },
+  { id:'stand-up', label:'Stand Up', type:'narrator', img:'ae-standup-crossroads.png', tip:'You stand. The crossroads reveals itself.' },
+  { id:'crossroads-choice', label:'Crossroads', type:'choice', img:'ae-standup-crossroads.png', tip:'Three paths diverge at the fountain' },
 ];
 
 const fcColumns = [
@@ -3075,35 +3124,28 @@ function renderFlowchart() {
   const scroll = document.getElementById('fc-scroll');
   scroll.innerHTML = '';
 
-  // intro (centered column)
-  const intro = document.createElement('div');
-  intro.className = 'ae-fc-intro';
-  fcIntro.forEach((n, i) => {
-    if (i > 0) intro.appendChild(mkVl(n.id));
-    intro.appendChild(mkCard(n));
+  // each intro node = its own full-screen slide
+  fcIntro.forEach(n => {
+    const slide = mkSlide();
+    slide.appendChild(mkFullCard(n));
+    scroll.appendChild(slide);
   });
-  scroll.appendChild(intro);
 
-  // connector to columns
-  scroll.appendChild(mkVl(null, true));
-
-  // 3 columns side by side
+  // the 3 branches = one big slide with columns
+  const branchSlide = mkSlide('Branches');
   const cols = document.createElement('div');
   cols.className = 'ae-fc-cols';
 
   fcColumns.forEach(col => {
     const colEl = document.createElement('div');
     colEl.className = 'ae-fc-col';
-
     const lbl = document.createElement('div');
     lbl.className = 'ae-fc-col-label';
     lbl.textContent = col.label;
     colEl.appendChild(lbl);
-
     col.nodes.forEach((n, i) => {
       if (i > 0) colEl.appendChild(mkVl(n.id));
       colEl.appendChild(mkCard(n));
-      // inline fork (dice outcomes)
       if (n.fork) {
         colEl.appendChild(mkVl(null, isAnyForkVis(n.fork)));
         colEl.appendChild(mkFork(n.fork));
@@ -3112,7 +3154,54 @@ function renderFlowchart() {
     cols.appendChild(colEl);
   });
 
-  scroll.appendChild(cols);
+  branchSlide.appendChild(cols);
+  scroll.appendChild(branchSlide);
+}
+
+function mkSlide(label) {
+  const s = document.createElement('div');
+  s.className = 'ae-fc-slide';
+  if (label) {
+    const l = document.createElement('div');
+    l.className = 'ae-fc-slide-label';
+    l.textContent = label;
+    s.appendChild(l);
+  }
+  return s;
+}
+
+function mkFullCard(n) {
+  const vis = isNodeVisited(n.refId || n.id);
+  const cur = isNodeCurrent(n.refId || n.id);
+  const locked = !vis && !cur;
+  const card = document.createElement('div');
+  card.className = 'ae-fc-card-full type-' + (n.type||'narrator')
+    + (cur ? ' current' : vis ? ' visited' : '')
+    + (locked ? ' locked' : '');
+  if (n.img) {
+    const img = document.createElement('img');
+    img.className = 'ae-fc-card-full-img'; img.src = n.img;
+    img.alt = n.label; img.loading = 'lazy';
+    card.appendChild(img);
+  }
+  const body = document.createElement('div');
+  body.className = 'ae-fc-card-full-body';
+  const t = document.createElement('div');
+  t.className = 'ae-fc-card-full-type';
+  t.textContent = fcTypeLabels[n.type] || 'narrative';
+  body.appendChild(t);
+  const title = document.createElement('div');
+  title.className = 'ae-fc-card-full-title';
+  title.textContent = n.label;
+  body.appendChild(title);
+  if (n.tip) {
+    const tip = document.createElement('div');
+    tip.className = 'ae-fc-card-full-tip';
+    tip.textContent = n.tip;
+    body.appendChild(tip);
+  }
+  card.appendChild(body);
+  return card;
 }
 
 function mkCard(n) {
@@ -3133,7 +3222,7 @@ function mkCard(n) {
   body.className = 'ae-fc-card-body';
   const t = document.createElement('div');
   t.className = 'ae-fc-card-type';
-  t.textContent = fcTypeLabels[n.type] || n.type || 'narrative';
+  t.textContent = fcTypeLabels[n.type] || 'narrative';
   body.appendChild(t);
   const title = document.createElement('div');
   title.className = 'ae-fc-card-title';
