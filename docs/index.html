@@ -183,15 +183,37 @@ html, body {
 
 .ae-sandbox-canvas {
   position:absolute; top:38px; left:0; right:0; bottom:0;
-  overflow:auto; cursor:grab;
+  overflow:hidden; cursor:grab; user-select:none;
+  -webkit-user-select:none;
 }
-.ae-sandbox-canvas:active { cursor:grabbing; }
-.ae-sandbox-canvas::-webkit-scrollbar { width:6px; height:6px; }
-.ae-sandbox-canvas::-webkit-scrollbar-thumb { background:rgba(201,156,90,.15); border-radius:3px; }
-.ae-sandbox-canvas::-webkit-scrollbar-corner { background:transparent; }
+.ae-sandbox-canvas.dragging { cursor:grabbing; }
 
 .ae-sandbox-grid {
-  position:relative; min-width:100%; min-height:100%;
+  position:absolute; top:0; left:0;
+  transform-origin:0 0;
+  will-change:transform;
+}
+
+/* zoom indicator */
+.ae-sandbox-zoom {
+  position:absolute; bottom:14px; right:14px; z-index:16;
+  display:flex; flex-direction:column; align-items:center; gap:4px;
+}
+.ae-sandbox-zoom-btn {
+  width:30px; height:30px; border-radius:4px;
+  background:rgba(5,4,10,.8); border:1px solid rgba(201,156,90,.15);
+  color:var(--gold); font-size:16px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  opacity:.5; transition:opacity .2s, background .2s;
+  backdrop-filter:blur(8px);
+}
+.ae-sandbox-zoom-btn:hover { opacity:.9; background:rgba(201,156,90,.12); }
+.ae-sandbox-zoom-level {
+  font:500 8px/1 'IBM Plex Mono'; color:var(--gold); opacity:.3;
+  letter-spacing:.1em;
+}
+.ae-sandbox-zoom-btn.fit {
+  font-size:10px; margin-top:4px;
 }
 
 /* SVG edges */
@@ -2051,6 +2073,12 @@ html, body {
         <svg class="ae-sandbox-edges" id="sandbox-edges"></svg>
       </div>
     </div>
+    <div class="ae-sandbox-zoom">
+      <button class="ae-sandbox-zoom-btn" id="sandbox-zoom-in" title="Zoom in">+</button>
+      <span class="ae-sandbox-zoom-level" id="sandbox-zoom-level">100%</span>
+      <button class="ae-sandbox-zoom-btn" id="sandbox-zoom-out" title="Zoom out">−</button>
+      <button class="ae-sandbox-zoom-btn fit" id="sandbox-zoom-fit" title="Fit to screen">⊡</button>
+    </div>
   </div>
 </div>
 <div class="ae-sandbox-tooltip" id="sandbox-tooltip">
@@ -3498,14 +3526,136 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') { e.preventDefault(); fcGo(-1); }
 });
 
-/* ══ SANDBOX — tree node view ══ */
+/* ══ SANDBOX — tree node view with pan/zoom ══ */
 let sandboxDevMode = false;
+let sbZoom = 1;
+let sbPanX = 0, sbPanY = 0;
+let sbGridW = 0, sbGridH = 0;
+let sbDragging = false, sbDragStartX = 0, sbDragStartY = 0, sbPanStartX = 0, sbPanStartY = 0;
+let sbInitialized = false;
 
 document.getElementById('sandbox-dev-toggle').addEventListener('click', function() {
   sandboxDevMode = !sandboxDevMode;
   this.classList.toggle('active', sandboxDevMode);
   renderSandbox();
 });
+
+// zoom buttons
+document.getElementById('sandbox-zoom-in').addEventListener('click', () => sbSetZoom(sbZoom * 1.25));
+document.getElementById('sandbox-zoom-out').addEventListener('click', () => sbSetZoom(sbZoom / 1.25));
+document.getElementById('sandbox-zoom-fit').addEventListener('click', sbFitToScreen);
+
+function sbSetZoom(z, pivotX, pivotY) {
+  const canvas = document.getElementById('sandbox-canvas');
+  const oldZ = sbZoom;
+  sbZoom = Math.max(0.15, Math.min(3, z));
+
+  // zoom toward pivot point (mouse position or center)
+  if (pivotX !== undefined) {
+    sbPanX = pivotX - (pivotX - sbPanX) * (sbZoom / oldZ);
+    sbPanY = pivotY - (pivotY - sbPanY) * (sbZoom / oldZ);
+  }
+
+  sbApplyTransform();
+  document.getElementById('sandbox-zoom-level').textContent = Math.round(sbZoom * 100) + '%';
+}
+
+function sbApplyTransform() {
+  const grid = document.getElementById('sandbox-grid');
+  grid.style.transform = 'translate(' + sbPanX + 'px,' + sbPanY + 'px) scale(' + sbZoom + ')';
+}
+
+function sbFitToScreen() {
+  const canvas = document.getElementById('sandbox-canvas');
+  const cw = canvas.clientWidth, ch = canvas.clientHeight;
+  if (!sbGridW || !sbGridH) return;
+  const scaleX = cw / sbGridW;
+  const scaleY = ch / sbGridH;
+  sbZoom = Math.min(scaleX, scaleY) * 0.9;
+  sbZoom = Math.max(0.15, Math.min(3, sbZoom));
+  sbPanX = (cw - sbGridW * sbZoom) / 2;
+  sbPanY = (ch - sbGridH * sbZoom) / 2;
+  sbApplyTransform();
+  document.getElementById('sandbox-zoom-level').textContent = Math.round(sbZoom * 100) + '%';
+}
+
+// mouse drag to pan
+(function() {
+  const canvas = document.getElementById('sandbox-canvas');
+
+  canvas.addEventListener('mousedown', function(e) {
+    if (e.button !== 0) return;
+    sbDragging = true;
+    sbDragStartX = e.clientX;
+    sbDragStartY = e.clientY;
+    sbPanStartX = sbPanX;
+    sbPanStartY = sbPanY;
+    canvas.classList.add('dragging');
+    e.preventDefault();
+  });
+
+  window.addEventListener('mousemove', function(e) {
+    if (!sbDragging) return;
+    sbPanX = sbPanStartX + (e.clientX - sbDragStartX);
+    sbPanY = sbPanStartY + (e.clientY - sbDragStartY);
+    sbApplyTransform();
+  });
+
+  window.addEventListener('mouseup', function() {
+    if (!sbDragging) return;
+    sbDragging = false;
+    canvas.classList.remove('dragging');
+  });
+
+  // scroll wheel to zoom
+  canvas.addEventListener('wheel', function(e) {
+    e.preventDefault();
+    const rect = canvas.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+    const factor = e.deltaY < 0 ? 1.12 : 1 / 1.12;
+    sbSetZoom(sbZoom * factor, mx, my);
+  }, { passive: false });
+
+  // touch: pinch-to-zoom + drag
+  let sbTouches = [];
+  let sbTouchDist = 0;
+  let sbTouchZoomStart = 1;
+
+  canvas.addEventListener('touchstart', function(e) {
+    sbTouches = Array.from(e.touches);
+    if (sbTouches.length === 1) {
+      sbDragging = true;
+      sbDragStartX = sbTouches[0].clientX;
+      sbDragStartY = sbTouches[0].clientY;
+      sbPanStartX = sbPanX;
+      sbPanStartY = sbPanY;
+    } else if (sbTouches.length === 2) {
+      sbDragging = false;
+      sbTouchDist = Math.hypot(sbTouches[1].clientX - sbTouches[0].clientX, sbTouches[1].clientY - sbTouches[0].clientY);
+      sbTouchZoomStart = sbZoom;
+    }
+    e.preventDefault();
+  }, { passive: false });
+
+  canvas.addEventListener('touchmove', function(e) {
+    const touches = Array.from(e.touches);
+    if (touches.length === 1 && sbDragging) {
+      sbPanX = sbPanStartX + (touches[0].clientX - sbDragStartX);
+      sbPanY = sbPanStartY + (touches[0].clientY - sbDragStartY);
+      sbApplyTransform();
+    } else if (touches.length === 2) {
+      const dist = Math.hypot(touches[1].clientX - touches[0].clientX, touches[1].clientY - touches[0].clientY);
+      const rect = canvas.getBoundingClientRect();
+      const mx = (touches[0].clientX + touches[1].clientX) / 2 - rect.left;
+      const my = (touches[0].clientY + touches[1].clientY) / 2 - rect.top;
+      sbSetZoom(sbTouchZoomStart * (dist / sbTouchDist), mx, my);
+    }
+    e.preventDefault();
+  }, { passive: false });
+
+  canvas.addEventListener('touchend', function() { sbDragging = false; });
+})();
 
 function buildTreeLayout() {
   const nodes = [];
@@ -3535,19 +3685,17 @@ function buildTreeLayout() {
   }
 
   // branches spread out from crossroads
-  const branchOffsets = [-3, 0, 3]; // Scout left, Cicero center, Fountain right
+  const branchOffsets = [-3, 0, 3];
   const crossroadsNid = introNodes[introNodes.length - 1];
   const branchStartY = fcIntro.length;
 
   fcColumns.forEach((col, ci) => {
     const baseX = branchOffsets[ci];
-    let curY = branchStartY;
 
-    // first node connects to crossroads
-    const firstNid = addNode(col.nodes[0].id, col.nodes[0].label, col.nodes[0].type, baseX, curY);
+    const firstNid = addNode(col.nodes[0].id, col.nodes[0].label, col.nodes[0].type, baseX, branchStartY);
     addEdge(crossroadsNid, firstNid, '');
 
-    function layoutBranch(parentNid, nodeList, startIdx, bx, by) {
+    function layoutNodes(parentNid, nodeList, startIdx, bx, by) {
       let prevNid = parentNid;
       for (let i = startIdx; i < nodeList.length; i++) {
         const n = nodeList[i];
@@ -3557,68 +3705,34 @@ function buildTreeLayout() {
         prevNid = nid;
 
         if (n.fork) {
-          const armCount = n.fork.length;
-          const spread = Math.min(1.5, 1);
-          n.fork.forEach((arm, ai) => {
-            const armX = bx + (ai - (armCount-1)/2) * spread;
-            let armY = by;
-            const edgeCls = arm.label === '✓' || arm.label === 'Holds' || arm.label === 'Safe' || arm.label === '✓'
-              ? 'fork-success'
-              : (arm.label === '✗' || arm.label === 'Snaps' || arm.label === 'Lost' || arm.label === '✗')
-                ? 'fork-fail' : '';
-
-            let armPrev = nid;
-            arm.nodes.forEach(an => {
-              armY++;
-              const anid = addNode(an.refId || an.id, an.label, an.type, armX, armY);
-              addEdge(armPrev, anid, edgeCls);
-              armPrev = anid;
-
-              if (an.fork) {
-                const subArmCount = an.fork.length;
-                an.fork.forEach((subArm, sai) => {
-                  const subX = armX + (sai - (subArmCount-1)/2) * spread;
-                  let subY = armY;
-                  const subCls = subArm.label === '✓' || subArm.label === 'Holds' || subArm.label === 'Safe'
-                    ? 'fork-success'
-                    : (subArm.label === '✗' || subArm.label === 'Snaps' || subArm.label === 'Lost')
-                      ? 'fork-fail' : '';
-
-                  let subPrev = anid;
-                  subArm.nodes.forEach(sn => {
-                    subY++;
-                    const snid = addNode(sn.refId || sn.id, sn.label, sn.type, subX, subY);
-                    addEdge(subPrev, snid, subCls);
-                    subPrev = snid;
-
-                    if (sn.fork) {
-                      const deepCount = sn.fork.length;
-                      sn.fork.forEach((dArm, dai) => {
-                        const dX = subX + (dai - (deepCount-1)/2) * spread;
-                        let dY = subY;
-                        const dCls = dArm.label === '✓' ? 'fork-success' : dArm.label === '✗' ? 'fork-fail' : '';
-                        let dPrev = snid;
-                        dArm.nodes.forEach(dn => {
-                          dY++;
-                          const dnid = addNode(dn.refId || dn.id, dn.label, dn.type, dX, dY);
-                          addEdge(dPrev, dnid, dCls);
-                          dPrev = dnid;
-                        });
-                      });
-                    }
-                  });
-                });
-              }
-            });
-          });
+          layoutFork(nid, n.fork, bx, by);
         }
       }
     }
 
-    layoutBranch(firstNid, col.nodes, 1, baseX, branchStartY);
+    function layoutFork(parentNid, fork, bx, by) {
+      const spread = 1;
+      fork.forEach((arm, ai) => {
+        const armX = bx + (ai - (fork.length-1)/2) * spread;
+        const edgeCls = /✓|Holds|Safe/.test(arm.label) ? 'fork-success'
+          : /✗|Snaps|Lost/.test(arm.label) ? 'fork-fail' : '';
+
+        let prevNid = parentNid;
+        let armY = by;
+        arm.nodes.forEach(an => {
+          armY++;
+          const anid = addNode(an.refId || an.id, an.label, an.type, armX, armY);
+          addEdge(prevNid, anid, edgeCls);
+          prevNid = anid;
+          if (an.fork) layoutFork(anid, an.fork, armX, armY);
+        });
+      });
+    }
+
+    layoutNodes(firstNid, col.nodes, 1, baseX, branchStartY);
   });
 
-  // normalize coordinates — find min x/y, shift everything to positive
+  // normalize coordinates
   let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
   nodes.forEach(n => {
     if (n.x < minX) minX = n.x;
@@ -3627,7 +3741,7 @@ function buildTreeLayout() {
     if (n.y > maxY) maxY = n.y;
   });
 
-  const padX = 100, padY = 60;
+  const padX = 120, padY = 80;
   nodes.forEach(n => {
     n.px = (n.x - minX) * COL_W + padX;
     n.py = (n.y - minY) * ROW_H + padY;
@@ -3640,25 +3754,25 @@ function buildTreeLayout() {
 }
 
 function renderSandbox() {
-  const { nodes, edges, gridW, gridH } = buildTreeLayout();
+  const layout = buildTreeLayout();
+  const { nodes, edges } = layout;
+  sbGridW = layout.gridW;
+  sbGridH = layout.gridH;
+
   const grid = document.getElementById('sandbox-grid');
   const svgEl = document.getElementById('sandbox-edges');
 
-  // clear old nodes (keep SVG)
   grid.querySelectorAll('.ae-sandbox-node, .ae-sandbox-branch-label').forEach(e => e.remove());
 
-  // set grid size
-  grid.style.width = gridW + 'px';
-  grid.style.height = gridH + 'px';
+  grid.style.width = sbGridW + 'px';
+  grid.style.height = sbGridH + 'px';
 
-  // SVG sizing
-  svgEl.setAttribute('width', gridW);
-  svgEl.setAttribute('height', gridH);
-  svgEl.style.width = gridW + 'px';
-  svgEl.style.height = gridH + 'px';
+  svgEl.setAttribute('width', sbGridW);
+  svgEl.setAttribute('height', sbGridH);
+  svgEl.style.width = sbGridW + 'px';
+  svgEl.style.height = sbGridH + 'px';
   svgEl.innerHTML = '';
 
-  // draw edges
   const nodeMap = {};
   nodes.forEach(n => { nodeMap[n.nid] = n; });
 
@@ -3667,10 +3781,7 @@ function renderSandbox() {
     const to = nodeMap[e.to];
     if (!from || !to) return;
 
-    const fromVis = isNodeVisited(from.id);
-    const toVis = isNodeVisited(to.id);
-    const bothActive = fromVis && toVis;
-
+    const bothActive = isNodeVisited(from.id) && isNodeVisited(to.id);
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     const x1 = from.px, y1 = from.py + 18;
     const x2 = to.px, y2 = to.py - 18;
@@ -3681,7 +3792,6 @@ function renderSandbox() {
     svgEl.appendChild(path);
   });
 
-  // draw nodes
   const typeIcons = { narrator:'✎', choice:'✦', dice:'🎲', collect:'★', fail:'✗' };
 
   nodes.forEach(n => {
@@ -3698,8 +3808,8 @@ function renderSandbox() {
       '<span class="ae-sandbox-node-label">' + n.label + '</span>' +
       '<span class="ae-sandbox-node-type">' + (fcTypeLabels[n.type] || 'narrative') + '</span>';
 
-    // tooltip on hover
-    el.addEventListener('mouseenter', function(ev) {
+    el.addEventListener('mouseenter', function() {
+      if (sbDragging) return;
       const frame = frames.find(f => f.id === n.id);
       const tt = document.getElementById('sandbox-tooltip');
       document.getElementById('sandbox-tt-title').textContent = n.label + (n.type ? ' · ' + (fcTypeLabels[n.type] || '') : '');
@@ -3717,9 +3827,9 @@ function renderSandbox() {
       document.getElementById('sandbox-tooltip').classList.remove('show');
     });
 
-    // dev mode click — jump to frame in story
     if (sandboxDevMode) {
-      el.addEventListener('click', function() {
+      el.addEventListener('click', function(e) {
+        if (Math.abs(e.clientX - sbDragStartX) > 5 || Math.abs(e.clientY - sbDragStartY) > 5) return;
         const idx = frames.findIndex(f => f.id === n.id);
         if (idx >= 0) {
           currentFrameIdx = idx;
@@ -3732,15 +3842,17 @@ function renderSandbox() {
     grid.appendChild(el);
   });
 
-  // stats
   const written = nodes.filter(n => isNodeVisited(n.id)).length;
   const unique = new Set(nodes.map(n => n.id)).size;
   document.getElementById('sandbox-stats').textContent = written + '/' + unique + ' written';
 
-  // auto-center on load
-  const canvas = document.getElementById('sandbox-canvas');
-  const centerX = gridW / 2 - canvas.clientWidth / 2;
-  canvas.scrollLeft = Math.max(0, centerX);
+  // fit to screen on first load
+  if (!sbInitialized) {
+    sbInitialized = true;
+    setTimeout(sbFitToScreen, 50);
+  } else {
+    sbApplyTransform();
+  }
 }
 
 // image focus hints per image file
