@@ -227,6 +227,10 @@ html, body {
   max-width: 500px;
 }
 
+/* multi-card: image position centered so less cropping on tall/narrow panels */
+.ae-fc-viewport[data-count="2"] .ae-fc-block-img,
+.ae-fc-viewport[data-count="3"] .ae-fc-block-img { object-position: center center; }
+
 /* multi-card slides — smaller text */
 .ae-fc-viewport[data-count="2"] .ae-fc-block-title { font-size: 20px; }
 .ae-fc-viewport[data-count="2"] .ae-fc-block-tip { font-size: 11px; }
