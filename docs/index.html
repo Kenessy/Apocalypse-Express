@@ -40,48 +40,68 @@ html, body {
 }
 
 /* ══════════════════════════════════════
-   TAB BAR  ·  32px fixed, below topbar
+   NAV BUTTONS  ·  in topbar-right
 ══════════════════════════════════════ */
-.ae-tab-bar {
-  position: fixed; top: 44px; left: 0; right: 0; z-index: 99;
-  height: 32px;
-  background: rgba(5,4,10,.94);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(201,156,90,.07);
-  display: flex; align-items: stretch;
-  padding: 0 14px; gap: 2px;
+.ae-nav-btns {
+  display: flex; align-items: center; gap: 3px;
+  margin-right: 6px;
 }
-.ae-tab {
-  background: none; border: none; cursor: pointer;
-  padding: 0 16px; position: relative;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 9px; letter-spacing: .16em; text-transform: uppercase;
-  color: var(--muted); opacity: .30;
-  transition: opacity .25s, color .25s;
-  display: flex; align-items: center; gap: 7px;
+.ae-nav-btn {
+  width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  background: none; border: 1px solid transparent;
+  border-radius: 5px; cursor: pointer;
+  position: relative;
+  transition: background .2s, border-color .2s, box-shadow .2s;
 }
-.ae-tab:hover { opacity: .55; }
-.ae-tab.active { opacity: .80; color: var(--gold); }
-.ae-tab.active::after {
-  content: ''; position: absolute; bottom: 0; left: 10px; right: 10px;
-  height: 1px; background: var(--gold); opacity: .55;
+.ae-nav-btn:hover {
+  background: rgba(201,156,90,.06);
+  border-color: rgba(201,156,90,.12);
 }
-.ae-tab-icon { font-size: 10px; opacity: .65; }
-.ae-tab-badge {
-  font-size: 7px; min-width: 13px; height: 13px;
-  background: rgba(255,123,92,.15); border: 1px solid rgba(255,123,92,.25);
+.ae-nav-btn.active {
+  background: rgba(201,156,90,.08);
+  border-color: rgba(201,156,90,.18);
+  box-shadow: 0 0 12px rgba(201,156,90,.08);
+}
+.ae-nav-btn svg {
+  display: block; width: 20px; height: 20px;
+  color: var(--muted); opacity: .35;
+  transition: opacity .2s, color .2s;
+}
+.ae-nav-btn:hover svg { opacity: .65; color: var(--gold); }
+.ae-nav-btn.active svg { opacity: .80; color: var(--gold2); }
+.ae-nav-btn:focus-visible { outline: 1px solid rgba(201,156,90,.45); outline-offset: -1px; }
+
+.ae-nav-badge {
+  position: absolute; top: 3px; right: 3px;
+  min-width: 12px; height: 12px;
+  font: 500 7px/1 'IBM Plex Mono'; letter-spacing: 0;
+  background: rgba(255,123,92,.20); border: 1px solid rgba(255,123,92,.35);
   color: var(--ember); border-radius: 99px;
-  display: inline-flex; align-items: center; justify-content: center;
-  padding: 0 3px; font-family: 'IBM Plex Mono', monospace;
-  letter-spacing: 0; opacity: 0; transition: opacity .4s;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 3px; opacity: 0; transition: opacity .4s;
+  pointer-events: none;
 }
-.ae-tab-badge.has { opacity: 1; }
+.ae-nav-badge.has { opacity: 1; }
+
+/* tooltip */
+.ae-nav-btn::before {
+  content: attr(data-tip);
+  position: absolute; bottom: -24px; left: 50%;
+  transform: translateX(-50%);
+  font: 400 8px/1 'IBM Plex Mono'; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--gold); opacity: 0;
+  background: rgba(5,4,10,.95); border: 1px solid rgba(201,156,90,.15);
+  padding: 3px 8px; border-radius: 3px; white-space: nowrap;
+  pointer-events: none; z-index: 200;
+  transition: opacity .2s;
+}
+.ae-nav-btn:hover::before { opacity: .75; }
 
 /* ══ MAIN PANELS (tab content) ══ */
 .ae-panel {
   position: fixed;
-  top: 76px; left: 0; right: 0; bottom: 0;
+  top: 44px; left: 0; right: 0; bottom: 0;
   display: none;
   z-index: 50;
 }
@@ -318,7 +338,7 @@ html, body {
 ══════════════════════════════════════ */
 .ae-layout {
   position: fixed;
-  top: 76px; left: 0; right: 0; bottom: 0;
+  top: 44px; left: 0; right: 0; bottom: 0;
   display: flex; flex-direction: row;
   z-index: 48;
 }
@@ -1510,27 +1530,47 @@ html, body {
   </div>
 
   <div class="topbar-right">
-    <button class="hamburger" id="hamburger" onclick="this.classList.toggle('open')" aria-label="Menu">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
-</div>
+    <div class="ae-nav-btns" id="nav-btns">
 
-<!-- ══ TAB BAR ══ -->
-<div class="ae-tab-bar" id="tab-bar">
-  <button class="ae-tab active" data-tab="story">
-    <span class="ae-tab-icon">&#x25b6;</span> Story
-  </button>
-  <button class="ae-tab" data-tab="collections">
-    <span class="ae-tab-icon">&#x2727;</span> Collections
-    <span class="ae-tab-badge" id="tab-coll-badge">0</span>
-  </button>
-  <button class="ae-tab" data-tab="cargo">
-    <span class="ae-tab-icon">&#x2b21;</span> Cargo
-  </button>
-  <button class="ae-tab" data-tab="map">
-    <span class="ae-tab-icon">&#x25c9;</span> Map
-  </button>
+      <!-- Storyline (active by default) -->
+      <button class="ae-nav-btn active" data-tab="story" data-tip="storyline" aria-label="Storyline">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+          <line x1="9" y1="7" x2="16" y2="7"/>
+          <line x1="9" y1="11" x2="14" y2="11"/>
+        </svg>
+      </button>
+
+      <!-- Collections -->
+      <button class="ae-nav-btn" data-tab="collections" data-tip="collections" aria-label="Collections">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/>
+        </svg>
+        <span class="ae-nav-badge" id="nav-coll-badge">0</span>
+      </button>
+
+      <!-- Inventory -->
+      <button class="ae-nav-btn" data-tab="inventory" data-tip="inventory" aria-label="Inventory">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="7" width="20" height="14" rx="2"/>
+          <path d="M16 7V5a4 4 0 0 0-8 0v2"/>
+          <line x1="12" y1="12" x2="12" y2="16"/>
+          <line x1="10" y1="14" x2="14" y2="14"/>
+        </svg>
+      </button>
+
+      <!-- Map -->
+      <button class="ae-nav-btn" data-tab="map" data-tip="map" aria-label="Map">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88"/>
+          <circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/>
+        </svg>
+      </button>
+
+    </div>
+  </div>
 </div>
 
 <!-- ══ COLLECTIONS PANEL ══ -->
@@ -1538,11 +1578,11 @@ html, body {
   <div class="ae-coll-full" id="coll-full-body"></div>
 </div>
 
-<!-- ══ CARGO PANEL ══ -->
-<div class="ae-panel" id="panel-cargo" data-panel="cargo">
+<!-- ══ INVENTORY PANEL ══ -->
+<div class="ae-panel" id="panel-inventory" data-panel="inventory">
   <div class="ae-cargo-full">
     <div class="ae-coll-full-header">
-      <div class="ae-coll-full-title">Cargo Pockets</div>
+      <div class="ae-coll-full-title">Inventory</div>
       <div class="ae-coll-full-sub">0 / 8 slots &mdash; Board the Train to unlock</div>
     </div>
     <div class="ae-cargo-slots">
@@ -2770,8 +2810,8 @@ function initChoiceEvents() {
 ══════════════════════════════════════ */
 let activeTab = 'story';
 
-document.getElementById('tab-bar').addEventListener('click', function(e) {
-  const btn = e.target.closest('.ae-tab');
+document.getElementById('nav-btns').addEventListener('click', function(e) {
+  const btn = e.target.closest('.ae-nav-btn');
   if (!btn) return;
   const tab = btn.dataset.tab;
   if (tab === activeTab) return;
@@ -2780,15 +2820,15 @@ document.getElementById('tab-bar').addEventListener('click', function(e) {
 
 function switchTab(tab) {
   activeTab = tab;
-  // tab buttons
-  document.querySelectorAll('.ae-tab').forEach(b => {
+  // nav buttons
+  document.querySelectorAll('.ae-nav-btn').forEach(b => {
     b.classList.toggle('active', b.dataset.tab === tab);
   });
-  // panels
+  // panels (collections, inventory, map)
   document.querySelectorAll('.ae-panel').forEach(p => {
     p.classList.toggle('active', p.dataset.panel === tab);
   });
-  // story layout (ae-layout) is special — show/hide via display
+  // story layout is the ae-layout div
   const storyLayout = document.getElementById('panel-story');
   storyLayout.style.display = (tab === 'story') ? 'flex' : 'none';
   // render tab content
@@ -2825,7 +2865,7 @@ function renderCollectionFull() {
 
 function updateTabBadge() {
   const unlocked = collection.filter(c => c.unlocked).length;
-  const badge = document.getElementById('tab-coll-badge');
+  const badge = document.getElementById('nav-coll-badge');
   badge.textContent = unlocked;
   badge.classList.toggle('has', unlocked > 0);
 }
