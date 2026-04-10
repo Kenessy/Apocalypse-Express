@@ -156,6 +156,146 @@ html, body {
   transition: opacity .3s, border-color .3s;
 }
 
+/* ══ SANDBOX — tree node view ══ */
+.ae-sandbox { flex:1; position:relative; overflow:hidden; background:rgba(8,6,16,.98); }
+.ae-sandbox-toolbar {
+  position:absolute; top:0; left:0; right:0; z-index:15; height:38px;
+  display:flex; align-items:center; justify-content:space-between; padding:0 16px;
+  background:rgba(5,4,10,.85); backdrop-filter:blur(10px);
+  border-bottom:1px solid rgba(201,156,90,.06);
+}
+.ae-sandbox-toolbar-title {
+  font:700 14px/1 'Cinzel',serif; letter-spacing:.04em; color:var(--gold2); opacity:.85;
+}
+.ae-sandbox-toolbar-right { display:flex; align-items:center; gap:10px; }
+.ae-sandbox-toggle {
+  font:500 9px/1 'IBM Plex Mono'; letter-spacing:.1em; text-transform:uppercase;
+  padding:4px 10px; border-radius:3px; cursor:pointer;
+  background:rgba(201,156,90,.08); border:1px solid rgba(201,156,90,.15);
+  color:var(--gold); opacity:.5; transition:all .2s;
+}
+.ae-sandbox-toggle:hover { opacity:.8; background:rgba(201,156,90,.15); }
+.ae-sandbox-toggle.active { opacity:1; background:rgba(201,156,90,.18); border-color:rgba(201,156,90,.4); }
+.ae-sandbox-stats {
+  font:500 9px/1 'IBM Plex Mono'; letter-spacing:.1em;
+  color:var(--gold); opacity:.3;
+}
+
+.ae-sandbox-canvas {
+  position:absolute; top:38px; left:0; right:0; bottom:0;
+  overflow:auto; cursor:grab;
+}
+.ae-sandbox-canvas:active { cursor:grabbing; }
+.ae-sandbox-canvas::-webkit-scrollbar { width:6px; height:6px; }
+.ae-sandbox-canvas::-webkit-scrollbar-thumb { background:rgba(201,156,90,.15); border-radius:3px; }
+.ae-sandbox-canvas::-webkit-scrollbar-corner { background:transparent; }
+
+.ae-sandbox-grid {
+  position:relative; min-width:100%; min-height:100%;
+}
+
+/* SVG edges */
+.ae-sandbox-edges {
+  position:absolute; top:0; left:0; pointer-events:none;
+}
+.ae-sandbox-edge {
+  fill:none; stroke:rgba(201,156,90,.12); stroke-width:2;
+  transition:stroke .3s, stroke-width .3s;
+}
+.ae-sandbox-edge.active {
+  stroke:rgba(201,156,90,.45); stroke-width:2.5;
+}
+.ae-sandbox-edge.fork-success { stroke:rgba(92,200,92,.25); }
+.ae-sandbox-edge.fork-success.active { stroke:rgba(92,200,92,.55); }
+.ae-sandbox-edge.fork-fail { stroke:rgba(255,123,92,.25); }
+.ae-sandbox-edge.fork-fail.active { stroke:rgba(255,123,92,.55); }
+
+/* nodes */
+.ae-sandbox-node {
+  position:absolute; width:140px;
+  display:flex; flex-direction:column; align-items:center;
+  cursor:default; transition:opacity .3s, transform .2s;
+}
+.ae-sandbox-node.locked { opacity:.15; }
+.ae-sandbox-node.visited { opacity:1; }
+.ae-sandbox-node:hover { transform:scale(1.05); z-index:10; }
+
+.ae-sandbox-node-dot {
+  width:36px; height:36px; border-radius:50%;
+  border:2px solid rgba(201,156,90,.2);
+  background:rgba(15,12,25,.9);
+  display:flex; align-items:center; justify-content:center;
+  font-size:14px; color:var(--gold); opacity:.5;
+  transition:all .3s; position:relative;
+}
+.ae-sandbox-node.visited .ae-sandbox-node-dot {
+  border-color:rgba(201,156,90,.55); opacity:1;
+  box-shadow:0 0 12px rgba(201,156,90,.15);
+}
+.ae-sandbox-node.type-choice .ae-sandbox-node-dot { border-color:rgba(163,139,207,.3); }
+.ae-sandbox-node.visited.type-choice .ae-sandbox-node-dot { border-color:rgba(163,139,207,.65); box-shadow:0 0 12px rgba(163,139,207,.2); }
+.ae-sandbox-node.type-dice .ae-sandbox-node-dot { border-color:rgba(255,200,40,.3); }
+.ae-sandbox-node.visited.type-dice .ae-sandbox-node-dot { border-color:rgba(255,200,40,.65); box-shadow:0 0 12px rgba(255,200,40,.2); }
+.ae-sandbox-node.type-collect .ae-sandbox-node-dot { border-color:rgba(92,200,92,.3); }
+.ae-sandbox-node.visited.type-collect .ae-sandbox-node-dot { border-color:rgba(92,200,92,.65); box-shadow:0 0 12px rgba(92,200,92,.2); }
+.ae-sandbox-node.type-fail .ae-sandbox-node-dot { border-color:rgba(255,123,92,.3); }
+.ae-sandbox-node.visited.type-fail .ae-sandbox-node-dot { border-color:rgba(255,123,92,.65); box-shadow:0 0 12px rgba(255,123,92,.2); }
+
+.ae-sandbox-node-label {
+  margin-top:6px; font:600 10px/1.3 'IBM Plex Mono';
+  letter-spacing:.06em; color:var(--text); opacity:.5;
+  text-align:center; max-width:140px;
+  text-shadow:0 1px 4px rgba(0,0,0,.8);
+}
+.ae-sandbox-node.visited .ae-sandbox-node-label { opacity:.85; color:var(--gold2); }
+
+.ae-sandbox-node-type {
+  font:500 7px/1 'IBM Plex Mono'; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--gold); opacity:.25; margin-top:2px;
+}
+.ae-sandbox-node.visited .ae-sandbox-node-type { opacity:.4; }
+
+/* branch labels */
+.ae-sandbox-branch-label {
+  position:absolute; font:700 11px/1 'Cinzel',serif;
+  letter-spacing:.08em; color:var(--gold); opacity:.25;
+  text-transform:uppercase; white-space:nowrap;
+}
+
+/* sandbox mode: clickable nodes */
+.ae-sandbox-node.clickable { cursor:pointer; }
+.ae-sandbox-node.clickable:hover .ae-sandbox-node-dot {
+  transform:scale(1.15);
+  box-shadow:0 0 20px rgba(201,156,90,.35);
+}
+.ae-sandbox-node.clickable .ae-sandbox-node-dot::after {
+  content:''; position:absolute; inset:-4px; border-radius:50%;
+  border:1px dashed rgba(201,156,90,.25);
+  animation:sandbox-pulse 2s ease-in-out infinite;
+}
+@keyframes sandbox-pulse {
+  0%,100% { opacity:.3; transform:scale(1); }
+  50% { opacity:.7; transform:scale(1.1); }
+}
+
+/* tooltip */
+.ae-sandbox-tooltip {
+  position:fixed; z-index:100; pointer-events:none;
+  max-width:320px; padding:12px 16px;
+  background:rgba(5,4,10,.92); backdrop-filter:blur(12px);
+  border:1px solid rgba(201,156,90,.15); border-radius:6px;
+  opacity:0; transition:opacity .2s;
+}
+.ae-sandbox-tooltip.show { opacity:1; }
+.ae-sandbox-tooltip-title {
+  font:700 13px/1.2 'Cinzel',serif; color:var(--gold2); margin-bottom:4px;
+}
+.ae-sandbox-tooltip-text {
+  font:400 11px/1.5 'IBM Plex Mono'; color:var(--muted); opacity:.7;
+  max-height:120px; overflow:hidden;
+}
+.ae-sandbox-tooltip-text p { margin:0 0 4px; }
+
 /* ══ FLOWCHART — fullscreen presentation ══ */
 .ae-fc {
   flex: 1; position: relative; overflow: hidden;
@@ -1834,6 +1974,21 @@ html, body {
         </svg>
       </button>
 
+      <!-- Sandbox (tree view) -->
+      <button class="ae-nav-btn" data-tab="sandbox" data-tip="sandbox" aria-label="Sandbox">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="4" r="2"/>
+          <circle cx="5" cy="12" r="2"/>
+          <circle cx="19" cy="12" r="2"/>
+          <circle cx="8" cy="20" r="2"/>
+          <circle cx="16" cy="20" r="2"/>
+          <line x1="12" y1="6" x2="5" y2="10"/>
+          <line x1="12" y1="6" x2="19" y2="10"/>
+          <line x1="5" y1="14" x2="8" y2="18"/>
+          <line x1="19" y1="14" x2="16" y2="18"/>
+        </svg>
+      </button>
+
     </div>
   </div>
 </div>
@@ -1879,6 +2034,28 @@ html, body {
     </div>
     <div class="ae-fc-viewport" id="fc-viewport"></div>
   </div>
+</div>
+
+<!-- ══ SANDBOX PANEL (tree view) ══ -->
+<div class="ae-panel" id="panel-sandbox" data-panel="sandbox">
+  <div class="ae-sandbox" id="sandbox-container">
+    <div class="ae-sandbox-toolbar">
+      <span class="ae-sandbox-toolbar-title">Story Tree</span>
+      <div class="ae-sandbox-toolbar-right">
+        <span class="ae-sandbox-stats" id="sandbox-stats"></span>
+        <button class="ae-sandbox-toggle" id="sandbox-dev-toggle">Dev Mode</button>
+      </div>
+    </div>
+    <div class="ae-sandbox-canvas" id="sandbox-canvas">
+      <div class="ae-sandbox-grid" id="sandbox-grid">
+        <svg class="ae-sandbox-edges" id="sandbox-edges"></svg>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="ae-sandbox-tooltip" id="sandbox-tooltip">
+  <div class="ae-sandbox-tooltip-title" id="sandbox-tt-title"></div>
+  <div class="ae-sandbox-tooltip-text" id="sandbox-tt-text"></div>
 </div>
 
 <!-- ══ LAYOUT (story panel) ══ -->
@@ -3108,6 +3285,7 @@ function switchTab(tab) {
   // render tab content
   if (tab === 'collections') renderCollectionFull();
   if (tab === 'map') renderFlowchart();
+  if (tab === 'sandbox') renderSandbox();
 }
 
 function renderCollectionFull() {
@@ -3319,6 +3497,251 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowDown' || e.key === 'ArrowRight') { e.preventDefault(); fcGo(1); }
   if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') { e.preventDefault(); fcGo(-1); }
 });
+
+/* ══ SANDBOX — tree node view ══ */
+let sandboxDevMode = false;
+
+document.getElementById('sandbox-dev-toggle').addEventListener('click', function() {
+  sandboxDevMode = !sandboxDevMode;
+  this.classList.toggle('active', sandboxDevMode);
+  renderSandbox();
+});
+
+function buildTreeLayout() {
+  const nodes = [];
+  const edges = [];
+  let nextId = 0;
+
+  const COL_W = 160;
+  const ROW_H = 80;
+
+  function addNode(id, label, type, x, y) {
+    const nid = nextId++;
+    nodes.push({ nid, id, label, type, x, y });
+    return nid;
+  }
+  function addEdge(from, to, cls) {
+    edges.push({ from, to, cls: cls || '' });
+  }
+
+  // intro chain — centered, vertical
+  const introX = 0;
+  const introNodes = [];
+  fcIntro.forEach((n, i) => {
+    introNodes.push(addNode(n.id, n.label, n.type, introX, i));
+  });
+  for (let i = 1; i < introNodes.length; i++) {
+    addEdge(introNodes[i-1], introNodes[i], '');
+  }
+
+  // branches spread out from crossroads
+  const branchOffsets = [-3, 0, 3]; // Scout left, Cicero center, Fountain right
+  const crossroadsNid = introNodes[introNodes.length - 1];
+  const branchStartY = fcIntro.length;
+
+  fcColumns.forEach((col, ci) => {
+    const baseX = branchOffsets[ci];
+    let curY = branchStartY;
+
+    // first node connects to crossroads
+    const firstNid = addNode(col.nodes[0].id, col.nodes[0].label, col.nodes[0].type, baseX, curY);
+    addEdge(crossroadsNid, firstNid, '');
+
+    function layoutBranch(parentNid, nodeList, startIdx, bx, by) {
+      let prevNid = parentNid;
+      for (let i = startIdx; i < nodeList.length; i++) {
+        const n = nodeList[i];
+        by++;
+        const nid = addNode(n.refId || n.id, n.label, n.type, bx, by);
+        addEdge(prevNid, nid, '');
+        prevNid = nid;
+
+        if (n.fork) {
+          const armCount = n.fork.length;
+          const spread = Math.min(1.5, 1);
+          n.fork.forEach((arm, ai) => {
+            const armX = bx + (ai - (armCount-1)/2) * spread;
+            let armY = by;
+            const edgeCls = arm.label === '✓' || arm.label === 'Holds' || arm.label === 'Safe' || arm.label === '✓'
+              ? 'fork-success'
+              : (arm.label === '✗' || arm.label === 'Snaps' || arm.label === 'Lost' || arm.label === '✗')
+                ? 'fork-fail' : '';
+
+            let armPrev = nid;
+            arm.nodes.forEach(an => {
+              armY++;
+              const anid = addNode(an.refId || an.id, an.label, an.type, armX, armY);
+              addEdge(armPrev, anid, edgeCls);
+              armPrev = anid;
+
+              if (an.fork) {
+                const subArmCount = an.fork.length;
+                an.fork.forEach((subArm, sai) => {
+                  const subX = armX + (sai - (subArmCount-1)/2) * spread;
+                  let subY = armY;
+                  const subCls = subArm.label === '✓' || subArm.label === 'Holds' || subArm.label === 'Safe'
+                    ? 'fork-success'
+                    : (subArm.label === '✗' || subArm.label === 'Snaps' || subArm.label === 'Lost')
+                      ? 'fork-fail' : '';
+
+                  let subPrev = anid;
+                  subArm.nodes.forEach(sn => {
+                    subY++;
+                    const snid = addNode(sn.refId || sn.id, sn.label, sn.type, subX, subY);
+                    addEdge(subPrev, snid, subCls);
+                    subPrev = snid;
+
+                    if (sn.fork) {
+                      const deepCount = sn.fork.length;
+                      sn.fork.forEach((dArm, dai) => {
+                        const dX = subX + (dai - (deepCount-1)/2) * spread;
+                        let dY = subY;
+                        const dCls = dArm.label === '✓' ? 'fork-success' : dArm.label === '✗' ? 'fork-fail' : '';
+                        let dPrev = snid;
+                        dArm.nodes.forEach(dn => {
+                          dY++;
+                          const dnid = addNode(dn.refId || dn.id, dn.label, dn.type, dX, dY);
+                          addEdge(dPrev, dnid, dCls);
+                          dPrev = dnid;
+                        });
+                      });
+                    }
+                  });
+                });
+              }
+            });
+          });
+        }
+      }
+    }
+
+    layoutBranch(firstNid, col.nodes, 1, baseX, branchStartY);
+  });
+
+  // normalize coordinates — find min x/y, shift everything to positive
+  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+  nodes.forEach(n => {
+    if (n.x < minX) minX = n.x;
+    if (n.y < minY) minY = n.y;
+    if (n.x > maxX) maxX = n.x;
+    if (n.y > maxY) maxY = n.y;
+  });
+
+  const padX = 100, padY = 60;
+  nodes.forEach(n => {
+    n.px = (n.x - minX) * COL_W + padX;
+    n.py = (n.y - minY) * ROW_H + padY;
+  });
+
+  const gridW = (maxX - minX) * COL_W + padX * 2 + COL_W;
+  const gridH = (maxY - minY) * ROW_H + padY * 2 + ROW_H;
+
+  return { nodes, edges, gridW, gridH };
+}
+
+function renderSandbox() {
+  const { nodes, edges, gridW, gridH } = buildTreeLayout();
+  const grid = document.getElementById('sandbox-grid');
+  const svgEl = document.getElementById('sandbox-edges');
+
+  // clear old nodes (keep SVG)
+  grid.querySelectorAll('.ae-sandbox-node, .ae-sandbox-branch-label').forEach(e => e.remove());
+
+  // set grid size
+  grid.style.width = gridW + 'px';
+  grid.style.height = gridH + 'px';
+
+  // SVG sizing
+  svgEl.setAttribute('width', gridW);
+  svgEl.setAttribute('height', gridH);
+  svgEl.style.width = gridW + 'px';
+  svgEl.style.height = gridH + 'px';
+  svgEl.innerHTML = '';
+
+  // draw edges
+  const nodeMap = {};
+  nodes.forEach(n => { nodeMap[n.nid] = n; });
+
+  edges.forEach(e => {
+    const from = nodeMap[e.from];
+    const to = nodeMap[e.to];
+    if (!from || !to) return;
+
+    const fromVis = isNodeVisited(from.id);
+    const toVis = isNodeVisited(to.id);
+    const bothActive = fromVis && toVis;
+
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    const x1 = from.px, y1 = from.py + 18;
+    const x2 = to.px, y2 = to.py - 18;
+    const cy1 = y1 + (y2 - y1) * 0.4;
+    const cy2 = y1 + (y2 - y1) * 0.6;
+    path.setAttribute('d', 'M' + x1 + ',' + y1 + ' C' + x1 + ',' + cy1 + ' ' + x2 + ',' + cy2 + ' ' + x2 + ',' + y2);
+    path.setAttribute('class', 'ae-sandbox-edge' + (bothActive ? ' active' : '') + (e.cls ? ' ' + e.cls : ''));
+    svgEl.appendChild(path);
+  });
+
+  // draw nodes
+  const typeIcons = { narrator:'✎', choice:'✦', dice:'🎲', collect:'★', fail:'✗' };
+
+  nodes.forEach(n => {
+    const vis = isNodeVisited(n.id);
+    const el = document.createElement('div');
+    el.className = 'ae-sandbox-node type-' + (n.type || 'narrator')
+      + (vis ? ' visited' : ' locked')
+      + (sandboxDevMode ? ' clickable' : '');
+    el.style.left = (n.px - 70) + 'px';
+    el.style.top = (n.py - 18) + 'px';
+
+    el.innerHTML =
+      '<div class="ae-sandbox-node-dot">' + (typeIcons[n.type] || '◈') + '</div>' +
+      '<span class="ae-sandbox-node-label">' + n.label + '</span>' +
+      '<span class="ae-sandbox-node-type">' + (fcTypeLabels[n.type] || 'narrative') + '</span>';
+
+    // tooltip on hover
+    el.addEventListener('mouseenter', function(ev) {
+      const frame = frames.find(f => f.id === n.id);
+      const tt = document.getElementById('sandbox-tooltip');
+      document.getElementById('sandbox-tt-title').textContent = n.label + (n.type ? ' · ' + (fcTypeLabels[n.type] || '') : '');
+      if (frame && vis) {
+        document.getElementById('sandbox-tt-text').innerHTML = frame.text ? frame.text.slice(0, 2).map(t => '<p>' + t + '</p>').join('') : '<p style="opacity:.4">No text</p>';
+      } else {
+        document.getElementById('sandbox-tt-text').innerHTML = '<p style="opacity:.4">' + (vis ? 'No frame content' : 'Locked — not yet written') + '</p>';
+      }
+      tt.classList.add('show');
+      const rect = this.getBoundingClientRect();
+      tt.style.left = Math.min(rect.right + 12, window.innerWidth - 340) + 'px';
+      tt.style.top = rect.top + 'px';
+    });
+    el.addEventListener('mouseleave', function() {
+      document.getElementById('sandbox-tooltip').classList.remove('show');
+    });
+
+    // dev mode click — jump to frame in story
+    if (sandboxDevMode) {
+      el.addEventListener('click', function() {
+        const idx = frames.findIndex(f => f.id === n.id);
+        if (idx >= 0) {
+          currentFrameIdx = idx;
+          switchTab('story');
+          renderFrame();
+        }
+      });
+    }
+
+    grid.appendChild(el);
+  });
+
+  // stats
+  const written = nodes.filter(n => isNodeVisited(n.id)).length;
+  const unique = new Set(nodes.map(n => n.id)).size;
+  document.getElementById('sandbox-stats').textContent = written + '/' + unique + ' written';
+
+  // auto-center on load
+  const canvas = document.getElementById('sandbox-canvas');
+  const centerX = gridW / 2 - canvas.clientWidth / 2;
+  canvas.scrollLeft = Math.max(0, centerX);
+}
 
 // image focus hints per image file
 const imgFocus = {
