@@ -156,68 +156,70 @@ html, body {
   transition: opacity .3s, border-color .3s;
 }
 
-/* ══ FLOWCHART MAP PANEL ══ */
+/* ══ FLOWCHART MAP PANEL — vertical top-to-bottom ══ */
 .ae-fc {
-  flex: 1; overflow: auto; -webkit-overflow-scrolling: touch;
+  flex: 1; overflow-y: auto; overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
   background: rgba(8,6,16,.98);
   position: relative;
 }
 .ae-fc-scroll {
-  display: flex; align-items: flex-start;
-  min-height: 100%; padding: 48px 60px 48px 48px;
+  display: flex; flex-direction: column; align-items: center;
+  min-width: 100%; padding: 48px 24px 80px;
   gap: 0; position: relative;
 }
 /* chapter label */
 .ae-fc-chapter {
-  position: absolute; top: 16px; left: 20px;
-  font: 700 11px/1 'Cinzel', serif;
+  font: 700 13px/1 'Cinzel', serif;
   letter-spacing: .08em; color: var(--gold); opacity: .30;
+  margin-bottom: 32px; text-align: center;
 }
-/* column = one story beat */
+/* row = one story beat (vertical) */
 .ae-fc-col {
   display: flex; flex-direction: column;
   align-items: center; gap: 0;
   flex-shrink: 0; position: relative;
-  min-width: 120px;
 }
-/* connector line between columns */
+/* connector line between nodes (vertical) */
 .ae-fc-line {
-  width: 56px; height: 2px; flex-shrink: 0;
+  width: 2px; height: 40px; flex-shrink: 0;
   align-self: center;
-  background: linear-gradient(to right, rgba(201,156,90,.18), rgba(201,156,90,.12));
-  margin-top: 28px; /* align with node center */
+  background: linear-gradient(to bottom, rgba(201,156,90,.18), rgba(201,156,90,.12));
   position: relative;
 }
 .ae-fc-line.visited {
-  background: linear-gradient(to right, rgba(201,156,90,.45), rgba(201,156,90,.35));
+  background: linear-gradient(to bottom, rgba(201,156,90,.45), rgba(201,156,90,.35));
   box-shadow: 0 0 8px rgba(201,156,90,.10);
 }
 .ae-fc-line.locked {
-  background: repeating-linear-gradient(to right,
+  background: repeating-linear-gradient(to bottom,
     rgba(184,176,198,.08) 0px, rgba(184,176,198,.08) 4px,
     transparent 4px, transparent 8px);
 }
-/* branch connector (vertical + horizontal) */
+/* branch group */
 .ae-fc-branch {
   display: flex; flex-direction: column; align-items: center;
-  position: relative;
+  position: relative; width: 100%;
 }
 .ae-fc-branch-row {
-  display: flex; align-items: flex-start; gap: 0;
+  display: flex; align-items: flex-start; justify-content: center;
+  gap: 16px; width: 100%;
 }
 .ae-fc-branch-arm {
   display: flex; flex-direction: column; align-items: center;
+  flex: 0 1 auto; min-width: 70px;
 }
-.ae-fc-vline {
-  width: 2px; height: 32px; flex-shrink: 0;
+/* horizontal line into branch arm */
+.ae-fc-hline {
+  width: 2px; height: 28px; flex-shrink: 0;
   background: rgba(201,156,90,.12);
 }
-.ae-fc-vline.visited { background: rgba(201,156,90,.40); }
-.ae-fc-vline.locked { background: repeating-linear-gradient(to bottom, rgba(184,176,198,.06) 0px, rgba(184,176,198,.06) 3px, transparent 3px, transparent 6px); }
+.ae-fc-hline.visited { background: rgba(201,156,90,.40); }
+.ae-fc-hline.locked { background: repeating-linear-gradient(to bottom, rgba(184,176,198,.06) 0px, rgba(184,176,198,.06) 3px, transparent 3px, transparent 6px); }
 
 /* node */
 .ae-fc-node {
-  width: 56px; height: 56px; flex-shrink: 0;
+  width: 52px; height: 52px; flex-shrink: 0;
   border-radius: 50%; position: relative;
   display: flex; align-items: center; justify-content: center;
   border: 1.5px solid rgba(184,176,198,.12);
@@ -257,7 +259,7 @@ html, body {
 
 /* node icon */
 .ae-fc-node svg {
-  width: 22px; height: 22px;
+  width: 20px; height: 20px;
   color: var(--muted); opacity: .30;
   transition: opacity .3s, color .3s;
 }
@@ -268,15 +270,14 @@ html, body {
 .ae-fc-node.type-collect.visited svg { color: #5cc85c; }
 .ae-fc-node.type-fail.visited svg    { color: var(--ember); }
 
-/* node label */
+/* node label — right side */
 .ae-fc-label {
-  position: absolute; top: calc(100% + 8px); left: 50%;
-  transform: translateX(-50%);
+  position: absolute; left: calc(100% + 10px); top: 50%;
+  transform: translateY(-50%);
   font: 500 8px/1.3 'IBM Plex Mono';
   letter-spacing: .08em; text-transform: uppercase;
   color: var(--muted); opacity: .25;
-  white-space: nowrap; text-align: center;
-  max-width: 100px; overflow: hidden; text-overflow: ellipsis;
+  white-space: nowrap; text-align: left;
   pointer-events: none;
   transition: opacity .3s;
 }
@@ -284,40 +285,33 @@ html, body {
 .ae-fc-node.visited .ae-fc-label { opacity: .40; }
 .ae-fc-node.current .ae-fc-label { opacity: .65; color: var(--gold); }
 
-/* node hover tooltip */
+/* node hover tooltip — left side */
 .ae-fc-tip {
-  position: absolute; bottom: calc(100% + 12px); left: 50%;
-  transform: translateX(-50%);
+  position: absolute; right: calc(100% + 14px); top: 50%;
+  transform: translateY(-50%);
   font: 400 10px/1.5 'IBM Plex Mono';
   color: var(--text); opacity: 0;
   background: rgba(5,4,10,.96); border: 1px solid rgba(201,156,90,.15);
   padding: 8px 12px; border-radius: 4px;
-  white-space: nowrap; pointer-events: none; z-index: 10;
+  pointer-events: none; z-index: 10;
   box-shadow: 0 6px 24px rgba(0,0,0,.6);
   transition: opacity .2s;
-  max-width: 240px; white-space: normal;
+  max-width: 220px; white-space: normal;
 }
 .ae-fc-node:hover .ae-fc-tip { opacity: 1; }
 
-/* choice path indicator */
-.ae-fc-path-tag {
-  position: absolute; top: -6px; right: -6px;
-  width: 14px; height: 14px; border-radius: 50%;
-  font: 700 7px/1 'IBM Plex Mono';
-  display: flex; align-items: center; justify-content: center;
-  border: 1px solid; z-index: 2;
+/* branch label */
+.ae-fc-blabel {
+  font: 500 7px/1 'IBM Plex Mono';
+  letter-spacing: .12em; text-transform: uppercase;
+  color: var(--muted); opacity: .25;
+  margin: 4px 0 6px; text-align: center;
+  transition: opacity .3s;
 }
-.ae-fc-path-tag.chosen {
-  background: rgba(92,200,92,.15); border-color: rgba(92,200,92,.40);
-  color: #5cc85c;
-}
-.ae-fc-path-tag.missed {
-  background: rgba(184,176,198,.06); border-color: rgba(184,176,198,.15);
-  color: var(--muted); opacity: .40;
-}
+.ae-fc-blabel.visited { opacity: .50; }
 
 /* scrollbar */
-.ae-fc::-webkit-scrollbar { height: 4px; }
+.ae-fc::-webkit-scrollbar { width: 4px; }
 .ae-fc::-webkit-scrollbar-track { background: transparent; }
 .ae-fc::-webkit-scrollbar-thumb { background: rgba(201,156,90,.15); border-radius: 2px; }
 
@@ -3109,14 +3103,14 @@ function renderFlowchart() {
 
 function renderFcNodes(nodes, container, isBranch) {
   nodes.forEach((node, i) => {
-    // connector line before node (except first in a branch)
+    // connector line before node
     if (i > 0 || isBranch) {
       const line = document.createElement('div');
       line.className = 'ae-fc-line' + (isNodeVisited(node.id) ? ' visited' : (isNodeLocked(node) ? ' locked' : ''));
       container.appendChild(line);
     }
 
-    // the node itself
+    // the node
     const col = document.createElement('div');
     col.className = 'ae-fc-col';
 
@@ -3130,13 +3124,13 @@ function renderFcNodes(nodes, container, isBranch) {
       + (locked ? ' locked' : '');
     nd.innerHTML = fcIcons[nodeType] || fcIcons.narrator;
 
-    // label
+    // label (right side)
     const lbl = document.createElement('span');
     lbl.className = 'ae-fc-label';
     lbl.textContent = node.label;
     nd.appendChild(lbl);
 
-    // tooltip
+    // tooltip (left side)
     if (node.tip && (vis || cur)) {
       const tip = document.createElement('span');
       tip.className = 'ae-fc-tip';
@@ -3147,7 +3141,7 @@ function renderFcNodes(nodes, container, isBranch) {
     col.appendChild(nd);
     container.appendChild(col);
 
-    // branches
+    // branches — fan out horizontally, each arm goes down
     if (node.branches && node.branches.length) {
       const line2 = document.createElement('div');
       line2.className = 'ae-fc-line' + (isAnyBranchVisited(node.branches) ? ' visited' : ' locked');
@@ -3159,28 +3153,28 @@ function renderFcNodes(nodes, container, isBranch) {
       const branchRow = document.createElement('div');
       branchRow.className = 'ae-fc-branch-row';
 
-      node.branches.forEach((branch, bi) => {
+      node.branches.forEach((branch) => {
         const arm = document.createElement('div');
         arm.className = 'ae-fc-branch-arm';
 
-        // vertical line down
-        const vl = document.createElement('div');
         const branchVis = branch.nodes.some(n => isNodeVisited(n.refId || n.id));
-        vl.className = 'ae-fc-vline' + (branchVis ? ' visited' : ' locked');
-        arm.appendChild(vl);
 
         // branch label
         const bLabel = document.createElement('div');
-        bLabel.style.cssText = 'font:500 7px/1 "IBM Plex Mono";letter-spacing:.12em;text-transform:uppercase;color:var(--muted);opacity:.25;margin:4px 0 6px;text-align:center';
-        if (branchVis) bLabel.style.opacity = '.50';
+        bLabel.className = 'ae-fc-blabel' + (branchVis ? ' visited' : '');
         bLabel.textContent = branch.label;
         arm.appendChild(bLabel);
 
-        // nodes in this branch (horizontal)
-        const branchLine = document.createElement('div');
-        branchLine.style.cssText = 'display:flex;align-items:flex-start;gap:0';
-        renderFcNodes(branch.nodes, branchLine, true);
-        arm.appendChild(branchLine);
+        // vertical connector into branch
+        const hl = document.createElement('div');
+        hl.className = 'ae-fc-hline' + (branchVis ? ' visited' : ' locked');
+        arm.appendChild(hl);
+
+        // nodes going down in this arm
+        const armCol = document.createElement('div');
+        armCol.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:0';
+        renderFcNodes(branch.nodes, armCol, true);
+        arm.appendChild(armCol);
 
         branchRow.appendChild(arm);
       });
