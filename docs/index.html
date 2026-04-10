@@ -162,9 +162,52 @@ html, body {
   background: rgba(8,6,16,.98);
 }
 
-/* viewport that holds all cards for current set */
+/* ── top header bar ── */
+.ae-fc-header {
+  position: absolute; top: 0; left: 0; right: 0; z-index: 15;
+  height: 38px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 16px;
+  background: rgba(5,4,10,.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(201,156,90,.06);
+}
+.ae-fc-header-title {
+  font: 700 14px/1 'Cinzel', serif;
+  letter-spacing: .04em; color: var(--gold2); opacity: .85;
+}
+.ae-fc-header-type {
+  font: 500 7px/1 'IBM Plex Mono';
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--gold); opacity: .40;
+  margin-right: 10px;
+}
+.ae-fc-header-left {
+  display: flex; align-items: center; gap: 8px;
+}
+.ae-fc-header-nav {
+  display: flex; align-items: center; gap: 10px;
+}
+.ae-fc-header-nav-btn {
+  width: 26px; height: 26px;
+  display: flex; align-items: center; justify-content: center;
+  background: none; border: 1px solid rgba(201,156,90,.12);
+  border-radius: 4px; cursor: pointer;
+  color: var(--gold); font-size: 10px; opacity: .40;
+  transition: opacity .2s, border-color .2s, background .2s;
+}
+.ae-fc-header-nav-btn:hover { opacity: .80; border-color: rgba(201,156,90,.35); background: rgba(201,156,90,.06); }
+.ae-fc-header-nav-btn.disabled { opacity: .08; pointer-events: none; }
+.ae-fc-header-counter {
+  font: 500 9px/1 'IBM Plex Mono';
+  letter-spacing: .12em; color: var(--gold); opacity: .28;
+  min-width: 40px; text-align: center;
+}
+
+/* viewport */
 .ae-fc-viewport {
-  position: absolute; inset: 0;
+  position: absolute; top: 38px; left: 0; right: 0; bottom: 0;
   display: flex; gap: 0;
   align-items: stretch;
   padding: 0;
@@ -372,28 +415,6 @@ html, body {
 .ae-fc-block.locked .ae-fc-block-img { filter: brightness(.08) saturate(0); }
 .ae-fc-block.locked .ae-fc-block-title { opacity: .30; }
 
-/* ── navigation — inline at bottom of content block ── */
-.ae-fc-nav {
-  display: flex; align-items: center; gap: 12px;
-  margin-top: 12px; padding-top: 10px;
-  border-top: 1px solid rgba(201,156,90,.06);
-  flex-shrink: 0;
-}
-.ae-fc-nav-btn {
-  width: 28px; height: 28px;
-  display: flex; align-items: center; justify-content: center;
-  background: none; border: 1px solid rgba(201,156,90,.14);
-  border-radius: 4px; cursor: pointer;
-  color: var(--gold); font-size: 11px; opacity: .42;
-  transition: opacity .2s, border-color .2s, background .2s;
-}
-.ae-fc-nav-btn:hover { opacity: .80; border-color: rgba(201,156,90,.35); background: rgba(201,156,90,.06); }
-.ae-fc-nav-btn.disabled { opacity: .08; pointer-events: none; }
-.ae-fc-nav-counter {
-  font: 500 9px/1 'IBM Plex Mono';
-  letter-spacing: .12em; color: var(--gold); opacity: .28;
-}
-.ae-fc-nav-label { display: none; }
 
 /* ══════════════════════════════════════
    TOP BAR  ·  44px fixed
@@ -1826,6 +1847,17 @@ html, body {
 <!-- ══ MAP / FLOWCHART PANEL ══ -->
 <div class="ae-panel" id="panel-map" data-panel="map">
   <div class="ae-fc" id="fc-container">
+    <div class="ae-fc-header" id="fc-header">
+      <div class="ae-fc-header-left">
+        <span class="ae-fc-header-type" id="fc-htype"></span>
+        <span class="ae-fc-header-title" id="fc-htitle"></span>
+      </div>
+      <div class="ae-fc-header-nav">
+        <button class="ae-fc-header-nav-btn" id="fc-prev" onclick="fcGo(-1)">&#x25C0;</button>
+        <span class="ae-fc-header-counter" id="fc-counter">1/1</span>
+        <button class="ae-fc-header-nav-btn" id="fc-next" onclick="fcGo(1)">&#x25B6;</button>
+      </div>
+    </div>
     <div class="ae-fc-viewport" id="fc-viewport"></div>
   </div>
 </div>
@@ -3236,31 +3268,18 @@ function renderFcSlide() {
   const slide = fcSlides[fcIdx];
   if (!slide) return;
 
+  // header: title + nav
+  const mainCard = slide.cards[0];
+  document.getElementById('fc-htitle').textContent = slide.label || mainCard.label;
+  document.getElementById('fc-htype').textContent = fcTypeLabels[mainCard.type] || 'narrative';
+  document.getElementById('fc-counter').textContent = (fcIdx + 1) + '/' + fcSlides.length;
+  document.getElementById('fc-prev').classList.toggle('disabled', fcIdx === 0);
+  document.getElementById('fc-next').classList.toggle('disabled', fcIdx >= fcSlides.length - 1);
+
   vp.setAttribute('data-count', slide.cards.length);
-  let firstContent = null;
   slide.cards.forEach(n => {
-    const block = mkBlock(n);
-    vp.appendChild(block);
-    if (!firstContent) {
-      firstContent = block.querySelector('.ae-fc-block-content');
-    }
+    vp.appendChild(mkBlock(n));
   });
-
-  // add nav into the first card's content block (or create standalone)
-  const nav = document.createElement('div');
-  nav.className = 'ae-fc-nav';
-  nav.innerHTML = '<button class="ae-fc-nav-btn' + (fcIdx === 0 ? ' disabled' : '') + '" onclick="fcGo(-1)">\u25C0</button>'
-    + '<span class="ae-fc-nav-counter">' + (fcIdx + 1) + ' / ' + fcSlides.length + '</span>'
-    + '<button class="ae-fc-nav-btn' + (fcIdx >= fcSlides.length - 1 ? ' disabled' : '') + '" onclick="fcGo(1)">\u25B6</button>';
-
-  if (firstContent) {
-    firstContent.appendChild(nav);
-  } else {
-    nav.style.position = 'absolute';
-    nav.style.bottom = '12px';
-    nav.style.left = '12px';
-    vp.appendChild(nav);
-  }
 }
 
 function fcGo(dir) {
@@ -3349,23 +3368,6 @@ function mkBlock(n) {
     content.className = 'ae-fc-block-content';
     const inner = document.createElement('div');
     inner.className = 'ae-fc-block-content-inner';
-
-    // title at top of panel
-    if (n.colLabel) {
-      const cl = document.createElement('div');
-      cl.className = 'ae-fc-block-type';
-      cl.style.color = 'var(--gold)'; cl.style.opacity = '.50';
-      cl.textContent = n.colLabel;
-      inner.appendChild(cl);
-    }
-    const ht = document.createElement('div');
-    ht.className = 'ae-fc-block-type';
-    ht.textContent = fcTypeLabels[n.type] || 'narrative';
-    inner.appendChild(ht);
-    const htitle = document.createElement('div');
-    htitle.className = 'ae-fc-block-panel-title';
-    htitle.textContent = n.label;
-    inner.appendChild(htitle);
 
     // speaker
     if (frame.speaker) {
