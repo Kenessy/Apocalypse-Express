@@ -3152,19 +3152,19 @@ const fcIntro = [
 const fcColumns = [
   { label:'Scout', nodes:[
     { id:'look-around', label:'Survey', type:'choice', img:'ae-obelisk-fountain.png' },
-    { id:'climb-obelisk', label:'Climb Obelisk', type:'dice', img:'ae-obelisk-fountain.png',
+    { id:'climb-obelisk', label:'Climb Obelisk', type:'dice', img:'ae-climb-retry.png',
       fork:[
         { label:'\u2713', nodes:[
           { id:'climb-success', label:'The View', type:'collect', img:'ae-crossroads-wide.png' },
         ]},
         { label:'\u2717', nodes:[
           { id:'climb-fail-1', label:'Fall #1', type:'fail', img:'ae-climb-fall.png' },
-          { id:'climb-attempt-2', label:'Retry DC15', type:'dice',
+          { id:'climb-attempt-2', label:'Retry DC15', type:'dice', img:'ae-climb-retry.png',
             fork:[
               { label:'\u2713', nodes:[{ id:'climb-success-2', refId:'climb-success', label:'The View', type:'collect' }]},
               { label:'\u2717', nodes:[
                 { id:'climb-fail-2', label:'Fall #2', type:'fail', img:'ae-climb-fall.png' },
-                { id:'climb-attempt-3', label:'Last DC20', type:'dice',
+                { id:'climb-attempt-3', label:'Last DC20', type:'dice', img:'ae-climb-retry.png',
                   fork:[
                     { label:'\u2713', nodes:[{ id:'climb-success-3', refId:'climb-success', label:'The View', type:'collect' }]},
                     { label:'\u2717', nodes:[{ id:'climb-failed', label:'Defeat', type:'fail', img:'ae-climb-fall.png' }]}
@@ -3329,6 +3329,7 @@ const imgFocus = {
   'ae-crossroads-wide.png': 'center 45%',
   'ae-fountain-close.png': 'center 40%',
   'ae-climb-fall.png': 'center 45%',
+  'ae-climb-retry.png': 'center 40%',
 };
 
 function mkBlock(n) {
