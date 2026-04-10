@@ -245,85 +245,99 @@ html, body {
   border-left: 1px solid rgba(201,156,90,.08);
 }
 
-/* ── story content on card ── */
+/* ── story content overlay ── */
 .ae-fc-block-content {
-  position: relative; z-index: 2;
-  padding: 0 32px 0; margin-top: 12px;
-  max-height: 35vh; overflow-y: auto;
-  mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+  position: absolute; inset: 0; z-index: 4;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 60px 40px 70px;
+  background: rgba(5,4,10,.78);
+  backdrop-filter: blur(12px) saturate(.6);
+  -webkit-backdrop-filter: blur(12px) saturate(.6);
+  opacity: 0; transition: opacity .35s ease;
+  overflow-y: auto;
 }
+.ae-fc-block:hover .ae-fc-block-content,
+.ae-fc-block.show-content .ae-fc-block-content { opacity: 1; }
 .ae-fc-block-content::-webkit-scrollbar { width: 2px; }
-.ae-fc-block-content::-webkit-scrollbar-thumb { background: rgba(201,156,90,.15); border-radius: 2px; }
+.ae-fc-block-content::-webkit-scrollbar-thumb { background: rgba(201,156,90,.18); border-radius: 2px; }
+
+.ae-fc-block-content-inner {
+  max-width: 600px; width: 100%;
+}
 
 .ae-fc-block-speaker {
-  display: inline-flex; align-items: center; gap: 8px;
-  margin-bottom: 10px;
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 14px;
 }
 .ae-fc-block-speaker-glyph {
-  font-size: 10px; color: var(--gold); opacity: .45;
+  font-size: 11px; color: var(--gold); opacity: .55;
 }
 .ae-fc-block-speaker-name {
-  font: 700 13px/1 'Cinzel', serif;
-  letter-spacing: .05em; color: var(--gold2); opacity: .70;
+  font: 700 15px/1 'Cinzel', serif;
+  letter-spacing: .06em; color: var(--gold2); opacity: .85;
+}
+.ae-fc-block-speaker-line {
+  flex: 1; height: 1px;
+  background: linear-gradient(to right, rgba(201,156,90,.25), transparent);
 }
 .ae-fc-block-prose {
-  font: 400 11px/1.75 'IBM Plex Mono';
-  color: var(--prose); opacity: .55;
+  font: 400 12px/1.85 'IBM Plex Mono';
+  color: var(--text); opacity: .80;
+  text-shadow: 0 1px 6px rgba(0,0,0,.6);
 }
-.ae-fc-block-prose em { color: var(--cyan); font-style: italic; opacity: .80; }
-.ae-fc-block-prose p { margin-bottom: .6em; }
+.ae-fc-block-prose em { color: var(--cyan); font-style: italic; }
+.ae-fc-block-prose p { margin-bottom: .8em; }
 
 /* choices */
 .ae-fc-block-choices {
-  display: flex; flex-wrap: wrap; gap: 6px;
-  margin-top: 10px;
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin-top: 14px;
 }
 .ae-fc-block-choice {
-  display: inline-flex; align-items: center; gap: 5px;
-  padding: 4px 10px; border-radius: 3px;
-  border: 1px solid rgba(201,156,90,.12);
-  background: rgba(201,156,90,.04);
-  font: 500 9px/1 'IBM Plex Mono';
-  letter-spacing: .04em; color: var(--gold); opacity: .55;
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 14px; border-radius: 4px;
+  border: 1px solid rgba(201,156,90,.18);
+  background: rgba(201,156,90,.06);
+  font: 500 10px/1 'IBM Plex Mono';
+  letter-spacing: .04em; color: var(--gold2); opacity: .75;
 }
-.ae-fc-block-choice-icon { font-size: 10px; opacity: .50; }
+.ae-fc-block-choice-icon { font-size: 11px; opacity: .60; }
 
 /* dice check badge */
 .ae-fc-block-dice {
-  display: inline-flex; align-items: center; gap: 8px;
-  margin-top: 10px; padding: 5px 12px; border-radius: 3px;
-  border: 1px solid rgba(255,200,40,.15);
-  background: rgba(255,200,40,.04);
+  display: inline-flex; align-items: center; gap: 10px;
+  margin-top: 14px; padding: 7px 16px; border-radius: 4px;
+  border: 1px solid rgba(255,200,40,.20);
+  background: rgba(255,200,40,.06);
 }
-.ae-fc-block-dice-icon { font-size: 12px; }
+.ae-fc-block-dice-icon { font-size: 14px; }
 .ae-fc-block-dice-label {
-  font: 500 9px/1 'IBM Plex Mono';
-  letter-spacing: .08em; text-transform: uppercase;
-  color: #ffc828; opacity: .60;
+  font: 500 10px/1 'IBM Plex Mono';
+  letter-spacing: .10em; text-transform: uppercase;
+  color: #ffc828; opacity: .70;
 }
 .ae-fc-block-dice-dc {
-  font: 700 11px/1 'Cinzel', serif;
-  color: #ffc828; opacity: .70;
+  font: 700 13px/1 'Cinzel', serif;
+  color: #ffc828; opacity: .80;
 }
 
 /* continue label */
 .ae-fc-block-continue {
-  display: inline-flex; align-items: center; gap: 6px;
-  margin-top: 10px;
-  font: 500 9px/1 'IBM Plex Mono';
-  letter-spacing: .10em; text-transform: uppercase;
-  color: var(--gold); opacity: .35;
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-top: 14px;
+  font: 500 10px/1 'IBM Plex Mono';
+  letter-spacing: .12em; text-transform: uppercase;
+  color: var(--gold); opacity: .50;
 }
-.ae-fc-block-continue-arrow { font-size: 10px; opacity: .50; }
+.ae-fc-block-continue-arrow { font-size: 11px; opacity: .55; }
 
-/* multi-card: less content space */
-.ae-fc-viewport[data-count="2"] .ae-fc-block-content { padding: 0 24px 0; max-height: 30vh; }
-.ae-fc-viewport[data-count="2"] .ae-fc-block-prose { font-size: 10px; }
-.ae-fc-viewport[data-count="3"] .ae-fc-block-content { padding: 0 18px 0; max-height: 25vh; }
-.ae-fc-viewport[data-count="3"] .ae-fc-block-prose { font-size: 9px; line-height: 1.6; }
-.ae-fc-viewport[data-count="3"] .ae-fc-block-choices { gap: 4px; }
-.ae-fc-viewport[data-count="3"] .ae-fc-block-choice { font-size: 8px; padding: 3px 7px; }
+/* multi-card adjustments */
+.ae-fc-viewport[data-count="2"] .ae-fc-block-content { padding: 50px 28px 60px; }
+.ae-fc-viewport[data-count="2"] .ae-fc-block-prose { font-size: 11px; }
+.ae-fc-viewport[data-count="3"] .ae-fc-block-content { padding: 40px 18px 50px; }
+.ae-fc-viewport[data-count="3"] .ae-fc-block-prose { font-size: 10px; line-height: 1.7; }
+.ae-fc-viewport[data-count="3"] .ae-fc-block-choice { font-size: 8px; padding: 4px 10px; }
 
 /* left accent bar */
 .ae-fc-block::before {
@@ -3318,20 +3332,23 @@ function mkBlock(n) {
   }
   el.appendChild(body);
 
-  // look up frame content and add it
+  // look up frame content — shown as blur overlay on hover
   const fid = n.refId || n.id;
   const frame = frames.find(f => f.id === fid);
   if (frame && !locked) {
     const content = document.createElement('div');
     content.className = 'ae-fc-block-content';
+    const inner = document.createElement('div');
+    inner.className = 'ae-fc-block-content-inner';
 
     // speaker
     if (frame.speaker) {
       const sp = document.createElement('div');
       sp.className = 'ae-fc-block-speaker';
       sp.innerHTML = '<span class="ae-fc-block-speaker-glyph">' + frame.speaker.glyph + '</span>'
-        + '<span class="ae-fc-block-speaker-name">' + frame.speaker.name + '</span>';
-      content.appendChild(sp);
+        + '<span class="ae-fc-block-speaker-name">' + frame.speaker.name + '</span>'
+        + '<div class="ae-fc-block-speaker-line"></div>';
+      inner.appendChild(sp);
     }
 
     // story text
@@ -3339,7 +3356,7 @@ function mkBlock(n) {
       const prose = document.createElement('div');
       prose.className = 'ae-fc-block-prose';
       prose.innerHTML = frame.text.map(t => '<p>' + t + '</p>').join('');
-      content.appendChild(prose);
+      inner.appendChild(prose);
     }
 
     // choices
@@ -3352,7 +3369,7 @@ function mkBlock(n) {
         ch.innerHTML = '<span class="ae-fc-block-choice-icon">' + c.icon + '</span> ' + c.label;
         cw.appendChild(ch);
       });
-      content.appendChild(cw);
+      inner.appendChild(cw);
     }
 
     // dice check
@@ -3362,7 +3379,7 @@ function mkBlock(n) {
       dc.innerHTML = '<span class="ae-fc-block-dice-icon">\ud83c\udfb2</span>'
         + '<span class="ae-fc-block-dice-label">' + (frame.diceCheck.label || 'Skill Check') + '</span>'
         + '<span class="ae-fc-block-dice-dc">DC ' + frame.diceCheck.dc + '</span>';
-      content.appendChild(dc);
+      inner.appendChild(dc);
     }
 
     // continue label
@@ -3370,9 +3387,10 @@ function mkBlock(n) {
       const cont = document.createElement('div');
       cont.className = 'ae-fc-block-continue';
       cont.innerHTML = '<span class="ae-fc-block-continue-arrow">\u25b6</span> ' + frame.continueLabel;
-      content.appendChild(cont);
+      inner.appendChild(cont);
     }
 
+    content.appendChild(inner);
     el.appendChild(content);
   }
 
