@@ -3844,102 +3844,34 @@ function buildTreeLayout() {
 }
 
 function renderSandbox() {
-  const layout = buildTreeLayout();
-  const { nodes, edges } = layout;
-  sbGridW = layout.gridW;
-  sbGridH = layout.gridH;
+  // texture-only mode — large canvas to pan/zoom around
+  sbGridW = 3000;
+  sbGridH = 2000;
 
   const grid = document.getElementById('sandbox-grid');
   const svgEl = document.getElementById('sandbox-edges');
 
   grid.querySelectorAll('.ae-sandbox-node, .ae-sandbox-branch-label').forEach(e => e.remove());
+  svgEl.innerHTML = '';
 
   grid.style.width = sbGridW + 'px';
   grid.style.height = sbGridH + 'px';
-
   svgEl.setAttribute('width', sbGridW);
   svgEl.setAttribute('height', sbGridH);
   svgEl.style.width = sbGridW + 'px';
   svgEl.style.height = sbGridH + 'px';
-  svgEl.innerHTML = '';
 
-  const nodeMap = {};
-  nodes.forEach(n => { nodeMap[n.nid] = n; });
+  document.getElementById('sandbox-stats').textContent = 'texture preview';
 
-  edges.forEach(e => {
-    const from = nodeMap[e.from];
-    const to = nodeMap[e.to];
-    if (!from || !to) return;
-
-    const bothActive = isNodeVisited(from.id) && isNodeVisited(to.id);
-    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    const x1 = from.px, y1 = from.py + 18;
-    const x2 = to.px, y2 = to.py - 18;
-    const cy1 = y1 + (y2 - y1) * 0.4;
-    const cy2 = y1 + (y2 - y1) * 0.6;
-    path.setAttribute('d', 'M' + x1 + ',' + y1 + ' C' + x1 + ',' + cy1 + ' ' + x2 + ',' + cy2 + ' ' + x2 + ',' + y2);
-    path.setAttribute('class', 'ae-sandbox-edge' + (bothActive ? ' active' : '') + (e.cls ? ' ' + e.cls : ''));
-    svgEl.appendChild(path);
-  });
-
-  const typeIcons = { narrator:'✎', choice:'✦', dice:'🎲', collect:'★', fail:'✗' };
-
-  nodes.forEach(n => {
-    const vis = isNodeVisited(n.id);
-    const el = document.createElement('div');
-    el.className = 'ae-sandbox-node type-' + (n.type || 'narrator')
-      + (vis ? ' visited' : ' locked')
-      + (sandboxDevMode ? ' clickable' : '');
-    el.style.left = (n.px - 70) + 'px';
-    el.style.top = (n.py - 18) + 'px';
-
-    el.innerHTML =
-      '<div class="ae-sandbox-node-dot">' + (typeIcons[n.type] || '◈') + '</div>' +
-      '<span class="ae-sandbox-node-label">' + n.label + '</span>' +
-      '<span class="ae-sandbox-node-type">' + (fcTypeLabels[n.type] || 'narrative') + '</span>';
-
-    el.addEventListener('mouseenter', function() {
-      if (sbDragging) return;
-      const frame = frames.find(f => f.id === n.id);
-      const tt = document.getElementById('sandbox-tooltip');
-      document.getElementById('sandbox-tt-title').textContent = n.label + (n.type ? ' · ' + (fcTypeLabels[n.type] || '') : '');
-      if (frame && vis) {
-        document.getElementById('sandbox-tt-text').innerHTML = frame.text ? frame.text.slice(0, 2).map(t => '<p>' + t + '</p>').join('') : '<p style="opacity:.4">No text</p>';
-      } else {
-        document.getElementById('sandbox-tt-text').innerHTML = '<p style="opacity:.4">' + (vis ? 'No frame content' : 'Locked — not yet written') + '</p>';
-      }
-      tt.classList.add('show');
-      const rect = this.getBoundingClientRect();
-      tt.style.left = Math.min(rect.right + 12, window.innerWidth - 340) + 'px';
-      tt.style.top = rect.top + 'px';
-    });
-    el.addEventListener('mouseleave', function() {
-      document.getElementById('sandbox-tooltip').classList.remove('show');
-    });
-
-    if (sandboxDevMode) {
-      el.addEventListener('click', function(e) {
-        if (Math.abs(e.clientX - sbDragStartX) > 5 || Math.abs(e.clientY - sbDragStartY) > 5) return;
-        const idx = frames.findIndex(f => f.id === n.id);
-        if (idx >= 0) {
-          currentFrameIdx = idx;
-          switchTab('story');
-          renderFrame();
-        }
-      });
-    }
-
-    grid.appendChild(el);
-  });
-
-  const written = nodes.filter(n => isNodeVisited(n.id)).length;
-  const unique = new Set(nodes.map(n => n.id)).size;
-  document.getElementById('sandbox-stats').textContent = written + '/' + unique + ' written';
-
-  // fit to screen on first load
   if (!sbInitialized) {
     sbInitialized = true;
-    setTimeout(sbFitToScreen, 50);
+    // center the canvas
+    const canvas = document.getElementById('sandbox-canvas');
+    sbZoom = 1;
+    sbPanX = (canvas.clientWidth - sbGridW) / 2;
+    sbPanY = (canvas.clientHeight - sbGridH) / 2;
+    sbApplyTransform();
+    document.getElementById('sandbox-zoom-level').textContent = '100%';
   } else {
     sbApplyTransform();
   }
