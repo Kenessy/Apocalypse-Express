@@ -3176,8 +3176,8 @@ const fcColumns = [
         ]}
       ]
     },
-    { id:'find-ridge', label:'Find Tree', type:'narrator', img:'ae-crossroads-wide.png' },
-    { id:'tree-climb', label:'Jump', type:'dice',
+    { id:'find-ridge', label:'Find Tree', type:'narrator', img:'ae-tree-climb.png' },
+    { id:'tree-climb', label:'Jump', type:'dice', img:'ae-tree-climb.png',
       fork:[
         { label:'Holds', nodes:[{ id:'tree-success', label:'Glimpse', type:'collect' }]},
         { label:'Snaps', nodes:[{ id:'tree-failed', label:'Closed', type:'fail' }]}
@@ -3331,6 +3331,7 @@ const imgFocus = {
   'ae-climb-fall.png': 'center 45%',
   'ae-climb-retry.png': 'center 40%',
   'ae-climb-defeat.png': 'center 50%',
+  'ae-tree-climb.png': 'center 35%',
 };
 
 function mkBlock(n) {
