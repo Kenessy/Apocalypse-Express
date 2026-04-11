@@ -3847,12 +3847,12 @@ function buildCampaignTree() {
   // Scout branch
   const scout = add('a1-scout','Survey','choice',-3,2.5,true,{img:'ae-obelisk-fountain.png', tip:'Scan the landscape — obelisk, tree, open plain'});
   const climb = add('a1-climb','Climb Obelisk','dice',-4,3.8,true,{img:'ae-climb-retry.png', tip:'DC 10 → DC 15 → DC 20 chain'});
-  const climbOk = add('a1-climb-ok','The View','collect',-4.8,5.2,true,{img:'ae-crossroads-wide.png', tip:'See the infinite obsidian plane from above'});
-  const climbFail = add('a1-climb-fail','Defeat','fail',-3.2,5.2,true,{img:'ae-climb-defeat.png', tip:'Three falls. Give up.'});
+  const climbOk = add('a1-climb-ok','The View','collect',-5,5.2,true,{img:'ae-crossroads-wide.png', tip:'See the infinite obsidian plane from above'});
+  const climbFail = add('a1-climb-fail','Defeat','fail',-3.5,5.2,true,{img:'ae-climb-defeat.png', tip:'Three falls. Give up.'});
   const tree = add('a1-tree','Find Tree','narrator',-2,3.8,true,{img:'ae-tree-find.png', tip:'Tree ridge in the mist — DC 15 jump'});
-  const treeOk = add('a1-tree-ok','Glimpse','collect',-2.8,5.2,true,{img:'ae-tree-top.png', tip:'Brief view from the canopy'});
-  const treeFail = add('a1-tree-fail','Closed','fail',-1.2,5.2,true,{img:'ae-tree-fall.png', tip:'Branch snaps. Fall.'});
-  const wander = add('a1-wander','Walk','narrator',-4,5.2,false,{img:'ae-long-walk.png', tip:'Wander the infinite plain alone'});
+  const treeOk = add('a1-tree-ok','Glimpse','collect',-2.5,5.2,true,{img:'ae-tree-top.png', tip:'Brief view from the canopy'});
+  const treeFail = add('a1-tree-fail','Closed','fail',-1.5,5.2,true,{img:'ae-tree-fall.png', tip:'Branch snaps. Fall.'});
+  const wander = add('a1-wander','Walk','narrator',-3,4.5,false,{img:'ae-long-walk.png', tip:'Wander the infinite plain alone'});
   link(a1cross, scout); link(scout, climb); link(climb, climbOk,'fork-success'); link(climb, climbFail,'fork-fail');
   link(scout, tree); link(tree, treeOk,'fork-success'); link(tree, treeFail,'fork-fail');
   link(scout, wander);
