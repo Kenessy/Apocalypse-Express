@@ -184,35 +184,13 @@ html, body {
 .ae-sandbox-canvas {
   position:absolute; top:38px; left:0; right:0; bottom:0;
   overflow:hidden; cursor:grab; user-select:none;
-  -webkit-user-select:none;
-  /* ── vector grid lives here — always at native screen resolution ── */
-  background-color:#06050e;
-  background-image:
-    /* fine dot grid */
-    radial-gradient(circle, rgba(200,180,150,.09) 1px, transparent 1px),
-    /* medium grid */
-    linear-gradient(rgba(200,180,150,.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(200,180,150,.04) 1px, transparent 1px),
-    /* major grid */
-    linear-gradient(rgba(200,180,150,.07) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(200,180,150,.07) 1px, transparent 1px),
-    /* warm glow */
-    radial-gradient(ellipse at 50% 40%, rgba(180,140,80,.04) 0%, transparent 50%),
-    /* cool glow */
-    radial-gradient(ellipse at 30% 70%, rgba(100,80,160,.03) 0%, transparent 45%);
-  /* sizes/positions set dynamically by sbApplyTransform */
+  -webkit-user-select:none; background:#06050e;
 }
 .ae-sandbox-canvas.dragging { cursor:grabbing; }
 
-/* node overlay layer — transparent, only nodes + edges */
-.ae-sandbox-grid {
-  position:absolute; top:0; left:0;
-  transform-origin:0 0;
-  will-change:transform;
-  z-index:1;
-}
+#sandbox-svg { position:absolute; inset:0; width:100%; height:100%; }
 
-/* zoom indicator */
+/* zoom controls */
 .ae-sandbox-zoom {
   position:absolute; bottom:14px; right:14px; z-index:16;
   display:flex; flex-direction:column; align-items:center; gap:4px;
@@ -226,169 +204,91 @@ html, body {
   backdrop-filter:blur(8px);
 }
 .ae-sandbox-zoom-btn:hover { opacity:.9; background:rgba(201,156,90,.12); }
-.ae-sandbox-zoom-level {
-  font:500 8px/1 'IBM Plex Mono'; color:var(--gold); opacity:.3;
-  letter-spacing:.1em;
-}
-.ae-sandbox-zoom-btn.fit {
-  font-size:10px; margin-top:4px;
-}
+.ae-sandbox-zoom-level { font:500 8px/1 'IBM Plex Mono'; color:var(--gold); opacity:.3; letter-spacing:.1em; }
+.ae-sandbox-zoom-btn.fit { font-size:10px; margin-top:4px; }
 
-/* ═══ CELESTIAL CARTOGRAPHY — constellation node map ═══ */
+/* ═══ SVG CELESTIAL CARTOGRAPHY ═══ */
 
-/* trajectory arcs between celestial bodies */
-.ae-sandbox-edges { position:absolute; top:0; left:0; pointer-events:none; }
-.ae-sandbox-edge {
-  fill:none; stroke-width:1.5; stroke-linecap:round;
-  stroke:rgba(180,160,140,.15);
-  stroke-dasharray:4 6;
-}
-.ae-sandbox-edge.active {
-  stroke:rgba(220,195,150,.35);
-  stroke-dasharray:none;
-  stroke-width:2;
-}
-.ae-sandbox-edge.fork-success.active { stroke:rgba(160,230,180,.35); }
-.ae-sandbox-edge.fork-fail.active { stroke:rgba(230,150,140,.35); }
+/* edges */
+.sb-edge { fill:none; stroke-width:1.5; stroke-linecap:round; stroke:rgba(180,160,140,.15); stroke-dasharray:4 6; }
+.sb-edge.active { stroke:rgba(220,195,150,.35); stroke-dasharray:none; stroke-width:2; }
+.sb-edge.fork-success.active { stroke:rgba(160,230,180,.35); }
+.sb-edge.fork-fail.active { stroke:rgba(230,150,140,.35); }
 
-/* ── celestial node — concentric ring system ── */
-.sb-node {
-  position:absolute;
-  width:72px; height:72px;
-  display:flex; align-items:center; justify-content:center;
-  cursor:default;
-}
-.sb-node:hover { z-index:10; }
+/* node group */
+.sb-node { cursor:default; }
+.sb-hit { fill:transparent; } /* invisible hit area for hover */
 
-/* outer orbit ring */
-.sb-node-orbit {
-  position:absolute; inset:0;
-  border-radius:50%;
-  border:1px solid rgba(200,180,150,.15);
-  transition:border-color .5s, box-shadow .5s;
-}
-.sb-node:hover .sb-node-orbit {
-  border-color:rgba(200,180,150,.35);
-}
+/* orbit ring */
+.sb-orbit { fill:none; stroke:rgba(200,180,150,.15); stroke-width:1; transition:stroke .5s; }
+.sb-node:hover .sb-orbit { stroke:rgba(200,180,150,.35); }
 
-/* inner ring — the main body indicator */
-.sb-node-ring {
-  width:28px; height:28px;
-  border-radius:50%;
-  border:1.5px solid rgba(200,180,150,.25);
-  background:rgba(12,10,18,.6);
-  display:flex; align-items:center; justify-content:center;
-  position:relative;
-  transition:all .5s cubic-bezier(.23,1,.32,1);
-}
+/* body ring */
+.sb-ring { fill:rgba(12,10,18,.6); stroke:rgba(200,180,150,.25); stroke-width:1.5; transition:all .5s; }
 
-/* core — the luminous center point */
-.sb-node-core {
-  width:6px; height:6px;
-  border-radius:50%;
-  background:rgba(200,180,150,.35);
-  transition:all .5s cubic-bezier(.23,1,.32,1);
-}
+/* core */
+.sb-core { fill:rgba(200,180,150,.35); transition:all .5s; }
 
-/* designation label — catalogue notation style */
-.sb-node-label {
-  position:absolute; left:calc(50% + 42px); top:50%;
-  transform:translateY(-50%);
-  font:400 10px/1.2 'Cormorant Garamond','Garamond','Georgia',serif;
-  letter-spacing:.08em;
-  color:rgba(200,180,150,.35);
-  white-space:nowrap;
-  transition:color .5s;
+/* label text */
+.sb-label {
+  font-family:'Cormorant Garamond','Garamond','Georgia',serif;
+  font-size:10px; font-weight:400; letter-spacing:.08em;
+  fill:rgba(200,180,150,.35); dominant-baseline:central;
+  transition:fill .5s;
 }
-.sb-node:hover .sb-node-label { color:rgba(220,200,170,.65); }
+.sb-node:hover .sb-label { fill:rgba(220,200,170,.65); }
 
-/* type notation — tiny subscript */
-.sb-node-type {
-  position:absolute; left:calc(50% + 42px); top:calc(50% + 12px);
-  font:300 7.5px/1 'Cormorant Garamond','Garamond','Georgia',serif;
-  letter-spacing:.16em; text-transform:lowercase;
-  color:rgba(200,180,150,.18);
-  font-style:italic;
-  transition:color .5s;
+/* type text */
+.sb-type-label {
+  font-family:'Cormorant Garamond','Garamond','Georgia',serif;
+  font-size:7.5px; font-weight:300; letter-spacing:.16em;
+  fill:rgba(200,180,150,.18); font-style:italic; dominant-baseline:central;
+  transition:fill .5s;
 }
-.sb-node:hover .sb-node-type { color:rgba(200,180,150,.4); }
+.sb-node:hover .sb-type-label { fill:rgba(200,180,150,.4); }
 
-/* ── EMPTY state — dormant, visible but dim ── */
-.sb-node.empty .sb-node-orbit { border-color:rgba(180,160,140,.08); }
-.sb-node.empty .sb-node-ring { border-color:rgba(180,160,140,.12); background:rgba(8,6,14,.4); }
-.sb-node.empty .sb-node-core { background:rgba(180,160,140,.15); width:4px; height:4px; }
-.sb-node.empty .sb-node-label { color:rgba(180,160,140,.18); }
-.sb-node.empty .sb-node-type { color:rgba(180,160,140,.10); }
+/* ── empty state ── */
+.sb-node.empty .sb-orbit { stroke:rgba(180,160,140,.08); }
+.sb-node.empty .sb-ring { stroke:rgba(180,160,140,.12); fill:rgba(8,6,14,.4); }
+.sb-node.empty .sb-core { fill:rgba(180,160,140,.15); }
+.sb-node.empty .sb-label { fill:rgba(180,160,140,.18); }
+.sb-node.empty .sb-type-label { fill:rgba(180,160,140,.10); }
 
-/* ── FILLED state — lit celestial body ── */
-.sb-node.filled .sb-node-orbit {
-  border-color:rgba(230,205,155,.25);
-  box-shadow:0 0 25px rgba(230,205,155,.06);
-}
-.sb-node.filled .sb-node-ring {
-  border-color:rgba(230,205,155,.5);
-  background:rgba(25,20,15,.5);
-  box-shadow:0 0 15px rgba(230,205,155,.1);
-}
-.sb-node.filled .sb-node-core {
-  background:rgba(255,225,160,.8);
-  box-shadow:0 0 10px rgba(255,225,160,.4), 0 0 25px rgba(255,225,160,.15);
-  width:8px; height:8px;
-}
-.sb-node.filled .sb-node-label { color:rgba(230,205,155,.55); }
-.sb-node.filled .sb-node-type { color:rgba(230,205,155,.3); }
-.sb-node.filled:hover .sb-node-ring {
-  border-color:rgba(240,215,165,.65);
-  box-shadow:0 0 25px rgba(240,215,165,.18);
-}
-.sb-node.filled:hover .sb-node-core {
-  background:rgba(255,235,180,.95);
-  box-shadow:0 0 14px rgba(255,235,180,.5), 0 0 35px rgba(255,235,180,.2);
-  width:10px; height:10px;
-}
-.sb-node.filled:hover .sb-node-label { color:rgba(240,220,170,.8); }
+/* ── filled state ── */
+.sb-node.filled .sb-orbit { stroke:rgba(230,205,155,.25); }
+.sb-node.filled .sb-ring { stroke:rgba(230,205,155,.5); fill:rgba(25,20,15,.5); }
+.sb-node.filled .sb-core { fill:rgba(255,225,160,.8); }
+.sb-node.filled .sb-label { fill:rgba(230,205,155,.55); }
+.sb-node.filled .sb-type-label { fill:rgba(230,205,155,.3); }
+.sb-node.filled:hover .sb-ring { stroke:rgba(240,215,165,.65); }
+.sb-node.filled:hover .sb-core { fill:rgba(255,235,180,.95); }
+.sb-node.filled:hover .sb-label { fill:rgba(240,220,170,.8); }
 
-/* ── type-specific color temperatures ── */
-/* narrator — warm amber (standard, uses base filled styles) */
+/* ── type colors ── */
+.sb-node.filled.t-choice .sb-core { fill:rgba(180,205,250,.8); }
+.sb-node.filled.t-choice .sb-ring { stroke:rgba(180,205,250,.4); }
+.sb-node.filled.t-choice .sb-orbit { stroke:rgba(180,205,250,.2); }
+.sb-node.filled.t-choice:hover .sb-core { fill:rgba(200,220,255,.95); }
 
-/* choice — cool silver-blue */
-.sb-node.filled.t-choice .sb-node-core { background:rgba(180,205,250,.8); box-shadow:0 0 10px rgba(180,205,250,.4), 0 0 25px rgba(180,205,250,.12); }
-.sb-node.filled.t-choice .sb-node-ring { border-color:rgba(180,205,250,.4); box-shadow:0 0 15px rgba(180,205,250,.08); }
-.sb-node.filled.t-choice .sb-node-orbit { border-color:rgba(180,205,250,.2); }
-.sb-node.filled.t-choice:hover .sb-node-core { background:rgba(200,220,255,.95); box-shadow:0 0 14px rgba(200,220,255,.5), 0 0 35px rgba(200,220,255,.18); }
+.sb-node.filled.t-dice .sb-core { fill:rgba(255,220,100,.8); }
+.sb-node.filled.t-dice .sb-ring { stroke:rgba(255,220,100,.4); }
+.sb-node.filled.t-dice .sb-orbit { stroke:rgba(255,220,100,.2); }
+.sb-node.filled.t-dice:hover .sb-core { fill:rgba(255,235,130,.95); }
+.sb-orbit-inner { fill:none; stroke-dasharray:4 4; stroke:rgba(255,220,100,.15); stroke-width:1; }
 
-/* dice — bright gold */
-.sb-node.filled.t-dice .sb-node-core { background:rgba(255,220,100,.8); box-shadow:0 0 10px rgba(255,220,100,.4), 0 0 25px rgba(255,220,100,.12); }
-.sb-node.filled.t-dice .sb-node-ring { border-color:rgba(255,220,100,.4); box-shadow:0 0 15px rgba(255,220,100,.08); }
-.sb-node.filled.t-dice .sb-node-orbit { border-color:rgba(255,220,100,.2); }
-.sb-node.filled.t-dice:hover .sb-node-core { background:rgba(255,235,130,.95); box-shadow:0 0 14px rgba(255,235,130,.5); }
-/* dice gets a second orbit ring */
-.sb-node.filled.t-dice .sb-node-orbit::before {
-  content:''; position:absolute; inset:6px; border-radius:50%;
-  border:1px dashed rgba(255,220,100,.15);
-}
+.sb-node.filled.t-collect .sb-core { fill:rgba(140,240,170,.8); }
+.sb-node.filled.t-collect .sb-ring { stroke:rgba(140,240,170,.4); }
+.sb-node.filled.t-collect .sb-orbit { stroke:rgba(140,240,170,.2); }
+.sb-node.filled.t-collect:hover .sb-core { fill:rgba(160,255,190,.95); }
+.sb-node.filled.t-collect .sb-core { animation:sb-pulse 3s ease-in-out infinite; }
+@keyframes sb-pulse { 0%,100%{opacity:1} 50%{opacity:.65} }
 
-/* collect — vivid green */
-.sb-node.filled.t-collect .sb-node-core { background:rgba(140,240,170,.8); box-shadow:0 0 10px rgba(140,240,170,.4), 0 0 25px rgba(140,240,170,.12); }
-.sb-node.filled.t-collect .sb-node-ring { border-color:rgba(140,240,170,.4); box-shadow:0 0 15px rgba(140,240,170,.08); }
-.sb-node.filled.t-collect .sb-node-orbit { border-color:rgba(140,240,170,.2); }
-.sb-node.filled.t-collect:hover .sb-node-core { background:rgba(160,255,190,.95); box-shadow:0 0 14px rgba(160,255,190,.5); }
-/* collect gets a pulsing core */
-.sb-node.filled.t-collect .sb-node-core { animation:sb-pulse 3s ease-in-out infinite; }
-@keyframes sb-pulse {
-  0%,100% { opacity:1; }
-  50% { opacity:.65; }
-}
+.sb-node.filled.t-fail .sb-core { fill:rgba(240,140,130,.7); }
+.sb-node.filled.t-fail .sb-ring { stroke:rgba(240,140,130,.35); }
+.sb-node.filled.t-fail .sb-orbit { stroke:rgba(240,140,130,.15); stroke-dasharray:6 4; }
+.sb-node.filled.t-fail:hover .sb-core { fill:rgba(255,160,150,.9); }
 
-/* fail — warm red */
-.sb-node.filled.t-fail .sb-node-core { background:rgba(240,140,130,.7); box-shadow:0 0 10px rgba(240,140,130,.35), 0 0 25px rgba(240,140,130,.1); }
-.sb-node.filled.t-fail .sb-node-ring { border-color:rgba(240,140,130,.35); box-shadow:0 0 15px rgba(240,140,130,.06); }
-.sb-node.filled.t-fail .sb-node-orbit { border-color:rgba(240,140,130,.15); }
-.sb-node.filled.t-fail:hover .sb-node-core { background:rgba(255,160,150,.9); box-shadow:0 0 14px rgba(255,160,150,.45); }
-/* fail orbit is broken/dashed */
-.sb-node.filled.t-fail .sb-node-orbit { border-style:dashed; border-width:1px; }
-
-/* ── tooltip — parchment slip ── */
+/* ── tooltip ── */
 .ae-sandbox-tooltip {
   position:fixed; z-index:100; pointer-events:none;
   max-width:280px; padding:16px 20px;
@@ -2163,9 +2063,31 @@ html, body {
       </div>
     </div>
     <div class="ae-sandbox-canvas" id="sandbox-canvas">
-      <div class="ae-sandbox-grid" id="sandbox-grid">
-        <svg class="ae-sandbox-edges" id="sandbox-edges"></svg>
-      </div>
+      <svg id="sandbox-svg" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <pattern id="sb-dotgrid" width="24" height="24" patternUnits="userSpaceOnUse">
+            <circle cx="12" cy="12" r="1" fill="rgba(200,180,150,0.09)"/>
+          </pattern>
+          <pattern id="sb-medgrid" width="120" height="120" patternUnits="userSpaceOnUse">
+            <line x1="0" y1="0" x2="120" y2="0" stroke="rgba(200,180,150,0.04)" stroke-width="0.5"/>
+            <line x1="0" y1="0" x2="0" y2="120" stroke="rgba(200,180,150,0.04)" stroke-width="0.5"/>
+          </pattern>
+          <pattern id="sb-majgrid" width="360" height="360" patternUnits="userSpaceOnUse">
+            <line x1="0" y1="0" x2="360" y2="0" stroke="rgba(200,180,150,0.07)" stroke-width="1"/>
+            <line x1="0" y1="0" x2="0" y2="360" stroke="rgba(200,180,150,0.07)" stroke-width="1"/>
+          </pattern>
+          <filter id="sb-glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+        <rect x="-5000" y="-5000" width="10000" height="10000" fill="#06050e"/>
+        <rect x="-5000" y="-5000" width="10000" height="10000" fill="url(#sb-dotgrid)"/>
+        <rect x="-5000" y="-5000" width="10000" height="10000" fill="url(#sb-medgrid)"/>
+        <rect x="-5000" y="-5000" width="10000" height="10000" fill="url(#sb-majgrid)"/>
+        <g id="sb-edges"></g>
+        <g id="sb-nodes"></g>
+      </svg>
     </div>
     <div class="ae-sandbox-zoom">
       <button class="ae-sandbox-zoom-btn" id="sandbox-zoom-in" title="Zoom in">+</button>
@@ -3620,12 +3542,12 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') { e.preventDefault(); fcGo(-1); }
 });
 
-/* ══ SANDBOX — WebGL shader canvas with pan/zoom ══ */
+/* ══ SANDBOX — full SVG viewBox pan/zoom ══ */
+const SVG_NS = 'http://www.w3.org/2000/svg';
 let sandboxDevMode = false;
-let sbZoom = 1;
-let sbPanX = 0, sbPanY = 0;
-let sbGridW = 0, sbGridH = 0;
-let sbDragging = false, sbDragStartX = 0, sbDragStartY = 0, sbPanStartX = 0, sbPanStartY = 0;
+let vbX = 0, vbY = 0, vbW = 1600, vbH = 1200;
+let sbInitW = 1600, sbInitH = 1200;
+let sbDragging = false, sbDragStartX = 0, sbDragStartY = 0, sbDragVBX = 0, sbDragVBY = 0;
 let sbInitialized = false;
 
 document.getElementById('sandbox-dev-toggle').addEventListener('click', function() {
@@ -3633,46 +3555,44 @@ document.getElementById('sandbox-dev-toggle').addEventListener('click', function
   this.classList.toggle('active', sandboxDevMode);
 });
 
+function sbApplyViewBox() {
+  document.getElementById('sandbox-svg').setAttribute('viewBox', vbX+' '+vbY+' '+vbW+' '+vbH);
+  document.getElementById('sandbox-zoom-level').textContent = Math.round((sbInitW / vbW) * 100) + '%';
+}
+
+function sbZoomAt(factor, cx, cy) {
+  const svg = document.getElementById('sandbox-svg');
+  const r = svg.getBoundingClientRect();
+  const fx = (cx - r.left) / r.width;
+  const fy = (cy - r.top) / r.height;
+  const wpx = vbX + fx * vbW;
+  const wpy = vbY + fy * vbH;
+  const nw = Math.max(200, Math.min(8000, vbW / factor));
+  const nh = nw * (r.height / r.width);
+  vbX = wpx - fx * nw;
+  vbY = wpy - fy * nh;
+  vbW = nw; vbH = nh;
+  sbApplyViewBox();
+}
+
 // zoom buttons
-document.getElementById('sandbox-zoom-in').addEventListener('click', () => sbSetZoom(sbZoom * 1.25));
-document.getElementById('sandbox-zoom-out').addEventListener('click', () => sbSetZoom(sbZoom / 1.25));
-document.getElementById('sandbox-zoom-fit').addEventListener('click', () => { sbZoom = 1; sbPanX = 0; sbPanY = 0; sbApplyTransform(); document.getElementById('sandbox-zoom-level').textContent = '100%'; });
+document.getElementById('sandbox-zoom-in').addEventListener('click', () => {
+  const svg = document.getElementById('sandbox-svg');
+  const r = svg.getBoundingClientRect();
+  sbZoomAt(1.25, r.left + r.width/2, r.top + r.height/2);
+});
+document.getElementById('sandbox-zoom-out').addEventListener('click', () => {
+  const svg = document.getElementById('sandbox-svg');
+  const r = svg.getBoundingClientRect();
+  sbZoomAt(1/1.25, r.left + r.width/2, r.top + r.height/2);
+});
+document.getElementById('sandbox-zoom-fit').addEventListener('click', () => {
+  vbX = sbFitVB.x; vbY = sbFitVB.y; vbW = sbFitVB.w; vbH = sbFitVB.h;
+  sbApplyViewBox();
+});
+let sbFitVB = { x:0, y:0, w:1600, h:1200 };
 
-function sbSetZoom(z, pivotX, pivotY) {
-  const oldZ = sbZoom;
-  sbZoom = Math.max(0.15, Math.min(3, z));
-  if (pivotX !== undefined) {
-    sbPanX = pivotX - (pivotX - sbPanX) * (sbZoom / oldZ);
-    sbPanY = pivotY - (pivotY - sbPanY) * (sbZoom / oldZ);
-  }
-  sbApplyTransform();
-  document.getElementById('sandbox-zoom-level').textContent = Math.round(sbZoom * 100) + '%';
-}
-
-function sbApplyTransform() {
-  const grid = document.getElementById('sandbox-grid');
-  grid.style.transform = 'translate(' + sbPanX + 'px,' + sbPanY + 'px) scale(' + sbZoom + ')';
-
-  // update vector background at native resolution — zoom-aware sizes + pan-aware positions
-  const c = document.getElementById('sandbox-canvas');
-  const z = sbZoom;
-  const px = sbPanX, py = sbPanY;
-  const dot = 24*z, med = 120*z, maj = 360*z;
-  c.style.backgroundSize = [
-    dot+'px '+dot+'px',
-    med+'px '+med+'px', med+'px '+med+'px',
-    maj+'px '+maj+'px', maj+'px '+maj+'px',
-    '100% 100%', '100% 100%'
-  ].join(',');
-  c.style.backgroundPosition = [
-    (px+12*z)+'px '+(py+12*z)+'px',
-    px+'px '+py+'px', px+'px '+py+'px',
-    px+'px '+py+'px', px+'px '+py+'px',
-    '0 0', '0 0'
-  ].join(',');
-}
-
-// mouse drag to pan + track mouse for shader
+// pan/zoom interaction
 (function() {
   const container = document.getElementById('sandbox-canvas');
 
@@ -3680,15 +3600,17 @@ function sbApplyTransform() {
     if (e.button !== 0) return;
     sbDragging = true;
     sbDragStartX = e.clientX; sbDragStartY = e.clientY;
-    sbPanStartX = sbPanX; sbPanStartY = sbPanY;
+    sbDragVBX = vbX; sbDragVBY = vbY;
     container.classList.add('dragging');
     e.preventDefault();
   });
   window.addEventListener('mousemove', function(e) {
     if (!sbDragging) return;
-    sbPanX = sbPanStartX + (e.clientX - sbDragStartX);
-    sbPanY = sbPanStartY + (e.clientY - sbDragStartY);
-    sbApplyTransform();
+    const svg = document.getElementById('sandbox-svg');
+    const r = svg.getBoundingClientRect();
+    vbX = sbDragVBX - (e.clientX - sbDragStartX) * (vbW / r.width);
+    vbY = sbDragVBY - (e.clientY - sbDragStartY) * (vbH / r.height);
+    sbApplyViewBox();
   });
   window.addEventListener('mouseup', function() {
     if (!sbDragging) return;
@@ -3697,198 +3619,195 @@ function sbApplyTransform() {
   });
   container.addEventListener('wheel', function(e) {
     e.preventDefault();
-    const rect = container.getBoundingClientRect();
-    const mx = e.clientX - rect.left, my = e.clientY - rect.top;
-    sbSetZoom(sbZoom * (e.deltaY < 0 ? 1.12 : 1/1.12), mx, my);
+    sbZoomAt(e.deltaY < 0 ? 1.12 : 1/1.12, e.clientX, e.clientY);
   }, { passive: false });
 
-  // touch support
-  let sbTouchDist = 0, sbTouchZoomStart = 1;
+  // touch
+  let tDist = 0, tVBW = 0;
   container.addEventListener('touchstart', function(e) {
     const t = Array.from(e.touches);
     if (t.length === 1) {
       sbDragging = true;
       sbDragStartX = t[0].clientX; sbDragStartY = t[0].clientY;
-      sbPanStartX = sbPanX; sbPanStartY = sbPanY;
+      sbDragVBX = vbX; sbDragVBY = vbY;
     } else if (t.length === 2) {
       sbDragging = false;
-      sbTouchDist = Math.hypot(t[1].clientX-t[0].clientX, t[1].clientY-t[0].clientY);
-      sbTouchZoomStart = sbZoom;
+      tDist = Math.hypot(t[1].clientX-t[0].clientX, t[1].clientY-t[0].clientY);
+      tVBW = vbW;
     }
     e.preventDefault();
   }, { passive: false });
   container.addEventListener('touchmove', function(e) {
     const t = Array.from(e.touches);
     if (t.length === 1 && sbDragging) {
-      sbPanX = sbPanStartX + (t[0].clientX - sbDragStartX);
-      sbPanY = sbPanStartY + (t[0].clientY - sbDragStartY);
-      sbApplyTransform();
+      const svg = document.getElementById('sandbox-svg');
+      const r = svg.getBoundingClientRect();
+      vbX = sbDragVBX - (t[0].clientX - sbDragStartX) * (vbW / r.width);
+      vbY = sbDragVBY - (t[0].clientY - sbDragStartY) * (vbH / r.height);
+      sbApplyViewBox();
     } else if (t.length === 2) {
       const d = Math.hypot(t[1].clientX-t[0].clientX, t[1].clientY-t[0].clientY);
-      const rect = container.getBoundingClientRect();
-      sbSetZoom(sbTouchZoomStart*(d/sbTouchDist), (t[0].clientX+t[1].clientX)/2-rect.left, (t[0].clientY+t[1].clientY)/2-rect.top);
+      const factor = d / tDist;
+      sbZoomAt(factor, (t[0].clientX+t[1].clientX)/2, (t[0].clientY+t[1].clientY)/2);
+      tDist = d;
     }
     e.preventDefault();
   }, { passive: false });
   container.addEventListener('touchend', function() { sbDragging = false; });
 })();
 
-/* ── dummy decision tree for design testing ── */
+/* ── dummy decision tree ── */
 function buildDummyTree() {
-  const COL_W = 200;
-  const ROW_H = 120;
-  const nodes = [];
-  const edges = [];
+  const COL_W = 200, ROW_H = 120;
+  const nodes = [], edges = [];
   let nid = 0;
+  function add(id, label, type, x, y, filled) { const n = { nid:nid++, id, label, type, x, y, filled }; nodes.push(n); return n.nid; }
+  function link(a, b, cls) { edges.push({ from:a, to:b, cls:cls||'' }); }
 
-  function add(id, label, type, x, y, filled) {
-    const n = { nid: nid++, id, label, type, x, y, filled };
-    nodes.push(n);
-    return n.nid;
-  }
-  function link(a, b, cls) { edges.push({ from: a, to: b, cls: cls || '' }); }
+  const n0 = add('d-prologue','Prologue','narrator',0,0,true);
+  const n1 = add('d-awakening','Awakening','narrator',0,1,true);
+  const n2 = add('d-crossroads','Crossroads','choice',0,2,true);
+  link(n0,n1); link(n1,n2);
 
-  // ── linear intro ──
-  const n0 = add('d-prologue',   'Prologue',     'narrator', 0, 0, true);
-  const n1 = add('d-awakening',  'Awakening',    'narrator', 0, 1, true);
-  const n2 = add('d-crossroads', 'Crossroads',   'choice',   0, 2, true);
-  link(n0, n1); link(n1, n2);
+  const a0 = add('d-vault-enter','Enter Vault','narrator',-3,3.5,true);
+  const a1 = add('d-vault-lock','Pick Lock','dice',-3,4.8,true);
+  const a2 = add('d-vault-open','Treasure','collect',-3.8,6.2,true);
+  const a3 = add('d-vault-trap','Trap Spring','fail',-2.2,6.2,false);
+  link(n2,a0); link(a0,a1); link(a1,a2,'fork-success'); link(a1,a3,'fork-fail');
 
-  // ── branch A: The Vault ──
-  const a0 = add('d-vault-enter', 'Enter Vault',  'narrator', -3, 3.5, true);
-  const a1 = add('d-vault-lock',  'Pick Lock',    'dice',     -3, 4.8, true);
-  const a2 = add('d-vault-open',  'Treasure',     'collect',  -3.8, 6.2, true);
-  const a3 = add('d-vault-trap',  'Trap Spring',  'fail',     -2.2, 6.2, false);
-  link(n2, a0); link(a0, a1);
-  link(a1, a2, 'fork-success'); link(a1, a3, 'fork-fail');
+  const b0 = add('d-oracle-path','Seek Oracle','narrator',0,3.5,true);
+  const b1 = add('d-oracle-meet','The Question','choice',0,4.8,true);
+  const b2 = add('d-oracle-truth','Truth','collect',-0.8,6.2,false);
+  const b3 = add('d-oracle-lie','Deception','narrator',0.8,6.2,true);
+  const b4 = add('d-oracle-end','Revelation','collect',0.8,7.5,false);
+  link(n2,b0); link(b0,b1); link(b1,b2); link(b1,b3); link(b3,b4);
 
-  // ── branch B: The Oracle ──
-  const b0 = add('d-oracle-path', 'Seek Oracle',  'narrator', 0, 3.5, true);
-  const b1 = add('d-oracle-meet', 'The Question', 'choice',   0, 4.8, true);
-  const b2 = add('d-oracle-truth','Truth',        'collect', -0.8, 6.2, false);
-  const b3 = add('d-oracle-lie',  'Deception',    'narrator', 0.8, 6.2, true);
-  const b4 = add('d-oracle-end',  'Revelation',   'collect',  0.8, 7.5, false);
-  link(n2, b0); link(b0, b1);
-  link(b1, b2); link(b1, b3);
-  link(b3, b4);
+  const c0 = add('d-wild-enter','Into the Wild','narrator',3,3.5,true);
+  const c1 = add('d-wild-beast','Beast','dice',3,4.8,false);
+  const c2 = add('d-wild-tame','Tame','collect',2.2,6.2,false);
+  const c3 = add('d-wild-flee','Flee','fail',3.8,6.2,false);
+  link(n2,c0); link(c0,c1); link(c1,c2,'fork-success'); link(c1,c3,'fork-fail');
 
-  // ── branch C: The Wild ──
-  const c0 = add('d-wild-enter',  'Into the Wild','narrator', 3, 3.5, true);
-  const c1 = add('d-wild-beast',  'Beast',        'dice',     3, 4.8, false);
-  const c2 = add('d-wild-tame',   'Tame',         'collect',  2.2, 6.2, false);
-  const c3 = add('d-wild-flee',   'Flee',         'fail',     3.8, 6.2, false);
-  link(n2, c0); link(c0, c1);
-  link(c1, c2, 'fork-success'); link(c1, c3, 'fork-fail');
-
-  // normalize
-  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-  nodes.forEach(n => {
-    if (n.x < minX) minX = n.x;
-    if (n.y < minY) minY = n.y;
-    if (n.x > maxX) maxX = n.x;
-    if (n.y > maxY) maxY = n.y;
-  });
-  const padX = 180, padY = 120;
-  nodes.forEach(n => {
-    n.px = (n.x - minX) * COL_W + padX;
-    n.py = (n.y - minY) * ROW_H + padY;
-  });
-  return {
-    nodes, edges,
-    gridW: (maxX - minX) * COL_W + padX * 2 + COL_W,
-    gridH: (maxY - minY) * ROW_H + padY * 2 + ROW_H
-  };
+  let minX=Infinity, minY=Infinity, maxX=-Infinity, maxY=-Infinity;
+  nodes.forEach(n => { if(n.x<minX)minX=n.x; if(n.y<minY)minY=n.y; if(n.x>maxX)maxX=n.x; if(n.y>maxY)maxY=n.y; });
+  const padX=180, padY=120;
+  nodes.forEach(n => { n.px=(n.x-minX)*COL_W+padX; n.py=(n.y-minY)*ROW_H+padY; });
+  return { nodes, edges, gridW:(maxX-minX)*COL_W+padX*2+COL_W, gridH:(maxY-minY)*ROW_H+padY*2+ROW_H };
 }
 
 function renderSandbox() {
   const layout = buildDummyTree();
   const { nodes, edges } = layout;
-  sbGridW = layout.gridW;
-  sbGridH = layout.gridH;
 
-  const grid = document.getElementById('sandbox-grid');
-  const svgEl = document.getElementById('sandbox-edges');
-
-  grid.querySelectorAll('.sb-node').forEach(e => e.remove());
-
-  grid.style.width = sbGridW + 'px';
-  grid.style.height = sbGridH + 'px';
-  svgEl.setAttribute('width', sbGridW);
-  svgEl.setAttribute('height', sbGridH);
-  svgEl.style.width = sbGridW + 'px';
-  svgEl.style.height = sbGridH + 'px';
-  svgEl.querySelectorAll('path').forEach(p => p.remove());
+  const edgesG = document.getElementById('sb-edges');
+  const nodesG = document.getElementById('sb-nodes');
+  edgesG.innerHTML = '';
+  nodesG.innerHTML = '';
 
   const nodeMap = {};
   nodes.forEach(n => { nodeMap[n.nid] = n; });
 
-  // draw trajectory arcs
+  // edges
   edges.forEach(e => {
     const from = nodeMap[e.from], to = nodeMap[e.to];
     if (!from || !to) return;
-    const bothFilled = from.filled && to.filled;
-    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    const x1 = from.px, y1 = from.py + 36;
-    const x2 = to.px, y2 = to.py - 36;
-    const cy1 = y1 + (y2 - y1) * 0.35;
-    const cy2 = y1 + (y2 - y1) * 0.65;
-    path.setAttribute('d', 'M'+x1+','+y1+' C'+x1+','+cy1+' '+x2+','+cy2+' '+x2+','+y2);
-    path.setAttribute('class', 'ae-sandbox-edge' + (bothFilled ? ' active' : '') + (e.cls ? ' ' + e.cls : ''));
-    svgEl.appendChild(path);
+    const both = from.filled && to.filled;
+    const p = document.createElementNS(SVG_NS, 'path');
+    const x1=from.px, y1=from.py+36, x2=to.px, y2=to.py-36;
+    p.setAttribute('d', 'M'+x1+','+y1+' C'+x1+','+(y1+(y2-y1)*.35)+' '+x2+','+(y1+(y2-y1)*.65)+' '+x2+','+y2);
+    p.setAttribute('class', 'sb-edge'+(both?' active':'')+(e.cls?' '+e.cls:''));
+    edgesG.appendChild(p);
   });
 
-  // type labels for tooltip
+  // nodes
   const typeNames = { narrator:'narrative', choice:'divergence', dice:'fate check', collect:'acquisition', fail:'terminus' };
 
-  // draw celestial nodes
   nodes.forEach(n => {
-    const el = document.createElement('div');
-    el.className = 'sb-node t-' + (n.type || 'narrator') + (n.filled ? ' filled' : ' empty');
-    el.style.left = (n.px - 36) + 'px';
-    el.style.top = (n.py - 36) + 'px';
+    const g = document.createElementNS(SVG_NS, 'g');
+    g.setAttribute('transform', 'translate('+n.px+','+n.py+')');
+    g.setAttribute('class', 'sb-node t-'+(n.type||'narrator')+(n.filled?' filled':' empty'));
 
-    el.innerHTML =
-      '<div class="sb-node-orbit"></div>' +
-      '<div class="sb-node-ring"><div class="sb-node-core"></div></div>' +
-      '<span class="sb-node-label">' + n.label + '</span>' +
-      '<span class="sb-node-type">' + (typeNames[n.type] || '') + '</span>';
+    // hit area
+    const hit = document.createElementNS(SVG_NS, 'circle');
+    hit.setAttribute('r', '36'); hit.setAttribute('class', 'sb-hit');
+    g.appendChild(hit);
+
+    // orbit
+    const orbit = document.createElementNS(SVG_NS, 'circle');
+    orbit.setAttribute('r', '36'); orbit.setAttribute('class', 'sb-orbit');
+    g.appendChild(orbit);
+
+    // dice: inner dashed orbit
+    if (n.type === 'dice' && n.filled) {
+      const o2 = document.createElementNS(SVG_NS, 'circle');
+      o2.setAttribute('r', '30'); o2.setAttribute('class', 'sb-orbit-inner');
+      g.appendChild(o2);
+    }
+
+    // ring
+    const ring = document.createElementNS(SVG_NS, 'circle');
+    ring.setAttribute('r', '14'); ring.setAttribute('class', 'sb-ring');
+    g.appendChild(ring);
+
+    // core
+    const core = document.createElementNS(SVG_NS, 'circle');
+    core.setAttribute('r', n.filled ? '4' : '2'); core.setAttribute('class', 'sb-core');
+    if (n.filled) core.setAttribute('filter', 'url(#sb-glow)');
+    g.appendChild(core);
+
+    // label
+    const lbl = document.createElementNS(SVG_NS, 'text');
+    lbl.setAttribute('x', '42'); lbl.setAttribute('y', '0');
+    lbl.setAttribute('class', 'sb-label');
+    lbl.textContent = n.label;
+    g.appendChild(lbl);
+
+    // type
+    const typ = document.createElementNS(SVG_NS, 'text');
+    typ.setAttribute('x', '42'); typ.setAttribute('y', '12');
+    typ.setAttribute('class', 'sb-type-label');
+    typ.textContent = typeNames[n.type] || '';
+    g.appendChild(typ);
 
     // tooltip
-    el.addEventListener('mouseenter', function() {
+    g.addEventListener('mouseenter', function() {
       if (sbDragging) return;
       const tt = document.getElementById('sandbox-tooltip');
       document.getElementById('sandbox-tt-title').textContent = n.label;
       document.getElementById('sandbox-tt-text').innerHTML = n.filled
-        ? '<p>Written — ' + (typeNames[n.type] || 'narrative') + ' node</p>'
+        ? '<p>Written — '+(typeNames[n.type]||'narrative')+' node</p>'
         : '<p>Uncharted — awaiting content</p>';
       tt.classList.add('show');
-      const rect = this.getBoundingClientRect();
-      tt.style.left = Math.min(rect.right + 8, window.innerWidth - 300) + 'px';
-      tt.style.top = (rect.top + rect.height/2 - 30) + 'px';
+      const rect = g.getBoundingClientRect();
+      tt.style.left = Math.min(rect.right+8, window.innerWidth-300)+'px';
+      tt.style.top = (rect.top+rect.height/2-30)+'px';
     });
-    el.addEventListener('mouseleave', function() {
+    g.addEventListener('mouseleave', function() {
       document.getElementById('sandbox-tooltip').classList.remove('show');
     });
 
-    grid.appendChild(el);
+    nodesG.appendChild(g);
   });
 
   const filled = nodes.filter(n => n.filled).length;
-  document.getElementById('sandbox-stats').textContent = filled + ' / ' + nodes.length + ' charted';
+  document.getElementById('sandbox-stats').textContent = filled+' / '+nodes.length+' charted';
 
+  // fit to content
   if (!sbInitialized) {
     sbInitialized = true;
-    const canvas = document.getElementById('sandbox-canvas');
-    const scaleX = canvas.clientWidth / sbGridW;
-    const scaleY = canvas.clientHeight / sbGridH;
-    sbZoom = Math.min(scaleX, scaleY) * 0.85;
-    sbZoom = Math.max(0.15, Math.min(3, sbZoom));
-    sbPanX = (canvas.clientWidth - sbGridW * sbZoom) / 2;
-    sbPanY = (canvas.clientHeight - sbGridH * sbZoom) / 2;
-    sbApplyTransform();
-    document.getElementById('sandbox-zoom-level').textContent = Math.round(sbZoom * 100) + '%';
+    const svg = document.getElementById('sandbox-svg');
+    const r = svg.getBoundingClientRect();
+    const aspect = r.width / r.height;
+    vbW = layout.gridW * 1.15;
+    vbH = vbW / aspect;
+    if (vbH < layout.gridH * 1.15) { vbH = layout.gridH * 1.15; vbW = vbH * aspect; }
+    vbX = -(vbW - layout.gridW) / 2;
+    vbY = -(vbH - layout.gridH) / 2;
+    sbInitW = vbW; sbInitH = vbH;
+    sbFitVB = { x:vbX, y:vbY, w:vbW, h:vbH };
+    sbApplyViewBox();
   } else {
-    sbApplyTransform();
+    sbApplyViewBox();
   }
 }
 
