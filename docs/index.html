@@ -185,20 +185,50 @@ html, body {
   position:absolute; top:38px; left:0; right:0; bottom:0;
   overflow:hidden; cursor:grab; user-select:none;
   -webkit-user-select:none;
-  background:#04030a;
+  background:#06050e;
 }
 .ae-sandbox-canvas.dragging { cursor:grabbing; }
 
-/* WebGL shader fills the entire canvas area */
-#sandbox-gl {
-  position:absolute; inset:0; z-index:0;
-}
-
-/* node overlay layer — sits on top of shader */
+/* node overlay + vector background layer */
 .ae-sandbox-grid {
   position:absolute; top:0; left:0;
   transform-origin:0 0;
   will-change:transform;
+
+  /* ── vector background — infinite resolution ── */
+  background-color:#08071200;
+
+  /* layered CSS vector patterns */
+  background-image:
+    /* 1. fine dot grid — 24px */
+    radial-gradient(circle, rgba(200,180,150,.09) 1px, transparent 1px),
+    /* 2. medium crosshair grid — 120px */
+    linear-gradient(rgba(200,180,150,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(200,180,150,.04) 1px, transparent 1px),
+    /* 3. major section grid — 360px */
+    linear-gradient(rgba(200,180,150,.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(200,180,150,.07) 1px, transparent 1px),
+    /* 4. diagonal crosshatch — subtle texture */
+    repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(200,180,150,.015) 40px, rgba(200,180,150,.015) 41px),
+    repeating-linear-gradient(-45deg, transparent, transparent 40px, rgba(200,180,150,.015) 40px, rgba(200,180,150,.015) 41px),
+    /* 5. warm radial glow at center */
+    radial-gradient(ellipse at 50% 40%, rgba(180,140,80,.04) 0%, transparent 50%),
+    /* 6. cool radial glow offset */
+    radial-gradient(ellipse at 30% 70%, rgba(100,80,160,.03) 0%, transparent 45%);
+
+  background-size:
+    24px 24px,
+    120px 120px, 120px 120px,
+    360px 360px, 360px 360px,
+    56.57px 56.57px, 56.57px 56.57px,
+    100% 100%, 100% 100%;
+
+  background-position:
+    12px 12px,
+    0 0, 0 0,
+    0 0, 0 0,
+    0 0, 0 0,
+    0 0, 0 0;
   z-index:1;
 }
 
@@ -2153,7 +2183,6 @@ html, body {
       </div>
     </div>
     <div class="ae-sandbox-canvas" id="sandbox-canvas">
-      <canvas id="sandbox-gl"></canvas>
       <div class="ae-sandbox-grid" id="sandbox-grid">
         <svg class="ae-sandbox-edges" id="sandbox-edges"></svg>
       </div>
@@ -3618,8 +3647,6 @@ let sbPanX = 0, sbPanY = 0;
 let sbGridW = 0, sbGridH = 0;
 let sbDragging = false, sbDragStartX = 0, sbDragStartY = 0, sbPanStartX = 0, sbPanStartY = 0;
 let sbInitialized = false;
-let sbGl = null, sbProgram = null, sbAnimId = null;
-let sbMouseX = 0.5, sbMouseY = 0.5;
 
 document.getElementById('sandbox-dev-toggle').addEventListener('click', function() {
   sandboxDevMode = !sandboxDevMode;
@@ -3660,10 +3687,6 @@ function sbApplyTransform() {
     e.preventDefault();
   });
   window.addEventListener('mousemove', function(e) {
-    // track mouse for shader parallax
-    const rect = document.getElementById('sandbox-canvas').getBoundingClientRect();
-    sbMouseX = (e.clientX - rect.left) / rect.width;
-    sbMouseY = (e.clientY - rect.top) / rect.height;
     if (!sbDragging) return;
     sbPanX = sbPanStartX + (e.clientX - sbDragStartX);
     sbPanY = sbPanStartY + (e.clientY - sbDragStartY);
@@ -3711,165 +3734,6 @@ function sbApplyTransform() {
   }, { passive: false });
   container.addEventListener('touchend', function() { sbDragging = false; });
 })();
-
-/* ── WebGL shader engine ── */
-function initSandboxGL() {
-  const canvas = document.getElementById('sandbox-gl');
-  const gl = canvas.getContext('webgl', { alpha: false, antialias: false });
-  if (!gl) return;
-  sbGl = gl;
-
-  const vs = gl.createShader(gl.VERTEX_SHADER);
-  gl.shaderSource(vs, 'attribute vec2 p;void main(){gl_Position=vec4(p,0,1);}');
-  gl.compileShader(vs);
-
-  const fs = gl.createShader(gl.FRAGMENT_SHADER);
-  gl.shaderSource(fs, `
-precision highp float;
-uniform vec2 u_res;
-uniform float u_time;
-uniform vec2 u_mouse;
-uniform vec2 u_pan;
-uniform float u_zoom;
-
-// simplex-ish noise
-vec3 mod289(vec3 x){return x-floor(x*(1./289.))*289.;}
-vec2 mod289(vec2 x){return x-floor(x*(1./289.))*289.;}
-vec3 permute(vec3 x){return mod289(((x*34.)+1.)*x);}
-float snoise(vec2 v){
-  const vec4 C=vec4(.211324865405187,.366025403784439,-.577350269189626,.024390243902439);
-  vec2 i=floor(v+dot(v,C.yy));
-  vec2 x0=v-i+dot(i,C.xx);
-  vec2 i1;i1=(x0.x>x0.y)?vec2(1,0):vec2(0,1);
-  vec4 x12=x0.xyxy+C.xxzz;x12.xy-=i1;
-  i=mod289(i);
-  vec3 p=permute(permute(i.y+vec3(0,i1.y,1.))+i.x+vec3(0,i1.x,1.));
-  vec3 m=max(.5-vec3(dot(x0,x0),dot(x12.xy,x12.xy),dot(x12.zw,x12.zw)),0.);
-  m=m*m;m=m*m;
-  vec3 x=2.*fract(p*C.www)-1.;
-  vec3 h=abs(x)-.5;
-  vec3 ox=floor(x+.5);
-  vec3 a0=x-ox;
-  m*=1.79284291400159-.85373472095314*(a0*a0+h*h);
-  vec3 g;
-  g.x=a0.x*x0.x+h.x*x0.y;
-  g.yz=a0.yz*x12.xz+h.yz*x12.yw;
-  return 130.*dot(m,g);
-}
-
-// fractal brownian motion
-float fbm(vec2 p){
-  float f=0., a=.5;
-  for(int i=0;i<5;i++){
-    f+=a*snoise(p);
-    p*=2.07;a*=.48;
-  }
-  return f;
-}
-
-void main(){
-  vec2 uv=gl_FragCoord.xy/u_res;
-  // world-space UV: account for pan and zoom
-  vec2 wuv=(gl_FragCoord.xy-u_pan*vec2(1,-1))/u_zoom/u_res;
-
-  float t=u_time*.08;
-
-  // domain-warped noise for obsidian surface
-  vec2 q=vec2(fbm(wuv*3.+t*.3), fbm(wuv*3.+vec2(5.2,1.3)));
-  vec2 r=vec2(fbm(wuv*4.+q*4.+vec2(1.7,9.2)+t*.15), fbm(wuv*4.+q*4.+vec2(8.3,2.8)+t*.12));
-  float f=fbm(wuv*3.+r*1.5);
-
-  // base color: deep obsidian with purple/gold undertones
-  vec3 col=vec3(.02,.015,.04);
-  // layer 1: dark purple veins
-  col=mix(col, vec3(.06,.02,.10), smoothstep(-.2,.6,f));
-  // layer 2: gold traces in the stone
-  col=mix(col, vec3(.12,.08,.03), smoothstep(.1,.8,f)*smoothstep(.9,.3,f)*.6);
-  // layer 3: deep blue cracks
-  col=mix(col, vec3(.015,.03,.08), smoothstep(.3,.7,r.x)*.4);
-
-  // grid lines — world-space, scale with zoom
-  vec2 gp=(gl_FragCoord.xy-u_pan*vec2(1,-1))/u_zoom;
-  // fine grid
-  vec2 fg=abs(fract(gp/40.)-.5);
-  float fgLine=1.-smoothstep(0.,.03/u_zoom, min(fg.x,fg.y));
-  col+=vec3(.12,.09,.05)*fgLine*.15;
-  // major grid
-  vec2 mg=abs(fract(gp/200.)-.5);
-  float mgLine=1.-smoothstep(0.,.02/u_zoom, min(mg.x,mg.y));
-  col+=vec3(.15,.11,.06)*mgLine*.25;
-
-  // caustic light ripples
-  float c1=snoise(wuv*8.+t*1.2);
-  float c2=snoise(wuv*12.-t*.9+vec2(3.1,7.4));
-  float caustic=smoothstep(.3,.8,c1*c2+.5)*.12;
-  col+=vec3(.14,.10,.06)*caustic;
-
-  // mouse-reactive light cone
-  vec2 mPos=u_mouse;
-  float mDist=length(uv-mPos);
-  float light=exp(-mDist*mDist*6.)*.08;
-  col+=vec3(.16,.13,.08)*light;
-  // secondary purple highlight from mouse
-  col+=vec3(.05,.03,.10)*exp(-mDist*mDist*10.)*.12;
-
-  // subtle sparkle particles
-  float sp=snoise(wuv*60.+t*2.);
-  float sp2=snoise(wuv*80.-t*1.5);
-  float sparkle=smoothstep(.92,.98,sp)*smoothstep(.9,.96,sp2);
-  col+=vec3(.25,.20,.12)*sparkle;
-
-  // edge vignette
-  vec2 vig=uv*(1.-uv);
-  col*=smoothstep(0.,.15,vig.x*vig.y)*1.1+.15;
-
-  // very subtle breathing
-  col*=.95+.05*sin(t*3.);
-
-  gl_FragColor=vec4(col,1.);
-}
-`);
-  gl.compileShader(fs);
-
-  sbProgram = gl.createProgram();
-  gl.attachShader(sbProgram, vs);
-  gl.attachShader(sbProgram, fs);
-  gl.linkProgram(sbProgram);
-  gl.useProgram(sbProgram);
-
-  const buf = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,1,-1,-1,1,1,1]), gl.STATIC_DRAW);
-  const p = gl.getAttribLocation(sbProgram, 'p');
-  gl.enableVertexAttribArray(p);
-  gl.vertexAttribPointer(p, 2, gl.FLOAT, false, 0, 0);
-}
-
-function sbRenderLoop() {
-  if (activeTab !== 'sandbox') { sbAnimId = null; return; }
-  const gl = sbGl;
-  const canvas = document.getElementById('sandbox-gl');
-  const container = document.getElementById('sandbox-canvas');
-
-  // resize canvas to container — HiDPI aware
-  const dpr = window.devicePixelRatio || 1;
-  const w = container.clientWidth, h = container.clientHeight;
-  const pw = Math.round(w * dpr), ph = Math.round(h * dpr);
-  if (canvas.width !== pw || canvas.height !== ph) {
-    canvas.width = pw; canvas.height = ph;
-    gl.viewport(0, 0, pw, ph);
-  }
-
-  const t = performance.now() / 1000;
-  gl.uniform2f(gl.getUniformLocation(sbProgram, 'u_res'), pw, ph);
-  gl.uniform1f(gl.getUniformLocation(sbProgram, 'u_time'), t);
-  gl.uniform2f(gl.getUniformLocation(sbProgram, 'u_mouse'), sbMouseX, sbMouseY);
-  gl.uniform2f(gl.getUniformLocation(sbProgram, 'u_pan'), sbPanX * dpr, sbPanY * dpr);
-  gl.uniform1f(gl.getUniformLocation(sbProgram, 'u_zoom'), sbZoom);
-
-  gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-  sbAnimId = requestAnimationFrame(sbRenderLoop);
-}
 
 /* ── dummy decision tree for design testing ── */
 function buildDummyTree() {
@@ -3939,9 +3803,6 @@ function buildDummyTree() {
 }
 
 function renderSandbox() {
-  if (!sbGl) initSandboxGL();
-  if (!sbAnimId && sbGl) sbAnimId = requestAnimationFrame(sbRenderLoop);
-
   const layout = buildDummyTree();
   const { nodes, edges } = layout;
   sbGridW = layout.gridW;
