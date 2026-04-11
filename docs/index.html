@@ -185,50 +185,30 @@ html, body {
   position:absolute; top:38px; left:0; right:0; bottom:0;
   overflow:hidden; cursor:grab; user-select:none;
   -webkit-user-select:none;
-  background:#06050e;
+  /* ── vector grid lives here — always at native screen resolution ── */
+  background-color:#06050e;
+  background-image:
+    /* fine dot grid */
+    radial-gradient(circle, rgba(200,180,150,.09) 1px, transparent 1px),
+    /* medium grid */
+    linear-gradient(rgba(200,180,150,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(200,180,150,.04) 1px, transparent 1px),
+    /* major grid */
+    linear-gradient(rgba(200,180,150,.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(200,180,150,.07) 1px, transparent 1px),
+    /* warm glow */
+    radial-gradient(ellipse at 50% 40%, rgba(180,140,80,.04) 0%, transparent 50%),
+    /* cool glow */
+    radial-gradient(ellipse at 30% 70%, rgba(100,80,160,.03) 0%, transparent 45%);
+  /* sizes/positions set dynamically by sbApplyTransform */
 }
 .ae-sandbox-canvas.dragging { cursor:grabbing; }
 
-/* node overlay + vector background layer */
+/* node overlay layer — transparent, only nodes + edges */
 .ae-sandbox-grid {
   position:absolute; top:0; left:0;
   transform-origin:0 0;
   will-change:transform;
-
-  /* ── vector background — infinite resolution ── */
-  background-color:#08071200;
-
-  /* layered CSS vector patterns */
-  background-image:
-    /* 1. fine dot grid — 24px */
-    radial-gradient(circle, rgba(200,180,150,.09) 1px, transparent 1px),
-    /* 2. medium crosshair grid — 120px */
-    linear-gradient(rgba(200,180,150,.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(200,180,150,.04) 1px, transparent 1px),
-    /* 3. major section grid — 360px */
-    linear-gradient(rgba(200,180,150,.07) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(200,180,150,.07) 1px, transparent 1px),
-    /* 4. diagonal crosshatch — subtle texture */
-    repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(200,180,150,.015) 40px, rgba(200,180,150,.015) 41px),
-    repeating-linear-gradient(-45deg, transparent, transparent 40px, rgba(200,180,150,.015) 40px, rgba(200,180,150,.015) 41px),
-    /* 5. warm radial glow at center */
-    radial-gradient(ellipse at 50% 40%, rgba(180,140,80,.04) 0%, transparent 50%),
-    /* 6. cool radial glow offset */
-    radial-gradient(ellipse at 30% 70%, rgba(100,80,160,.03) 0%, transparent 45%);
-
-  background-size:
-    24px 24px,
-    120px 120px, 120px 120px,
-    360px 360px, 360px 360px,
-    56.57px 56.57px, 56.57px 56.57px,
-    100% 100%, 100% 100%;
-
-  background-position:
-    12px 12px,
-    0 0, 0 0,
-    0 0, 0 0,
-    0 0, 0 0,
-    0 0, 0 0;
   z-index:1;
 }
 
@@ -3672,6 +3652,24 @@ function sbSetZoom(z, pivotX, pivotY) {
 function sbApplyTransform() {
   const grid = document.getElementById('sandbox-grid');
   grid.style.transform = 'translate(' + sbPanX + 'px,' + sbPanY + 'px) scale(' + sbZoom + ')';
+
+  // update vector background at native resolution — zoom-aware sizes + pan-aware positions
+  const c = document.getElementById('sandbox-canvas');
+  const z = sbZoom;
+  const px = sbPanX, py = sbPanY;
+  const dot = 24*z, med = 120*z, maj = 360*z;
+  c.style.backgroundSize = [
+    dot+'px '+dot+'px',
+    med+'px '+med+'px', med+'px '+med+'px',
+    maj+'px '+maj+'px', maj+'px '+maj+'px',
+    '100% 100%', '100% 100%'
+  ].join(',');
+  c.style.backgroundPosition = [
+    (px+12*z)+'px '+(py+12*z)+'px',
+    px+'px '+py+'px', px+'px '+py+'px',
+    px+'px '+py+'px', px+'px '+py+'px',
+    '0 0', '0 0'
+  ].join(',');
 }
 
 // mouse drag to pan + track mouse for shader
