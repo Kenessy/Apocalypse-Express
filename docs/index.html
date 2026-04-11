@@ -224,116 +224,159 @@ html, body {
   font-size:10px; margin-top:4px;
 }
 
-/* ── edges — clean modern lines ── */
+/* ── grooves — carved channels in obsidian ── */
 .ae-sandbox-edges { position:absolute; top:0; left:0; pointer-events:none; }
 .ae-sandbox-edge {
-  fill:none; stroke:rgba(255,255,255,.06); stroke-width:1.5;
-  stroke-linecap:round; transition:stroke .3s;
+  fill:none; stroke-width:8; stroke-linecap:round;
+  stroke:rgba(0,0,0,.6);
+  filter:url(#groove-filter);
 }
-.ae-sandbox-edge.active { stroke:rgba(255,255,255,.14); }
-.ae-sandbox-edge.fork-success.active { stroke:rgba(52,211,153,.18); }
-.ae-sandbox-edge.fork-fail.active { stroke:rgba(251,113,133,.18); }
+.ae-sandbox-edge.active {
+  stroke:rgba(15,10,5,.7);
+  filter:url(#groove-filter-lit);
+}
+.ae-sandbox-edge.fork-success.active { stroke:rgba(8,15,5,.6); }
+.ae-sandbox-edge.fork-fail.active { stroke:rgba(18,5,5,.6); }
 
-/* ── node cards — modern glass UI ── */
+/* ── node stones — 4-pointed star carved into obsidian ── */
 .ae-sandbox-node {
   position:absolute;
-  width:120px; height:52px;
-  border-radius:12px;
-  background:rgba(255,255,255,.03);
-  border:1px solid rgba(255,255,255,.06);
-  backdrop-filter:blur(12px);
-  -webkit-backdrop-filter:blur(12px);
-  display:flex; align-items:center; gap:10px;
-  padding:0 12px;
+  width:56px; height:56px;
   cursor:default;
-  transition:all .25s cubic-bezier(.4,0,.2,1);
+  transition:filter .4s;
 }
-.ae-sandbox-node:hover {
-  background:rgba(255,255,255,.06);
-  border-color:rgba(255,255,255,.12);
-  transform:translateY(-1px);
-  box-shadow:0 8px 32px rgba(0,0,0,.3), 0 0 0 1px rgba(255,255,255,.04);
-  z-index:5;
+.ae-sandbox-node:hover { z-index:5; }
+
+/* the carved star shape */
+.ae-sandbox-node-stone {
+  width:56px; height:56px;
+  clip-path:polygon(
+    50% 0%, 62% 38%, 100% 50%, 62% 62%,
+    50% 100%, 38% 62%, 0% 50%, 38% 38%
+  );
+  /* carved inward: dark center, beveled edges */
+  background:
+    radial-gradient(circle at 45% 40%, rgba(25,18,35,.4) 0%, rgba(8,5,12,1) 70%),
+    linear-gradient(135deg, rgba(201,156,90,.04) 0%, transparent 50%, rgba(0,0,0,.3) 100%);
+  box-shadow:none; /* clip-path clips shadows, use filter instead */
+  position:relative;
+  transition:all .4s;
 }
 
-/* left accent dot */
-.ae-sandbox-node-dot {
-  width:8px; height:8px; border-radius:50%; flex-shrink:0;
-  background:rgba(255,255,255,.12);
-  transition:all .25s;
+/* bevel light — top-left highlight via pseudo */
+.ae-sandbox-node-stone::before {
+  content:''; position:absolute; inset:0;
+  clip-path:polygon(
+    50% 0%, 62% 38%, 100% 50%, 62% 62%,
+    50% 100%, 38% 62%, 0% 50%, 38% 38%
+  );
+  background:linear-gradient(135deg, rgba(201,156,90,.08) 0%, transparent 40%, rgba(0,0,0,.15) 100%);
+  pointer-events:none;
 }
 
-/* text stack */
-.ae-sandbox-node-text { min-width:0; flex:1; }
+/* inner rune symbol */
+.ae-sandbox-node-rune {
+  position:absolute; inset:0;
+  display:flex; align-items:center; justify-content:center;
+  font-size:14px; line-height:1;
+  color:rgba(201,156,90,.1);
+  text-shadow:0 0 6px rgba(201,156,90,.05);
+  transition:all .4s;
+}
+
+/* label under the stone */
 .ae-sandbox-node-label {
-  font:500 11px/1.2 'Inter','IBM Plex Mono',system-ui;
-  color:rgba(255,255,255,.4);
-  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-  transition:color .25s;
-}
-.ae-sandbox-node-type {
-  font:400 8px/1 'IBM Plex Mono';
-  letter-spacing:.08em; text-transform:uppercase;
-  color:rgba(255,255,255,.15); margin-top:2px;
+  position:absolute; top:62px; left:50%; transform:translateX(-50%);
+  font:600 8px/1 'Cinzel',serif;
+  letter-spacing:.1em; text-transform:uppercase;
+  color:rgba(201,156,90,.12);
+  white-space:nowrap;
+  text-shadow:0 1px 4px rgba(0,0,0,.9);
+  transition:color .4s, opacity .4s;
 }
 
-/* ── empty state ── */
-.ae-sandbox-node.empty {
-  border-style:dashed;
-  border-color:rgba(255,255,255,.04);
-  background:rgba(255,255,255,.01);
+/* ── empty node — barely visible carved slot ── */
+.ae-sandbox-node.empty .ae-sandbox-node-stone {
+  background:
+    radial-gradient(circle at 45% 40%, rgba(15,10,22,.5) 0%, rgba(5,3,8,1) 70%),
+    linear-gradient(135deg, rgba(201,156,90,.02) 0%, transparent 50%, rgba(0,0,0,.2) 100%);
+  filter:drop-shadow(0 1px 0 rgba(201,156,90,.03)) drop-shadow(0 -1px 0 rgba(0,0,0,.4));
 }
-.ae-sandbox-node.empty .ae-sandbox-node-dot { background:rgba(255,255,255,.06); }
-.ae-sandbox-node.empty .ae-sandbox-node-label { color:rgba(255,255,255,.18); }
+.ae-sandbox-node.empty .ae-sandbox-node-rune { color:rgba(201,156,90,.05); }
+.ae-sandbox-node.empty .ae-sandbox-node-label { color:rgba(201,156,90,.06); }
 
-/* ── filled state — has written content ── */
-.ae-sandbox-node.filled {
-  background:rgba(255,255,255,.05);
-  border-color:rgba(255,255,255,.10);
+/* ── filled node — lit up, gold inlay ── */
+.ae-sandbox-node.filled .ae-sandbox-node-stone {
+  background:
+    radial-gradient(circle at 45% 40%, rgba(40,28,15,.6) 0%, rgba(12,8,5,.9) 70%),
+    linear-gradient(135deg, rgba(201,156,90,.12) 0%, transparent 50%, rgba(0,0,0,.2) 100%);
+  filter:
+    drop-shadow(0 1px 1px rgba(201,156,90,.1))
+    drop-shadow(0 -1px 0 rgba(0,0,0,.5))
+    drop-shadow(0 0 8px rgba(201,156,90,.06));
 }
-.ae-sandbox-node.filled .ae-sandbox-node-label { color:rgba(255,255,255,.7); }
-.ae-sandbox-node.filled .ae-sandbox-node-dot {
-  background:rgba(201,156,90,.6);
-  box-shadow:0 0 8px rgba(201,156,90,.2);
+.ae-sandbox-node.filled .ae-sandbox-node-stone::before {
+  background:linear-gradient(135deg, rgba(201,156,90,.15) 0%, transparent 40%, rgba(0,0,0,.1) 100%);
 }
+.ae-sandbox-node.filled .ae-sandbox-node-rune {
+  color:rgba(201,156,90,.4);
+  text-shadow:0 0 8px rgba(201,156,90,.15);
+}
+.ae-sandbox-node.filled .ae-sandbox-node-label { color:rgba(201,156,90,.3); }
 
-/* ── type accent colors — dot + subtle border tint ── */
-.ae-sandbox-node.filled.type-narrator .ae-sandbox-node-dot { background:rgba(201,156,90,.5); box-shadow:0 0 6px rgba(201,156,90,.15); }
-.ae-sandbox-node.filled.type-choice .ae-sandbox-node-dot { background:rgba(167,139,250,.6); box-shadow:0 0 6px rgba(167,139,250,.2); }
-.ae-sandbox-node.filled.type-choice { border-color:rgba(167,139,250,.10); }
-.ae-sandbox-node.filled.type-dice .ae-sandbox-node-dot { background:rgba(251,191,36,.6); box-shadow:0 0 6px rgba(251,191,36,.2); }
-.ae-sandbox-node.filled.type-dice { border-color:rgba(251,191,36,.10); }
-.ae-sandbox-node.filled.type-collect .ae-sandbox-node-dot { background:rgba(52,211,153,.6); box-shadow:0 0 6px rgba(52,211,153,.2); }
-.ae-sandbox-node.filled.type-collect { border-color:rgba(52,211,153,.10); }
-.ae-sandbox-node.filled.type-fail .ae-sandbox-node-dot { background:rgba(251,113,133,.6); box-shadow:0 0 6px rgba(251,113,133,.2); }
-.ae-sandbox-node.filled.type-fail { border-color:rgba(251,113,133,.10); }
+/* hover: glow */
+.ae-sandbox-node.filled:hover .ae-sandbox-node-stone {
+  filter:
+    drop-shadow(0 1px 1px rgba(201,156,90,.15))
+    drop-shadow(0 -1px 0 rgba(0,0,0,.5))
+    drop-shadow(0 0 16px rgba(201,156,90,.12));
+}
+.ae-sandbox-node.filled:hover .ae-sandbox-node-rune {
+  color:rgba(201,156,90,.6);
+  text-shadow:0 0 12px rgba(201,156,90,.3);
+}
+.ae-sandbox-node.filled:hover .ae-sandbox-node-label { color:rgba(201,156,90,.5); }
 
-/* empty type tints — very subtle */
-.ae-sandbox-node.empty.type-choice .ae-sandbox-node-dot { background:rgba(167,139,250,.12); }
-.ae-sandbox-node.empty.type-dice .ae-sandbox-node-dot { background:rgba(251,191,36,.12); }
-.ae-sandbox-node.empty.type-collect .ae-sandbox-node-dot { background:rgba(52,211,153,.12); }
-.ae-sandbox-node.empty.type-fail .ae-sandbox-node-dot { background:rgba(251,113,133,.12); }
+/* ── type-specific inlay colors ── */
+.ae-sandbox-node.filled.type-choice .ae-sandbox-node-stone {
+  filter:drop-shadow(0 0 8px rgba(163,139,207,.08)) drop-shadow(0 1px 1px rgba(163,139,207,.06));
+}
+.ae-sandbox-node.filled.type-choice .ae-sandbox-node-rune { color:rgba(163,139,207,.35); text-shadow:0 0 8px rgba(163,139,207,.12); }
 
-/* ── tooltip — modern popover ── */
+.ae-sandbox-node.filled.type-dice .ae-sandbox-node-stone {
+  filter:drop-shadow(0 0 8px rgba(251,191,36,.08)) drop-shadow(0 1px 1px rgba(251,191,36,.06));
+}
+.ae-sandbox-node.filled.type-dice .ae-sandbox-node-rune { color:rgba(251,191,36,.35); text-shadow:0 0 8px rgba(251,191,36,.12); }
+
+.ae-sandbox-node.filled.type-collect .ae-sandbox-node-stone {
+  filter:drop-shadow(0 0 8px rgba(92,200,92,.08)) drop-shadow(0 1px 1px rgba(92,200,92,.06));
+}
+.ae-sandbox-node.filled.type-collect .ae-sandbox-node-rune { color:rgba(92,200,92,.35); text-shadow:0 0 8px rgba(92,200,92,.12); }
+
+.ae-sandbox-node.filled.type-fail .ae-sandbox-node-stone {
+  filter:drop-shadow(0 0 8px rgba(255,123,92,.08)) drop-shadow(0 1px 1px rgba(255,123,92,.06));
+}
+.ae-sandbox-node.filled.type-fail .ae-sandbox-node-rune { color:rgba(255,123,92,.35); text-shadow:0 0 8px rgba(255,123,92,.12); }
+
+/* ── tooltip — carved stone popup ── */
 .ae-sandbox-tooltip {
   position:fixed; z-index:100; pointer-events:none;
   max-width:300px; padding:14px 18px;
-  background:rgba(15,15,20,.92);
-  backdrop-filter:blur(20px) saturate(1.2);
-  -webkit-backdrop-filter:blur(20px) saturate(1.2);
-  border:1px solid rgba(255,255,255,.08);
-  border-radius:12px;
-  box-shadow:0 16px 48px rgba(0,0,0,.4), 0 0 0 1px rgba(255,255,255,.03);
-  opacity:0; transition:opacity .2s cubic-bezier(.4,0,.2,1);
+  background:rgba(8,6,14,.94);
+  border:1px solid rgba(201,156,90,.1);
+  border-radius:4px;
+  box-shadow:0 8px 32px rgba(0,0,0,.6), inset 0 1px 0 rgba(201,156,90,.04);
+  opacity:0; transition:opacity .25s;
 }
 .ae-sandbox-tooltip.show { opacity:1; }
 .ae-sandbox-tooltip-title {
-  font:600 13px/1.2 'Inter','IBM Plex Mono',system-ui;
-  color:rgba(255,255,255,.85); margin-bottom:6px;
+  font:600 12px/1.2 'Cinzel',serif;
+  letter-spacing:.06em;
+  color:rgba(201,156,90,.7); margin-bottom:6px;
 }
 .ae-sandbox-tooltip-text {
   font:400 11px/1.6 'IBM Plex Mono';
-  color:rgba(255,255,255,.4);
+  color:rgba(184,176,198,.4);
   max-height:100px; overflow:hidden;
 }
 .ae-sandbox-tooltip-text p { margin:0 0 4px; }
@@ -2091,7 +2134,27 @@ html, body {
     <div class="ae-sandbox-canvas" id="sandbox-canvas">
       <canvas id="sandbox-gl"></canvas>
       <div class="ae-sandbox-grid" id="sandbox-grid">
-        <svg class="ae-sandbox-edges" id="sandbox-edges"></svg>
+        <svg class="ae-sandbox-edges" id="sandbox-edges">
+          <defs>
+            <filter id="groove-filter" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="blur"/>
+              <feOffset in="blur" dx="0" dy="1" result="offset"/>
+              <feComposite in="SourceGraphic" in2="offset" operator="over"/>
+            </filter>
+            <filter id="groove-filter-lit" x="-30%" y="-30%" width="160%" height="160%">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="1" result="blur"/>
+              <feOffset in="blur" dx="0" dy="1" result="offset"/>
+              <feComposite in="SourceGraphic" in2="offset" operator="over"/>
+              <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="glow"/>
+              <feFlood flood-color="rgba(201,156,90,0.08)" result="color"/>
+              <feComposite in="color" in2="glow" operator="in" result="litglow"/>
+              <feMerge>
+                <feMergeNode in="litglow"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+        </svg>
       </div>
     </div>
     <div class="ae-sandbox-zoom">
@@ -3905,7 +3968,8 @@ function renderSandbox() {
   svgEl.setAttribute('height', sbGridH);
   svgEl.style.width = sbGridW + 'px';
   svgEl.style.height = sbGridH + 'px';
-  svgEl.innerHTML = '';
+  // clear edges but keep <defs>
+  svgEl.querySelectorAll('path').forEach(p => p.remove());
 
   // node position map
   const nodeMap = {};
@@ -3917,8 +3981,8 @@ function renderSandbox() {
     if (!from || !to) return;
     const bothActive = isNodeVisited(from.id) && isNodeVisited(to.id);
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    const x1 = from.px, y1 = from.py + 26;
-    const x2 = to.px, y2 = to.py - 26;
+    const x1 = from.px, y1 = from.py + 28;
+    const x2 = to.px, y2 = to.py - 28;
     const cy1 = y1 + (y2 - y1) * 0.4;
     const cy2 = y1 + (y2 - y1) * 0.6;
     path.setAttribute('d', 'M'+x1+','+y1+' C'+x1+','+cy1+' '+x2+','+cy2+' '+x2+','+y2);
@@ -3926,20 +3990,20 @@ function renderSandbox() {
     svgEl.appendChild(path);
   });
 
-  // draw node cards
+  // draw carved star nodes
+  const typeRunes = { narrator:'✎', choice:'✦', dice:'⚄', collect:'✧', fail:'✕' };
+
   nodes.forEach(n => {
     const vis = isNodeVisited(n.id);
     const el = document.createElement('div');
     el.className = 'ae-sandbox-node type-' + (n.type || 'narrator') + (vis ? ' filled' : ' empty');
-    el.style.left = (n.px - 60) + 'px';
-    el.style.top = (n.py - 26) + 'px';
+    el.style.left = (n.px - 28) + 'px';
+    el.style.top = (n.py - 28) + 'px';
 
     el.innerHTML =
-      '<div class="ae-sandbox-node-dot"></div>' +
-      '<div class="ae-sandbox-node-text">' +
-        '<div class="ae-sandbox-node-label">' + n.label + '</div>' +
-        '<div class="ae-sandbox-node-type">' + (fcTypeLabels[n.type] || 'narrative') + '</div>' +
-      '</div>';
+      '<div class="ae-sandbox-node-stone"></div>' +
+      '<div class="ae-sandbox-node-rune">' + (typeRunes[n.type] || '◈') + '</div>' +
+      '<div class="ae-sandbox-node-label">' + n.label + '</div>';
 
     // tooltip
     el.addEventListener('mouseenter', function() {
