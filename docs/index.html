@@ -342,6 +342,134 @@ html, body {
 }
 .ae-sandbox-tooltip-text p { margin:0 0 6px; }
 
+/* ── detail panel (left side, opens on node click) ── */
+.sb-detail {
+  position:fixed; top:44px; left:0; bottom:0; width:380px; z-index:50;
+  background:rgba(8,6,14,.96);
+  backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+  border-right:1px solid rgba(201,156,90,.12);
+  display:flex; flex-direction:column;
+  transform:translateX(-100%);
+  transition:transform .35s cubic-bezier(.22,1,.36,1);
+  overflow:hidden;
+}
+.sb-detail.open { transform:translateX(0); }
+
+.sb-detail-close {
+  position:absolute; top:10px; right:10px; z-index:5;
+  width:28px; height:28px; border-radius:4px;
+  background:rgba(201,156,90,.08); border:1px solid rgba(201,156,90,.15);
+  color:var(--gold); font-size:16px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  opacity:.5; transition:opacity .2s, background .2s;
+}
+.sb-detail-close:hover { opacity:1; background:rgba(201,156,90,.18); }
+
+.sb-detail-header {
+  padding:18px 20px 12px; flex-shrink:0;
+  border-bottom:1px solid rgba(201,156,90,.08);
+}
+.sb-detail-type {
+  font:500 8px/1 'IBM Plex Mono'; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--gold); opacity:.5; display:block; margin-bottom:6px;
+}
+.sb-detail-title {
+  font:700 20px/1.2 'Cinzel',serif; letter-spacing:.03em;
+  color:var(--gold2); opacity:.9; margin:0;
+}
+
+.sb-detail-img-wrap {
+  flex-shrink:0; height:160px; overflow:hidden;
+  position:relative;
+}
+.sb-detail-img-wrap img {
+  width:100%; height:100%; object-fit:cover;
+  filter:brightness(.7) saturate(.8);
+}
+.sb-detail-img-wrap::after {
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background:linear-gradient(to top, rgba(8,6,14,1) 0%, rgba(8,6,14,.3) 40%, transparent 100%);
+}
+.sb-detail-img-wrap:empty { display:none; }
+
+.sb-detail-body {
+  flex:1; overflow-y:auto; padding:16px 22px 32px;
+}
+.sb-detail-body::-webkit-scrollbar { width:3px; }
+.sb-detail-body::-webkit-scrollbar-thumb { background:rgba(201,156,90,.2); border-radius:2px; }
+
+/* body content styles */
+.sb-detail-body p {
+  font:300 14px/1.75 'Cormorant Garamond','Garamond','Georgia',serif;
+  color:rgba(248,245,240,.75); margin:0 0 14px;
+}
+.sb-detail-body p em.inline { font-style:italic; color:var(--gold2); opacity:.9; }
+.sb-detail-body p em.standalone {
+  display:block; padding:10px 16px; margin:8px 0;
+  border-left:2px solid rgba(201,156,90,.25);
+  color:var(--gold2); opacity:.85; font-style:italic;
+}
+
+.sb-detail-speaker {
+  display:flex; align-items:center; gap:8px;
+  margin-bottom:14px; padding-bottom:10px;
+  border-bottom:1px solid rgba(201,156,90,.08);
+}
+.sb-detail-speaker-glyph {
+  font-size:16px; color:var(--gold); opacity:.6;
+}
+.sb-detail-speaker-name {
+  font:500 14px/1 'Cinzel',serif; letter-spacing:.06em;
+  color:var(--gold2); opacity:.7;
+}
+
+.sb-detail-choices {
+  display:flex; flex-direction:column; gap:8px; margin-top:16px;
+}
+.sb-detail-choice {
+  padding:10px 14px; border-radius:4px;
+  background:rgba(40,189,216,.06); border:1px solid rgba(40,189,216,.15);
+  font:400 12px/1.4 'IBM Plex Mono'; color:rgba(40,189,216,.7);
+  display:flex; align-items:center; gap:8px;
+}
+.sb-detail-choice-icon { font-size:14px; opacity:.6; }
+
+.sb-detail-dice {
+  margin-top:16px; padding:12px 14px; border-radius:4px;
+  background:rgba(255,200,40,.06); border:1px solid rgba(255,200,40,.15);
+  display:flex; align-items:center; gap:10px;
+  font:500 12px/1 'IBM Plex Mono'; color:rgba(255,200,40,.7);
+}
+.sb-detail-dice-icon { font-size:18px; }
+.sb-detail-dice-dc { margin-left:auto; font-weight:700; }
+
+.sb-detail-continue {
+  margin-top:16px; padding:10px 14px; border-radius:4px;
+  background:rgba(201,156,90,.06); border:1px solid rgba(201,156,90,.12);
+  font:400 12px/1.4 'IBM Plex Mono'; color:rgba(201,156,90,.6);
+  display:flex; align-items:center; gap:8px;
+}
+.sb-detail-continue-arrow { font-size:10px; opacity:.5; }
+
+.sb-detail-tip {
+  margin-top:12px; padding:12px 16px; border-radius:4px;
+  background:rgba(201,156,90,.04); border:1px solid rgba(201,156,90,.08);
+  font:italic 300 13px/1.6 'Cormorant Garamond',serif;
+  color:rgba(200,180,150,.5);
+}
+.sb-detail-status {
+  display:inline-block; margin-bottom:12px; padding:3px 10px; border-radius:3px;
+  font:500 8px/1 'IBM Plex Mono'; letter-spacing:.14em; text-transform:uppercase;
+}
+.sb-detail-status.written {
+  background:rgba(140,240,170,.08); border:1px solid rgba(140,240,170,.15);
+  color:rgba(140,240,170,.6);
+}
+.sb-detail-status.planned {
+  background:rgba(180,160,140,.06); border:1px solid rgba(180,160,140,.1);
+  color:rgba(180,160,140,.4);
+}
+
 /* ══ FLOWCHART — fullscreen presentation ══ */
 .ae-fc {
   flex: 1; position: relative; overflow: hidden;
@@ -2123,6 +2251,16 @@ html, body {
     </div>
   </div>
 </div>
+<!-- sandbox detail panel (left side) -->
+<div class="sb-detail" id="sb-detail">
+  <button class="sb-detail-close" id="sb-detail-close">&times;</button>
+  <div class="sb-detail-header">
+    <span class="sb-detail-type" id="sb-detail-type"></span>
+    <h3 class="sb-detail-title" id="sb-detail-title"></h3>
+  </div>
+  <div class="sb-detail-img-wrap" id="sb-detail-img-wrap"></div>
+  <div class="sb-detail-body" id="sb-detail-body"></div>
+</div>
 <div class="ae-sandbox-tooltip" id="sandbox-tooltip">
   <div class="ae-sandbox-tooltip-title" id="sandbox-tt-title"></div>
   <div class="ae-sandbox-tooltip-text" id="sandbox-tt-text"></div>
@@ -3573,7 +3711,7 @@ const SVG_NS = 'http://www.w3.org/2000/svg';
 let sandboxDevMode = false;
 let vbX = 0, vbY = 0, vbW = 1600, vbH = 1200;
 let sbInitW = 1600, sbInitH = 1200;
-let sbDragging = false, sbDragStartX = 0, sbDragStartY = 0, sbDragVBX = 0, sbDragVBY = 0;
+let sbDragging = false, sbDragMoved = false, sbDragStartX = 0, sbDragStartY = 0, sbDragVBX = 0, sbDragVBY = 0;
 let sbInitialized = false;
 
 document.getElementById('sandbox-dev-toggle').addEventListener('click', function() {
@@ -3624,7 +3762,7 @@ let sbFitVB = { x:0, y:0, w:1600, h:1200 };
 
   container.addEventListener('mousedown', function(e) {
     if (e.button !== 0) return;
-    sbDragging = true;
+    sbDragging = true; sbDragMoved = false;
     sbDragStartX = e.clientX; sbDragStartY = e.clientY;
     sbDragVBX = vbX; sbDragVBY = vbY;
     container.classList.add('dragging');
@@ -3632,10 +3770,12 @@ let sbFitVB = { x:0, y:0, w:1600, h:1200 };
   });
   window.addEventListener('mousemove', function(e) {
     if (!sbDragging) return;
+    const dx = e.clientX - sbDragStartX, dy = e.clientY - sbDragStartY;
+    if (Math.abs(dx) > 4 || Math.abs(dy) > 4) sbDragMoved = true;
     const svg = document.getElementById('sandbox-svg');
     const r = svg.getBoundingClientRect();
-    vbX = sbDragVBX - (e.clientX - sbDragStartX) * (vbW / r.width);
-    vbY = sbDragVBY - (e.clientY - sbDragStartY) * (vbH / r.height);
+    vbX = sbDragVBX - dx * (vbW / r.width);
+    vbY = sbDragVBY - dy * (vbH / r.height);
     sbApplyViewBox();
   });
   window.addEventListener('mouseup', function() {
@@ -3985,6 +4125,14 @@ function renderSandbox() {
       document.getElementById('sandbox-tooltip').classList.remove('show');
     });
 
+    // click → open detail panel
+    g.style.cursor = 'pointer';
+    g.addEventListener('click', function(e) {
+      if (sbDragMoved) return;
+      e.stopPropagation();
+      sbOpenDetail(n);
+    });
+
     nodesG.appendChild(g);
   });
 
@@ -4013,6 +4161,121 @@ function renderSandbox() {
     sbApplyViewBox();
   }
 }
+
+/* ══ DETAIL PANEL — node click → show content ══ */
+const sbFrameMap = {
+  'a1':'cicero-monologue', 'a1-cross':'crossroads-choice',
+  'a1-scout':'look-around', 'a1-climb':'climb-obelisk',
+  'a1-climb-ok':'climb-success', 'a1-climb-fail':'climb-failed',
+  'a1-tree':'find-ridge', 'a1-tree-ok':'tree-success', 'a1-tree-fail':'tree-failed',
+  'a1-wander':'wander-explore',
+  'a1-cicero':'talk-cicero', 'a1-cic-listen':'cicero-listen', 'a1-cic-leave':'cicero-leave',
+  'a1-fountain':'examine-fountain', 'a1-desk':'fountain-desk',
+  'a1-scroll':'scroll-check-1', 'a1-scroll-ok':'scroll-revelation', 'a1-scroll-fail':'scrolls-dust',
+};
+
+function sbOpenDetail(n) {
+  const panel = document.getElementById('sb-detail');
+  const typeNames = { narrator:'narrative', choice:'divergence', dice:'fate check', collect:'acquisition', fail:'terminus' };
+
+  // header
+  document.getElementById('sb-detail-type').textContent =
+    (typeNames[n.type]||'narrative') + (n.scene ? ' · scene' : '');
+  document.getElementById('sb-detail-title').textContent = n.label;
+
+  // image
+  const imgWrap = document.getElementById('sb-detail-img-wrap');
+  imgWrap.innerHTML = '';
+  if (n.img) {
+    const img = document.createElement('img');
+    img.src = n.img; img.alt = n.label;
+    if (imgFocus[n.img]) img.style.objectPosition = imgFocus[n.img];
+    imgWrap.appendChild(img);
+  }
+
+  // body content
+  const body = document.getElementById('sb-detail-body');
+  body.innerHTML = '';
+
+  // status badge
+  const badge = document.createElement('span');
+  badge.className = 'sb-detail-status ' + (n.filled ? 'written' : 'planned');
+  badge.textContent = n.filled ? 'written' : 'planned';
+  body.appendChild(badge);
+
+  // look up frame content
+  const frameId = sbFrameMap[n.id];
+  const frame = frameId ? frames.find(f => f.id === frameId) : null;
+
+  if (frame) {
+    // speaker
+    if (frame.speaker) {
+      const sp = document.createElement('div');
+      sp.className = 'sb-detail-speaker';
+      sp.innerHTML = '<span class="sb-detail-speaker-glyph">'+frame.speaker.glyph+'</span>'
+        + '<span class="sb-detail-speaker-name">'+frame.speaker.name+'</span>';
+      body.appendChild(sp);
+    }
+
+    // story text
+    if (frame.text && frame.text.length) {
+      frame.text.forEach(t => {
+        const p = document.createElement('p');
+        p.innerHTML = t;
+        body.appendChild(p);
+      });
+    }
+
+    // choices
+    if (frame.choices && frame.choices.length) {
+      const cw = document.createElement('div');
+      cw.className = 'sb-detail-choices';
+      frame.choices.forEach(c => {
+        const ch = document.createElement('div');
+        ch.className = 'sb-detail-choice';
+        ch.innerHTML = '<span class="sb-detail-choice-icon">'+c.icon+'</span> '+c.label;
+        cw.appendChild(ch);
+      });
+      body.appendChild(cw);
+    }
+
+    // dice check
+    if (frame.diceCheck) {
+      const dc = document.createElement('div');
+      dc.className = 'sb-detail-dice';
+      dc.innerHTML = '<span class="sb-detail-dice-icon">\uD83C\uDFB2</span>'
+        + '<span>'+(frame.diceCheck.label||'Skill Check')+'</span>'
+        + '<span class="sb-detail-dice-dc">DC '+frame.diceCheck.dc+'</span>';
+      body.appendChild(dc);
+    }
+
+    // continue label
+    if (frame.continueLabel && !frame.choices && !frame.diceCheck) {
+      const cont = document.createElement('div');
+      cont.className = 'sb-detail-continue';
+      cont.innerHTML = '<span class="sb-detail-continue-arrow">\u25B6</span> '+frame.continueLabel;
+      body.appendChild(cont);
+    }
+  } else if (n.tip) {
+    // no frame content — show tip as description
+    const tip = document.createElement('div');
+    tip.className = 'sb-detail-tip';
+    tip.textContent = n.tip;
+    body.appendChild(tip);
+  }
+
+  panel.classList.add('open');
+}
+
+// close detail panel
+document.getElementById('sb-detail-close').addEventListener('click', function() {
+  document.getElementById('sb-detail').classList.remove('open');
+});
+// click outside nodes on canvas → close
+document.getElementById('sandbox-canvas').addEventListener('click', function(e) {
+  if (e.target.closest('.sb-node')) return;
+  document.getElementById('sb-detail').classList.remove('open');
+});
 
 // image focus hints per image file
 const imgFocus = {
