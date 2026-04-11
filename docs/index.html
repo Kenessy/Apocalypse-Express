@@ -289,6 +289,26 @@ html, body {
 .sb-node.filled.t-fail .sb-card { stroke:rgba(240,140,130,.15); }
 .sb-node.filled.t-fail:hover .sb-card { stroke:rgba(240,140,130,.35); }
 
+/* ── chapter group backgrounds ── */
+.sb-chapter-label {
+  font-family:'IBM Plex Mono',monospace;
+  font-size:9px; font-weight:500; letter-spacing:.18em; text-transform:uppercase;
+  fill:rgba(200,180,150,.18); dominant-baseline:hanging;
+}
+
+/* ── scene-level nodes — larger, bolder ── */
+.sb-node.scene .sb-card { stroke-width:1.5; }
+.sb-node.scene.filled .sb-card {
+  stroke:rgba(230,190,80,.35);
+  filter:drop-shadow(0 0 10px rgba(230,190,80,.08));
+}
+.sb-node.scene.filled:hover .sb-card {
+  stroke:rgba(240,210,100,.55);
+  filter:drop-shadow(0 0 14px rgba(240,210,100,.12));
+}
+.sb-node.scene.empty .sb-card { stroke-dasharray:6 4; }
+.sb-label-scene { font-size:12px; font-weight:600; }
+
 /* ── tooltip ── */
 .ae-sandbox-tooltip {
   position:fixed; z-index:100; pointer-events:none;
@@ -2057,7 +2077,7 @@ html, body {
 <div class="ae-panel" id="panel-sandbox" data-panel="sandbox">
   <div class="ae-sandbox" id="sandbox-container">
     <div class="ae-sandbox-toolbar">
-      <span class="ae-sandbox-toolbar-title">Story Tree</span>
+      <span class="ae-sandbox-toolbar-title">Campaign Map</span>
       <div class="ae-sandbox-toolbar-right">
         <span class="ae-sandbox-stats" id="sandbox-stats"></span>
         <button class="ae-sandbox-toggle" id="sandbox-dev-toggle">Dev Mode</button>
@@ -3653,70 +3673,209 @@ let sbFitVB = { x:0, y:0, w:1600, h:1200 };
   container.addEventListener('touchend', function() { sbDragging = false; });
 })();
 
-/* ── dummy decision tree ── */
-function buildDummyTree() {
-  const COL_W = 220, ROW_H = 100;
-  const nodes = [], edges = [];
+/* ── campaign tree — real story structure ── */
+function buildCampaignTree() {
+  const COL_W = 220, ROW_H = 110;
+  const nodes = [], edges = [], groups = [];
   let nid = 0;
-  function add(id, label, type, x, y, filled) { const n = { nid:nid++, id, label, type, x, y, filled }; nodes.push(n); return n.nid; }
+  function add(id, label, type, x, y, filled, opts) {
+    const n = { nid:nid++, id, label, type, x, y, filled, scene:!!(opts&&opts.scene), tip:(opts&&opts.tip)||'' };
+    nodes.push(n); return n.nid;
+  }
   function link(a, b, cls) { edges.push({ from:a, to:b, cls:cls||'' }); }
 
-  const n0 = add('d-prologue','Prologue','narrator',0,0,true);
-  const n1 = add('d-awakening','Awakening','narrator',0,1,true);
-  const n2 = add('d-crossroads','Crossroads','choice',0,2,true);
-  link(n0,n1); link(n1,n2);
+  // ═══════════════════════════════════
+  //  PRELUDE  (A1 – A5)
+  // ═══════════════════════════════════
 
-  const a0 = add('d-vault-enter','Enter Vault','narrator',-3,3.5,true);
-  const a1 = add('d-vault-lock','Pick Lock','dice',-3,4.8,true);
-  const a2 = add('d-vault-open','Treasure','collect',-3.8,6.2,true);
-  const a3 = add('d-vault-trap','Trap Spring','fail',-2.2,6.2,false);
-  link(n2,a0); link(a0,a1); link(a1,a2,'fork-success'); link(a1,a3,'fork-fail');
+  // ── A1: Null Meridian ──
+  const a1 = add('a1','A1 · Null Meridian','narrator',0,0,true,
+    {scene:true, tip:'Waking on the obsidian platform. Tutorial scene. System OFF.'});
+  const a1cross = add('a1-cross','Crossroads','choice',0,1.2,true,
+    {tip:'Three paths diverge at the fountain'});
+  link(a1, a1cross);
 
-  const b0 = add('d-oracle-path','Seek Oracle','narrator',0,3.5,true);
-  const b1 = add('d-oracle-meet','The Question','choice',0,4.8,true);
-  const b2 = add('d-oracle-truth','Truth','collect',-0.8,6.2,false);
-  const b3 = add('d-oracle-lie','Deception','narrator',0.8,6.2,true);
-  const b4 = add('d-oracle-end','Revelation','collect',0.8,7.5,false);
-  link(n2,b0); link(b0,b1); link(b1,b2); link(b1,b3); link(b3,b4);
+  // Scout branch
+  const scout = add('a1-scout','Survey','choice',-3,2.5,true,{tip:'Scan the landscape — obelisk, tree, open plain'});
+  const climb = add('a1-climb','Climb Obelisk','dice',-4,3.8,true,{tip:'DC 10 → DC 15 → DC 20 chain'});
+  const climbOk = add('a1-climb-ok','The View','collect',-4.8,5.2,true,{tip:'See the infinite obsidian plane from above'});
+  const climbFail = add('a1-climb-fail','Defeat','fail',-3.2,5.2,true,{tip:'Three falls. Give up.'});
+  const tree = add('a1-tree','Find Tree','narrator',-2,3.8,true,{tip:'Tree ridge in the mist — DC 15 jump'});
+  const treeOk = add('a1-tree-ok','Glimpse','collect',-2.8,5.2,true,{tip:'Brief view from the canopy'});
+  const treeFail = add('a1-tree-fail','Closed','fail',-1.2,5.2,true,{tip:'Branch snaps. Fall.'});
+  const wander = add('a1-wander','Walk','narrator',-4,5.2,false,{tip:'Wander the infinite plain alone'});
+  link(a1cross, scout); link(scout, climb); link(climb, climbOk,'fork-success'); link(climb, climbFail,'fork-fail');
+  link(scout, tree); link(tree, treeOk,'fork-success'); link(tree, treeFail,'fork-fail');
+  link(scout, wander);
 
-  const c0 = add('d-wild-enter','Into the Wild','narrator',3,3.5,true);
-  const c1 = add('d-wild-beast','Beast','dice',3,4.8,false);
-  const c2 = add('d-wild-tame','Tame','collect',2.2,6.2,false);
-  const c3 = add('d-wild-flee','Flee','fail',3.8,6.2,false);
-  link(n2,c0); link(c0,c1); link(c1,c2,'fork-success'); link(c1,c3,'fork-fail');
+  // Cicero branch
+  const cicero = add('a1-cicero','Approach Cicero','narrator',0,2.5,true,{tip:'The old man with the obsidian quill'});
+  const cicListen = add('a1-cic-listen','Listen','narrator',0,3.8,true,{tip:'Wait. Hear his mumbling about promises.'});
+  const cicLeave = add('a1-cic-leave','Leave Him','narrator',0,5.2,true,{tip:'He is not ready to talk — not yet.'});
+  link(a1cross, cicero); link(cicero, cicListen); link(cicListen, cicLeave);
 
+  // Fountain branch
+  const fountain = add('a1-fountain','Examine Fountain','narrator',3,2.5,true,{tip:'Obsidian fountain with ancient coins'});
+  const desk = add('a1-desk','Desk & Scrolls','narrator',3,3.8,true,{tip:'Crumbling desk with sealed scrolls'});
+  const scrollDice = add('a1-scroll','Scroll Check','dice',3,5.2,true,{tip:'DC 10 Delicacy — can you unroll them?'});
+  const scrollOk = add('a1-scroll-ok','Letter','collect',2.2,6.5,true,{tip:'Weapons ledger. Fear. An unsent goodbye.'});
+  const scrollFail = add('a1-scroll-fail','All Lost','fail',3.8,6.5,true,{tip:'Both scrolls crumble to dust.'});
+  link(a1cross, fountain); link(fountain, desk); link(desk, scrollDice);
+  link(scrollDice, scrollOk,'fork-success'); link(scrollDice, scrollFail,'fork-fail');
+
+  // ── A2: Obelisk, Clock & Postcards ──
+  const a2 = add('a2','A2 · Obelisk & Postcards','collect',0,7.5,true,
+    {scene:true, tip:'Obelisk appears. Countdown. Silver Postcard binds to one soul.'});
+  link(a1cross, a2);
+
+  // ── A3: Train Arrival & Boarding ──
+  const a3 = add('a3','A3 · Train Arrival','narrator',0,9,true,
+    {scene:true, tip:'Twin red rails. Apocalypse Express arrives. Herald announces boarding.'});
+  link(a2, a3);
+
+  // ── A4: Gossip Car & Golden Tickets ──
+  const a4 = add('a4','A4 · Gossip Car','collect',0,10.5,true,
+    {scene:true, tip:'Breather car. Golden Tickets discovered in pockets. Inspector validates.'});
+  link(a3, a4);
+
+  // ── A5: Sundown Saloon & Lucifer's Pact ──
+  const a5 = add('a5','A5 · Sundown Saloon','choice',0,12,true,
+    {scene:true, tip:'Lucifer\'s pitch. Hell below. Sign the pact or stay in Hell.'});
+  const a5sign = add('a5-sign','Sign Pact','narrator',-1,13.2,true,{tip:'Golden pen. Name in black. Verse flickers in window.'});
+  const a5refuse = add('a5-refuse','Refuse','fail',1,13.2,false,{tip:'Stay in Hell. Character lost.'});
+  link(a4, a5); link(a5, a5sign); link(a5, a5refuse,'fork-fail');
+
+  // ── Character Creation (procedural node) ──
+  const charCreate = add('char-create','Character Creation','narrator',0,14.5,true,
+    {scene:true, tip:'Cross the mirror. Design your body. Stats, class, background.'});
+  link(a5sign, charCreate);
+
+  // ═══════════════════════════════════
+  //  CHAPTER 1  (B1 – B2 + planned)
+  // ═══════════════════════════════════
+
+  // ── B1: Chapel of Second Chances ──
+  const b1 = add('b1','B1 · Chapel Revival','dice',0,16.5,true,
+    {scene:true, tip:'Wake in printed bodies. Soul Grit DC 13 sets HP + Injuries. PAVNN activates.'});
+  const b1wake = add('b1-wake','Wake Check','dice',-1.5,17.8,true,{tip:'Soul Grit vs DC 13 — determines starting HP band'});
+  const b1lucifer = add('b1-lucifer','Lucifer Briefing','narrator',0,17.8,true,{tip:'Mirror manifestation. Objective: reach the Station.'});
+  const b1pavnn = add('b1-pavnn','PAVNN Online','collect',1.5,17.8,true,{tip:'Android escort activated. Carries gear, local maps.'});
+  link(charCreate, b1); link(b1, b1wake); link(b1, b1lucifer); link(b1, b1pavnn);
+
+  // ── B2: Chapel of the Second Dawn ──
+  const b2 = add('b2','B2 · Chapel Yard','choice',0,19.5,true,
+    {scene:true, tip:'Ruined sanctuary. Storage puzzle (3 paths). PAVNN briefing. Choose destination.'});
+  const b2key = add('b2-key','Outhouse Key','dice',-2,20.8,true,{tip:'Pry DC 12 — dead worker\'s keycard'});
+  const b2card = add('b2-card','Card Writer','dice',0,20.8,true,{tip:'SYS DC 12–15 — program a blank keycard'});
+  const b2climb = add('b2-climb','Climb & Drop','dice',2,20.8,true,{tip:'RES DC 15 + DC 12 — risky physical route'});
+  const b2storage = add('b2-storage','Storage Room','collect',0,22,true,{tip:'Healing supplies, tools, datashards. Most injuries healed.'});
+  link(b1, b2); link(b2, b2key); link(b2, b2card); link(b2, b2climb);
+  link(b2key, b2storage,'fork-success'); link(b2card, b2storage,'fork-success'); link(b2climb, b2storage,'fork-success');
+
+  // ── Planned nodes (not written yet) ──
+  const station = add('station','Terminus Station','narrator',0,24,false,
+    {scene:true, tip:'Reach the Apocalypse Express. Primary objective.'});
+  link(b2storage, station);
+
+  const drown = add('drown','Drowntown Basin','narrator',-2,25.5,false,
+    {scene:true, tip:'Wetland biome. Side area.'});
+  const ruins = add('ruins','Overground Ruins','narrator',0,25.5,false,
+    {scene:true, tip:'Surface ruins. Alternate route.'});
+  const bunker = add('bunker','A-Tech Bunker','narrator',2,25.5,false,
+    {scene:true, tip:'Underground bunker. Lore and equipment.'});
+  link(station, drown); link(station, ruins); link(station, bunker);
+
+  const temple = add('temple','Temple','choice',0,27.5,false,
+    {scene:true, tip:'Chapter 1 climax. Final confrontation.'});
+  link(drown, temple); link(ruins, temple); link(bunker, temple);
+
+  const ch1exit = add('ch1-exit','Chapter 1 Exit','narrator',0,29,false,
+    {scene:true, tip:'Transition to Chapter 2.'});
+  link(temple, ch1exit);
+
+  // ═══════════════════════════════════
+  //  CHAPTER 2  (placeholder)
+  // ═══════════════════════════════════
+  const ch2 = add('ch2','Chapter 2','narrator',0,31,false,
+    {scene:true, tip:'The journey continues...'});
+  link(ch1exit, ch2);
+
+  // ── chapter groups ──
+  groups.push({ label:'PRELUDE', yStart:0, yEnd:14.5, color:'rgba(201,156,90,.04)' });
+  groups.push({ label:'CHAPTER 1', yStart:16.5, yEnd:29, color:'rgba(92,180,230,.04)' });
+  groups.push({ label:'CHAPTER 2', yStart:31, yEnd:31, color:'rgba(180,130,220,.04)' });
+
+  // ── layout ──
   let minX=Infinity, minY=Infinity, maxX=-Infinity, maxY=-Infinity;
   nodes.forEach(n => { if(n.x<minX)minX=n.x; if(n.y<minY)minY=n.y; if(n.x>maxX)maxX=n.x; if(n.y>maxY)maxY=n.y; });
-  const padX=180, padY=120;
+  const padX=200, padY=140;
   nodes.forEach(n => { n.px=(n.x-minX)*COL_W+padX; n.py=(n.y-minY)*ROW_H+padY; });
-  return { nodes, edges, gridW:(maxX-minX)*COL_W+padX*2+COL_W, gridH:(maxY-minY)*ROW_H+padY*2+ROW_H };
+  groups.forEach(g => {
+    g.pyStart=(g.yStart-minY)*ROW_H+padY-60;
+    g.pyEnd=(g.yEnd-minY)*ROW_H+padY+60;
+    g.pxLeft=(minX-minX)*COL_W+padX-180;
+    g.pxRight=(maxX-minX)*COL_W+padX+180;
+  });
+  return { nodes, edges, groups, gridW:(maxX-minX)*COL_W+padX*2+COL_W, gridH:(maxY-minY)*ROW_H+padY*2+ROW_H };
 }
 
 function renderSandbox() {
-  const layout = buildDummyTree();
-  const { nodes, edges } = layout;
+  const layout = buildCampaignTree();
+  const { nodes, edges, groups } = layout;
 
+  const svg = document.getElementById('sandbox-svg');
   const edgesG = document.getElementById('sb-edges');
   const nodesG = document.getElementById('sb-nodes');
+
+  // remove previous chapter groups
+  svg.querySelectorAll('.sb-chapter-group').forEach(el => el.remove());
   edgesG.innerHTML = '';
   nodesG.innerHTML = '';
 
   const nodeMap = {};
   nodes.forEach(n => { nodeMap[n.nid] = n; });
 
-  // card dimensions
-  const CW = 140, CH = 56, IMG_H = 30;
+  // card dimensions — scene nodes are larger
+  const CW = 160, CH = 60, CW_S = 190, CH_S = 68, IMG_H = 30;
 
-  // edges — 90° orthogonal: down from bottom center, horizontal, down to top center
+  // ── chapter group backgrounds ──
+  if (groups) {
+    const groupsG = document.createElementNS(SVG_NS, 'g');
+    groupsG.setAttribute('class', 'sb-chapter-group');
+    groups.forEach(g => {
+      const pad = 20;
+      const r = document.createElementNS(SVG_NS, 'rect');
+      r.setAttribute('x', g.pxLeft - pad);
+      r.setAttribute('y', g.pyStart - pad);
+      r.setAttribute('width', g.pxRight - g.pxLeft + pad*2);
+      r.setAttribute('height', g.pyEnd - g.pyStart + pad*2);
+      r.setAttribute('rx', 8); r.setAttribute('ry', 8);
+      r.setAttribute('fill', g.color);
+      r.setAttribute('stroke', g.color.replace(/[\d.]+\)$/, s => (parseFloat(s)*3)+')'));
+      r.setAttribute('stroke-width', '1');
+      groupsG.appendChild(r);
+
+      const lbl = document.createElementNS(SVG_NS, 'text');
+      lbl.setAttribute('x', g.pxLeft - pad + 12);
+      lbl.setAttribute('y', g.pyStart - pad + 18);
+      lbl.setAttribute('class', 'sb-chapter-label');
+      lbl.textContent = g.label;
+      groupsG.appendChild(lbl);
+    });
+    svg.insertBefore(groupsG, edgesG);
+  }
+
+  // ── edges — 90° orthogonal ──
   edges.forEach(e => {
     const from = nodeMap[e.from], to = nodeMap[e.to];
     if (!from || !to) return;
     const both = from.filled && to.filled;
+    const fh = from.scene ? CH_S : CH;
+    const th = to.scene ? CH_S : CH;
     const p = document.createElementNS(SVG_NS, 'path');
-    const x1 = from.px, y1 = from.py + CH/2;
-    const x2 = to.px, y2 = to.py - CH/2;
+    const x1 = from.px, y1 = from.py + fh/2;
+    const x2 = to.px, y2 = to.py - th/2;
     const midY = y1 + (y2 - y1) / 2;
-    // straight vertical if same column, otherwise L-shaped with horizontal segment
     if (Math.abs(x1 - x2) < 1) {
       p.setAttribute('d', 'M'+x1+','+y1+' L'+x2+','+y2);
     } else {
@@ -3726,58 +3885,67 @@ function renderSandbox() {
     edgesG.appendChild(p);
   });
 
-  // nodes — rectangular cards
+  // ── nodes ──
   const typeNames = { narrator:'narrative', choice:'divergence', dice:'fate check', collect:'acquisition', fail:'terminus' };
 
   nodes.forEach(n => {
+    const isScene = n.scene;
+    const cw = isScene ? CW_S : CW;
+    const ch = isScene ? CH_S : CH;
+
     const g = document.createElementNS(SVG_NS, 'g');
     g.setAttribute('transform', 'translate('+n.px+','+n.py+')');
-    g.setAttribute('class', 'sb-node t-'+(n.type||'narrator')+(n.filled?' filled':' empty'));
+    g.setAttribute('class', 'sb-node t-'+(n.type||'narrator')
+      +(n.filled?' filled':' empty')
+      +(isScene?' scene':''));
 
     // card background
     const card = document.createElementNS(SVG_NS, 'rect');
-    card.setAttribute('x', -CW/2); card.setAttribute('y', -CH/2);
-    card.setAttribute('width', CW); card.setAttribute('height', CH);
+    card.setAttribute('x', -cw/2); card.setAttribute('y', -ch/2);
+    card.setAttribute('width', cw); card.setAttribute('height', ch);
     card.setAttribute('class', 'sb-card');
     g.appendChild(card);
 
-    // image placeholder area (top portion of card)
+    // image placeholder area
     const img = document.createElementNS(SVG_NS, 'rect');
-    img.setAttribute('x', -CW/2+4); img.setAttribute('y', -CH/2+4);
-    img.setAttribute('width', CW-8); img.setAttribute('height', IMG_H);
+    img.setAttribute('x', -cw/2+4); img.setAttribute('y', -ch/2+4);
+    img.setAttribute('width', cw-8); img.setAttribute('height', IMG_H);
     img.setAttribute('class', 'sb-card-img');
     g.appendChild(img);
 
     // type accent bar — left edge
     const accent = document.createElementNS(SVG_NS, 'rect');
-    accent.setAttribute('x', -CW/2); accent.setAttribute('y', -CH/2);
-    accent.setAttribute('width', 3); accent.setAttribute('height', CH);
+    accent.setAttribute('x', -cw/2); accent.setAttribute('y', -ch/2);
+    accent.setAttribute('width', isScene ? 4 : 3); accent.setAttribute('height', ch);
     accent.setAttribute('class', 'sb-accent');
     g.appendChild(accent);
 
-    // label text — below image area
+    // label text
     const lbl = document.createElementNS(SVG_NS, 'text');
-    lbl.setAttribute('x', -CW/2+10); lbl.setAttribute('y', CH/2-10);
-    lbl.setAttribute('class', 'sb-label');
+    lbl.setAttribute('x', -cw/2+10); lbl.setAttribute('y', ch/2-10);
+    lbl.setAttribute('class', 'sb-label'+(isScene?' sb-label-scene':''));
     lbl.textContent = n.label;
     g.appendChild(lbl);
 
-    // type text — top right corner
+    // type text
     const typ = document.createElementNS(SVG_NS, 'text');
-    typ.setAttribute('x', CW/2-4); typ.setAttribute('y', -CH/2+10);
+    typ.setAttribute('x', cw/2-4); typ.setAttribute('y', -ch/2+10);
     typ.setAttribute('text-anchor', 'end');
     typ.setAttribute('class', 'sb-type-label');
     typ.textContent = typeNames[n.type] || '';
     g.appendChild(typ);
 
-    // tooltip
+    // tooltip with tip text
     g.addEventListener('mouseenter', function() {
       if (sbDragging) return;
       const tt = document.getElementById('sandbox-tooltip');
       document.getElementById('sandbox-tt-title').textContent = n.label;
-      document.getElementById('sandbox-tt-text').innerHTML = n.filled
-        ? '<p>Written — '+(typeNames[n.type]||'narrative')+' node</p>'
-        : '<p>Uncharted — awaiting content</p>';
+      const status = n.filled ? 'Written' : 'Planned';
+      const typeStr = typeNames[n.type] || 'narrative';
+      const tipHtml = n.tip
+        ? '<p>'+status+' · '+typeStr+(isScene?' · scene':'')+'</p><p>'+n.tip+'</p>'
+        : '<p>'+status+' · '+typeStr+'</p>';
+      document.getElementById('sandbox-tt-text').innerHTML = tipHtml;
       tt.classList.add('show');
       const rect = g.getBoundingClientRect();
       tt.style.left = Math.min(rect.right+8, window.innerWidth-300)+'px';
@@ -3790,8 +3958,12 @@ function renderSandbox() {
     nodesG.appendChild(g);
   });
 
-  const filled = nodes.filter(n => n.filled).length;
-  document.getElementById('sandbox-stats').textContent = filled+' / '+nodes.length+' charted';
+  // stats — chapter breakdown
+  const preludeFilled = nodes.filter(n => n.filled).length;
+  const scenesFilled = nodes.filter(n => n.scene && n.filled).length;
+  const scenesTotal = nodes.filter(n => n.scene).length;
+  document.getElementById('sandbox-stats').textContent =
+    preludeFilled+' / '+nodes.length+' charted  ·  '+scenesFilled+'/'+scenesTotal+' scenes';
 
   // fit to content
   if (!sbInitialized) {
