@@ -2572,6 +2572,15 @@ const collection = [
     hint: 'Search thoroughly near the fountain.',
     unlocked: false,
   },
+  {
+    id: 'silver-postcard',
+    title: 'The Silver Postcard',
+    img: 'ae-obelisk-fountain.png',
+    desc: 'A postcard in impossible colour — a red-lined train crossing a storm-lit viaduct. The image shifts when you look away. It feels warm, heavy, alive. Whatever it is, it chose you.',
+    lore: 'Found stuck to the obelisk among a dozen faded black-and-white cards. Each monochrome card shows a different station — snow depots, jungle halts, seaside piers, desert sidings. But this one blazes in full colour, its details changing with each glance. The moment you took it, you felt vertigo, heard a station chime only you could hear, and saw dozens of stations superimposed like double exposures. The place seemed satisfied. You are on the list now.',
+    hint: 'Take the colour card from the obelisk.',
+    unlocked: false,
+  },
 ];
 
 function unlockCollection(id) {
@@ -3036,9 +3045,8 @@ const frames = [
     ],
     continueLabel: 'return',
     continueIcon: '↩',
-    next: 'crossroads-choice',
+    next: 'obelisk-clock',
   },
-  // ── WANDER EXPLORE (fallback scout) ──
   {
     id: 'wander-explore',
     speaker: null,
@@ -3111,6 +3119,120 @@ const frames = [
     continueIcon: '↩',
     next: 'crossroads-choice',
   },
+  // ══════════════════════════════════════════════
+  //  A2 — OBELISK, CLOCK & POSTCARDS
+  // ══════════════════════════════════════════════
+  {
+    id: 'obelisk-clock',
+    speaker: null,
+    text: [
+      'A sound. Not loud — but <em class="inline">total</em>. A single low tone that rolls through the mist like a stone dropped into still water. It doesn\'t echo. It <em class="inline">expands</em>. You feel it in your ribs, in the soles of your feet, in the obsidian beneath you.',
+      'A gong. Somewhere far away — or nowhere at all.',
+      'You look up. The obelisk — that black needle you\'ve been orbiting since you arrived — has changed. Near its top, where before there was only seamless obsidian, a narrow window of pale gold light has opened. Numbers. Small, elegant, counting <em class="inline">backward</em>.',
+      'A clock. A countdown. Set into the stone as if it was always there, waiting for the right moment to reveal itself.',
+      'The numbers tick down. Slow. Patient. Not urgent — but unmistakably <em class="inline">deliberate</em>. Someone — or something — is keeping time.',
+    ],
+    continueLabel: 'approach',
+    continueIcon: '◎',
+    next: 'obelisk-approach',
+  },
+  {
+    id: 'obelisk-approach',
+    speaker: null,
+    text: [
+      'You cross the platform toward the obelisk. Up close, it\'s taller than you thought — three metres, maybe four — and the surface is so smooth that it doesn\'t reflect light so much as <em class="inline">swallow</em> it. Your reflection smears across the stone like something drowned beneath black water.',
+      'No seams. No joints. No runes or inscriptions. Just obsidian, polished to the point of impossibility, standing on the platform as though the ground grew it. Installed. Not built. Not carved. <em class="inline">Placed</em>.',
+      'The golden clock ticks above your head. You can hear it now — a faint mechanical heartbeat, regular as breathing. The numbers are too high to read clearly, but their steady descent is unmistakable.',
+      'And there — on one face of the obelisk, at eye level — something else. Postcards. A ragged fan of them, stuck to the obsidian with ugly lumps of dried grey gum.',
+    ],
+    continueLabel: 'examine the postcards',
+    continueIcon: '◎',
+    next: 'obelisk-postcards',
+  },
+  {
+    id: 'obelisk-postcards',
+    speaker: null,
+    text: [
+      'A dozen cards, maybe more, pasted to the stone in overlapping rows. Most are black-and-white — grainy, faded, the kind of photography that belongs to a century you can\'t name. Each one shows a different place.',
+      'A snow-covered railway depot, lanterns burning in the fog. A jungle halt, vines swallowing the platform. A seaside pier where the tracks end at the waterline. A desert siding, sun-bleached and empty. A ruined marshalling yard, half-buried in ash.',
+      'Stations. All of them stations. Different worlds, different weathers, different states of ruin or beauty — but all unmistakably <em class="inline">stops along a line</em>.',
+      'And among them — one card that doesn\'t belong. Slightly larger than the rest, fresher, held by a fat wad of gum at eye level. While everything around it is monochrome and faded, this card is in <em class="inline">full, vivid colour</em>. It practically glows against the obsidian.',
+    ],
+    choices: [
+      { icon: '✦', tint: 'gold', label: 'Reach for the colour card', next: 'silver-postcard' },
+      { icon: '⏱', tint: 'blue', label: 'Study the clock above', next: 'obelisk-clock-study' },
+    ],
+  },
+  {
+    id: 'obelisk-clock-study',
+    speaker: null,
+    text: [
+      'You tilt your head back and stare at the clock. The pale numerals drift downward — not fast, not slow, just <em class="inline">constant</em>. A patient unwinding of something you don\'t understand.',
+      'You watch for a while. And then — so subtly you almost miss it — the digits begin to flip a little <em class="inline">faster</em>. Not by much. But the rhythm shifts. The quiet ticking sharpens. As if the mechanism has noticed you looking. As if your attention is something it can <em class="inline">feel</em>.',
+      'The distant mechanical rhythm in the Null — the one you\'ve been half-hearing since you arrived — locks to the faster beat. The whole place tightens, just a fraction.',
+      'You look away. The ticking settles. But you know it noticed.',
+      'Your eyes fall back to the postcards. The colour card is still there, vivid and impossible, waiting at eye level.',
+    ],
+    continueLabel: 'reach for the colour card',
+    continueIcon: '✦',
+    next: 'silver-postcard',
+  },
+  {
+    id: 'silver-postcard',
+    speaker: null,
+    text: [
+      'You lean in. The card shows a train. Red-lined, iron-dark, crossing a viaduct under a sky split by lightning. The colours are too saturated for this place — too <em class="inline">alive</em>. The red of the train\'s livery is the colour of arterial blood. The storm-light is silver-white. The rails gleam like wet bone.',
+      'You blink. The crowd on the platform has shifted — the same people, but in different positions. The weather has changed. The lightning is in a different place. You didn\'t see it move. It just <em class="inline">did</em>.',
+      'You reach out. The card is warm beneath your fingers — warmer than the stone, warmer than anything you\'ve touched in this place. The gum resists for a moment, then <em class="inline">relaxes</em>, as if it was waiting for the right hand.',
+      'It could come free. You could take it. Something in the image stirs — not quite recognition, not quite memory. Something closer to <em class="inline">invitation</em>.',
+    ],
+    choices: [
+      { icon: '✋', tint: 'gold', label: 'Keep it', next: 'postcard-take' },
+      { icon: '↩', tint: 'grey', label: 'Leave it on the obelisk', next: 'postcard-leave' },
+    ],
+  },
+  {
+    id: 'postcard-take',
+    speaker: null,
+    text: [
+      'You pull. The gum lets go with a soft, wet sound, and the card comes free in your hand.',
+      'The moment it leaves the stone, something shifts. A brief <em class="inline">vertigo</em> — not dizziness, not nausea, but the sensation of looking down an endless straight rail line that stretches to a vanishing point you will never reach. It lasts a heartbeat. Two. Then it\'s gone.',
+      'A single clear tone rings in your ears — high, clean, like a station chime heard from far away. No one else reacts. The sound was for you.',
+      'For an instant you see them: stations. Dozens of them, superimposed over each other like double-exposed photographs — platforms, lanterns, crowds, departures, arrivals — all at once, all different, all <em class="inline">real</em>. Then they fade, and you\'re standing at the obelisk again with a warm postcard in your hand.',
+      'Whatever this is, it feels like it belongs to you now. And the place seems <em class="inline">satisfied</em> with that.',
+    ],
+    continueLabel: 'look up at the clock',
+    continueIcon: '◎',
+    next: 'clock-quicken',
+  },
+  {
+    id: 'postcard-leave',
+    speaker: null,
+    text: [
+      'You pull your hand back. The card stays. The gum holds. The vivid colours dim slightly — or maybe your eyes are adjusting. Either way, the moment passes.',
+      'You step back from the obelisk. The black-and-white postcards stare blankly at you — dead stations, forgotten platforms, snow and ash and empty tracks.',
+      'The colour card watches from among them. Patient. Not offended. Just... <em class="inline">waiting</em>.',
+      'You notice, absently, that your palm is still warm where you touched it. And the aftertaste of that warmth follows you — not unpleasant, not insistent, just <em class="inline">present</em>. Like a word on the tip of your tongue that you\'ve decided not to say.',
+      'Later — between one step and the next — you\'ll realise something small and warm has found its way into your pocket. But that\'s later.',
+    ],
+    continueLabel: 'look up at the clock',
+    continueIcon: '◎',
+    next: 'clock-quicken',
+  },
+  {
+    id: 'clock-quicken',
+    speaker: null,
+    text: [
+      'The clock has changed. The numbers are falling faster now — not racing, not panicked, but <em class="inline">purposeful</em>. The patient drift has become a steady march. Whatever the obelisk was waiting for, you\'ve triggered it. Or it was always going to happen, and you just happened to be here when it did.',
+      'The mechanical ticking spreads through the obsidian underfoot. You can feel it in your soles — a vibration, deep and regular, like the heartbeat of something impossibly large stirring beneath the surface.',
+      'And then — from a direction that doesn\'t quite exist — a sound. Low. Rising. The drawn-out note of metal under tension, of wheels turning after a long stillness, of steam finding its voice.',
+      'Somewhere in the mist, two lines of red light resolve — parallel, close together, stretching toward you from the dark. <em class="inline">Rails.</em> Glowing faintly, like embers in a dead fire.',
+      'Something is coming.',
+    ],
+    continueLabel: 'wait',
+    continueIcon: '⏳',
+    next: null,
+  },
 ];
 
 let currentFrameIdx = 0;
@@ -3141,6 +3263,8 @@ function renderFrame(idx) {
     'tree-success': 'glimpse-fog',
     'wander-explore': 'panorama-void',
     'scroll-revelation': 'unsent-letter',
+    'postcard-take': 'silver-postcard',
+    'postcard-leave': 'silver-postcard',
   };
   if (unlocks[f.id]) unlockCollection(unlocks[f.id]);
 
@@ -3873,29 +3997,44 @@ function buildCampaignTree() {
   link(scrollDice, scrollOk,'fork-success'); link(scrollDice, scrollFail,'fork-fail');
 
   // ── A2: Obelisk, Clock & Postcards ──
-  const a2 = add('a2','A2 · Obelisk & Postcards','collect',0,7.5,true,
-    {scene:true, img:'ae-obelisk-fountain.png', tip:'Obelisk appears. Countdown. Silver Postcard binds to one soul.'});
-  link(a1cross, a2);
+  const a2 = add('a2','A2 · Obelisk & Clock','narrator',0,7.5,true,
+    {scene:true, img:'ae-obelisk-fountain.png', tip:'A gong. A golden clock appears on the obelisk, counting backward.'});
+  const a2post = add('a2-postcards','Postcards','choice',0,8.5,true,
+    {img:'ae-obelisk-fountain.png', tip:'Black-and-white station scenes. One vivid colour card stands out.'});
+  const a2clock = add('a2-clock','Study Clock','narrator',-1.5,8.5,true,
+    {tip:'The countdown notices your attention and speeds up.'});
+  const a2silver = add('a2-silver','Silver Postcard','choice',0,9.5,true,
+    {img:'ae-obelisk-fountain.png', tip:'Warm, shifting image. A train under lightning. It could be yours.'});
+  const a2take = add('a2-take','Keep Card','collect',-.8,10.5,true,
+    {tip:'Vertigo. Station chime. Dozens of stations flash. It belongs to you now.'});
+  const a2leave = add('a2-leave','Leave Card','narrator',.8,10.5,true,
+    {tip:'You step away. But later, something warm finds your pocket.'});
+  const a2quicken = add('a2-quicken','Clock Quickens','narrator',0,11.5,true,
+    {img:'ae-obelisk-fountain.png', tip:'Numbers fall faster. Red rails glow in the mist. Something is coming.'});
+  link(a1cross, a2); link(a2, a2post); link(a2post, a2clock);
+  link(a2clock, a2silver); link(a2post, a2silver);
+  link(a2silver, a2take); link(a2silver, a2leave,'fork-fail');
+  link(a2take, a2quicken); link(a2leave, a2quicken);
 
   // ── A3: Train Arrival & Boarding ──
-  const a3 = add('a3','A3 · Train Arrival','narrator',0,9,true,
+  const a3 = add('a3','A3 · Train Arrival','narrator',0,13,true,
     {scene:true, img:'ae-s1-bg.png', tip:'Twin red rails. Apocalypse Express arrives. Herald announces boarding.'});
-  link(a2, a3);
+  link(a2quicken, a3);
 
   // ── A4: Gossip Car & Golden Tickets ──
-  const a4 = add('a4','A4 · Gossip Car','collect',0,10.5,true,
+  const a4 = add('a4','A4 · Gossip Car','collect',0,14.5,true,
     {scene:true, img:'ae-s1-bg.png', tip:'Breather car. Golden Tickets discovered in pockets. Inspector validates.'});
   link(a3, a4);
 
   // ── A5: Sundown Saloon & Lucifer's Pact ──
-  const a5 = add('a5','A5 · Sundown Saloon','choice',0,12,true,
+  const a5 = add('a5','A5 · Sundown Saloon','choice',0,16,true,
     {scene:true, img:'ae-crossroads-wide.png', tip:'Lucifer\'s pitch. Hell below. Sign the pact or stay in Hell.'});
-  const a5sign = add('a5-sign','Sign Pact','narrator',-1,13.2,true,{img:'ae-crossroads-wide.png', tip:'Golden pen. Name in black. Verse flickers in window.'});
-  const a5refuse = add('a5-refuse','Refuse','fail',1,13.2,false,{tip:'Stay in Hell. Character lost.'});
+  const a5sign = add('a5-sign','Sign Pact','narrator',-1,17.2,true,{img:'ae-crossroads-wide.png', tip:'Golden pen. Name in black. Verse flickers in window.'});
+  const a5refuse = add('a5-refuse','Refuse','fail',1,17.2,false,{tip:'Stay in Hell. Character lost.'});
   link(a4, a5); link(a5, a5sign); link(a5, a5refuse,'fork-fail');
 
   // ── Character Creation (procedural node) ──
-  const charCreate = add('char-create','Character Creation','narrator',0,14.5,true,
+  const charCreate = add('char-create','Character Creation','narrator',0,18.5,true,
     {scene:true, img:'ae-null-meridian-portrait.png', tip:'Cross the mirror. Design your body. Stats, class, background.'});
   link(a5sign, charCreate);
 
@@ -3904,55 +4043,55 @@ function buildCampaignTree() {
   // ═══════════════════════════════════
 
   // ── B1: Chapel of Second Chances ──
-  const b1 = add('b1','B1 · Chapel Revival','dice',0,16.5,true,
+  const b1 = add('b1','B1 · Chapel Revival','dice',0,20.5,true,
     {scene:true, img:'ae-s1-waking.png', tip:'Wake in printed bodies. Soul Grit DC 13 sets HP + Injuries. PAVNN activates.'});
-  const b1wake = add('b1-wake','Wake Check','dice',-1.5,17.8,true,{img:'ae-s1-waking.png', tip:'Soul Grit vs DC 13 — determines starting HP band'});
-  const b1lucifer = add('b1-lucifer','Lucifer Briefing','narrator',0,17.8,true,{img:'ae-null-meridian.png', tip:'Mirror manifestation. Objective: reach the Station.'});
-  const b1pavnn = add('b1-pavnn','PAVNN Online','collect',1.5,17.8,true,{tip:'Android escort activated. Carries gear, local maps.'});
+  const b1wake = add('b1-wake','Wake Check','dice',-1.5,21.8,true,{img:'ae-s1-waking.png', tip:'Soul Grit vs DC 13 — determines starting HP band'});
+  const b1lucifer = add('b1-lucifer','Lucifer Briefing','narrator',0,21.8,true,{img:'ae-null-meridian.png', tip:'Mirror manifestation. Objective: reach the Station.'});
+  const b1pavnn = add('b1-pavnn','PAVNN Online','collect',1.5,21.8,true,{tip:'Android escort activated. Carries gear, local maps.'});
   link(charCreate, b1); link(b1, b1wake); link(b1, b1lucifer); link(b1, b1pavnn);
 
   // ── B2: Chapel of the Second Dawn ──
-  const b2 = add('b2','B2 · Chapel Yard','choice',0,19.5,true,
+  const b2 = add('b2','B2 · Chapel Yard','choice',0,23.5,true,
     {scene:true, img:'ae-long-walk.png', tip:'Ruined sanctuary. Storage puzzle (3 paths). PAVNN briefing. Choose destination.'});
-  const b2key = add('b2-key','Outhouse Key','dice',-2,20.8,true,{tip:'Pry DC 12 — dead worker\'s keycard'});
-  const b2card = add('b2-card','Card Writer','dice',0,20.8,true,{tip:'SYS DC 12–15 — program a blank keycard'});
-  const b2climb = add('b2-climb','Climb & Drop','dice',2,20.8,true,{tip:'RES DC 15 + DC 12 — risky physical route'});
-  const b2storage = add('b2-storage','Storage Room','collect',0,22,true,{tip:'Healing supplies, tools, datashards. Most injuries healed.'});
+  const b2key = add('b2-key','Outhouse Key','dice',-2,24.8,true,{tip:'Pry DC 12 — dead worker\'s keycard'});
+  const b2card = add('b2-card','Card Writer','dice',0,24.8,true,{tip:'SYS DC 12–15 — program a blank keycard'});
+  const b2climb = add('b2-climb','Climb & Drop','dice',2,24.8,true,{tip:'RES DC 15 + DC 12 — risky physical route'});
+  const b2storage = add('b2-storage','Storage Room','collect',0,26,true,{tip:'Healing supplies, tools, datashards. Most injuries healed.'});
   link(b1, b2); link(b2, b2key); link(b2, b2card); link(b2, b2climb);
   link(b2key, b2storage,'fork-success'); link(b2card, b2storage,'fork-success'); link(b2climb, b2storage,'fork-success');
 
   // ── Planned nodes (not written yet) ──
-  const station = add('station','Terminus Station','narrator',0,24,false,
+  const station = add('station','Terminus Station','narrator',0,28,false,
     {scene:true, tip:'Reach the Apocalypse Express. Primary objective.'});
   link(b2storage, station);
 
-  const drown = add('drown','Drowntown Basin','narrator',-2,25.5,false,
+  const drown = add('drown','Drowntown Basin','narrator',-2,29.5,false,
     {scene:true, tip:'Wetland biome. Side area.'});
-  const ruins = add('ruins','Overground Ruins','narrator',0,25.5,false,
+  const ruins = add('ruins','Overground Ruins','narrator',0,29.5,false,
     {scene:true, tip:'Surface ruins. Alternate route.'});
-  const bunker = add('bunker','A-Tech Bunker','narrator',2,25.5,false,
+  const bunker = add('bunker','A-Tech Bunker','narrator',2,29.5,false,
     {scene:true, tip:'Underground bunker. Lore and equipment.'});
   link(station, drown); link(station, ruins); link(station, bunker);
 
-  const temple = add('temple','Temple','choice',0,27.5,false,
+  const temple = add('temple','Temple','choice',0,31.5,false,
     {scene:true, tip:'Chapter 1 climax. Final confrontation.'});
   link(drown, temple); link(ruins, temple); link(bunker, temple);
 
-  const ch1exit = add('ch1-exit','Chapter 1 Exit','narrator',0,29,false,
+  const ch1exit = add('ch1-exit','Chapter 1 Exit','narrator',0,33,false,
     {scene:true, tip:'Transition to Chapter 2.'});
   link(temple, ch1exit);
 
   // ═══════════════════════════════════
   //  CHAPTER 2  (placeholder)
   // ═══════════════════════════════════
-  const ch2 = add('ch2','Chapter 2','narrator',0,31,false,
+  const ch2 = add('ch2','Chapter 2','narrator',0,35,false,
     {scene:true, tip:'The journey continues...'});
   link(ch1exit, ch2);
 
   // ── chapter groups ──
-  groups.push({ label:'PRELUDE', yStart:0, yEnd:14.5, color:'rgba(201,156,90,.04)' });
-  groups.push({ label:'CHAPTER 1', yStart:16.5, yEnd:29, color:'rgba(92,180,230,.04)' });
-  groups.push({ label:'CHAPTER 2', yStart:31, yEnd:31, color:'rgba(180,130,220,.04)' });
+  groups.push({ label:'PRELUDE', yStart:0, yEnd:18.5, color:'rgba(201,156,90,.04)' });
+  groups.push({ label:'CHAPTER 1', yStart:20.5, yEnd:33, color:'rgba(92,180,230,.04)' });
+  groups.push({ label:'CHAPTER 2', yStart:35, yEnd:35, color:'rgba(180,130,220,.04)' });
 
   // ── layout ──
   let minX=Infinity, minY=Infinity, maxX=-Infinity, maxY=-Infinity;
@@ -4172,6 +4311,10 @@ const sbFrameMap = {
   'a1-cicero':'talk-cicero', 'a1-cic-listen':'cicero-listen', 'a1-cic-leave':'cicero-leave',
   'a1-fountain':'examine-fountain', 'a1-desk':'fountain-desk',
   'a1-scroll':'scroll-check-1', 'a1-scroll-ok':'scroll-revelation', 'a1-scroll-fail':'scrolls-dust',
+  // A2
+  'a2':'obelisk-clock', 'a2-postcards':'obelisk-postcards', 'a2-clock':'obelisk-clock-study',
+  'a2-silver':'silver-postcard', 'a2-take':'postcard-take', 'a2-leave':'postcard-leave',
+  'a2-quicken':'clock-quicken',
 };
 
 function sbOpenDetail(n) {
