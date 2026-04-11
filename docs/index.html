@@ -232,6 +232,15 @@ html, body {
 .sb-card-img {
   fill:rgba(200,180,150,.03); rx:4; ry:4;
 }
+/* real image inside card */
+.sb-card-img-real {
+  opacity:.35; filter:brightness(.6) saturate(.6);
+  transition:opacity .4s, filter .4s;
+}
+.sb-node:hover .sb-card-img-real { opacity:.55; filter:brightness(.75) saturate(.8); }
+.sb-node.filled .sb-card-img-real { opacity:.45; filter:brightness(.65) saturate(.7); }
+.sb-node.filled:hover .sb-card-img-real { opacity:.7; filter:brightness(.8) saturate(.85); }
+.sb-node.empty .sb-card-img-real { opacity:.12; filter:brightness(.3) saturate(.2); }
 
 /* type accent bar — left edge */
 .sb-accent { fill:rgba(200,180,150,.15); rx:2; ry:2; transition:fill .4s; }
@@ -3679,7 +3688,7 @@ function buildCampaignTree() {
   const nodes = [], edges = [], groups = [];
   let nid = 0;
   function add(id, label, type, x, y, filled, opts) {
-    const n = { nid:nid++, id, label, type, x, y, filled, scene:!!(opts&&opts.scene), tip:(opts&&opts.tip)||'' };
+    const n = { nid:nid++, id, label, type, x, y, filled, scene:!!(opts&&opts.scene), tip:(opts&&opts.tip)||'', img:(opts&&opts.img)||'' };
     nodes.push(n); return n.nid;
   }
   function link(a, b, cls) { edges.push({ from:a, to:b, cls:cls||'' }); }
@@ -3690,64 +3699,64 @@ function buildCampaignTree() {
 
   // ── A1: Null Meridian ──
   const a1 = add('a1','A1 · Null Meridian','narrator',0,0,true,
-    {scene:true, tip:'Waking on the obsidian platform. Tutorial scene. System OFF.'});
+    {scene:true, img:'ae-null-meridian.png', tip:'Waking on the obsidian platform. Tutorial scene. System OFF.'});
   const a1cross = add('a1-cross','Crossroads','choice',0,1.2,true,
-    {tip:'Three paths diverge at the fountain'});
+    {img:'ae-standup-crossroads.png', tip:'Three paths diverge at the fountain'});
   link(a1, a1cross);
 
   // Scout branch
-  const scout = add('a1-scout','Survey','choice',-3,2.5,true,{tip:'Scan the landscape — obelisk, tree, open plain'});
-  const climb = add('a1-climb','Climb Obelisk','dice',-4,3.8,true,{tip:'DC 10 → DC 15 → DC 20 chain'});
-  const climbOk = add('a1-climb-ok','The View','collect',-4.8,5.2,true,{tip:'See the infinite obsidian plane from above'});
-  const climbFail = add('a1-climb-fail','Defeat','fail',-3.2,5.2,true,{tip:'Three falls. Give up.'});
-  const tree = add('a1-tree','Find Tree','narrator',-2,3.8,true,{tip:'Tree ridge in the mist — DC 15 jump'});
-  const treeOk = add('a1-tree-ok','Glimpse','collect',-2.8,5.2,true,{tip:'Brief view from the canopy'});
-  const treeFail = add('a1-tree-fail','Closed','fail',-1.2,5.2,true,{tip:'Branch snaps. Fall.'});
-  const wander = add('a1-wander','Walk','narrator',-4,5.2,false,{tip:'Wander the infinite plain alone'});
+  const scout = add('a1-scout','Survey','choice',-3,2.5,true,{img:'ae-obelisk-fountain.png', tip:'Scan the landscape — obelisk, tree, open plain'});
+  const climb = add('a1-climb','Climb Obelisk','dice',-4,3.8,true,{img:'ae-climb-retry.png', tip:'DC 10 → DC 15 → DC 20 chain'});
+  const climbOk = add('a1-climb-ok','The View','collect',-4.8,5.2,true,{img:'ae-crossroads-wide.png', tip:'See the infinite obsidian plane from above'});
+  const climbFail = add('a1-climb-fail','Defeat','fail',-3.2,5.2,true,{img:'ae-climb-defeat.png', tip:'Three falls. Give up.'});
+  const tree = add('a1-tree','Find Tree','narrator',-2,3.8,true,{img:'ae-tree-find.png', tip:'Tree ridge in the mist — DC 15 jump'});
+  const treeOk = add('a1-tree-ok','Glimpse','collect',-2.8,5.2,true,{img:'ae-tree-top.png', tip:'Brief view from the canopy'});
+  const treeFail = add('a1-tree-fail','Closed','fail',-1.2,5.2,true,{img:'ae-tree-fall.png', tip:'Branch snaps. Fall.'});
+  const wander = add('a1-wander','Walk','narrator',-4,5.2,false,{img:'ae-long-walk.png', tip:'Wander the infinite plain alone'});
   link(a1cross, scout); link(scout, climb); link(climb, climbOk,'fork-success'); link(climb, climbFail,'fork-fail');
   link(scout, tree); link(tree, treeOk,'fork-success'); link(tree, treeFail,'fork-fail');
   link(scout, wander);
 
   // Cicero branch
-  const cicero = add('a1-cicero','Approach Cicero','narrator',0,2.5,true,{tip:'The old man with the obsidian quill'});
-  const cicListen = add('a1-cic-listen','Listen','narrator',0,3.8,true,{tip:'Wait. Hear his mumbling about promises.'});
-  const cicLeave = add('a1-cic-leave','Leave Him','narrator',0,5.2,true,{tip:'He is not ready to talk — not yet.'});
+  const cicero = add('a1-cicero','Approach Cicero','narrator',0,2.5,true,{img:'ae-cicero-close.png', tip:'The old man with the obsidian quill'});
+  const cicListen = add('a1-cic-listen','Listen','narrator',0,3.8,true,{img:'ae-cicero-close.png', tip:'Wait. Hear his mumbling about promises.'});
+  const cicLeave = add('a1-cic-leave','Leave Him','narrator',0,5.2,true,{img:'ae-cicero-close.png', tip:'He is not ready to talk — not yet.'});
   link(a1cross, cicero); link(cicero, cicListen); link(cicListen, cicLeave);
 
   // Fountain branch
-  const fountain = add('a1-fountain','Examine Fountain','narrator',3,2.5,true,{tip:'Obsidian fountain with ancient coins'});
-  const desk = add('a1-desk','Desk & Scrolls','narrator',3,3.8,true,{tip:'Crumbling desk with sealed scrolls'});
-  const scrollDice = add('a1-scroll','Scroll Check','dice',3,5.2,true,{tip:'DC 10 Delicacy — can you unroll them?'});
-  const scrollOk = add('a1-scroll-ok','Letter','collect',2.2,6.5,true,{tip:'Weapons ledger. Fear. An unsent goodbye.'});
-  const scrollFail = add('a1-scroll-fail','All Lost','fail',3.8,6.5,true,{tip:'Both scrolls crumble to dust.'});
+  const fountain = add('a1-fountain','Examine Fountain','narrator',3,2.5,true,{img:'ae-fountain-close.png', tip:'Obsidian fountain with ancient coins'});
+  const desk = add('a1-desk','Desk & Scrolls','narrator',3,3.8,true,{img:'ae-obelisk-fountain.png', tip:'Crumbling desk with sealed scrolls'});
+  const scrollDice = add('a1-scroll','Scroll Check','dice',3,5.2,true,{img:'ae-obelisk-fountain.png', tip:'DC 10 Delicacy — can you unroll them?'});
+  const scrollOk = add('a1-scroll-ok','Letter','collect',2.2,6.5,true,{img:'ae-obelisk-fountain.png', tip:'Weapons ledger. Fear. An unsent goodbye.'});
+  const scrollFail = add('a1-scroll-fail','All Lost','fail',3.8,6.5,true,{img:'ae-obelisk-fountain.png', tip:'Both scrolls crumble to dust.'});
   link(a1cross, fountain); link(fountain, desk); link(desk, scrollDice);
   link(scrollDice, scrollOk,'fork-success'); link(scrollDice, scrollFail,'fork-fail');
 
   // ── A2: Obelisk, Clock & Postcards ──
   const a2 = add('a2','A2 · Obelisk & Postcards','collect',0,7.5,true,
-    {scene:true, tip:'Obelisk appears. Countdown. Silver Postcard binds to one soul.'});
+    {scene:true, img:'ae-obelisk-fountain.png', tip:'Obelisk appears. Countdown. Silver Postcard binds to one soul.'});
   link(a1cross, a2);
 
   // ── A3: Train Arrival & Boarding ──
   const a3 = add('a3','A3 · Train Arrival','narrator',0,9,true,
-    {scene:true, tip:'Twin red rails. Apocalypse Express arrives. Herald announces boarding.'});
+    {scene:true, img:'ae-s1-bg.png', tip:'Twin red rails. Apocalypse Express arrives. Herald announces boarding.'});
   link(a2, a3);
 
   // ── A4: Gossip Car & Golden Tickets ──
   const a4 = add('a4','A4 · Gossip Car','collect',0,10.5,true,
-    {scene:true, tip:'Breather car. Golden Tickets discovered in pockets. Inspector validates.'});
+    {scene:true, img:'ae-s1-bg.png', tip:'Breather car. Golden Tickets discovered in pockets. Inspector validates.'});
   link(a3, a4);
 
   // ── A5: Sundown Saloon & Lucifer's Pact ──
   const a5 = add('a5','A5 · Sundown Saloon','choice',0,12,true,
-    {scene:true, tip:'Lucifer\'s pitch. Hell below. Sign the pact or stay in Hell.'});
-  const a5sign = add('a5-sign','Sign Pact','narrator',-1,13.2,true,{tip:'Golden pen. Name in black. Verse flickers in window.'});
+    {scene:true, img:'ae-crossroads-wide.png', tip:'Lucifer\'s pitch. Hell below. Sign the pact or stay in Hell.'});
+  const a5sign = add('a5-sign','Sign Pact','narrator',-1,13.2,true,{img:'ae-crossroads-wide.png', tip:'Golden pen. Name in black. Verse flickers in window.'});
   const a5refuse = add('a5-refuse','Refuse','fail',1,13.2,false,{tip:'Stay in Hell. Character lost.'});
   link(a4, a5); link(a5, a5sign); link(a5, a5refuse,'fork-fail');
 
   // ── Character Creation (procedural node) ──
   const charCreate = add('char-create','Character Creation','narrator',0,14.5,true,
-    {scene:true, tip:'Cross the mirror. Design your body. Stats, class, background.'});
+    {scene:true, img:'ae-null-meridian-portrait.png', tip:'Cross the mirror. Design your body. Stats, class, background.'});
   link(a5sign, charCreate);
 
   // ═══════════════════════════════════
@@ -3756,15 +3765,15 @@ function buildCampaignTree() {
 
   // ── B1: Chapel of Second Chances ──
   const b1 = add('b1','B1 · Chapel Revival','dice',0,16.5,true,
-    {scene:true, tip:'Wake in printed bodies. Soul Grit DC 13 sets HP + Injuries. PAVNN activates.'});
-  const b1wake = add('b1-wake','Wake Check','dice',-1.5,17.8,true,{tip:'Soul Grit vs DC 13 — determines starting HP band'});
-  const b1lucifer = add('b1-lucifer','Lucifer Briefing','narrator',0,17.8,true,{tip:'Mirror manifestation. Objective: reach the Station.'});
+    {scene:true, img:'ae-s1-waking.png', tip:'Wake in printed bodies. Soul Grit DC 13 sets HP + Injuries. PAVNN activates.'});
+  const b1wake = add('b1-wake','Wake Check','dice',-1.5,17.8,true,{img:'ae-s1-waking.png', tip:'Soul Grit vs DC 13 — determines starting HP band'});
+  const b1lucifer = add('b1-lucifer','Lucifer Briefing','narrator',0,17.8,true,{img:'ae-null-meridian.png', tip:'Mirror manifestation. Objective: reach the Station.'});
   const b1pavnn = add('b1-pavnn','PAVNN Online','collect',1.5,17.8,true,{tip:'Android escort activated. Carries gear, local maps.'});
   link(charCreate, b1); link(b1, b1wake); link(b1, b1lucifer); link(b1, b1pavnn);
 
   // ── B2: Chapel of the Second Dawn ──
   const b2 = add('b2','B2 · Chapel Yard','choice',0,19.5,true,
-    {scene:true, tip:'Ruined sanctuary. Storage puzzle (3 paths). PAVNN briefing. Choose destination.'});
+    {scene:true, img:'ae-long-walk.png', tip:'Ruined sanctuary. Storage puzzle (3 paths). PAVNN briefing. Choose destination.'});
   const b2key = add('b2-key','Outhouse Key','dice',-2,20.8,true,{tip:'Pry DC 12 — dead worker\'s keycard'});
   const b2card = add('b2-card','Card Writer','dice',0,20.8,true,{tip:'SYS DC 12–15 — program a blank keycard'});
   const b2climb = add('b2-climb','Climb & Drop','dice',2,20.8,true,{tip:'RES DC 15 + DC 12 — risky physical route'});
@@ -3906,12 +3915,33 @@ function renderSandbox() {
     card.setAttribute('class', 'sb-card');
     g.appendChild(card);
 
-    // image placeholder area
-    const img = document.createElementNS(SVG_NS, 'rect');
-    img.setAttribute('x', -cw/2+4); img.setAttribute('y', -ch/2+4);
-    img.setAttribute('width', cw-8); img.setAttribute('height', IMG_H);
-    img.setAttribute('class', 'sb-card-img');
-    g.appendChild(img);
+    // image area — real image or placeholder rect
+    if (n.img) {
+      const clipId = 'sb-clip-'+n.nid;
+      const clip = document.createElementNS(SVG_NS, 'clipPath');
+      clip.setAttribute('id', clipId);
+      const clipR = document.createElementNS(SVG_NS, 'rect');
+      clipR.setAttribute('x', -cw/2+3); clipR.setAttribute('y', -ch/2+3);
+      clipR.setAttribute('width', cw-6); clipR.setAttribute('height', IMG_H+2);
+      clipR.setAttribute('rx', 3); clipR.setAttribute('ry', 3);
+      clip.appendChild(clipR);
+      g.appendChild(clip);
+
+      const img = document.createElementNS(SVG_NS, 'image');
+      img.setAttributeNS('http://www.w3.org/1999/xlink', 'href', n.img);
+      img.setAttribute('x', -cw/2+3); img.setAttribute('y', -ch/2+3);
+      img.setAttribute('width', cw-6); img.setAttribute('height', IMG_H+2);
+      img.setAttribute('preserveAspectRatio', 'xMidYMid slice');
+      img.setAttribute('clip-path', 'url(#'+clipId+')');
+      img.setAttribute('class', 'sb-card-img-real');
+      g.appendChild(img);
+    } else {
+      const img = document.createElementNS(SVG_NS, 'rect');
+      img.setAttribute('x', -cw/2+4); img.setAttribute('y', -ch/2+4);
+      img.setAttribute('width', cw-8); img.setAttribute('height', IMG_H);
+      img.setAttribute('class', 'sb-card-img');
+      g.appendChild(img);
+    }
 
     // type accent bar — left edge
     const accent = document.createElementNS(SVG_NS, 'rect');
