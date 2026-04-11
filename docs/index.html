@@ -209,84 +209,81 @@ html, body {
 
 /* ═══ SVG CELESTIAL CARTOGRAPHY ═══ */
 
-/* edges */
-.sb-edge { fill:none; stroke-width:1.5; stroke-linecap:round; stroke:rgba(180,160,140,.15); stroke-dasharray:4 6; }
+/* edges — orthogonal 90° connectors */
+.sb-edge { fill:none; stroke-width:1.5; stroke-linecap:square; stroke-linejoin:miter;
+  stroke:rgba(180,160,140,.15); stroke-dasharray:4 6; }
 .sb-edge.active { stroke:rgba(220,195,150,.35); stroke-dasharray:none; stroke-width:2; }
 .sb-edge.fork-success.active { stroke:rgba(160,230,180,.35); }
 .sb-edge.fork-fail.active { stroke:rgba(230,150,140,.35); }
 
 /* node group */
 .sb-node { cursor:default; }
-.sb-hit { fill:transparent; } /* invisible hit area for hover */
 
-/* orbit ring */
-.sb-orbit { fill:none; stroke:rgba(200,180,150,.15); stroke-width:1; transition:stroke .5s; }
-.sb-node:hover .sb-orbit { stroke:rgba(200,180,150,.35); }
+/* card background — rounded rect */
+.sb-card {
+  fill:rgba(10,8,16,.75); stroke:rgba(200,180,150,.12); stroke-width:1;
+  rx:6; ry:6; transition:fill .4s, stroke .4s;
+}
+.sb-node:hover .sb-card { fill:rgba(15,12,22,.85); stroke:rgba(200,180,150,.25); }
 
-/* body ring */
-.sb-ring { fill:rgba(12,10,18,.6); stroke:rgba(200,180,150,.25); stroke-width:1.5; transition:all .5s; }
+/* image placeholder area inside card */
+.sb-card-img {
+  fill:rgba(200,180,150,.03); rx:4; ry:4;
+}
 
-/* core */
-.sb-core { fill:rgba(200,180,150,.35); transition:all .5s; }
+/* type accent bar — left edge */
+.sb-accent { fill:rgba(200,180,150,.15); rx:2; ry:2; transition:fill .4s; }
 
 /* label text */
 .sb-label {
   font-family:'Cormorant Garamond','Garamond','Georgia',serif;
-  font-size:10px; font-weight:400; letter-spacing:.08em;
-  fill:rgba(200,180,150,.35); dominant-baseline:central;
-  transition:fill .5s;
+  font-size:11px; font-weight:500; letter-spacing:.04em;
+  fill:rgba(200,180,150,.4); dominant-baseline:central;
+  transition:fill .4s;
 }
-.sb-node:hover .sb-label { fill:rgba(220,200,170,.65); }
+.sb-node:hover .sb-label { fill:rgba(220,200,170,.7); }
 
 /* type text */
 .sb-type-label {
-  font-family:'Cormorant Garamond','Garamond','Georgia',serif;
-  font-size:7.5px; font-weight:300; letter-spacing:.16em;
-  fill:rgba(200,180,150,.18); font-style:italic; dominant-baseline:central;
-  transition:fill .5s;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:7px; font-weight:400; letter-spacing:.12em; text-transform:uppercase;
+  fill:rgba(200,180,150,.2); dominant-baseline:central;
+  transition:fill .4s;
 }
 .sb-node:hover .sb-type-label { fill:rgba(200,180,150,.4); }
 
 /* ── empty state ── */
-.sb-node.empty .sb-orbit { stroke:rgba(180,160,140,.08); }
-.sb-node.empty .sb-ring { stroke:rgba(180,160,140,.12); fill:rgba(8,6,14,.4); }
-.sb-node.empty .sb-core { fill:rgba(180,160,140,.15); }
-.sb-node.empty .sb-label { fill:rgba(180,160,140,.18); }
-.sb-node.empty .sb-type-label { fill:rgba(180,160,140,.10); }
+.sb-node.empty .sb-card { fill:rgba(8,6,14,.5); stroke:rgba(180,160,140,.06); stroke-dasharray:4 3; }
+.sb-node.empty .sb-accent { fill:rgba(180,160,140,.06); }
+.sb-node.empty .sb-card-img { fill:rgba(180,160,140,.015); }
+.sb-node.empty .sb-label { fill:rgba(180,160,140,.15); }
+.sb-node.empty .sb-type-label { fill:rgba(180,160,140,.08); }
 
 /* ── filled state ── */
-.sb-node.filled .sb-orbit { stroke:rgba(230,205,155,.25); }
-.sb-node.filled .sb-ring { stroke:rgba(230,205,155,.5); fill:rgba(25,20,15,.5); }
-.sb-node.filled .sb-core { fill:rgba(255,225,160,.8); }
-.sb-node.filled .sb-label { fill:rgba(230,205,155,.55); }
+.sb-node.filled .sb-card { fill:rgba(12,10,18,.8); stroke:rgba(230,205,155,.2); }
+.sb-node.filled .sb-accent { fill:rgba(230,205,155,.4); }
+.sb-node.filled .sb-card-img { fill:rgba(230,205,155,.04); }
+.sb-node.filled .sb-label { fill:rgba(230,205,155,.6); }
 .sb-node.filled .sb-type-label { fill:rgba(230,205,155,.3); }
-.sb-node.filled:hover .sb-ring { stroke:rgba(240,215,165,.65); }
-.sb-node.filled:hover .sb-core { fill:rgba(255,235,180,.95); }
-.sb-node.filled:hover .sb-label { fill:rgba(240,220,170,.8); }
+.sb-node.filled:hover .sb-card { stroke:rgba(240,215,165,.4); }
+.sb-node.filled:hover .sb-label { fill:rgba(240,220,170,.85); }
 
-/* ── type colors ── */
-.sb-node.filled.t-choice .sb-core { fill:rgba(180,205,250,.8); }
-.sb-node.filled.t-choice .sb-ring { stroke:rgba(180,205,250,.4); }
-.sb-node.filled.t-choice .sb-orbit { stroke:rgba(180,205,250,.2); }
-.sb-node.filled.t-choice:hover .sb-core { fill:rgba(200,220,255,.95); }
+/* ── type accent colors ── */
+.sb-node.filled.t-choice .sb-accent { fill:rgba(180,205,250,.5); }
+.sb-node.filled.t-choice .sb-card { stroke:rgba(180,205,250,.15); }
+.sb-node.filled.t-choice:hover .sb-card { stroke:rgba(180,205,250,.35); }
 
-.sb-node.filled.t-dice .sb-core { fill:rgba(255,220,100,.8); }
-.sb-node.filled.t-dice .sb-ring { stroke:rgba(255,220,100,.4); }
-.sb-node.filled.t-dice .sb-orbit { stroke:rgba(255,220,100,.2); }
-.sb-node.filled.t-dice:hover .sb-core { fill:rgba(255,235,130,.95); }
-.sb-orbit-inner { fill:none; stroke-dasharray:4 4; stroke:rgba(255,220,100,.15); stroke-width:1; }
+.sb-node.filled.t-dice .sb-accent { fill:rgba(255,220,100,.5); }
+.sb-node.filled.t-dice .sb-card { stroke:rgba(255,220,100,.15); }
+.sb-node.filled.t-dice:hover .sb-card { stroke:rgba(255,220,100,.35); }
 
-.sb-node.filled.t-collect .sb-core { fill:rgba(140,240,170,.8); }
-.sb-node.filled.t-collect .sb-ring { stroke:rgba(140,240,170,.4); }
-.sb-node.filled.t-collect .sb-orbit { stroke:rgba(140,240,170,.2); }
-.sb-node.filled.t-collect:hover .sb-core { fill:rgba(160,255,190,.95); }
-.sb-node.filled.t-collect .sb-core { animation:sb-pulse 3s ease-in-out infinite; }
-@keyframes sb-pulse { 0%,100%{opacity:1} 50%{opacity:.65} }
+.sb-node.filled.t-collect .sb-accent { fill:rgba(140,240,170,.5); }
+.sb-node.filled.t-collect .sb-card { stroke:rgba(140,240,170,.15); }
+.sb-node.filled.t-collect:hover .sb-card { stroke:rgba(140,240,170,.35); }
 
-.sb-node.filled.t-fail .sb-core { fill:rgba(240,140,130,.7); }
-.sb-node.filled.t-fail .sb-ring { stroke:rgba(240,140,130,.35); }
-.sb-node.filled.t-fail .sb-orbit { stroke:rgba(240,140,130,.15); stroke-dasharray:6 4; }
-.sb-node.filled.t-fail:hover .sb-core { fill:rgba(255,160,150,.9); }
+.sb-node.filled.t-fail .sb-accent { fill:rgba(240,140,130,.5); }
+.sb-node.filled.t-fail .sb-card { stroke:rgba(240,140,130,.15); }
+.sb-node.filled.t-fail:hover .sb-card { stroke:rgba(240,140,130,.35); }
 
 /* ── tooltip ── */
 .ae-sandbox-tooltip {
@@ -2076,10 +2073,6 @@ html, body {
             <line x1="0" y1="0" x2="360" y2="0" stroke="rgba(200,180,150,0.07)" stroke-width="1"/>
             <line x1="0" y1="0" x2="0" y2="360" stroke="rgba(200,180,150,0.07)" stroke-width="1"/>
           </pattern>
-          <filter id="sb-glow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="b"/>
-            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-          </filter>
         </defs>
         <rect x="-5000" y="-5000" width="10000" height="10000" fill="#06050e"/>
         <rect x="-5000" y="-5000" width="10000" height="10000" fill="url(#sb-dotgrid)"/>
@@ -3658,7 +3651,7 @@ let sbFitVB = { x:0, y:0, w:1600, h:1200 };
 
 /* ── dummy decision tree ── */
 function buildDummyTree() {
-  const COL_W = 200, ROW_H = 120;
+  const COL_W = 220, ROW_H = 100;
   const nodes = [], edges = [];
   let nid = 0;
   function add(id, label, type, x, y, filled) { const n = { nid:nid++, id, label, type, x, y, filled }; nodes.push(n); return n.nid; }
@@ -3707,19 +3700,29 @@ function renderSandbox() {
   const nodeMap = {};
   nodes.forEach(n => { nodeMap[n.nid] = n; });
 
-  // edges
+  // card dimensions
+  const CW = 140, CH = 56, IMG_H = 30;
+
+  // edges — 90° orthogonal: down from bottom center, horizontal, down to top center
   edges.forEach(e => {
     const from = nodeMap[e.from], to = nodeMap[e.to];
     if (!from || !to) return;
     const both = from.filled && to.filled;
     const p = document.createElementNS(SVG_NS, 'path');
-    const x1=from.px, y1=from.py+36, x2=to.px, y2=to.py-36;
-    p.setAttribute('d', 'M'+x1+','+y1+' C'+x1+','+(y1+(y2-y1)*.35)+' '+x2+','+(y1+(y2-y1)*.65)+' '+x2+','+y2);
+    const x1 = from.px, y1 = from.py + CH/2;
+    const x2 = to.px, y2 = to.py - CH/2;
+    const midY = y1 + (y2 - y1) / 2;
+    // straight vertical if same column, otherwise L-shaped with horizontal segment
+    if (Math.abs(x1 - x2) < 1) {
+      p.setAttribute('d', 'M'+x1+','+y1+' L'+x2+','+y2);
+    } else {
+      p.setAttribute('d', 'M'+x1+','+y1+' L'+x1+','+midY+' L'+x2+','+midY+' L'+x2+','+y2);
+    }
     p.setAttribute('class', 'sb-edge'+(both?' active':'')+(e.cls?' '+e.cls:''));
     edgesG.appendChild(p);
   });
 
-  // nodes
+  // nodes — rectangular cards
   const typeNames = { narrator:'narrative', choice:'divergence', dice:'fate check', collect:'acquisition', fail:'terminus' };
 
   nodes.forEach(n => {
@@ -3727,44 +3730,38 @@ function renderSandbox() {
     g.setAttribute('transform', 'translate('+n.px+','+n.py+')');
     g.setAttribute('class', 'sb-node t-'+(n.type||'narrator')+(n.filled?' filled':' empty'));
 
-    // hit area
-    const hit = document.createElementNS(SVG_NS, 'circle');
-    hit.setAttribute('r', '36'); hit.setAttribute('class', 'sb-hit');
-    g.appendChild(hit);
+    // card background
+    const card = document.createElementNS(SVG_NS, 'rect');
+    card.setAttribute('x', -CW/2); card.setAttribute('y', -CH/2);
+    card.setAttribute('width', CW); card.setAttribute('height', CH);
+    card.setAttribute('class', 'sb-card');
+    g.appendChild(card);
 
-    // orbit
-    const orbit = document.createElementNS(SVG_NS, 'circle');
-    orbit.setAttribute('r', '36'); orbit.setAttribute('class', 'sb-orbit');
-    g.appendChild(orbit);
+    // image placeholder area (top portion of card)
+    const img = document.createElementNS(SVG_NS, 'rect');
+    img.setAttribute('x', -CW/2+4); img.setAttribute('y', -CH/2+4);
+    img.setAttribute('width', CW-8); img.setAttribute('height', IMG_H);
+    img.setAttribute('class', 'sb-card-img');
+    g.appendChild(img);
 
-    // dice: inner dashed orbit
-    if (n.type === 'dice' && n.filled) {
-      const o2 = document.createElementNS(SVG_NS, 'circle');
-      o2.setAttribute('r', '30'); o2.setAttribute('class', 'sb-orbit-inner');
-      g.appendChild(o2);
-    }
+    // type accent bar — left edge
+    const accent = document.createElementNS(SVG_NS, 'rect');
+    accent.setAttribute('x', -CW/2); accent.setAttribute('y', -CH/2);
+    accent.setAttribute('width', 3); accent.setAttribute('height', CH);
+    accent.setAttribute('class', 'sb-accent');
+    g.appendChild(accent);
 
-    // ring
-    const ring = document.createElementNS(SVG_NS, 'circle');
-    ring.setAttribute('r', '14'); ring.setAttribute('class', 'sb-ring');
-    g.appendChild(ring);
-
-    // core
-    const core = document.createElementNS(SVG_NS, 'circle');
-    core.setAttribute('r', n.filled ? '4' : '2'); core.setAttribute('class', 'sb-core');
-    if (n.filled) core.setAttribute('filter', 'url(#sb-glow)');
-    g.appendChild(core);
-
-    // label
+    // label text — below image area
     const lbl = document.createElementNS(SVG_NS, 'text');
-    lbl.setAttribute('x', '42'); lbl.setAttribute('y', '0');
+    lbl.setAttribute('x', -CW/2+10); lbl.setAttribute('y', CH/2-10);
     lbl.setAttribute('class', 'sb-label');
     lbl.textContent = n.label;
     g.appendChild(lbl);
 
-    // type
+    // type text — top right corner
     const typ = document.createElementNS(SVG_NS, 'text');
-    typ.setAttribute('x', '42'); typ.setAttribute('y', '12');
+    typ.setAttribute('x', CW/2-4); typ.setAttribute('y', -CH/2+10);
+    typ.setAttribute('text-anchor', 'end');
     typ.setAttribute('class', 'sb-type-label');
     typ.textContent = typeNames[n.type] || '';
     g.appendChild(typ);
