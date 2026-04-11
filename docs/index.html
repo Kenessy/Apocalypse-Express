@@ -211,22 +211,22 @@ html, body {
 
 /* edges — orthogonal 90° connectors */
 .sb-edge { fill:none; stroke-width:1.5; stroke-linecap:square; stroke-linejoin:miter;
-  stroke:rgba(201,165,80,.12); }
+  stroke:rgba(201,165,80,.22); }
 /* chosen path — glowing gold */
-.sb-edge.chosen { stroke:rgba(230,190,80,.6); stroke-width:2.5;
-  filter:drop-shadow(0 0 4px rgba(230,190,80,.25)); }
-.sb-edge.fork-success.chosen { stroke:rgba(140,220,160,.55); filter:drop-shadow(0 0 4px rgba(140,220,160,.2)); }
-.sb-edge.fork-fail.chosen { stroke:rgba(220,130,120,.55); filter:drop-shadow(0 0 4px rgba(220,130,120,.2)); }
+.sb-edge.chosen { stroke:rgba(230,190,80,.75); stroke-width:2.5;
+  filter:drop-shadow(0 0 6px rgba(230,190,80,.35)); }
+.sb-edge.fork-success.chosen { stroke:rgba(140,220,160,.7); filter:drop-shadow(0 0 5px rgba(140,220,160,.3)); }
+.sb-edge.fork-fail.chosen { stroke:rgba(220,130,120,.7); filter:drop-shadow(0 0 5px rgba(220,130,120,.3)); }
 
 /* node group */
 .sb-node { cursor:default; }
 
 /* card background — rounded rect */
 .sb-card {
-  fill:rgba(10,8,16,.75); stroke:rgba(200,180,150,.12); stroke-width:1;
+  fill:rgba(18,14,26,.8); stroke:rgba(200,180,150,.2); stroke-width:1;
   rx:6; ry:6; transition:fill .4s, stroke .4s;
 }
-.sb-node:hover .sb-card { fill:rgba(15,12,22,.85); stroke:rgba(200,180,150,.25); }
+.sb-node:hover .sb-card { fill:rgba(25,20,36,.9); stroke:rgba(200,180,150,.4); }
 
 /* image placeholder area inside card */
 .sb-card-img {
@@ -234,89 +234,89 @@ html, body {
 }
 /* real image inside card */
 .sb-card-img-real {
-  opacity:.35; filter:brightness(.6) saturate(.6);
+  opacity:.6; filter:brightness(.85) saturate(.75);
   transition:opacity .4s, filter .4s;
 }
-.sb-node:hover .sb-card-img-real { opacity:.55; filter:brightness(.75) saturate(.8); }
-.sb-node.filled .sb-card-img-real { opacity:.45; filter:brightness(.65) saturate(.7); }
-.sb-node.filled:hover .sb-card-img-real { opacity:.7; filter:brightness(.8) saturate(.85); }
-.sb-node.empty .sb-card-img-real { opacity:.12; filter:brightness(.3) saturate(.2); }
+.sb-node:hover .sb-card-img-real { opacity:.85; filter:brightness(1) saturate(.9); }
+.sb-node.filled .sb-card-img-real { opacity:.75; filter:brightness(.9) saturate(.8); }
+.sb-node.filled:hover .sb-card-img-real { opacity:.95; filter:brightness(1.05) saturate(.95); }
+.sb-node.empty .sb-card-img-real { opacity:.25; filter:brightness(.5) saturate(.3); }
 
 /* type accent bar — left edge */
-.sb-accent { fill:rgba(200,180,150,.15); rx:2; ry:2; transition:fill .4s; }
+.sb-accent { fill:rgba(200,180,150,.3); rx:2; ry:2; transition:fill .4s; }
 
 /* label text */
 .sb-label {
   font-family:'Cormorant Garamond','Garamond','Georgia',serif;
   font-size:11px; font-weight:500; letter-spacing:.04em;
-  fill:rgba(200,180,150,.4); dominant-baseline:central;
+  fill:rgba(220,200,170,.7); dominant-baseline:central;
   transition:fill .4s;
 }
-.sb-node:hover .sb-label { fill:rgba(220,200,170,.7); }
+.sb-node:hover .sb-label { fill:rgba(240,225,195,.9); }
 
 /* type text */
 .sb-type-label {
   font-family:'IBM Plex Mono',monospace;
   font-size:7px; font-weight:400; letter-spacing:.12em; text-transform:uppercase;
-  fill:rgba(200,180,150,.2); dominant-baseline:central;
+  fill:rgba(200,180,150,.4); dominant-baseline:central;
   transition:fill .4s;
 }
-.sb-node:hover .sb-type-label { fill:rgba(200,180,150,.4); }
+.sb-node:hover .sb-type-label { fill:rgba(200,180,150,.65); }
 
 /* ── empty state ── */
-.sb-node.empty .sb-card { fill:rgba(8,6,14,.5); stroke:rgba(180,160,140,.06); stroke-dasharray:4 3; }
-.sb-node.empty .sb-accent { fill:rgba(180,160,140,.06); }
-.sb-node.empty .sb-card-img { fill:rgba(180,160,140,.015); }
-.sb-node.empty .sb-label { fill:rgba(180,160,140,.15); }
-.sb-node.empty .sb-type-label { fill:rgba(180,160,140,.08); }
+.sb-node.empty .sb-card { fill:rgba(12,10,20,.6); stroke:rgba(180,160,140,.12); stroke-dasharray:4 3; }
+.sb-node.empty .sb-accent { fill:rgba(180,160,140,.15); }
+.sb-node.empty .sb-card-img { fill:rgba(180,160,140,.03); }
+.sb-node.empty .sb-label { fill:rgba(180,160,140,.35); }
+.sb-node.empty .sb-type-label { fill:rgba(180,160,140,.18); }
 
 /* ── filled state — on the chosen path ── */
-.sb-node.filled .sb-card { fill:rgba(14,12,20,.85); stroke:rgba(230,190,80,.25);
-  filter:drop-shadow(0 0 6px rgba(230,190,80,.06)); }
-.sb-node.filled .sb-accent { fill:rgba(230,190,80,.5); }
-.sb-node.filled .sb-card-img { fill:rgba(230,190,80,.04); }
-.sb-node.filled .sb-label { fill:rgba(240,210,130,.65); }
-.sb-node.filled .sb-type-label { fill:rgba(230,190,80,.3); }
-.sb-node.filled:hover .sb-card { stroke:rgba(240,210,100,.45);
-  filter:drop-shadow(0 0 10px rgba(240,210,100,.1)); }
-.sb-node.filled:hover .sb-label { fill:rgba(250,225,150,.9); }
+.sb-node.filled .sb-card { fill:rgba(20,16,30,.9); stroke:rgba(230,190,80,.4);
+  filter:drop-shadow(0 0 8px rgba(230,190,80,.12)); }
+.sb-node.filled .sb-accent { fill:rgba(230,190,80,.7); }
+.sb-node.filled .sb-card-img { fill:rgba(230,190,80,.06); }
+.sb-node.filled .sb-label { fill:rgba(245,220,140,.85); }
+.sb-node.filled .sb-type-label { fill:rgba(230,190,80,.5); }
+.sb-node.filled:hover .sb-card { stroke:rgba(240,210,100,.6);
+  filter:drop-shadow(0 0 14px rgba(240,210,100,.18)); }
+.sb-node.filled:hover .sb-label { fill:rgba(255,235,170,1); }
 
 /* ── type accent colors ── */
-.sb-node.filled.t-choice .sb-accent { fill:rgba(180,205,250,.5); }
-.sb-node.filled.t-choice .sb-card { stroke:rgba(180,205,250,.15); }
-.sb-node.filled.t-choice:hover .sb-card { stroke:rgba(180,205,250,.35); }
+.sb-node.filled.t-choice .sb-accent { fill:rgba(180,205,250,.7); }
+.sb-node.filled.t-choice .sb-card { stroke:rgba(180,205,250,.3); }
+.sb-node.filled.t-choice:hover .sb-card { stroke:rgba(180,205,250,.5); }
 
-.sb-node.filled.t-dice .sb-accent { fill:rgba(255,220,100,.5); }
-.sb-node.filled.t-dice .sb-card { stroke:rgba(255,220,100,.15); }
-.sb-node.filled.t-dice:hover .sb-card { stroke:rgba(255,220,100,.35); }
+.sb-node.filled.t-dice .sb-accent { fill:rgba(255,220,100,.7); }
+.sb-node.filled.t-dice .sb-card { stroke:rgba(255,220,100,.3); }
+.sb-node.filled.t-dice:hover .sb-card { stroke:rgba(255,220,100,.5); }
 
-.sb-node.filled.t-collect .sb-accent { fill:rgba(140,240,170,.5); }
-.sb-node.filled.t-collect .sb-card { stroke:rgba(140,240,170,.15); }
-.sb-node.filled.t-collect:hover .sb-card { stroke:rgba(140,240,170,.35); }
+.sb-node.filled.t-collect .sb-accent { fill:rgba(140,240,170,.7); }
+.sb-node.filled.t-collect .sb-card { stroke:rgba(140,240,170,.3); }
+.sb-node.filled.t-collect:hover .sb-card { stroke:rgba(140,240,170,.5); }
 
-.sb-node.filled.t-fail .sb-accent { fill:rgba(240,140,130,.5); }
-.sb-node.filled.t-fail .sb-card { stroke:rgba(240,140,130,.15); }
-.sb-node.filled.t-fail:hover .sb-card { stroke:rgba(240,140,130,.35); }
+.sb-node.filled.t-fail .sb-accent { fill:rgba(240,140,130,.7); }
+.sb-node.filled.t-fail .sb-card { stroke:rgba(240,140,130,.3); }
+.sb-node.filled.t-fail:hover .sb-card { stroke:rgba(240,140,130,.5); }
 
 /* ── chapter group backgrounds ── */
 .sb-chapter-label {
   font-family:'IBM Plex Mono',monospace;
-  font-size:9px; font-weight:500; letter-spacing:.18em; text-transform:uppercase;
-  fill:rgba(200,180,150,.18); dominant-baseline:hanging;
+  font-size:10px; font-weight:500; letter-spacing:.18em; text-transform:uppercase;
+  fill:rgba(200,180,150,.4); dominant-baseline:hanging;
 }
 
 /* ── scene-level nodes — larger, bolder ── */
-.sb-node.scene .sb-card { stroke-width:1.5; }
+.sb-node.scene .sb-card { stroke-width:2; }
 .sb-node.scene.filled .sb-card {
-  stroke:rgba(230,190,80,.35);
-  filter:drop-shadow(0 0 10px rgba(230,190,80,.08));
+  stroke:rgba(230,190,80,.5);
+  filter:drop-shadow(0 0 12px rgba(230,190,80,.15));
 }
 .sb-node.scene.filled:hover .sb-card {
-  stroke:rgba(240,210,100,.55);
-  filter:drop-shadow(0 0 14px rgba(240,210,100,.12));
+  stroke:rgba(240,210,100,.7);
+  filter:drop-shadow(0 0 18px rgba(240,210,100,.22));
 }
-.sb-node.scene.empty .sb-card { stroke-dasharray:6 4; }
-.sb-label-scene { font-size:12px; font-weight:600; }
+.sb-node.scene.empty .sb-card { stroke-dasharray:6 4; stroke:rgba(180,160,140,.2); }
+.sb-label-scene { font-size:13px; font-weight:600; }
 
 /* ── tooltip ── */
 .ae-sandbox-tooltip {
