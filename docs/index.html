@@ -3851,18 +3851,20 @@ function sbRenderLoop() {
   const canvas = document.getElementById('sandbox-gl');
   const container = document.getElementById('sandbox-canvas');
 
-  // resize canvas to container
+  // resize canvas to container — HiDPI aware
+  const dpr = window.devicePixelRatio || 1;
   const w = container.clientWidth, h = container.clientHeight;
-  if (canvas.width !== w || canvas.height !== h) {
-    canvas.width = w; canvas.height = h;
-    gl.viewport(0, 0, w, h);
+  const pw = Math.round(w * dpr), ph = Math.round(h * dpr);
+  if (canvas.width !== pw || canvas.height !== ph) {
+    canvas.width = pw; canvas.height = ph;
+    gl.viewport(0, 0, pw, ph);
   }
 
   const t = performance.now() / 1000;
-  gl.uniform2f(gl.getUniformLocation(sbProgram, 'u_res'), w, h);
+  gl.uniform2f(gl.getUniformLocation(sbProgram, 'u_res'), pw, ph);
   gl.uniform1f(gl.getUniformLocation(sbProgram, 'u_time'), t);
   gl.uniform2f(gl.getUniformLocation(sbProgram, 'u_mouse'), sbMouseX, sbMouseY);
-  gl.uniform2f(gl.getUniformLocation(sbProgram, 'u_pan'), sbPanX, sbPanY);
+  gl.uniform2f(gl.getUniformLocation(sbProgram, 'u_pan'), sbPanX * dpr, sbPanY * dpr);
   gl.uniform1f(gl.getUniformLocation(sbProgram, 'u_zoom'), sbZoom);
 
   gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
