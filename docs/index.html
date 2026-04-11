@@ -370,12 +370,12 @@ html, body {
   border-bottom:1px solid rgba(201,156,90,.08);
 }
 .sb-detail-type {
-  font:500 8px/1 'IBM Plex Mono'; letter-spacing:.16em; text-transform:uppercase;
-  color:var(--gold); opacity:.5; display:block; margin-bottom:6px;
+  font:500 10px/1 'IBM Plex Mono'; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--gold); opacity:.65; display:block; margin-bottom:6px;
 }
 .sb-detail-title {
-  font:700 20px/1.2 'Cinzel',serif; letter-spacing:.03em;
-  color:var(--gold2); opacity:.9; margin:0;
+  font:700 22px/1.2 'Cinzel',serif; letter-spacing:.03em;
+  color:var(--gold2); opacity:.95; margin:0;
 }
 
 .sb-detail-img-wrap {
@@ -400,14 +400,15 @@ html, body {
 
 /* body content styles */
 .sb-detail-body p {
-  font:300 14px/1.75 'Cormorant Garamond','Garamond','Georgia',serif;
-  color:rgba(248,245,240,.75); margin:0 0 14px;
+  font:300 17px/1.8 'Cormorant Garamond','Garamond','Georgia',serif;
+  color:rgba(248,245,240,.88); margin:0 0 16px;
 }
-.sb-detail-body p em.inline { font-style:italic; color:var(--gold2); opacity:.9; }
+.sb-detail-body p em.inline { font-style:italic; color:var(--gold2); opacity:.95; }
 .sb-detail-body p em.standalone {
-  display:block; padding:10px 16px; margin:8px 0;
-  border-left:2px solid rgba(201,156,90,.25);
-  color:var(--gold2); opacity:.85; font-style:italic;
+  display:block; padding:12px 18px; margin:10px 0;
+  border-left:2px solid rgba(201,156,90,.3);
+  color:var(--gold2); opacity:.9; font-style:italic;
+  font-size:16px;
 }
 
 .sb-detail-speaker {
@@ -416,11 +417,11 @@ html, body {
   border-bottom:1px solid rgba(201,156,90,.08);
 }
 .sb-detail-speaker-glyph {
-  font-size:16px; color:var(--gold); opacity:.6;
+  font-size:18px; color:var(--gold); opacity:.7;
 }
 .sb-detail-speaker-name {
-  font:500 14px/1 'Cinzel',serif; letter-spacing:.06em;
-  color:var(--gold2); opacity:.7;
+  font:500 16px/1 'Cinzel',serif; letter-spacing:.06em;
+  color:var(--gold2); opacity:.85;
 }
 
 .sb-detail-choices {
@@ -429,33 +430,33 @@ html, body {
 .sb-detail-choice {
   padding:10px 14px; border-radius:4px;
   background:rgba(40,189,216,.06); border:1px solid rgba(40,189,216,.15);
-  font:400 12px/1.4 'IBM Plex Mono'; color:rgba(40,189,216,.7);
+  font:400 14px/1.4 'IBM Plex Mono'; color:rgba(40,189,216,.8);
   display:flex; align-items:center; gap:8px;
 }
-.sb-detail-choice-icon { font-size:14px; opacity:.6; }
+.sb-detail-choice-icon { font-size:15px; opacity:.7; }
 
 .sb-detail-dice {
   margin-top:16px; padding:12px 14px; border-radius:4px;
   background:rgba(255,200,40,.06); border:1px solid rgba(255,200,40,.15);
   display:flex; align-items:center; gap:10px;
-  font:500 12px/1 'IBM Plex Mono'; color:rgba(255,200,40,.7);
+  font:500 14px/1 'IBM Plex Mono'; color:rgba(255,200,40,.8);
 }
-.sb-detail-dice-icon { font-size:18px; }
+.sb-detail-dice-icon { font-size:20px; }
 .sb-detail-dice-dc { margin-left:auto; font-weight:700; }
 
 .sb-detail-continue {
   margin-top:16px; padding:10px 14px; border-radius:4px;
   background:rgba(201,156,90,.06); border:1px solid rgba(201,156,90,.12);
-  font:400 12px/1.4 'IBM Plex Mono'; color:rgba(201,156,90,.6);
+  font:400 14px/1.4 'IBM Plex Mono'; color:rgba(201,156,90,.75);
   display:flex; align-items:center; gap:8px;
 }
-.sb-detail-continue-arrow { font-size:10px; opacity:.5; }
+.sb-detail-continue-arrow { font-size:12px; opacity:.6; }
 
 .sb-detail-tip {
   margin-top:12px; padding:12px 16px; border-radius:4px;
   background:rgba(201,156,90,.04); border:1px solid rgba(201,156,90,.08);
-  font:italic 300 13px/1.6 'Cormorant Garamond',serif;
-  color:rgba(200,180,150,.5);
+  font:italic 300 15px/1.65 'Cormorant Garamond',serif;
+  color:rgba(200,180,150,.65);
 }
 .sb-detail-status {
   display:inline-block; margin-bottom:12px; padding:3px 10px; border-radius:3px;
@@ -3126,10 +3127,11 @@ const frames = [
     id: 'obelisk-clock',
     speaker: null,
     text: [
-      'A sound. Not loud — but <em class="inline">total</em>. A single low tone that rolls through the mist like a stone dropped into still water. It doesn\'t echo. It <em class="inline">expands</em>. You feel it in your ribs, in the soles of your feet, in the obsidian beneath you.',
-      'A gong. Somewhere far away — or nowhere at all.',
+      'You\'ve been hearing it for a while now. Not consciously — not as a sound you could name — but as a pressure. A hum beneath the silence, threaded through the obsidian like a pulse. It was there during the old man\'s mumbling, there beneath the scratch of his quill. You mistook it for nothing. Background. The sound a place makes when it\'s simply <em class="inline">being</em>.',
+      'It\'s not nothing. It\'s been building.',
+      'The hum deepens. Thickens. Rises through your soles, up your spine, into the back of your skull — and then it <em class="inline">blooms</em>. A single low tone, vast and round, rolling through the mist like the voice of something buried beneath the glass. Not a gong exactly — more like the memory of one, held too long.',
       'You look up. The obelisk — that black needle you\'ve been orbiting since you arrived — has changed. Near its top, where before there was only seamless obsidian, a narrow window of pale gold light has opened. Numbers. Small, elegant, counting <em class="inline">backward</em>.',
-      'A clock. A countdown. Set into the stone as if it was always there, waiting for the right moment to reveal itself.',
+      'A clock. A countdown. As if it was always there, waiting beneath the surface for the right moment to reveal itself.',
       'The numbers tick down. Slow. Patient. Not urgent — but unmistakably <em class="inline">deliberate</em>. Someone — or something — is keeping time.',
     ],
     continueLabel: 'approach',
@@ -3140,9 +3142,10 @@ const frames = [
     id: 'obelisk-approach',
     speaker: null,
     text: [
-      'You cross the platform toward the obelisk. Up close, it\'s taller than you thought — three metres, maybe four — and the surface is so smooth that it doesn\'t reflect light so much as <em class="inline">swallow</em> it. Your reflection smears across the stone like something drowned beneath black water.',
-      'No seams. No joints. No runes or inscriptions. Just obsidian, polished to the point of impossibility, standing on the platform as though the ground grew it. Installed. Not built. Not carved. <em class="inline">Placed</em>.',
-      'The golden clock ticks above your head. You can hear it now — a faint mechanical heartbeat, regular as breathing. The numbers are too high to read clearly, but their steady descent is unmistakable.',
+      'Your eyes keep drifting back to it. The obelisk — that black needle at the centre of everything — and now, near its top, that glint. Gold. Faint but persistent, catching in the mist like a coin at the bottom of dark water. The numbers. Ticking.',
+      'You walk closer. Not because anything pulls you — because you <em class="inline">want to see</em>.',
+      'Up close, it\'s taller than you thought — three metres, maybe four — and the surface is so smooth that it doesn\'t reflect light so much as <em class="inline">swallow</em> it. Your reflection smears across the stone like something drowned beneath black water. No seams. No joints. No runes or inscriptions. Just obsidian, polished to the point of impossibility, standing on the platform as though the ground grew it. <em class="inline">Placed</em>.',
+      'The golden clock ticks above your head — a faint mechanical heartbeat, regular as breathing. The numbers are too high to read clearly, but their steady descent is unmistakable.',
       'And there — on one face of the obelisk, at eye level — something else. Postcards. A ragged fan of them, stuck to the obsidian with ugly lumps of dried grey gum.',
     ],
     continueLabel: 'examine the postcards',
@@ -3167,10 +3170,10 @@ const frames = [
     id: 'obelisk-clock-study',
     speaker: null,
     text: [
-      'You tilt your head back and stare at the clock. The pale numerals drift downward — not fast, not slow, just <em class="inline">constant</em>. A patient unwinding of something you don\'t understand.',
-      'You watch for a while. And then — so subtly you almost miss it — the digits begin to flip a little <em class="inline">faster</em>. Not by much. But the rhythm shifts. The quiet ticking sharpens. As if the mechanism has noticed you looking. As if your attention is something it can <em class="inline">feel</em>.',
-      'The distant mechanical rhythm in the Null — the one you\'ve been half-hearing since you arrived — locks to the faster beat. The whole place tightens, just a fraction.',
-      'You look away. The ticking settles. But you know it noticed.',
+      'You tilt your head back. The pale numerals drift downward — unhurried, steady, like sand through an hourglass no one\'s watching. Each tick is soft. Almost gentle. Whatever it\'s counting toward, it doesn\'t seem to be in any rush to get there.',
+      'But it <em class="inline">is</em> counting. Backward. Toward something. Toward <em class="inline">when</em>?',
+      'You don\'t know what the numbers mean. You can\'t read them clearly from here — they\'re too high, too small, and the pale gold light bleeds at the edges. But the direction is unmistakable. Down. Always down. A signal, not an alarm. A marker, not a warning.',
+      'Not urgent. Not yet. But it\'s there. And now you know it\'s there.',
       'Your eyes fall back to the postcards. The colour card is still there, vivid and impossible, waiting at eye level.',
     ],
     continueLabel: 'reach for the colour card',
@@ -3183,8 +3186,9 @@ const frames = [
     text: [
       'You lean in. The card shows a train. Red-lined, iron-dark, crossing a viaduct under a sky split by lightning. The colours are too saturated for this place — too <em class="inline">alive</em>. The red of the train\'s livery is the colour of arterial blood. The storm-light is silver-white. The rails gleam like wet bone.',
       'You blink. The crowd on the platform has shifted — the same people, but in different positions. The weather has changed. The lightning is in a different place. You didn\'t see it move. It just <em class="inline">did</em>.',
-      'You reach out. The card is warm beneath your fingers — warmer than the stone, warmer than anything you\'ve touched in this place. The gum resists for a moment, then <em class="inline">relaxes</em>, as if it was waiting for the right hand.',
-      'It could come free. You could take it. Something in the image stirs — not quite recognition, not quite memory. Something closer to <em class="inline">invitation</em>.',
+      'Your fingers find the edge. The card is warm — warmer than the stone, warmer than anything you\'ve touched in this place. You tilt it, just enough to glimpse the back. Handwriting. Ink the colour of old rust, in a script you shouldn\'t be able to read — but you can:',
+      '<em class="inline">To thee whom I loved and lost, I long to see again and mend what has been broken. Mercy I seek, for deeds long past, for thee, and all, whose hope I cast. I yearn to feel thy light embrace, to cleanse us in its fiery grace.</em>',
+      'The gum resists for a moment, then <em class="inline">relaxes</em>, as if it was waiting for the right hand. It could come free. You could take it.',
     ],
     choices: [
       { icon: '✋', tint: 'gold', label: 'Keep it', next: 'postcard-take' },
@@ -3196,10 +3200,9 @@ const frames = [
     speaker: null,
     text: [
       'You pull. The gum lets go with a soft, wet sound, and the card comes free in your hand.',
-      'The moment it leaves the stone, something shifts. A brief <em class="inline">vertigo</em> — not dizziness, not nausea, but the sensation of looking down an endless straight rail line that stretches to a vanishing point you will never reach. It lasts a heartbeat. Two. Then it\'s gone.',
-      'A single clear tone rings in your ears — high, clean, like a station chime heard from far away. No one else reacts. The sound was for you.',
-      'For an instant you see them: stations. Dozens of them, superimposed over each other like double-exposed photographs — platforms, lanterns, crowds, departures, arrivals — all at once, all different, all <em class="inline">real</em>. Then they fade, and you\'re standing at the obelisk again with a warm postcard in your hand.',
-      'Whatever this is, it feels like it belongs to you now. And the place seems <em class="inline">satisfied</em> with that.',
+      'It\'s warm. Not faintly warm — <em class="inline">warm</em>. Like something alive. Like holding a small creature that has just fallen asleep in your palm. The heat spreads through your fingers, up your wrist, and settles somewhere in your chest. Odd. Not unpleasant. Just... there.',
+      'You turn it over. The verse stares back at you. The ink seems darker now — richer — as if the words have settled deeper into the cardstock since you last looked.',
+      'You tuck it away. The warmth stays.',
     ],
     continueLabel: 'look up at the clock',
     continueIcon: '◎',
@@ -3210,10 +3213,10 @@ const frames = [
     speaker: null,
     text: [
       'You pull your hand back. The card stays. The gum holds. The vivid colours dim slightly — or maybe your eyes are adjusting. Either way, the moment passes.',
-      'You step back from the obelisk. The black-and-white postcards stare blankly at you — dead stations, forgotten platforms, snow and ash and empty tracks.',
-      'The colour card watches from among them. Patient. Not offended. Just... <em class="inline">waiting</em>.',
-      'You notice, absently, that your palm is still warm where you touched it. And the aftertaste of that warmth follows you — not unpleasant, not insistent, just <em class="inline">present</em>. Like a word on the tip of your tongue that you\'ve decided not to say.',
-      'Later — between one step and the next — you\'ll realise something small and warm has found its way into your pocket. But that\'s later.',
+      'You step back from the obelisk. The black-and-white postcards stare blankly at you — dead stations, forgotten platforms, snow and ash and empty tracks. The colour card watches from among them. Patient. Not offended. Just... <em class="inline">waiting</em>.',
+      'You walk away. But your palm is warm. Not where you touched the obelisk — where you touched the <em class="inline">card</em>. The heat lingers, faint at first, then slowly growing. A soft burn that creeps up from the skin, settling into something you can\'t quite shake.',
+      'A few steps later, you feel it. A weight in your pocket — small, rectangular, unmistakable. You didn\'t put anything there. You <em class="inline">know</em> you didn\'t. But there it is, warm and patient, as though it has always been there.',
+      'You don\'t need to check. You already know what it is.',
     ],
     continueLabel: 'look up at the clock',
     continueIcon: '◎',
@@ -3224,9 +3227,9 @@ const frames = [
     speaker: null,
     text: [
       'The clock has changed. The numbers are falling faster now — not racing, not panicked, but <em class="inline">purposeful</em>. The patient drift has become a steady march. Whatever the obelisk was waiting for, you\'ve triggered it. Or it was always going to happen, and you just happened to be here when it did.',
-      'The mechanical ticking spreads through the obsidian underfoot. You can feel it in your soles — a vibration, deep and regular, like the heartbeat of something impossibly large stirring beneath the surface.',
-      'And then — from a direction that doesn\'t quite exist — a sound. Low. Rising. The drawn-out note of metal under tension, of wheels turning after a long stillness, of steam finding its voice.',
-      'Somewhere in the mist, two lines of red light resolve — parallel, close together, stretching toward you from the dark. <em class="inline">Rails.</em> Glowing faintly, like embers in a dead fire.',
+      'The ticking spreads through the obsidian underfoot. You can feel it in your soles — a vibration, deep and regular, like the heartbeat of something impossibly large stirring beneath the surface.',
+      'And then — far away, at the edge of the mist where distance stops meaning anything — two red dots. Faint. Steady. Like eyes opening in the dark.',
+      'They grow. Slowly at first, then faster — stretching, elongating, resolving into two parallel lines of red light. They\'re not eyes. They\'re not dots. They\'re <em class="inline">tracks</em>. A pair of rails, glowing faintly, cutting through the obsidian toward you like old scars that have just remembered how to bleed.',
       'Something is coming.',
     ],
     continueLabel: 'wait',
