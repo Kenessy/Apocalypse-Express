@@ -42,13 +42,13 @@ Daniel's pick for direction (α / β) determines the candidate space. Then the a
 
 ---
 
-### Q2 — Are the Obsidian Canto docs the current canon for chapter names? *(implicit answer = yes; needs explicit lock)*
+### Q2 — Chapter naming convention — RESOLVED 2026-04-25 (opposite of my guess)
 
-**Prompt:** Canto 1 is named "The Redline Covenant" in Obsidian (baseline-ready v1.7) but "The Gauntlet" in the brainstorm canvas. Same for Cantos 2 and 3. Is the Obsidian version canon, with brainstorm names retired?
+**Answer (Daniel):** *"a obsidian az csak a elő - prelude vagy mi, a többi a későbbi fejezetek. Sval a gauntlet majd lesz ahol az orbot szerzik meg az első nagy arc / könyv sok mini locationnel."*
 
-**Why it matters:** Affects every reference to chapter / book / canto across the codex.
+**Locked:** **Brainstorm canvas names are canon** ("The Gauntlet", "As Above so Below", "MUTATED JUNGLE?", "The World Anchor", etc.). The Obsidian Canto X.md docs are **early planning sketches** with alt names that did not become canon. *(I had this backward initially.)*
 
-**Tentative working assumption:** Obsidian Canto docs are canon. Brainstorm names are T3 (legacy). Will lock after Daniel confirms.
+**Also locked:** **The Prelude** = Null Meridian "obsidian-setting" content (A1-A5 + B1-B2 in `Database/40_Scenes/`) = a SEPARATE structural unit before Chapter 1 begins. Chapter 1 ("The Gauntlet") starts with the players reaching the Apocalypse Express to acquire+secure+fuel it. The actual chapter content beyond the prelude is **not yet detailed** — Daniel: *"még messze van"*.
 
 ---
 
@@ -101,9 +101,3 @@ Daniel's pick for direction (α / β) determines the candidate space. Then the a
 **Why it matters:** Needed before we can write any new Cicero dialogue (e.g. the A3 boarding *"Ah. You're here. Good"* moment, or his train conversations).
 
 ---
-
-### Q9 — The "9th rank" — Pseudo-Dionysian or AE-specific?
-
-**Prompt:** Brainstorm Canto X title: "Gambit for the 9th rank". The 9 ranks could be the angelic hierarchy (Pseudo-Dionysius: Seraphim, Cherubim, Thrones, Dominions, Virtues, Powers, Principalities, Archangels, Angels) — Lucifer claiming the topmost throne. Or AE-specific cosmic ranks. Which?
-
-**Why it matters:*
