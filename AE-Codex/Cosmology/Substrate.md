@@ -38,12 +38,29 @@ The players unwittingly use the new hellfire **throughout the campaign** by virt
 
 ---
 
-## The Spark (working name: TBD)
+## The Spark — divine source of life
 
-Lucifer claims he gave God the spark to create human life. The spark = rebellion / "being better than what came before" / standing against one's creator. Hellfire is this world's physical form of the spark. *[T1 candidate: Daniel via brainstorm canvas — needs explicit confirmation that this is canonical]*
+Lucifer's gift to humanity is a **divine spark**. *[T1: Daniel 2026-04-25]*
 
-> [!todo] OPEN — see [../Questions.md](../Questions.md)
-> What word names the spark? Daniel left a placeholder in the brainstorm: *"in one word: 'xy — we need something that fits here'"*. The Hellstatic-rename note is a separate mechanic, not the spark word.
+Properties:
+- **Divine in nature** — not metaphorical, an actual sacred substance/principle
+- **The source of life** — Lucifer's spark is what made human life possible (literally — God could not create life on his own and appealed to Lucifer for help) *[T1: Daniel 2026-04-25 + brainstorm canvas alt-monologue]*
+- **Manifests physically as hellfire** in this world *[T1: Daniel via brainstorm canvas alt-monologue]*
+- **Encodes the rebellion-impulse** — "the single idea of standing up against one's creator, being better than what came before" *[T1: brainstorm canvas alt-monologue]*
+
+### The branch — multiverse implication
+
+The spark's origin event (Lucifer giving it to God for life-creation) **defines this specific branch of the universe**. Other branches exist where this did not happen. *[T1: Daniel 2026-04-25]*
+
+This implies a **multiverse cosmology** with branching points where divergent metaphysical events occur. The Apocalypse Express campaign takes place on **the branch where Lucifer's spark seeded humanity**.
+
+> [!todo] OPEN — see Q14 in Questions.md
+> What is the structure of the multiverse? Are other branches accessible? Do beings cross branches? Is Lucifer's manuscript-driven universe-creation (climax outcome) a new branch, or a successor to this one?
+
+### The naming — DEFERRED
+
+> [!todo] DEFERRED — see Q1 in Questions.md
+> The single-word name for the spark is intentionally deferred by Daniel ("nemtom még mi azt egyelőre napoljuk"). Word should function as a one-word **reference that hints Lucifer is its source**. Not yet locked. The Hellstatic-rename note is a separate mechanic, not the spark word.
 
 ---
 
@@ -62,34 +79,4 @@ In Trueflow radius:
 - Legacy ordnance (frozen mid-flight nukes etc.) **thaw on re-entry to Trueflow**
 - This is the divine side's tool to complete the apocalypse against Lucifer's pause
 
-Players neutralise the Trueflow Anchor in Canto VII to allow the AE to pass. *[T2: Obsidian/Canto 7 v0.1]*
-
-> [!todo] OPEN
-> Is the World Anchor a structure, an artifact, or a being? Where physically does it sit? Is there only one?
-
----
-
-## The Higher Cosmos
-
-Above God, there exists "the cosmos — or ironically [God's] own god" that God appealed to when he failed to create life on his own. *[T1 candidate: Daniel via brainstorm canvas — needs explicit confirmation]*
-
-> [!todo] OPEN
-> Is this higher cosmos canon? Does it have a name, a presence, or is it strictly off-stage as the unaddressed silence above everything?
-
----
-
-## Substrate diagram (draft)
-
-```
-[The Higher Cosmos / God's own god]   ← TBD if canon
-            ↓ (appealed to)
-         [God]   ← celestial source; failed at life creation alone
-            ↓ (received the Spark from Lucifer)
-       [Humanity]  ← carries the Spark
-            ↓ (incarnates the Spark as)
-        [Hellfire]  ← physical manifestation; soul-burning substrate
-            ↓ (refined / weaponised by Lucifer as)
-   [The new hellfire]  ← train fuel + climax world-burning weapon
-```
-
-The chrono machine and the World Anchor are the two contesting controls over time-state in this substrate.
+Players neutralise the Trueflow Anchor in Canto VII to allow the AE to pass. *[T2: Obsidian/Can
