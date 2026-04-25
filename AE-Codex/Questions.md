@@ -16,9 +16,13 @@ last_updated: 2026-04-25
 
 ## CORE — story-blocking
 
-### Q1 — What word names the Spark? *(asked)*
+### Q1 — What word names what Lucifer planted in humanity? *(re-asked clearly 2026-04-25)*
 
-**Prompt:** Lucifer's alternative monologue (brainstorm canvas) ends with: *"the single idea of rebellion, of standing up against their own creator, the idea of 'being better than what came before' — in one word: 'xy — we need something that fits here'."* What word goes in that placeholder?
+**Prompt:** In Daniel's brainstorm Lucifer monologue draft, this exact phrasing appears:
+
+> *"I gave him **the spark** to create life, human life — the ember that fans the flame. The single idea of rebellion, of standing up against their own creator, the idea of 'being better than what came before' — in one word: '**xy — we need something that fits here**'."*
+
+The word "spark" here is **casual English in the draft**, NOT a defined term. The placeholder **`xy`** is where Daniel wanted **one specific word** that names what Lucifer's gift IS.
 
 **Why it matters:** This is the cosmological touchstone — names what Lucifer planted in humanity, what hellfire physically manifests, what the climax burns away or honors. The monologue is incomplete without it. Without it, the entire Cosmology/Substrate cannot finalise.
 
@@ -26,7 +30,11 @@ last_updated: 2026-04-25
 
 **Confirmed NOT the answer:** Hellstatic (clarified by Daniel — that's a death-residue mechanic).
 
-**Seed candidates:** Will, Ember, Becoming, Ascension, Promethean, Defiance, Insistence, Surge, Embercreed, the Climb, the Reach, Heatfire, Fellfire, Brightfall, the Spark Itself.
+**Open design choice — connect to Sparkplug or stay independent?**
+- **(α) Tie to Sparkplug mechanic.** Sparkplugs are *"distilled from what used to be someone"* — i.e., soul-residue energy. If Lucifer's gift IS the soul's rebellion-capacity, then every Sparkplug is a fragment of his gift. Strong worldbuilding integration. Word options: capitalised "the Spark", "the Plug", "Sparkfire", direct rhymes.
+- **(β) Independent word.** Doesn't tie to Sparkplug. Word options: Embercreed, the Climb, the Reach, Defiance, Becoming, Hellscale, Heatfire, Brightfall, etc.
+
+Daniel's pick for direction (α / β) determines the candidate space. Then the actual word.
 
 ---
 
@@ -40,13 +48,11 @@ last_updated: 2026-04-25
 
 ---
 
-### Q3 — Do Cantos IV, V, VI, VIII, IX, X have docs?
+### Q3 — Do Cantos IV, V, VI, VIII, IX, X have docs? — RESOLVED 2026-04-25
 
-**Prompt:** I found Canto 1, 2, 3, 7 docs in Obsidian. The brainstorm canvas had names for 4 (Burning Bridges), 6 (Drifting away), 8 (To Hell and Back), 9 (Siege of DarkHold), 10 (Gambit for the 9th rank), and 5 was a placeholder. **Are these still aspirational, or have docs been written and I haven't found them yet?**
+**Answer (Daniel):** *"neeem csak épp nagyjából voltak körvonalazva hogy valami ötletünk legyen hogy azért mi lesz ott kb."* — They are NOT detailed, just rough outlines for orientation. The brainstorm canvas names (Burning Bridges, Drifting away, To Hell and Back, Siege of DarkHold, Gambit for the 9th rank) are aspirational sketches, no Canto X.md docs exist for them.
 
-**Why it matters:** Determines whether 60% of the campaign exists in some form or is fully unwritten.
-
-**Action:** Daniel to check Obsidian and tell me. If they exist somewhere, point me to the path. If not, we know the design surface to fill.
+**Implication:** Cantos I, II, III, VII have Obsidian docs (varying depths). Cantos IV, V, VI, VIII, IX, X are **fully open design surface**. Brainstorm names are starting points, not commitments.
 
 ---
 
@@ -106,22 +112,4 @@ last_updated: 2026-04-25
 
 What types of Drifters exist (anomalous beings, half-revived humans, others)? Hostility spectrum? Specific physics?
 
-### Q11 — The Higher Cosmos above God — canonical?
-
-Daniel's brainstorm monologue mentions God appealing to "his own god" / "the cosmos." Is this off-stage flavour, or an active part of the cosmology with its own implications?
-
-### Q12 — Hellstatic-rename note in brainstorm canvas — what was it renaming?
-
-The note says "Hellstatic rename?" in isolation. Hellstatic is a death-mechanic (confirmed). Was the user considering renaming THIS mechanic, or did "Hellstatic" denote something else they meant to rename? Daniel-to-clarify.
-
-### Q13 — Master Campaign Bible
-
-Canto 2 references `[[Apocalypse Express – Master Campaign Bible]]`. I couldn't find this doc in the Obsidian vault. Does it exist?
-
----
-
-## Resolved (archive)
-
-> Move questions here once answered. Keep the Q+A summary so the trail is preserved.
-
-*(none yet)*
+### Q11 — The H
