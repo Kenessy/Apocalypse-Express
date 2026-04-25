@@ -211,31 +211,36 @@ html, body {
 
 /* edges — orthogonal 90° connectors */
 .sb-edge { fill:none; stroke-width:1.5; stroke-linecap:square; stroke-linejoin:miter;
-  stroke:rgba(201,165,80,.25); }
+  stroke:rgba(201,165,80,.22); }
 /* chosen path — glowing gold */
-.sb-edge.chosen { stroke:rgba(230,190,80,.7); stroke-width:2.5;
-  filter:drop-shadow(0 0 5px rgba(230,190,80,.3)); }
-.sb-edge.fork-success.chosen { stroke:rgba(140,220,160,.6); filter:drop-shadow(0 0 4px rgba(140,220,160,.25)); }
-.sb-edge.fork-fail.chosen { stroke:rgba(220,130,120,.6); filter:drop-shadow(0 0 4px rgba(220,130,120,.25)); }
-
-/* back-edges — dashed 90° return paths */
-.sb-edge.back { stroke:rgba(201,165,80,.22); stroke-width:1.5; stroke-dasharray:8 5;
-  stroke-linecap:square; stroke-linejoin:miter; fill:none; marker-end:url(#sb-arrow-back); }
+.sb-edge.chosen { stroke:rgba(230,190,80,.75); stroke-width:2.5;
+  filter:drop-shadow(0 0 6px rgba(230,190,80,.35)); }
+.sb-edge.fork-success.chosen { stroke:rgba(140,220,160,.7); filter:drop-shadow(0 0 5px rgba(140,220,160,.3)); }
+.sb-edge.fork-fail.chosen { stroke:rgba(220,130,120,.7); filter:drop-shadow(0 0 5px rgba(220,130,120,.3)); }
 
 /* node group */
-.sb-node { cursor:pointer; }
-.sb-node.selected .sb-card { stroke:rgba(230,190,80,.5) !important;
-  filter:drop-shadow(0 0 10px rgba(230,190,80,.15)) !important; }
+.sb-node { cursor:default; }
 
 /* card background — rounded rect */
 .sb-card {
-  fill:rgba(10,8,16,.5); stroke:rgba(200,180,150,.2); stroke-width:1;
+  fill:rgba(18,14,26,.8); stroke:rgba(200,180,150,.2); stroke-width:1;
   rx:6; ry:6; transition:fill .4s, stroke .4s;
 }
-.sb-node:hover .sb-card { stroke:rgba(200,180,150,.45); }
+.sb-node:hover .sb-card { fill:rgba(25,20,36,.9); stroke:rgba(200,180,150,.4); }
 
-/* image overlay gradient */
-.sb-img-fade { fill:url(#sb-img-fade); rx:6; ry:6; pointer-events:none; }
+/* image placeholder area inside card */
+.sb-card-img {
+  fill:rgba(200,180,150,.03); rx:4; ry:4;
+}
+/* real image inside card */
+.sb-card-img-real {
+  opacity:.6; filter:brightness(.85) saturate(.75);
+  transition:opacity .4s, filter .4s;
+}
+.sb-node:hover .sb-card-img-real { opacity:.85; filter:brightness(1) saturate(.9); }
+.sb-node.filled .sb-card-img-real { opacity:.75; filter:brightness(.9) saturate(.8); }
+.sb-node.filled:hover .sb-card-img-real { opacity:.95; filter:brightness(1.05) saturate(.95); }
+.sb-node.empty .sb-card-img-real { opacity:.25; filter:brightness(.5) saturate(.3); }
 
 /* type accent bar — left edge */
 .sb-accent { fill:rgba(200,180,150,.3); rx:2; ry:2; transition:fill .4s; }
@@ -243,122 +248,75 @@ html, body {
 /* label text */
 .sb-label {
   font-family:'Cormorant Garamond','Garamond','Georgia',serif;
-  font-size:12px; font-weight:600; letter-spacing:.03em;
-  fill:rgba(240,230,210,.85); dominant-baseline:central;
-  transition:fill .4s; text-shadow:0 1px 3px rgba(0,0,0,.6);
+  font-size:11px; font-weight:500; letter-spacing:.04em;
+  fill:rgba(220,200,170,.7); dominant-baseline:central;
+  transition:fill .4s;
 }
-.sb-node:hover .sb-label { fill:rgba(255,248,230,.95); }
+.sb-node:hover .sb-label { fill:rgba(240,225,195,.9); }
 
 /* type text */
 .sb-type-label {
   font-family:'IBM Plex Mono',monospace;
   font-size:7px; font-weight:400; letter-spacing:.12em; text-transform:uppercase;
-  fill:rgba(200,180,150,.5); dominant-baseline:central;
+  fill:rgba(200,180,150,.4); dominant-baseline:central;
   transition:fill .4s;
 }
-.sb-node:hover .sb-type-label { fill:rgba(200,180,150,.7); }
+.sb-node:hover .sb-type-label { fill:rgba(200,180,150,.65); }
 
-/* id text — under label */
-.sb-id-label {
-  font-family:'IBM Plex Mono',monospace;
-  font-size:6px; font-weight:400; letter-spacing:.08em;
-  fill:rgba(200,180,150,.25); dominant-baseline:central;
-}
-
-/* ── empty state (no image) ── */
-.sb-node.empty .sb-card { fill:rgba(12,10,20,.7); stroke:rgba(180,160,140,.1); stroke-dasharray:4 3; }
-.sb-node.empty .sb-accent { fill:rgba(180,160,140,.1); }
+/* ── empty state ── */
+.sb-node.empty .sb-card { fill:rgba(12,10,20,.6); stroke:rgba(180,160,140,.12); stroke-dasharray:4 3; }
+.sb-node.empty .sb-accent { fill:rgba(180,160,140,.15); }
+.sb-node.empty .sb-card-img { fill:rgba(180,160,140,.03); }
 .sb-node.empty .sb-label { fill:rgba(180,160,140,.35); }
 .sb-node.empty .sb-type-label { fill:rgba(180,160,140,.18); }
 
-/* ── filled state — has content ── */
-.sb-node.filled .sb-card { stroke:rgba(230,190,80,.3);
-  filter:drop-shadow(0 0 8px rgba(230,190,80,.1)); }
-.sb-node.filled .sb-accent { fill:rgba(230,190,80,.6); }
-.sb-node.filled .sb-label { fill:rgba(250,225,140,.9); }
-.sb-node.filled .sb-type-label { fill:rgba(230,190,80,.45); }
-.sb-node.filled:hover .sb-card { stroke:rgba(240,210,100,.55);
-  filter:drop-shadow(0 0 12px rgba(240,210,100,.18)); }
+/* ── filled state — on the chosen path ── */
+.sb-node.filled .sb-card { fill:rgba(20,16,30,.9); stroke:rgba(230,190,80,.4);
+  filter:drop-shadow(0 0 8px rgba(230,190,80,.12)); }
+.sb-node.filled .sb-accent { fill:rgba(230,190,80,.7); }
+.sb-node.filled .sb-card-img { fill:rgba(230,190,80,.06); }
+.sb-node.filled .sb-label { fill:rgba(245,220,140,.85); }
+.sb-node.filled .sb-type-label { fill:rgba(230,190,80,.5); }
+.sb-node.filled:hover .sb-card { stroke:rgba(240,210,100,.6);
+  filter:drop-shadow(0 0 14px rgba(240,210,100,.18)); }
+.sb-node.filled:hover .sb-label { fill:rgba(255,235,170,1); }
 
 /* ── type accent colors ── */
-.sb-node.t-choice .sb-accent { fill:rgba(130,170,250,.5); }
-.sb-node.filled.t-choice .sb-accent { fill:rgba(130,170,250,.7); }
-.sb-node.filled.t-choice .sb-card { stroke:rgba(130,170,250,.25); }
+.sb-node.filled.t-choice .sb-accent { fill:rgba(180,205,250,.7); }
+.sb-node.filled.t-choice .sb-card { stroke:rgba(180,205,250,.3); }
+.sb-node.filled.t-choice:hover .sb-card { stroke:rgba(180,205,250,.5); }
 
-.sb-node.t-dice .sb-accent { fill:rgba(255,200,60,.5); }
-.sb-node.filled.t-dice .sb-accent { fill:rgba(255,200,60,.7); }
-.sb-node.filled.t-dice .sb-card { stroke:rgba(255,200,60,.25); }
+.sb-node.filled.t-dice .sb-accent { fill:rgba(255,220,100,.7); }
+.sb-node.filled.t-dice .sb-card { stroke:rgba(255,220,100,.3); }
+.sb-node.filled.t-dice:hover .sb-card { stroke:rgba(255,220,100,.5); }
 
-.sb-node.t-collect .sb-accent { fill:rgba(100,220,140,.5); }
-.sb-node.filled.t-collect .sb-accent { fill:rgba(100,220,140,.7); }
-.sb-node.filled.t-collect .sb-card { stroke:rgba(100,220,140,.25); }
+.sb-node.filled.t-collect .sb-accent { fill:rgba(140,240,170,.7); }
+.sb-node.filled.t-collect .sb-card { stroke:rgba(140,240,170,.3); }
+.sb-node.filled.t-collect:hover .sb-card { stroke:rgba(140,240,170,.5); }
 
-.sb-node.t-fail .sb-accent { fill:rgba(240,110,100,.5); }
-.sb-node.filled.t-fail .sb-accent { fill:rgba(240,110,100,.7); }
-.sb-node.filled.t-fail .sb-card { stroke:rgba(240,110,100,.25); }
+.sb-node.filled.t-fail .sb-accent { fill:rgba(240,140,130,.7); }
+.sb-node.filled.t-fail .sb-card { stroke:rgba(240,140,130,.3); }
+.sb-node.filled.t-fail:hover .sb-card { stroke:rgba(240,140,130,.5); }
 
-/* ── detail panel ── */
-.sb-detail-panel {
-  position:absolute; top:0; left:0; width:340px; height:100%;
-  background:rgba(6,5,14,.94); border-right:1px solid rgba(201,165,80,.12);
-  z-index:20; overflow-y:auto; transform:translateX(-100%);
-  transition:transform .3s cubic-bezier(.4,0,.2,1);
-  backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+/* ── chapter group backgrounds ── */
+.sb-chapter-label {
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px; font-weight:500; letter-spacing:.18em; text-transform:uppercase;
+  fill:rgba(200,180,150,.4); dominant-baseline:hanging;
 }
-.sb-detail-panel.open { transform:translateX(0); }
-.sb-detail-close {
-  position:sticky; top:0; float:right; width:32px; height:32px; margin:10px;
-  background:rgba(200,180,150,.06); border:1px solid rgba(200,180,150,.1);
-  border-radius:4px; color:rgba(200,180,150,.4); font-size:18px;
-  cursor:pointer; z-index:2; transition:all .2s;
+
+/* ── scene-level nodes — larger, bolder ── */
+.sb-node.scene .sb-card { stroke-width:2; }
+.sb-node.scene.filled .sb-card {
+  stroke:rgba(230,190,80,.5);
+  filter:drop-shadow(0 0 12px rgba(230,190,80,.15));
 }
-.sb-detail-close:hover { background:rgba(200,180,150,.12); color:rgba(200,180,150,.7); }
-.sb-detail-img {
-  width:100%; aspect-ratio:16/9; object-fit:cover; display:block;
-  border-bottom:1px solid rgba(201,165,80,.08);
+.sb-node.scene.filled:hover .sb-card {
+  stroke:rgba(240,210,100,.7);
+  filter:drop-shadow(0 0 18px rgba(240,210,100,.22));
 }
-.sb-detail-img[src=""] { display:none; }
-.sb-detail-header { padding:16px 20px 0; }
-.sb-detail-header h3 {
-  font-family:'Cormorant Garamond','Garamond','Georgia',serif;
-  font-size:20px; font-weight:600; color:rgba(230,210,170,.85);
-  margin:0 0 4px; letter-spacing:.02em;
-}
-.sb-detail-type-badge {
-  display:inline-block; font-family:'IBM Plex Mono',monospace;
-  font-size:9px; letter-spacing:.12em; text-transform:uppercase;
-  padding:2px 8px; border-radius:2px;
-  color:rgba(200,180,150,.5); background:rgba(200,180,150,.06);
-  border:1px solid rgba(200,180,150,.08);
-}
-.sb-detail-body {
-  padding:16px 20px 24px;
-  font-family:'Cormorant Garamond','Garamond','Georgia',serif;
-  font-size:14px; line-height:1.7; color:rgba(200,180,150,.55);
-}
-.sb-detail-body .sb-d-speaker {
-  display:flex; align-items:center; gap:8px; margin:12px 0 8px;
-  font-size:11px; color:rgba(201,165,80,.45);
-  font-family:'IBM Plex Mono',monospace; letter-spacing:.08em; text-transform:uppercase;
-}
-.sb-detail-body .sb-d-speaker .glyph { font-size:14px; }
-.sb-detail-body .sb-d-text { color:rgba(210,195,170,.6); margin:0 0 16px; }
-.sb-detail-body .sb-d-choices { margin:12px 0; }
-.sb-detail-body .sb-d-choice {
-  display:flex; align-items:center; gap:8px; padding:8px 12px; margin:4px 0;
-  background:rgba(180,205,250,.04); border:1px solid rgba(180,205,250,.08);
-  border-radius:4px; font-size:12px; color:rgba(180,205,250,.5);
-}
-.sb-detail-body .sb-d-choice .icon { font-size:14px; opacity:.6; }
-.sb-detail-body .sb-d-dice {
-  display:flex; align-items:center; gap:10px; padding:10px 14px;
-  background:rgba(255,220,100,.04); border:1px solid rgba(255,220,100,.08);
-  border-radius:4px; font-size:12px; color:rgba(255,220,100,.5);
-}
-.sb-detail-body .sb-d-empty {
-  padding:20px; text-align:center; color:rgba(180,160,140,.2);
-  font-style:italic; font-size:13px;
-}
+.sb-node.scene.empty .sb-card { stroke-dasharray:6 4; stroke:rgba(180,160,140,.2); }
+.sb-label-scene { font-size:13px; font-weight:600; }
 
 /* ── tooltip ── */
 .ae-sandbox-tooltip {
@@ -383,6 +341,135 @@ html, body {
   font-style:italic;
 }
 .ae-sandbox-tooltip-text p { margin:0 0 6px; }
+
+/* ── detail panel (left side, opens on node click) ── */
+.sb-detail {
+  position:fixed; top:44px; left:0; bottom:0; width:480px; z-index:50;
+  background:rgba(8,6,14,.97);
+  backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px);
+  border-right:1px solid rgba(201,156,90,.15);
+  display:flex; flex-direction:column;
+  transform:translateX(-100%);
+  transition:transform .35s cubic-bezier(.22,1,.36,1);
+  overflow:hidden;
+}
+.sb-detail.open { transform:translateX(0); }
+
+.sb-detail-close {
+  position:absolute; top:12px; right:12px; z-index:5;
+  width:32px; height:32px; border-radius:6px;
+  background:rgba(201,156,90,.1); border:1px solid rgba(201,156,90,.18);
+  color:var(--gold); font-size:18px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  opacity:.6; transition:opacity .2s, background .2s;
+}
+.sb-detail-close:hover { opacity:1; background:rgba(201,156,90,.22); }
+
+.sb-detail-header {
+  padding:24px 28px 16px; flex-shrink:0;
+  border-bottom:1px solid rgba(201,156,90,.1);
+}
+.sb-detail-type {
+  font:600 11px/1 'IBM Plex Mono'; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--gold); opacity:.75; display:block; margin-bottom:8px;
+}
+.sb-detail-title {
+  font:700 26px/1.2 'Cinzel',serif; letter-spacing:.03em;
+  color:var(--gold2); margin:0;
+}
+
+.sb-detail-img-wrap {
+  flex-shrink:0; height:180px; overflow:hidden;
+  position:relative;
+}
+.sb-detail-img-wrap img {
+  width:100%; height:100%; object-fit:cover;
+  filter:brightness(.75) saturate(.85);
+}
+.sb-detail-img-wrap::after {
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background:linear-gradient(to top, rgba(8,6,14,1) 0%, rgba(8,6,14,.3) 40%, transparent 100%);
+}
+.sb-detail-img-wrap:empty { display:none; }
+
+.sb-detail-body {
+  flex:1; overflow-y:auto; padding:22px 28px 40px;
+}
+.sb-detail-body::-webkit-scrollbar { width:4px; }
+.sb-detail-body::-webkit-scrollbar-thumb { background:rgba(201,156,90,.25); border-radius:2px; }
+
+/* body content styles */
+.sb-detail-body p {
+  font:300 19px/1.85 'Cormorant Garamond','Garamond','Georgia',serif;
+  color:rgba(248,245,240,.92); margin:0 0 18px;
+}
+.sb-detail-body p em.inline { font-style:italic; color:var(--gold2); }
+.sb-detail-body p em.standalone {
+  display:block; padding:14px 20px; margin:12px 0;
+  border-left:2px solid rgba(201,156,90,.35);
+  color:var(--gold2); opacity:.92; font-style:italic;
+  font-size:18px;
+}
+
+.sb-detail-speaker {
+  display:flex; align-items:center; gap:10px;
+  margin-bottom:18px; padding-bottom:12px;
+  border-bottom:1px solid rgba(201,156,90,.1);
+}
+.sb-detail-speaker-glyph {
+  font-size:20px; color:var(--gold); opacity:.8;
+}
+.sb-detail-speaker-name {
+  font:600 18px/1 'Cinzel',serif; letter-spacing:.06em;
+  color:var(--gold2); opacity:.9;
+}
+
+.sb-detail-choices {
+  display:flex; flex-direction:column; gap:10px; margin-top:20px;
+}
+.sb-detail-choice {
+  padding:12px 16px; border-radius:6px;
+  background:rgba(40,189,216,.07); border:1px solid rgba(40,189,216,.18);
+  font:400 15px/1.5 'IBM Plex Mono'; color:rgba(40,189,216,.88);
+  display:flex; align-items:center; gap:10px;
+}
+.sb-detail-choice-icon { font-size:16px; opacity:.75; }
+
+.sb-detail-dice {
+  margin-top:20px; padding:14px 16px; border-radius:6px;
+  background:rgba(255,200,40,.07); border:1px solid rgba(255,200,40,.18);
+  display:flex; align-items:center; gap:12px;
+  font:500 15px/1 'IBM Plex Mono'; color:rgba(255,200,40,.88);
+}
+.sb-detail-dice-icon { font-size:22px; }
+.sb-detail-dice-dc { margin-left:auto; font-weight:700; }
+
+.sb-detail-continue {
+  margin-top:20px; padding:12px 16px; border-radius:6px;
+  background:rgba(201,156,90,.07); border:1px solid rgba(201,156,90,.15);
+  font:400 15px/1.5 'IBM Plex Mono'; color:rgba(201,156,90,.85);
+  display:flex; align-items:center; gap:10px;
+}
+.sb-detail-continue-arrow { font-size:13px; opacity:.7; }
+
+.sb-detail-tip {
+  margin-top:16px; padding:14px 18px; border-radius:6px;
+  background:rgba(201,156,90,.05); border:1px solid rgba(201,156,90,.1);
+  font:italic 300 17px/1.7 'Cormorant Garamond',serif;
+  color:rgba(200,180,150,.75);
+}
+.sb-detail-status {
+  display:inline-block; margin-bottom:14px; padding:4px 12px; border-radius:4px;
+  font:600 10px/1 'IBM Plex Mono'; letter-spacing:.14em; text-transform:uppercase;
+}
+.sb-detail-status.written {
+  background:rgba(140,240,170,.1); border:1px solid rgba(140,240,170,.2);
+  color:rgba(140,240,170,.75);
+}
+.sb-detail-status.planned {
+  background:rgba(180,160,140,.08); border:1px solid rgba(180,160,140,.14);
+  color:rgba(180,160,140,.55);
+}
 
 /* ══ FLOWCHART — fullscreen presentation ══ */
 .ae-fc {
@@ -2128,7 +2215,7 @@ html, body {
 <div class="ae-panel" id="panel-sandbox" data-panel="sandbox">
   <div class="ae-sandbox" id="sandbox-container">
     <div class="ae-sandbox-toolbar">
-      <span class="ae-sandbox-toolbar-title">Story Tree</span>
+      <span class="ae-sandbox-toolbar-title">Campaign Map</span>
       <div class="ae-sandbox-toolbar-right">
         <span class="ae-sandbox-stats" id="sandbox-stats"></span>
         <button class="ae-sandbox-toggle" id="sandbox-dev-toggle">Dev Mode</button>
@@ -2138,28 +2225,16 @@ html, body {
       <svg id="sandbox-svg" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <pattern id="sb-dotgrid" width="24" height="24" patternUnits="userSpaceOnUse">
-            <circle cx="12" cy="12" r="1" fill="rgba(200,180,150,0.14)"/>
+            <circle cx="12" cy="12" r="1" fill="rgba(200,180,150,0.09)"/>
           </pattern>
           <pattern id="sb-medgrid" width="120" height="120" patternUnits="userSpaceOnUse">
-            <line x1="0" y1="0" x2="120" y2="0" stroke="rgba(200,180,150,0.1)" stroke-width="0.5"/>
-            <line x1="0" y1="0" x2="0" y2="120" stroke="rgba(200,180,150,0.1)" stroke-width="0.5"/>
+            <line x1="0" y1="0" x2="120" y2="0" stroke="rgba(200,180,150,0.04)" stroke-width="0.5"/>
+            <line x1="0" y1="0" x2="0" y2="120" stroke="rgba(200,180,150,0.04)" stroke-width="0.5"/>
           </pattern>
           <pattern id="sb-majgrid" width="360" height="360" patternUnits="userSpaceOnUse">
-            <line x1="0" y1="0" x2="360" y2="0" stroke="rgba(200,180,150,0.1)" stroke-width="1"/>
-            <line x1="0" y1="0" x2="0" y2="360" stroke="rgba(200,180,150,0.1)" stroke-width="1"/>
+            <line x1="0" y1="0" x2="360" y2="0" stroke="rgba(200,180,150,0.07)" stroke-width="1"/>
+            <line x1="0" y1="0" x2="0" y2="360" stroke="rgba(200,180,150,0.07)" stroke-width="1"/>
           </pattern>
-          <marker id="sb-arrow-back" viewBox="0 0 8 6" refX="8" refY="3"
-                  markerWidth="6" markerHeight="5" orient="auto">
-            <path d="M0,0.5 L7,3 L0,5.5" fill="rgba(201,165,80,.2)" stroke="none"/>
-          </marker>
-          <clipPath id="sb-card-clip">
-            <rect x="-80" y="-50" width="160" height="100" rx="6" ry="6"/>
-          </clipPath>
-          <linearGradient id="sb-img-fade" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#06050e" stop-opacity="0"/>
-            <stop offset="0.55" stop-color="#06050e" stop-opacity="0.15"/>
-            <stop offset="1" stop-color="#06050e" stop-opacity="0.7"/>
-          </linearGradient>
         </defs>
         <rect x="-5000" y="-5000" width="10000" height="10000" fill="#06050e"/>
         <rect x="-5000" y="-5000" width="10000" height="10000" fill="url(#sb-dotgrid)"/>
@@ -2168,15 +2243,6 @@ html, body {
         <g id="sb-edges"></g>
         <g id="sb-nodes"></g>
       </svg>
-      <div class="sb-detail-panel" id="sb-detail-panel">
-        <button class="sb-detail-close" onclick="closeSbDetail()">×</button>
-        <img class="sb-detail-img" id="sb-detail-img" src="" alt="">
-        <div class="sb-detail-header">
-          <h3 id="sb-detail-title"></h3>
-          <span class="sb-detail-type-badge" id="sb-detail-type-badge"></span>
-        </div>
-        <div class="sb-detail-body" id="sb-detail-body"></div>
-      </div>
     </div>
     <div class="ae-sandbox-zoom">
       <button class="ae-sandbox-zoom-btn" id="sandbox-zoom-in" title="Zoom in">+</button>
@@ -2185,6 +2251,16 @@ html, body {
       <button class="ae-sandbox-zoom-btn fit" id="sandbox-zoom-fit" title="Fit to screen">⊡</button>
     </div>
   </div>
+</div>
+<!-- sandbox detail panel (left side) -->
+<div class="sb-detail" id="sb-detail">
+  <button class="sb-detail-close" id="sb-detail-close">&times;</button>
+  <div class="sb-detail-header">
+    <span class="sb-detail-type" id="sb-detail-type"></span>
+    <h3 class="sb-detail-title" id="sb-detail-title"></h3>
+  </div>
+  <div class="sb-detail-img-wrap" id="sb-detail-img-wrap"></div>
+  <div class="sb-detail-body" id="sb-detail-body"></div>
 </div>
 <div class="ae-sandbox-tooltip" id="sandbox-tooltip">
   <div class="ae-sandbox-tooltip-title" id="sandbox-tt-title"></div>
@@ -2497,6 +2573,15 @@ const collection = [
     hint: 'Search thoroughly near the fountain.',
     unlocked: false,
   },
+  {
+    id: 'silver-postcard',
+    title: 'The Silver Postcard',
+    img: 'ae-obelisk-fountain.png',
+    desc: 'A postcard in impossible colour — a red-lined train crossing a storm-lit viaduct. The image shifts when you look away. It feels warm, heavy, alive. Whatever it is, it chose you.',
+    lore: 'Found stuck to the obelisk among a dozen faded black-and-white cards. Each monochrome card shows a different station — snow depots, jungle halts, seaside piers, desert sidings. But this one blazes in full colour, its details changing with each glance. The moment you took it, you felt vertigo, heard a station chime only you could hear, and saw dozens of stations superimposed like double exposures. The place seemed satisfied. You are on the list now.',
+    hint: 'Take the colour card from the obelisk.',
+    unlocked: false,
+  },
 ];
 
 function unlockCollection(id) {
@@ -2541,7 +2626,6 @@ function toggleCollection() {
 const frames = [
   {
     id: 'cicero-monologue',
-    sceneBg: 'ae-cicero-wakeup.png',
     speaker: { name: 'Cicero', glyph: '†' },
     text: [
       'Morning, noon, evening — twilight by day, darkness by night... Our life is a loop of shadow and light. An endless loop of — well. But what <em class="inline">is</em> a loop? A circuit where we wake up, go to work, then fall asleep. Every day, the same exact thing, around and around — like a hamster in a wheel. Neuron A fires to B, B fires to C, C fires back to A, forever repeating the same cycle.',
@@ -2556,7 +2640,6 @@ const frames = [
   },
   {
     id: 'waking-up',
-    sceneBg: 'ae-waking-crossroads.png',
     speaker: { name: 'Cicero', glyph: '†' },
     text: [
       'The mist is rising — slowly, deliberately — from the obsidian landscape. Something fully strange, yet awfully familiar. As if you had been here before... in a dream you never quite finished.',
@@ -2963,9 +3046,8 @@ const frames = [
     ],
     continueLabel: 'return',
     continueIcon: '↩',
-    next: 'crossroads-choice',
+    next: 'obelisk-clock',
   },
-  // ── WANDER EXPLORE (fallback scout) ──
   {
     id: 'wander-explore',
     speaker: null,
@@ -3038,6 +3120,122 @@ const frames = [
     continueIcon: '↩',
     next: 'crossroads-choice',
   },
+  // ══════════════════════════════════════════════
+  //  A2 — OBELISK, CLOCK & POSTCARDS
+  // ══════════════════════════════════════════════
+  {
+    id: 'obelisk-clock',
+    speaker: null,
+    text: [
+      'A crack. Sharp and sudden — the sound of stone splitting in the cold. It comes from above, from the top of the obelisk, and it echoes across the platform like a shot.',
+      'You look up. A fissure runs down from the peak — dark, jagged, widening. Then another. And another. The obsidian at the crown of the obelisk is <em class="inline">breaking apart</em>. Fragments peel away and tumble down the smooth face, bouncing off the stone, shattering on the ground at the base. Black shards skitter across the platform like teeth knocked loose.',
+      'And beneath the falling pieces — something. A glint of gold, dull at first, then brighter as more stone falls away. A shape. Round. Mechanical. An <em class="inline">object</em> buried inside the obelisk, sealed within the stone since before you arrived, since before anyone arrived, now cracking free like something hatching.',
+      'A clock. Golden, tarnished, set into the raw stone where the obsidian shell has fallen away. Its face is pale, its numerals fine and deliberate. And it is ticking. Slowly. <em class="inline">Backward.</em>',
+      'The mist stirs. Not wind — there is no wind here — but something else. The fog that has been sitting heavy and still since you woke begins to <em class="inline">move</em>. Curling first, then rising, thinning, lifting off the obsidian like steam from cooling glass. The air clears. Not much. But enough that the platform feels larger, the distances longer, the silence thinner.',
+      'Whatever this clock is counting toward — it has started.',
+    ],
+    continueLabel: 'approach',
+    continueIcon: '◎',
+    next: 'obelisk-approach',
+  },
+  {
+    id: 'obelisk-approach',
+    speaker: null,
+    text: [
+      'Your eyes keep drifting back to it. The obelisk — that black needle at the centre of everything — and now, near its top, that glint. Gold. Faint but persistent, catching in the mist like a coin at the bottom of dark water. The numbers. Ticking.',
+      'You walk closer. Not because anything pulls you — because you <em class="inline">want to see</em>.',
+      'Up close, it\'s taller than you thought — three metres, maybe four — and the surface is so smooth that it doesn\'t reflect light so much as <em class="inline">swallow</em> it. Your reflection smears across the stone like something drowned beneath black water. No seams. No joints. No runes or inscriptions. Just obsidian, polished to the point of impossibility, standing on the platform as though the ground grew it. <em class="inline">Placed</em>.',
+      'The golden clock ticks above your head — a faint mechanical heartbeat, regular as breathing. The numbers are too high to read clearly, but their steady descent is unmistakable.',
+      'And there — on one face of the obelisk, at eye level — something else. Postcards. A ragged fan of them, stuck to the obsidian with ugly lumps of dried grey gum.',
+    ],
+    continueLabel: 'examine the postcards',
+    continueIcon: '◎',
+    next: 'obelisk-postcards',
+  },
+  {
+    id: 'obelisk-postcards',
+    speaker: null,
+    text: [
+      'A dozen cards, maybe more, pasted to the stone in overlapping rows. Most are black-and-white — grainy, faded, the kind of photography that belongs to a century you can\'t name. Each one shows a different place.',
+      'A snow-covered railway depot, lanterns burning in the fog. A jungle halt, vines swallowing the platform. A seaside pier where the tracks end at the waterline. A desert siding, sun-bleached and empty. A ruined marshalling yard, half-buried in ash.',
+      'Stations. All of them stations. Different worlds, different weathers, different states of ruin or beauty — but all unmistakably <em class="inline">stops along a line</em>.',
+      'And among them — one card that doesn\'t belong. Slightly larger than the rest, fresher, held by a fat wad of gum at eye level. While everything around it is monochrome and faded, this card is in <em class="inline">full, vivid colour</em>. It practically glows against the obsidian.',
+    ],
+    choices: [
+      { icon: '✦', tint: 'gold', label: 'Reach for the colour card', next: 'silver-postcard' },
+      { icon: '⏱', tint: 'blue', label: 'Study the clock above', next: 'obelisk-clock-study' },
+    ],
+  },
+  {
+    id: 'obelisk-clock-study',
+    speaker: null,
+    text: [
+      'You tilt your head back. The pale numerals drift downward — unhurried, steady, like sand through an hourglass no one\'s watching. Each tick is soft. Almost gentle. Whatever it\'s counting toward, it doesn\'t seem to be in any rush to get there.',
+      'But it <em class="inline">is</em> counting. Backward. Toward something. Toward <em class="inline">when</em>?',
+      'You don\'t know what the numbers mean. You can\'t read them clearly from here — they\'re too high, too small, and the pale gold light bleeds at the edges. But the direction is unmistakable. Down. Always down. A signal, not an alarm. A marker, not a warning.',
+      'Not urgent. Not yet. But it\'s there. And now you know it\'s there.',
+      'Your eyes fall back to the postcards. The colour card is still there, vivid and impossible, waiting at eye level.',
+    ],
+    continueLabel: 'reach for the colour card',
+    continueIcon: '✦',
+    next: 'silver-postcard',
+  },
+  {
+    id: 'silver-postcard',
+    speaker: null,
+    text: [
+      'You lean in. The card shows a train. Red-lined, iron-dark, crossing a viaduct under a sky split by lightning. The colours are too saturated for this place — too <em class="inline">alive</em>. The red of the train\'s livery is the colour of arterial blood. The storm-light is silver-white. The rails gleam like wet bone.',
+      'You blink. The crowd on the platform has shifted — the same people, but in different positions. The weather has changed. The lightning is in a different place. You didn\'t see it move. It just <em class="inline">did</em>.',
+      'Your fingers find the edge. The card is warm — warmer than the stone, warmer than anything you\'ve touched in this place. You tilt it, just enough to glimpse the back. Handwriting. Ink the colour of old rust, in a script you shouldn\'t be able to read — but you can:',
+      '<em class="inline">To thee whom I loved and lost, I long to see again and mend what has been broken. Mercy I seek, for deeds long past, for thee, and all, whose hope I cast. I yearn to feel thy light embrace, to cleanse us in its fiery grace.</em>',
+      'The gum resists for a moment, then <em class="inline">relaxes</em>, as if it was waiting for the right hand. It could come free. You could take it.',
+    ],
+    choices: [
+      { icon: '✋', tint: 'gold', label: 'Keep it', next: 'postcard-take' },
+      { icon: '↩', tint: 'grey', label: 'Leave it on the obelisk', next: 'postcard-leave' },
+    ],
+  },
+  {
+    id: 'postcard-take',
+    speaker: null,
+    text: [
+      'You pull. The gum lets go with a soft, wet sound, and the card comes free in your hand.',
+      'It\'s warm. Not faintly warm — <em class="inline">warm</em>. Like something alive. Like holding a small creature that has just fallen asleep in your palm. The heat spreads through your fingers, up your wrist, and settles somewhere in your chest. Odd. Not unpleasant. Just... there.',
+      'You turn it over. The verse stares back at you. The ink seems darker now — richer — as if the words have settled deeper into the cardstock since you last looked.',
+      'You tuck it away. The warmth stays.',
+    ],
+    continueLabel: 'look up at the clock',
+    continueIcon: '◎',
+    next: 'clock-quicken',
+  },
+  {
+    id: 'postcard-leave',
+    speaker: null,
+    text: [
+      'You pull your hand back. The card stays. The gum holds. The vivid colours dim slightly — or maybe your eyes are adjusting. Either way, the moment passes.',
+      'You step back from the obelisk. The black-and-white postcards stare blankly at you — dead stations, forgotten platforms, snow and ash and empty tracks. The colour card watches from among them. Patient. Not offended. Just... <em class="inline">waiting</em>.',
+      'You walk away. But your palm is warm. Not where you touched the obelisk — where you touched the <em class="inline">card</em>. The heat lingers, faint at first, then slowly growing. A soft burn that creeps up from the skin, settling into something you can\'t quite shake.',
+      'A few steps later, you feel it. A weight in your pocket — small, rectangular, unmistakable. You didn\'t put anything there. You <em class="inline">know</em> you didn\'t. But there it is, warm and patient, as though it has always been there.',
+      'You don\'t need to check. You already know what it is.',
+    ],
+    continueLabel: 'look up at the clock',
+    continueIcon: '◎',
+    next: 'clock-quicken',
+  },
+  {
+    id: 'clock-quicken',
+    speaker: null,
+    text: [
+      'The clock has changed. The numbers are falling faster now — not racing, not panicked, but <em class="inline">purposeful</em>. The patient drift has become a steady march. Whatever the obelisk was waiting for, you\'ve triggered it. Or it was always going to happen, and you just happened to be here when it did.',
+      'The ticking spreads through the obsidian underfoot. You can feel it in your soles — a vibration, deep and regular, like the heartbeat of something impossibly large stirring beneath the surface.',
+      'And then — far away, at the edge of the mist where distance stops meaning anything — two red dots. Faint. Steady. Like eyes opening in the dark.',
+      'They grow. Slowly at first, then faster — stretching, elongating, resolving into two parallel lines of red light. They\'re not eyes. They\'re not dots. They\'re <em class="inline">tracks</em>. A pair of rails, glowing faintly, cutting through the obsidian toward you like old scars that have just remembered how to bleed.',
+      'Something is coming.',
+    ],
+    continueLabel: 'wait',
+    continueIcon: '⏳',
+    next: null,
+  },
 ];
 
 let currentFrameIdx = 0;
@@ -3068,6 +3266,8 @@ function renderFrame(idx) {
     'tree-success': 'glimpse-fog',
     'wander-explore': 'panorama-void',
     'scroll-revelation': 'unsent-letter',
+    'postcard-take': 'silver-postcard',
+    'postcard-leave': 'silver-postcard',
   };
   if (unlocks[f.id]) unlockCollection(unlocks[f.id]);
 
@@ -3456,8 +3656,8 @@ function renderCollectionFull() {
 ══════════════════════════════════════ */
 /* ── flowchart data: flat column structure ── */
 const fcIntro = [
-  { id:'cicero-monologue', label:'Cicero', type:'narrator', img:'ae-cicero-wakeup.png', tip:'Opening monologue — loops, free will, the nature of choice' },
-  { id:'waking-up', label:'Waking', type:'narrator', img:'ae-waking-crossroads.png', tip:'The mist rises from the obsidian landscape' },
+  { id:'cicero-monologue', label:'Cicero', type:'narrator', img:'ae-null-meridian.png', tip:'Opening monologue — loops, free will, the nature of choice' },
+  { id:'waking-up', label:'Waking', type:'narrator', img:'ae-null-meridian.png', tip:'The mist rises from the obsidian landscape' },
   { id:'stand-up', label:'Stand Up', type:'narrator', img:'ae-standup-crossroads.png', tip:'You stand. The crossroads reveals itself.' },
   { id:'crossroads-choice', label:'Crossroads', type:'choice', img:'ae-standup-crossroads.png', tip:'Three paths diverge at the fountain' },
 ];
@@ -3638,7 +3838,7 @@ const SVG_NS = 'http://www.w3.org/2000/svg';
 let sandboxDevMode = false;
 let vbX = 0, vbY = 0, vbW = 1600, vbH = 1200;
 let sbInitW = 1600, sbInitH = 1200;
-let sbDragging = false, sbDragStartX = 0, sbDragStartY = 0, sbDragVBX = 0, sbDragVBY = 0;
+let sbDragging = false, sbDragMoved = false, sbDragStartX = 0, sbDragStartY = 0, sbDragVBX = 0, sbDragVBY = 0;
 let sbInitialized = false;
 
 document.getElementById('sandbox-dev-toggle').addEventListener('click', function() {
@@ -3687,13 +3887,9 @@ let sbFitVB = { x:0, y:0, w:1600, h:1200 };
 (function() {
   const container = document.getElementById('sandbox-canvas');
 
-  container.addEventListener('click', function(e) {
-    if (!e.target.closest('.sb-node') && !e.target.closest('.sb-detail-panel')) closeSbDetail();
-  });
-
   container.addEventListener('mousedown', function(e) {
     if (e.button !== 0) return;
-    sbDragging = true;
+    sbDragging = true; sbDragMoved = false;
     sbDragStartX = e.clientX; sbDragStartY = e.clientY;
     sbDragVBX = vbX; sbDragVBY = vbY;
     container.classList.add('dragging');
@@ -3701,10 +3897,12 @@ let sbFitVB = { x:0, y:0, w:1600, h:1200 };
   });
   window.addEventListener('mousemove', function(e) {
     if (!sbDragging) return;
+    const dx = e.clientX - sbDragStartX, dy = e.clientY - sbDragStartY;
+    if (Math.abs(dx) > 4 || Math.abs(dy) > 4) sbDragMoved = true;
     const svg = document.getElementById('sandbox-svg');
     const r = svg.getBoundingClientRect();
-    vbX = sbDragVBX - (e.clientX - sbDragStartX) * (vbW / r.width);
-    vbY = sbDragVBY - (e.clientY - sbDragStartY) * (vbH / r.height);
+    vbX = sbDragVBX - dx * (vbW / r.width);
+    vbY = sbDragVBY - dy * (vbH / r.height);
     sbApplyViewBox();
   });
   window.addEventListener('mouseup', function() {
@@ -3751,118 +3949,224 @@ let sbFitVB = { x:0, y:0, w:1600, h:1200 };
   container.addEventListener('touchend', function() { sbDragging = false; });
 })();
 
-/* ── real story tree layout from fcIntro + fcColumns ── */
-function buildRealTree() {
-  const COL_W = 220, ROW_H = 140;
-  const nodes = [], edges = [];
+/* ── campaign tree — real story structure ── */
+function buildCampaignTree() {
+  const COL_W = 220, ROW_H = 110;
+  const nodes = [], edges = [], groups = [];
   let nid = 0;
-
-  function addN(id, label, type, img) {
-    const n = { nid:nid++, id, label, type, img:img||'', x:0, y:0, filled:false };
-    nodes.push(n); return n;
+  function add(id, label, type, x, y, filled, opts) {
+    const n = { nid:nid++, id, label, type, x, y, filled, scene:!!(opts&&opts.scene), tip:(opts&&opts.tip)||'', img:(opts&&opts.img)||'' };
+    nodes.push(n); return n.nid;
   }
-  function addE(a, b) { edges.push({ from:a, to:b, cls:'' }); }
+  function link(a, b, cls) { edges.push({ from:a, to:b, cls:cls||'' }); }
 
-  /* width (in grid cols) needed by a node sequence — driven by fork spread */
-  function calcW(seq) {
-    if (!seq || !seq.length) return 1;
-    let w = 1;
-    for (const item of seq) {
-      if (item.fork) {
-        const fw = item.fork.reduce((s, arm) => s + calcW(arm.nodes), 0);
-        if (fw > w) w = fw;
-      }
-    }
-    return w;
-  }
+  // ═══════════════════════════════════
+  //  PRELUDE  (A1 – A5)
+  // ═══════════════════════════════════
 
-  /* lay out a sequence vertically; fork arms spread symmetrically around startX
-     returns { rootNid, depth } */
-  function layoutSeq(seq, startX, startY) {
-    if (!seq || !seq.length) return null;
-    let y = startY, rootNid = null, prevNid = null;
+  // ── A1: Null Meridian ──
+  const a1 = add('a1','A1 · Null Meridian','narrator',0,0,true,
+    {scene:true, img:'ae-null-meridian.png', tip:'Waking on the obsidian platform. Tutorial scene. System OFF.'});
+  const a1cross = add('a1-cross','Crossroads','choice',0,1.2,true,
+    {img:'ae-standup-crossroads.png', tip:'Three paths diverge at the fountain'});
+  link(a1, a1cross);
 
-    for (const item of seq) {
-      const n = addN(item.id, item.label, item.type, item.img);
-      n.x = startX; n.y = y;
-      if (rootNid === null) rootNid = n.nid;
-      if (prevNid !== null) addE(prevNid, n.nid);
-      prevNid = n.nid;
-      y++;
+  // Scout branch
+  const scout = add('a1-scout','Survey','choice',-3,2.5,true,{img:'ae-obelisk-fountain.png', tip:'Scan the landscape — obelisk, tree, open plain'});
+  const climb = add('a1-climb','Climb Obelisk','dice',-4,3.8,true,{img:'ae-climb-retry.png', tip:'DC 10 → DC 15 → DC 20 chain'});
+  const climbOk = add('a1-climb-ok','The View','collect',-5,5.2,true,{img:'ae-crossroads-wide.png', tip:'See the infinite obsidian plane from above'});
+  const climbFail = add('a1-climb-fail','Defeat','fail',-3.5,5.2,true,{img:'ae-climb-defeat.png', tip:'Three falls. Give up.'});
+  const tree = add('a1-tree','Find Tree','narrator',-2,3.8,true,{img:'ae-tree-find.png', tip:'Tree ridge in the mist — DC 15 jump'});
+  const treeOk = add('a1-tree-ok','Glimpse','collect',-2.5,5.2,true,{img:'ae-tree-top.png', tip:'Brief view from the canopy'});
+  const treeFail = add('a1-tree-fail','Closed','fail',-1.5,5.2,true,{img:'ae-tree-fall.png', tip:'Branch snaps. Fall.'});
+  const wander = add('a1-wander','Walk','narrator',-3,4.5,false,{img:'ae-long-walk.png', tip:'Wander the infinite plain alone'});
+  link(a1cross, scout); link(scout, climb); link(climb, climbOk,'fork-success'); link(climb, climbFail,'fork-fail');
+  link(scout, tree); link(tree, treeOk,'fork-success'); link(tree, treeFail,'fork-fail');
+  link(scout, wander);
 
-      if (item.fork) {
-        const armW = item.fork.map(arm => calcW(arm.nodes));
-        const total = armW.reduce((s, w) => s + w, 0);
-        let ax = startX - (total - 1) / 2;
-        let maxD = 0;
+  // Cicero branch
+  const cicero = add('a1-cicero','Approach Cicero','narrator',0,2.5,true,{img:'ae-cicero-close.png', tip:'The old man with the obsidian quill'});
+  const cicListen = add('a1-cic-listen','Listen','narrator',0,3.8,true,{img:'ae-cicero-close.png', tip:'Wait. Hear his mumbling about promises.'});
+  const cicLeave = add('a1-cic-leave','Leave Him','narrator',0,5.2,true,{img:'ae-cicero-close.png', tip:'He is not ready to talk — not yet.'});
+  link(a1cross, cicero); link(cicero, cicListen); link(cicListen, cicLeave);
 
-        for (let i = 0; i < item.fork.length; i++) {
-          const cx = ax + (armW[i] - 1) / 2;
-          const r = layoutSeq(item.fork[i].nodes, cx, y);
-          if (r) { addE(n.nid, r.rootNid); if (r.depth > maxD) maxD = r.depth; }
-          ax += armW[i];
-        }
-        y += maxD;
-      }
-    }
-    return { rootNid, depth: y - startY };
-  }
+  // Fountain branch
+  const fountain = add('a1-fountain','Examine Fountain','narrator',3,2.5,true,{img:'ae-fountain-close.png', tip:'Obsidian fountain with ancient coins'});
+  const desk = add('a1-desk','Desk & Scrolls','narrator',3,3.8,true,{img:'ae-obelisk-fountain.png', tip:'Crumbling desk with sealed scrolls'});
+  const scrollDice = add('a1-scroll','Scroll Check','dice',3,5.2,true,{img:'ae-obelisk-fountain.png', tip:'DC 10 Delicacy — can you unroll them?'});
+  const scrollOk = add('a1-scroll-ok','Letter','collect',2.2,6.5,true,{img:'ae-obelisk-fountain.png', tip:'Weapons ledger. Fear. An unsent goodbye.'});
+  const scrollFail = add('a1-scroll-fail','All Lost','fail',3.8,6.5,true,{img:'ae-obelisk-fountain.png', tip:'Both scrolls crumble to dust.'});
+  link(a1cross, fountain); link(fountain, desk); link(desk, scrollDice);
+  link(scrollDice, scrollOk,'fork-success'); link(scrollDice, scrollFail,'fork-fail');
 
-  /* ── intro spine (center, x=0) ── */
-  let y = 0, prevNid = null;
-  for (const item of fcIntro) {
-    const n = addN(item.id, item.label, item.type, item.img);
-    n.x = 0; n.y = y;
-    if (prevNid !== null) addE(prevNid, n.nid);
-    prevNid = n.nid; y++;
-  }
-  const crossNid = prevNid;
+  // ── A2: Obelisk, Clock & Postcards ──
+  const a2 = add('a2','A2 · Obelisk & Clock','narrator',0,7.5,true,
+    {scene:true, img:'ae-obelisk-fountain.png', tip:'A gong. A golden clock appears on the obelisk, counting backward.'});
+  const a2post = add('a2-postcards','Postcards','choice',0,8.5,true,
+    {img:'ae-obelisk-fountain.png', tip:'Black-and-white station scenes. One vivid colour card stands out.'});
+  const a2clock = add('a2-clock','Study Clock','narrator',-1.5,8.5,true,
+    {tip:'The countdown notices your attention and speeds up.'});
+  const a2silver = add('a2-silver','Silver Postcard','choice',0,9.5,true,
+    {img:'ae-obelisk-fountain.png', tip:'Warm, shifting image. A train under lightning. It could be yours.'});
+  const a2take = add('a2-take','Keep Card','collect',-.8,10.5,true,
+    {tip:'Vertigo. Station chime. Dozens of stations flash. It belongs to you now.'});
+  const a2leave = add('a2-leave','Leave Card','narrator',.8,10.5,true,
+    {tip:'You step away. But later, something warm finds your pocket.'});
+  const a2quicken = add('a2-quicken','Clock Quickens','narrator',0,11.5,true,
+    {img:'ae-obelisk-fountain.png', tip:'Numbers fall faster. Red rails glow in the mist. Something is coming.'});
+  link(a1cross, a2); link(a2, a2post); link(a2post, a2clock);
+  link(a2clock, a2silver); link(a2post, a2silver);
+  link(a2silver, a2take); link(a2silver, a2leave,'fork-fail');
+  link(a2take, a2quicken); link(a2leave, a2quicken);
 
-  /* ── three column branches ── */
-  const colW = fcColumns.map(c => calcW(c.nodes));
-  const totalW = colW.reduce((s, w) => s + w, 0);
-  let cx = -(totalW - 1) / 2;
-  for (let i = 0; i < fcColumns.length; i++) {
-    const center = cx + (colW[i] - 1) / 2;
-    const r = layoutSeq(fcColumns[i].nodes, center, y);
-    if (r) addE(crossNid, r.rootNid);
-    cx += colW[i];
-  }
+  // ── A3: Train Arrival & Boarding ──
+  const a3 = add('a3','A3 · Train Arrival','narrator',0,13,true,
+    {scene:true, img:'ae-s1-bg.png', tip:'Twin red rails. Apocalypse Express arrives. Herald announces boarding.'});
+  link(a2quicken, a3);
 
-  /* ── pixel conversion ── */
+  // ── A4: Gossip Car & Golden Tickets ──
+  const a4 = add('a4','A4 · Gossip Car','collect',0,14.5,true,
+    {scene:true, img:'ae-s1-bg.png', tip:'Breather car. Golden Tickets discovered in pockets. Inspector validates.'});
+  link(a3, a4);
+
+  // ── A5: Sundown Saloon & Lucifer's Pact ──
+  const a5 = add('a5','A5 · Sundown Saloon','choice',0,16,true,
+    {scene:true, img:'ae-crossroads-wide.png', tip:'Lucifer\'s pitch. Hell below. Sign the pact or stay in Hell.'});
+  const a5sign = add('a5-sign','Sign Pact','narrator',-1,17.2,true,{img:'ae-crossroads-wide.png', tip:'Golden pen. Name in black. Verse flickers in window.'});
+  const a5refuse = add('a5-refuse','Refuse','fail',1,17.2,false,{tip:'Stay in Hell. Character lost.'});
+  link(a4, a5); link(a5, a5sign); link(a5, a5refuse,'fork-fail');
+
+  // ── Character Creation (procedural node) ──
+  const charCreate = add('char-create','Character Creation','narrator',0,18.5,true,
+    {scene:true, img:'ae-null-meridian-portrait.png', tip:'Cross the mirror. Design your body. Stats, class, background.'});
+  link(a5sign, charCreate);
+
+  // ═══════════════════════════════════
+  //  CHAPTER 1  (B1 – B2 + planned)
+  // ═══════════════════════════════════
+
+  // ── B1: Chapel of Second Chances ──
+  const b1 = add('b1','B1 · Chapel Revival','dice',0,20.5,true,
+    {scene:true, img:'ae-s1-waking.png', tip:'Wake in printed bodies. Soul Grit DC 13 sets HP + Injuries. PAVNN activates.'});
+  const b1wake = add('b1-wake','Wake Check','dice',-1.5,21.8,true,{img:'ae-s1-waking.png', tip:'Soul Grit vs DC 13 — determines starting HP band'});
+  const b1lucifer = add('b1-lucifer','Lucifer Briefing','narrator',0,21.8,true,{img:'ae-null-meridian.png', tip:'Mirror manifestation. Objective: reach the Station.'});
+  const b1pavnn = add('b1-pavnn','PAVNN Online','collect',1.5,21.8,true,{tip:'Android escort activated. Carries gear, local maps.'});
+  link(charCreate, b1); link(b1, b1wake); link(b1, b1lucifer); link(b1, b1pavnn);
+
+  // ── B2: Chapel of the Second Dawn ──
+  const b2 = add('b2','B2 · Chapel Yard','choice',0,23.5,true,
+    {scene:true, img:'ae-long-walk.png', tip:'Ruined sanctuary. Storage puzzle (3 paths). PAVNN briefing. Choose destination.'});
+  const b2key = add('b2-key','Outhouse Key','dice',-2,24.8,true,{tip:'Pry DC 12 — dead worker\'s keycard'});
+  const b2card = add('b2-card','Card Writer','dice',0,24.8,true,{tip:'SYS DC 12–15 — program a blank keycard'});
+  const b2climb = add('b2-climb','Climb & Drop','dice',2,24.8,true,{tip:'RES DC 15 + DC 12 — risky physical route'});
+  const b2storage = add('b2-storage','Storage Room','collect',0,26,true,{tip:'Healing supplies, tools, datashards. Most injuries healed.'});
+  link(b1, b2); link(b2, b2key); link(b2, b2card); link(b2, b2climb);
+  link(b2key, b2storage,'fork-success'); link(b2card, b2storage,'fork-success'); link(b2climb, b2storage,'fork-success');
+
+  // ── Planned nodes (not written yet) ──
+  const station = add('station','Terminus Station','narrator',0,28,false,
+    {scene:true, tip:'Reach the Apocalypse Express. Primary objective.'});
+  link(b2storage, station);
+
+  const drown = add('drown','Drowntown Basin','narrator',-2,29.5,false,
+    {scene:true, tip:'Wetland biome. Side area.'});
+  const ruins = add('ruins','Overground Ruins','narrator',0,29.5,false,
+    {scene:true, tip:'Surface ruins. Alternate route.'});
+  const bunker = add('bunker','A-Tech Bunker','narrator',2,29.5,false,
+    {scene:true, tip:'Underground bunker. Lore and equipment.'});
+  link(station, drown); link(station, ruins); link(station, bunker);
+
+  const temple = add('temple','Temple','choice',0,31.5,false,
+    {scene:true, tip:'Chapter 1 climax. Final confrontation.'});
+  link(drown, temple); link(ruins, temple); link(bunker, temple);
+
+  const ch1exit = add('ch1-exit','Chapter 1 Exit','narrator',0,33,false,
+    {scene:true, tip:'Transition to Chapter 2.'});
+  link(temple, ch1exit);
+
+  // ═══════════════════════════════════
+  //  CHAPTER 2  (placeholder)
+  // ═══════════════════════════════════
+  const ch2 = add('ch2','Chapter 2','narrator',0,35,false,
+    {scene:true, tip:'The journey continues...'});
+  link(ch1exit, ch2);
+
+  // ── chapter groups ──
+  groups.push({ label:'PRELUDE', yStart:0, yEnd:18.5, color:'rgba(201,156,90,.04)' });
+  groups.push({ label:'CHAPTER 1', yStart:20.5, yEnd:33, color:'rgba(92,180,230,.04)' });
+  groups.push({ label:'CHAPTER 2', yStart:35, yEnd:35, color:'rgba(180,130,220,.04)' });
+
+  // ── layout ──
   let minX=Infinity, minY=Infinity, maxX=-Infinity, maxY=-Infinity;
   nodes.forEach(n => { if(n.x<minX)minX=n.x; if(n.y<minY)minY=n.y; if(n.x>maxX)maxX=n.x; if(n.y>maxY)maxY=n.y; });
-  const padX=240, padY=150;
+  const padX=200, padY=140;
   nodes.forEach(n => { n.px=(n.x-minX)*COL_W+padX; n.py=(n.y-minY)*ROW_H+padY; });
-  return { nodes, edges, gridW:(maxX-minX)*COL_W+padX*2+COL_W, gridH:(maxY-minY)*ROW_H+padY*2+ROW_H };
+  groups.forEach(g => {
+    g.pyStart=(g.yStart-minY)*ROW_H+padY-60;
+    g.pyEnd=(g.yEnd-minY)*ROW_H+padY+60;
+    g.pxLeft=(minX-minX)*COL_W+padX-180;
+    g.pxRight=(maxX-minX)*COL_W+padX+180;
+  });
+  return { nodes, edges, groups, gridW:(maxX-minX)*COL_W+padX*2+COL_W, gridH:(maxY-minY)*ROW_H+padY*2+ROW_H };
 }
 
 function renderSandbox() {
-  sbInitialized = false; // re-fit viewport to new layout
-  const layout = buildRealTree();
-  const { nodes, edges } = layout;
+  const layout = buildCampaignTree();
+  const { nodes, edges, groups } = layout;
 
+  const svg = document.getElementById('sandbox-svg');
   const edgesG = document.getElementById('sb-edges');
   const nodesG = document.getElementById('sb-nodes');
+
+  // remove previous chapter groups
+  svg.querySelectorAll('.sb-chapter-group').forEach(el => el.remove());
   edgesG.innerHTML = '';
   nodesG.innerHTML = '';
 
   const nodeMap = {};
   nodes.forEach(n => { nodeMap[n.nid] = n; });
 
-  // card dimensions
-  const CW = 160, CH = 100;
+  // card dimensions — scene nodes are larger
+  const CW = 160, CH = 60, CW_S = 190, CH_S = 68, IMG_H = 30;
 
-  // edges — 90° orthogonal: down from bottom center, horizontal, down to top center
+  // ── chapter group backgrounds ──
+  if (groups) {
+    const groupsG = document.createElementNS(SVG_NS, 'g');
+    groupsG.setAttribute('class', 'sb-chapter-group');
+    groups.forEach(g => {
+      const pad = 20;
+      const r = document.createElementNS(SVG_NS, 'rect');
+      r.setAttribute('x', g.pxLeft - pad);
+      r.setAttribute('y', g.pyStart - pad);
+      r.setAttribute('width', g.pxRight - g.pxLeft + pad*2);
+      r.setAttribute('height', g.pyEnd - g.pyStart + pad*2);
+      r.setAttribute('rx', 8); r.setAttribute('ry', 8);
+      r.setAttribute('fill', g.color);
+      r.setAttribute('stroke', g.color.replace(/[\d.]+\)$/, s => (parseFloat(s)*3)+')'));
+      r.setAttribute('stroke-width', '1');
+      groupsG.appendChild(r);
+
+      const lbl = document.createElementNS(SVG_NS, 'text');
+      lbl.setAttribute('x', g.pxLeft - pad + 12);
+      lbl.setAttribute('y', g.pyStart - pad + 18);
+      lbl.setAttribute('class', 'sb-chapter-label');
+      lbl.textContent = g.label;
+      groupsG.appendChild(lbl);
+    });
+    svg.insertBefore(groupsG, edgesG);
+  }
+
+  // ── edges — 90° orthogonal ──
   edges.forEach(e => {
     const from = nodeMap[e.from], to = nodeMap[e.to];
     if (!from || !to) return;
     const both = from.filled && to.filled;
+    const fh = from.scene ? CH_S : CH;
+    const th = to.scene ? CH_S : CH;
     const p = document.createElementNS(SVG_NS, 'path');
-    const x1 = from.px, y1 = from.py + CH/2;
-    const x2 = to.px, y2 = to.py - CH/2;
+    const x1 = from.px, y1 = from.py + fh/2;
+    const x2 = to.px, y2 = to.py - th/2;
     const midY = y1 + (y2 - y1) / 2;
-    // straight vertical if same column, otherwise L-shaped with horizontal segment
     if (Math.abs(x1 - x2) < 1) {
       p.setAttribute('d', 'M'+x1+','+y1+' L'+x2+','+y2);
     } else {
@@ -3872,142 +4176,88 @@ function renderSandbox() {
     edgesG.appendChild(p);
   });
 
-  // back-edges — one grouped 90° return path per column branch
-  const crossNode = nodes.find(n => n.id === 'crossroads-choice');
-  if (crossNode) {
-    // tree horizontal bounds for routing outside
-    let treeLX = Infinity, treeRX = -Infinity, treeBY = -Infinity;
-    nodes.forEach(n => {
-      treeLX = Math.min(treeLX, n.px - CW/2);
-      treeRX = Math.max(treeRX, n.px + CW/2);
-      treeBY = Math.max(treeBY, n.py + CH/2);
-    });
-    const bottomY = treeBY + 25; // below all nodes
-
-    // route defs: Scout & Cicero go LEFT, Fountain goes RIGHT
-    const routeDefs = [
-      { routeX: treeLX - 30, side: -1 },
-      { routeX: treeLX - 55, side: -1 },
-      { routeX: treeRX + 30, side:  1 },
-    ];
-
-    // collect all node IDs within a column (including fork descendants)
-    function collectIds(seq) {
-      const r = [];
-      if (!seq) return r;
-      for (const it of seq) { r.push(it.id); if (it.fork) it.fork.forEach(a => r.push(...collectIds(a.nodes))); }
-      return r;
-    }
-
-    fcColumns.forEach((col, ci) => {
-      const ids = new Set(collectIds(col.nodes));
-      const colNodes = nodes.filter(n => ids.has(n.id));
-      if (!colNodes.length) return;
-
-      // deepest node in this column — start point
-      const deepest = colNodes.reduce((a, b) => a.py > b.py ? a : b);
-      const { routeX, side } = routeDefs[ci];
-      const endX = crossNode.px + side * CW / 2;
-      const endY = crossNode.py;
-
-      // 90° path: down from deepest → horizontal below tree → up alongside → horizontal to crossroads
-      const p = document.createElementNS(SVG_NS, 'path');
-      p.setAttribute('d',
-        'M'+deepest.px+','+(deepest.py+CH/2)+
-        ' L'+deepest.px+','+bottomY+
-        ' L'+routeX+','+bottomY+
-        ' L'+routeX+','+endY+
-        ' L'+endX+','+endY);
-      p.setAttribute('class', 'sb-edge back');
-      edgesG.appendChild(p);
-    });
-  }
-
-  // nodes — image-backed cards
+  // ── nodes ──
   const typeNames = { narrator:'narrative', choice:'divergence', dice:'fate check', collect:'acquisition', fail:'terminus' };
-  let selectedNodeG = null;
 
   nodes.forEach(n => {
+    const isScene = n.scene;
+    const cw = isScene ? CW_S : CW;
+    const ch = isScene ? CH_S : CH;
+
     const g = document.createElementNS(SVG_NS, 'g');
     g.setAttribute('transform', 'translate('+n.px+','+n.py+')');
-    const hasImg = !!n.img;
-    const frame = typeof frames !== 'undefined' ? frames.find(f => f.id === n.id) : null;
-    const isFilled = !!frame;
-    g.setAttribute('class', 'sb-node t-'+(n.type||'narrator')+(isFilled?' filled':' empty'));
+    g.setAttribute('class', 'sb-node t-'+(n.type||'narrator')
+      +(n.filled?' filled':' empty')
+      +(isScene?' scene':''));
 
     // card background
     const card = document.createElementNS(SVG_NS, 'rect');
-    card.setAttribute('x', -CW/2); card.setAttribute('y', -CH/2);
-    card.setAttribute('width', CW); card.setAttribute('height', CH);
+    card.setAttribute('x', -cw/2); card.setAttribute('y', -ch/2);
+    card.setAttribute('width', cw); card.setAttribute('height', ch);
     card.setAttribute('class', 'sb-card');
     g.appendChild(card);
 
-    // scene image as card background (clipped to card shape)
-    if (hasImg) {
-      const imgEl = document.createElementNS(SVG_NS, 'image');
-      imgEl.setAttribute('href', n.img);
-      imgEl.setAttribute('x', -CW/2); imgEl.setAttribute('y', -CH/2);
-      imgEl.setAttribute('width', CW); imgEl.setAttribute('height', CH);
-      imgEl.setAttribute('preserveAspectRatio', 'xMidYMid slice');
-      imgEl.setAttribute('clip-path', 'url(#sb-card-clip)');
-      imgEl.setAttribute('opacity', isFilled ? '0.75' : '0.4');
-      g.appendChild(imgEl);
+    // image area — real image or placeholder rect
+    if (n.img) {
+      const clipId = 'sb-clip-'+n.nid;
+      const clip = document.createElementNS(SVG_NS, 'clipPath');
+      clip.setAttribute('id', clipId);
+      const clipR = document.createElementNS(SVG_NS, 'rect');
+      clipR.setAttribute('x', -cw/2+3); clipR.setAttribute('y', -ch/2+3);
+      clipR.setAttribute('width', cw-6); clipR.setAttribute('height', IMG_H+2);
+      clipR.setAttribute('rx', 3); clipR.setAttribute('ry', 3);
+      clip.appendChild(clipR);
+      g.appendChild(clip);
 
-      // gradient overlay for text readability
-      const fade = document.createElementNS(SVG_NS, 'rect');
-      fade.setAttribute('x', -CW/2); fade.setAttribute('y', -CH/2);
-      fade.setAttribute('width', CW); fade.setAttribute('height', CH);
-      fade.setAttribute('class', 'sb-img-fade');
-      g.appendChild(fade);
+      const img = document.createElementNS(SVG_NS, 'image');
+      img.setAttributeNS('http://www.w3.org/1999/xlink', 'href', n.img);
+      img.setAttribute('x', -cw/2+3); img.setAttribute('y', -ch/2+3);
+      img.setAttribute('width', cw-6); img.setAttribute('height', IMG_H+2);
+      img.setAttribute('preserveAspectRatio', 'xMidYMid slice');
+      img.setAttribute('clip-path', 'url(#'+clipId+')');
+      img.setAttribute('class', 'sb-card-img-real');
+      g.appendChild(img);
+    } else {
+      const img = document.createElementNS(SVG_NS, 'rect');
+      img.setAttribute('x', -cw/2+4); img.setAttribute('y', -ch/2+4);
+      img.setAttribute('width', cw-8); img.setAttribute('height', IMG_H);
+      img.setAttribute('class', 'sb-card-img');
+      g.appendChild(img);
     }
 
     // type accent bar — left edge
     const accent = document.createElementNS(SVG_NS, 'rect');
-    accent.setAttribute('x', -CW/2); accent.setAttribute('y', -CH/2);
-    accent.setAttribute('width', 3); accent.setAttribute('height', CH);
+    accent.setAttribute('x', -cw/2); accent.setAttribute('y', -ch/2);
+    accent.setAttribute('width', isScene ? 4 : 3); accent.setAttribute('height', ch);
     accent.setAttribute('class', 'sb-accent');
     g.appendChild(accent);
 
-    // label text — bottom area
+    // label text
     const lbl = document.createElementNS(SVG_NS, 'text');
-    lbl.setAttribute('x', -CW/2+10); lbl.setAttribute('y', CH/2-18);
-    lbl.setAttribute('class', 'sb-label');
+    lbl.setAttribute('x', -cw/2+10); lbl.setAttribute('y', ch/2-10);
+    lbl.setAttribute('class', 'sb-label'+(isScene?' sb-label-scene':''));
     lbl.textContent = n.label;
     g.appendChild(lbl);
 
-    // node id — very small, under label
-    const idLbl = document.createElementNS(SVG_NS, 'text');
-    idLbl.setAttribute('x', -CW/2+10); idLbl.setAttribute('y', CH/2-8);
-    idLbl.setAttribute('class', 'sb-id-label');
-    idLbl.textContent = n.id;
-    g.appendChild(idLbl);
-
-    // type text — top right corner
+    // type text
     const typ = document.createElementNS(SVG_NS, 'text');
-    typ.setAttribute('x', CW/2-4); typ.setAttribute('y', -CH/2+12);
+    typ.setAttribute('x', cw/2-4); typ.setAttribute('y', -ch/2+10);
     typ.setAttribute('text-anchor', 'end');
     typ.setAttribute('class', 'sb-type-label');
     typ.textContent = typeNames[n.type] || '';
     g.appendChild(typ);
 
-    // click → open detail panel
-    g.addEventListener('click', function(ev) {
-      if (sbDragging) return;
-      ev.stopPropagation();
-      if (selectedNodeG) selectedNodeG.classList.remove('selected');
-      g.classList.add('selected');
-      selectedNodeG = g;
-      openSbDetail(n, frame);
-    });
-
-    // tooltip on hover
+    // tooltip with tip text
     g.addEventListener('mouseenter', function() {
       if (sbDragging) return;
       const tt = document.getElementById('sandbox-tooltip');
       document.getElementById('sandbox-tt-title').textContent = n.label;
-      document.getElementById('sandbox-tt-text').innerHTML = isFilled
-        ? '<p>'+(typeNames[n.type]||'narrative')+' — click to inspect</p>'
-        : '<p>Uncharted — no content yet</p>';
+      const status = n.filled ? 'Written' : 'Planned';
+      const typeStr = typeNames[n.type] || 'narrative';
+      const tipHtml = n.tip
+        ? '<p>'+status+' · '+typeStr+(isScene?' · scene':'')+'</p><p>'+n.tip+'</p>'
+        : '<p>'+status+' · '+typeStr+'</p>';
+      document.getElementById('sandbox-tt-text').innerHTML = tipHtml;
       tt.classList.add('show');
       const rect = g.getBoundingClientRect();
       tt.style.left = Math.min(rect.right+8, window.innerWidth-300)+'px';
@@ -4017,12 +4267,23 @@ function renderSandbox() {
       document.getElementById('sandbox-tooltip').classList.remove('show');
     });
 
+    // click → open detail panel
+    g.style.cursor = 'pointer';
+    g.addEventListener('click', function(e) {
+      if (sbDragMoved) return;
+      e.stopPropagation();
+      sbOpenDetail(n);
+    });
+
     nodesG.appendChild(g);
   });
 
-  const written = typeof frames !== 'undefined'
-    ? nodes.filter(n => frames.some(f => f.id === n.id)).length : 0;
-  document.getElementById('sandbox-stats').textContent = written+' / '+nodes.length+' charted';
+  // stats — chapter breakdown
+  const preludeFilled = nodes.filter(n => n.filled).length;
+  const scenesFilled = nodes.filter(n => n.scene && n.filled).length;
+  const scenesTotal = nodes.filter(n => n.scene).length;
+  document.getElementById('sandbox-stats').textContent =
+    preludeFilled+' / '+nodes.length+' charted  ·  '+scenesFilled+'/'+scenesTotal+' scenes';
 
   // fit to content
   if (!sbInitialized) {
@@ -4043,50 +4304,124 @@ function renderSandbox() {
   }
 }
 
-/* ── detail panel logic ── */
-const fcTypeLabelsLong = { narrator:'Narrative', choice:'Choice Point', dice:'Dice Check', collect:'Collection', fail:'Outcome' };
+/* ══ DETAIL PANEL — node click → show content ══ */
+const sbFrameMap = {
+  'a1':'cicero-monologue', 'a1-cross':'crossroads-choice',
+  'a1-scout':'look-around', 'a1-climb':'climb-obelisk',
+  'a1-climb-ok':'climb-success', 'a1-climb-fail':'climb-failed',
+  'a1-tree':'find-ridge', 'a1-tree-ok':'tree-success', 'a1-tree-fail':'tree-failed',
+  'a1-wander':'wander-explore',
+  'a1-cicero':'talk-cicero', 'a1-cic-listen':'cicero-listen', 'a1-cic-leave':'cicero-leave',
+  'a1-fountain':'examine-fountain', 'a1-desk':'fountain-desk',
+  'a1-scroll':'scroll-check-1', 'a1-scroll-ok':'scroll-revelation', 'a1-scroll-fail':'scrolls-dust',
+  // A2
+  'a2':'obelisk-clock', 'a2-postcards':'obelisk-postcards', 'a2-clock':'obelisk-clock-study',
+  'a2-silver':'silver-postcard', 'a2-take':'postcard-take', 'a2-leave':'postcard-leave',
+  'a2-quicken':'clock-quicken',
+};
 
-function openSbDetail(node, frame) {
-  const panel = document.getElementById('sb-detail-panel');
-  const img = document.getElementById('sb-detail-img');
-  const title = document.getElementById('sb-detail-title');
-  const badge = document.getElementById('sb-detail-type-badge');
-  const body = document.getElementById('sb-detail-body');
+function sbOpenDetail(n) {
+  const panel = document.getElementById('sb-detail');
+  const typeNames = { narrator:'narrative', choice:'divergence', dice:'fate check', collect:'acquisition', fail:'terminus' };
 
-  img.src = node.img || '';
-  title.textContent = node.label;
-  badge.textContent = fcTypeLabelsLong[node.type] || node.type;
+  // header
+  document.getElementById('sb-detail-type').textContent =
+    (typeNames[n.type]||'narrative') + (n.scene ? ' · scene' : '');
+  document.getElementById('sb-detail-title').textContent = n.label;
 
-  let html = '';
-  if (frame) {
-    if (frame.speaker) {
-      html += '<div class="sb-d-speaker"><span class="glyph">'+frame.speaker.glyph+'</span> '+frame.speaker.name+'</div>';
-    }
-    if (frame.text && frame.text.length) {
-      html += '<div class="sb-d-text">'+frame.text.join('<br><br>')+'</div>';
-    }
-    if (frame.choices && frame.choices.length) {
-      html += '<div class="sb-d-choices">';
-      frame.choices.forEach(c => {
-        html += '<div class="sb-d-choice"><span class="icon">'+c.icon+'</span> '+c.label+'</div>';
-      });
-      html += '</div>';
-    }
-    if (frame.diceCheck) {
-      html += '<div class="sb-d-dice">🎲 '+frame.diceCheck.label+' — DC '+frame.diceCheck.dc+'</div>';
-    }
-  } else {
-    html = '<div class="sb-d-empty">No content written yet.<br>This node awaits its story.</div>';
+  // image
+  const imgWrap = document.getElementById('sb-detail-img-wrap');
+  imgWrap.innerHTML = '';
+  if (n.img) {
+    const img = document.createElement('img');
+    img.src = n.img; img.alt = n.label;
+    if (imgFocus[n.img]) img.style.objectPosition = imgFocus[n.img];
+    imgWrap.appendChild(img);
   }
-  body.innerHTML = html;
+
+  // body content
+  const body = document.getElementById('sb-detail-body');
+  body.innerHTML = '';
+
+  // status badge
+  const badge = document.createElement('span');
+  badge.className = 'sb-detail-status ' + (n.filled ? 'written' : 'planned');
+  badge.textContent = n.filled ? 'written' : 'planned';
+  body.appendChild(badge);
+
+  // look up frame content
+  const frameId = sbFrameMap[n.id];
+  const frame = frameId ? frames.find(f => f.id === frameId) : null;
+
+  if (frame) {
+    // speaker
+    if (frame.speaker) {
+      const sp = document.createElement('div');
+      sp.className = 'sb-detail-speaker';
+      sp.innerHTML = '<span class="sb-detail-speaker-glyph">'+frame.speaker.glyph+'</span>'
+        + '<span class="sb-detail-speaker-name">'+frame.speaker.name+'</span>';
+      body.appendChild(sp);
+    }
+
+    // story text
+    if (frame.text && frame.text.length) {
+      frame.text.forEach(t => {
+        const p = document.createElement('p');
+        p.innerHTML = t;
+        body.appendChild(p);
+      });
+    }
+
+    // choices
+    if (frame.choices && frame.choices.length) {
+      const cw = document.createElement('div');
+      cw.className = 'sb-detail-choices';
+      frame.choices.forEach(c => {
+        const ch = document.createElement('div');
+        ch.className = 'sb-detail-choice';
+        ch.innerHTML = '<span class="sb-detail-choice-icon">'+c.icon+'</span> '+c.label;
+        cw.appendChild(ch);
+      });
+      body.appendChild(cw);
+    }
+
+    // dice check
+    if (frame.diceCheck) {
+      const dc = document.createElement('div');
+      dc.className = 'sb-detail-dice';
+      dc.innerHTML = '<span class="sb-detail-dice-icon">\uD83C\uDFB2</span>'
+        + '<span>'+(frame.diceCheck.label||'Skill Check')+'</span>'
+        + '<span class="sb-detail-dice-dc">DC '+frame.diceCheck.dc+'</span>';
+      body.appendChild(dc);
+    }
+
+    // continue label
+    if (frame.continueLabel && !frame.choices && !frame.diceCheck) {
+      const cont = document.createElement('div');
+      cont.className = 'sb-detail-continue';
+      cont.innerHTML = '<span class="sb-detail-continue-arrow">\u25B6</span> '+frame.continueLabel;
+      body.appendChild(cont);
+    }
+  } else if (n.tip) {
+    // no frame content — show tip as description
+    const tip = document.createElement('div');
+    tip.className = 'sb-detail-tip';
+    tip.textContent = n.tip;
+    body.appendChild(tip);
+  }
+
   panel.classList.add('open');
 }
 
-function closeSbDetail() {
-  document.getElementById('sb-detail-panel').classList.remove('open');
-  const sel = document.querySelector('.sb-node.selected');
-  if (sel) sel.classList.remove('selected');
-}
+// close detail panel
+document.getElementById('sb-detail-close').addEventListener('click', function() {
+  document.getElementById('sb-detail').classList.remove('open');
+});
+// click outside nodes on canvas → close
+document.getElementById('sandbox-canvas').addEventListener('click', function(e) {
+  if (e.target.closest('.sb-node')) return;
+  document.getElementById('sb-detail').classList.remove('open');
+});
 
 // image focus hints per image file
 const imgFocus = {
@@ -4104,8 +4439,6 @@ const imgFocus = {
   'ae-tree-top.png': 'center 45%',
   'ae-tree-fall.png': 'center 60%',
   'ae-long-walk.png': 'center 50%',
-  'ae-cicero-wakeup.png': 'center 55%',
-  'ae-waking-crossroads.png': 'center 45%',
 };
 
 function mkBlock(n) {
