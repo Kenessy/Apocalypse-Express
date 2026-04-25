@@ -211,83 +211,154 @@ html, body {
 
 /* edges — orthogonal 90° connectors */
 .sb-edge { fill:none; stroke-width:1.5; stroke-linecap:square; stroke-linejoin:miter;
-  stroke:rgba(201,165,80,.12); }
+  stroke:rgba(201,165,80,.25); }
 /* chosen path — glowing gold */
-.sb-edge.chosen { stroke:rgba(230,190,80,.6); stroke-width:2.5;
-  filter:drop-shadow(0 0 4px rgba(230,190,80,.25)); }
-.sb-edge.fork-success.chosen { stroke:rgba(140,220,160,.55); filter:drop-shadow(0 0 4px rgba(140,220,160,.2)); }
-.sb-edge.fork-fail.chosen { stroke:rgba(220,130,120,.55); filter:drop-shadow(0 0 4px rgba(220,130,120,.2)); }
+.sb-edge.chosen { stroke:rgba(230,190,80,.7); stroke-width:2.5;
+  filter:drop-shadow(0 0 5px rgba(230,190,80,.3)); }
+.sb-edge.fork-success.chosen { stroke:rgba(140,220,160,.6); filter:drop-shadow(0 0 4px rgba(140,220,160,.25)); }
+.sb-edge.fork-fail.chosen { stroke:rgba(220,130,120,.6); filter:drop-shadow(0 0 4px rgba(220,130,120,.25)); }
+
+/* back-edges — dashed 90° return paths */
+.sb-edge.back { stroke:rgba(201,165,80,.22); stroke-width:1.5; stroke-dasharray:8 5;
+  stroke-linecap:square; stroke-linejoin:miter; fill:none; marker-end:url(#sb-arrow-back); }
 
 /* node group */
-.sb-node { cursor:default; }
+.sb-node { cursor:pointer; }
+.sb-node.selected .sb-card { stroke:rgba(230,190,80,.5) !important;
+  filter:drop-shadow(0 0 10px rgba(230,190,80,.15)) !important; }
 
 /* card background — rounded rect */
 .sb-card {
-  fill:rgba(10,8,16,.75); stroke:rgba(200,180,150,.12); stroke-width:1;
+  fill:rgba(10,8,16,.5); stroke:rgba(200,180,150,.2); stroke-width:1;
   rx:6; ry:6; transition:fill .4s, stroke .4s;
 }
-.sb-node:hover .sb-card { fill:rgba(15,12,22,.85); stroke:rgba(200,180,150,.25); }
+.sb-node:hover .sb-card { stroke:rgba(200,180,150,.45); }
 
-/* image placeholder area inside card */
-.sb-card-img {
-  fill:rgba(200,180,150,.03); rx:4; ry:4;
-}
+/* image overlay gradient */
+.sb-img-fade { fill:url(#sb-img-fade); rx:6; ry:6; pointer-events:none; }
 
 /* type accent bar — left edge */
-.sb-accent { fill:rgba(200,180,150,.15); rx:2; ry:2; transition:fill .4s; }
+.sb-accent { fill:rgba(200,180,150,.3); rx:2; ry:2; transition:fill .4s; }
 
 /* label text */
 .sb-label {
   font-family:'Cormorant Garamond','Garamond','Georgia',serif;
-  font-size:11px; font-weight:500; letter-spacing:.04em;
-  fill:rgba(200,180,150,.4); dominant-baseline:central;
-  transition:fill .4s;
+  font-size:12px; font-weight:600; letter-spacing:.03em;
+  fill:rgba(240,230,210,.85); dominant-baseline:central;
+  transition:fill .4s; text-shadow:0 1px 3px rgba(0,0,0,.6);
 }
-.sb-node:hover .sb-label { fill:rgba(220,200,170,.7); }
+.sb-node:hover .sb-label { fill:rgba(255,248,230,.95); }
 
 /* type text */
 .sb-type-label {
   font-family:'IBM Plex Mono',monospace;
   font-size:7px; font-weight:400; letter-spacing:.12em; text-transform:uppercase;
-  fill:rgba(200,180,150,.2); dominant-baseline:central;
+  fill:rgba(200,180,150,.5); dominant-baseline:central;
   transition:fill .4s;
 }
-.sb-node:hover .sb-type-label { fill:rgba(200,180,150,.4); }
+.sb-node:hover .sb-type-label { fill:rgba(200,180,150,.7); }
 
-/* ── empty state ── */
-.sb-node.empty .sb-card { fill:rgba(8,6,14,.5); stroke:rgba(180,160,140,.06); stroke-dasharray:4 3; }
-.sb-node.empty .sb-accent { fill:rgba(180,160,140,.06); }
-.sb-node.empty .sb-card-img { fill:rgba(180,160,140,.015); }
-.sb-node.empty .sb-label { fill:rgba(180,160,140,.15); }
-.sb-node.empty .sb-type-label { fill:rgba(180,160,140,.08); }
+/* id text — under label */
+.sb-id-label {
+  font-family:'IBM Plex Mono',monospace;
+  font-size:6px; font-weight:400; letter-spacing:.08em;
+  fill:rgba(200,180,150,.25); dominant-baseline:central;
+}
 
-/* ── filled state — on the chosen path ── */
-.sb-node.filled .sb-card { fill:rgba(14,12,20,.85); stroke:rgba(230,190,80,.25);
-  filter:drop-shadow(0 0 6px rgba(230,190,80,.06)); }
-.sb-node.filled .sb-accent { fill:rgba(230,190,80,.5); }
-.sb-node.filled .sb-card-img { fill:rgba(230,190,80,.04); }
-.sb-node.filled .sb-label { fill:rgba(240,210,130,.65); }
-.sb-node.filled .sb-type-label { fill:rgba(230,190,80,.3); }
-.sb-node.filled:hover .sb-card { stroke:rgba(240,210,100,.45);
-  filter:drop-shadow(0 0 10px rgba(240,210,100,.1)); }
-.sb-node.filled:hover .sb-label { fill:rgba(250,225,150,.9); }
+/* ── empty state (no image) ── */
+.sb-node.empty .sb-card { fill:rgba(12,10,20,.7); stroke:rgba(180,160,140,.1); stroke-dasharray:4 3; }
+.sb-node.empty .sb-accent { fill:rgba(180,160,140,.1); }
+.sb-node.empty .sb-label { fill:rgba(180,160,140,.35); }
+.sb-node.empty .sb-type-label { fill:rgba(180,160,140,.18); }
+
+/* ── filled state — has content ── */
+.sb-node.filled .sb-card { stroke:rgba(230,190,80,.3);
+  filter:drop-shadow(0 0 8px rgba(230,190,80,.1)); }
+.sb-node.filled .sb-accent { fill:rgba(230,190,80,.6); }
+.sb-node.filled .sb-label { fill:rgba(250,225,140,.9); }
+.sb-node.filled .sb-type-label { fill:rgba(230,190,80,.45); }
+.sb-node.filled:hover .sb-card { stroke:rgba(240,210,100,.55);
+  filter:drop-shadow(0 0 12px rgba(240,210,100,.18)); }
 
 /* ── type accent colors ── */
-.sb-node.filled.t-choice .sb-accent { fill:rgba(180,205,250,.5); }
-.sb-node.filled.t-choice .sb-card { stroke:rgba(180,205,250,.15); }
-.sb-node.filled.t-choice:hover .sb-card { stroke:rgba(180,205,250,.35); }
+.sb-node.t-choice .sb-accent { fill:rgba(130,170,250,.5); }
+.sb-node.filled.t-choice .sb-accent { fill:rgba(130,170,250,.7); }
+.sb-node.filled.t-choice .sb-card { stroke:rgba(130,170,250,.25); }
 
-.sb-node.filled.t-dice .sb-accent { fill:rgba(255,220,100,.5); }
-.sb-node.filled.t-dice .sb-card { stroke:rgba(255,220,100,.15); }
-.sb-node.filled.t-dice:hover .sb-card { stroke:rgba(255,220,100,.35); }
+.sb-node.t-dice .sb-accent { fill:rgba(255,200,60,.5); }
+.sb-node.filled.t-dice .sb-accent { fill:rgba(255,200,60,.7); }
+.sb-node.filled.t-dice .sb-card { stroke:rgba(255,200,60,.25); }
 
-.sb-node.filled.t-collect .sb-accent { fill:rgba(140,240,170,.5); }
-.sb-node.filled.t-collect .sb-card { stroke:rgba(140,240,170,.15); }
-.sb-node.filled.t-collect:hover .sb-card { stroke:rgba(140,240,170,.35); }
+.sb-node.t-collect .sb-accent { fill:rgba(100,220,140,.5); }
+.sb-node.filled.t-collect .sb-accent { fill:rgba(100,220,140,.7); }
+.sb-node.filled.t-collect .sb-card { stroke:rgba(100,220,140,.25); }
 
-.sb-node.filled.t-fail .sb-accent { fill:rgba(240,140,130,.5); }
-.sb-node.filled.t-fail .sb-card { stroke:rgba(240,140,130,.15); }
-.sb-node.filled.t-fail:hover .sb-card { stroke:rgba(240,140,130,.35); }
+.sb-node.t-fail .sb-accent { fill:rgba(240,110,100,.5); }
+.sb-node.filled.t-fail .sb-accent { fill:rgba(240,110,100,.7); }
+.sb-node.filled.t-fail .sb-card { stroke:rgba(240,110,100,.25); }
+
+/* ── detail panel ── */
+.sb-detail-panel {
+  position:absolute; top:0; left:0; width:340px; height:100%;
+  background:rgba(6,5,14,.94); border-right:1px solid rgba(201,165,80,.12);
+  z-index:20; overflow-y:auto; transform:translateX(-100%);
+  transition:transform .3s cubic-bezier(.4,0,.2,1);
+  backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+}
+.sb-detail-panel.open { transform:translateX(0); }
+.sb-detail-close {
+  position:sticky; top:0; float:right; width:32px; height:32px; margin:10px;
+  background:rgba(200,180,150,.06); border:1px solid rgba(200,180,150,.1);
+  border-radius:4px; color:rgba(200,180,150,.4); font-size:18px;
+  cursor:pointer; z-index:2; transition:all .2s;
+}
+.sb-detail-close:hover { background:rgba(200,180,150,.12); color:rgba(200,180,150,.7); }
+.sb-detail-img {
+  width:100%; aspect-ratio:16/9; object-fit:cover; display:block;
+  border-bottom:1px solid rgba(201,165,80,.08);
+}
+.sb-detail-img[src=""] { display:none; }
+.sb-detail-header { padding:16px 20px 0; }
+.sb-detail-header h3 {
+  font-family:'Cormorant Garamond','Garamond','Georgia',serif;
+  font-size:20px; font-weight:600; color:rgba(230,210,170,.85);
+  margin:0 0 4px; letter-spacing:.02em;
+}
+.sb-detail-type-badge {
+  display:inline-block; font-family:'IBM Plex Mono',monospace;
+  font-size:9px; letter-spacing:.12em; text-transform:uppercase;
+  padding:2px 8px; border-radius:2px;
+  color:rgba(200,180,150,.5); background:rgba(200,180,150,.06);
+  border:1px solid rgba(200,180,150,.08);
+}
+.sb-detail-body {
+  padding:16px 20px 24px;
+  font-family:'Cormorant Garamond','Garamond','Georgia',serif;
+  font-size:14px; line-height:1.7; color:rgba(200,180,150,.55);
+}
+.sb-detail-body .sb-d-speaker {
+  display:flex; align-items:center; gap:8px; margin:12px 0 8px;
+  font-size:11px; color:rgba(201,165,80,.45);
+  font-family:'IBM Plex Mono',monospace; letter-spacing:.08em; text-transform:uppercase;
+}
+.sb-detail-body .sb-d-speaker .glyph { font-size:14px; }
+.sb-detail-body .sb-d-text { color:rgba(210,195,170,.6); margin:0 0 16px; }
+.sb-detail-body .sb-d-choices { margin:12px 0; }
+.sb-detail-body .sb-d-choice {
+  display:flex; align-items:center; gap:8px; padding:8px 12px; margin:4px 0;
+  background:rgba(180,205,250,.04); border:1px solid rgba(180,205,250,.08);
+  border-radius:4px; font-size:12px; color:rgba(180,205,250,.5);
+}
+.sb-detail-body .sb-d-choice .icon { font-size:14px; opacity:.6; }
+.sb-detail-body .sb-d-dice {
+  display:flex; align-items:center; gap:10px; padding:10px 14px;
+  background:rgba(255,220,100,.04); border:1px solid rgba(255,220,100,.08);
+  border-radius:4px; font-size:12px; color:rgba(255,220,100,.5);
+}
+.sb-detail-body .sb-d-empty {
+  padding:20px; text-align:center; color:rgba(180,160,140,.2);
+  font-style:italic; font-size:13px;
+}
 
 /* ── tooltip ── */
 .ae-sandbox-tooltip {
@@ -2067,16 +2138,28 @@ html, body {
       <svg id="sandbox-svg" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <pattern id="sb-dotgrid" width="24" height="24" patternUnits="userSpaceOnUse">
-            <circle cx="12" cy="12" r="1" fill="rgba(200,180,150,0.09)"/>
+            <circle cx="12" cy="12" r="1" fill="rgba(200,180,150,0.14)"/>
           </pattern>
           <pattern id="sb-medgrid" width="120" height="120" patternUnits="userSpaceOnUse">
-            <line x1="0" y1="0" x2="120" y2="0" stroke="rgba(200,180,150,0.04)" stroke-width="0.5"/>
-            <line x1="0" y1="0" x2="0" y2="120" stroke="rgba(200,180,150,0.04)" stroke-width="0.5"/>
+            <line x1="0" y1="0" x2="120" y2="0" stroke="rgba(200,180,150,0.1)" stroke-width="0.5"/>
+            <line x1="0" y1="0" x2="0" y2="120" stroke="rgba(200,180,150,0.1)" stroke-width="0.5"/>
           </pattern>
           <pattern id="sb-majgrid" width="360" height="360" patternUnits="userSpaceOnUse">
-            <line x1="0" y1="0" x2="360" y2="0" stroke="rgba(200,180,150,0.07)" stroke-width="1"/>
-            <line x1="0" y1="0" x2="0" y2="360" stroke="rgba(200,180,150,0.07)" stroke-width="1"/>
+            <line x1="0" y1="0" x2="360" y2="0" stroke="rgba(200,180,150,0.1)" stroke-width="1"/>
+            <line x1="0" y1="0" x2="0" y2="360" stroke="rgba(200,180,150,0.1)" stroke-width="1"/>
           </pattern>
+          <marker id="sb-arrow-back" viewBox="0 0 8 6" refX="8" refY="3"
+                  markerWidth="6" markerHeight="5" orient="auto">
+            <path d="M0,0.5 L7,3 L0,5.5" fill="rgba(201,165,80,.2)" stroke="none"/>
+          </marker>
+          <clipPath id="sb-card-clip">
+            <rect x="-80" y="-50" width="160" height="100" rx="6" ry="6"/>
+          </clipPath>
+          <linearGradient id="sb-img-fade" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#06050e" stop-opacity="0"/>
+            <stop offset="0.55" stop-color="#06050e" stop-opacity="0.15"/>
+            <stop offset="1" stop-color="#06050e" stop-opacity="0.7"/>
+          </linearGradient>
         </defs>
         <rect x="-5000" y="-5000" width="10000" height="10000" fill="#06050e"/>
         <rect x="-5000" y="-5000" width="10000" height="10000" fill="url(#sb-dotgrid)"/>
@@ -2085,6 +2168,15 @@ html, body {
         <g id="sb-edges"></g>
         <g id="sb-nodes"></g>
       </svg>
+      <div class="sb-detail-panel" id="sb-detail-panel">
+        <button class="sb-detail-close" onclick="closeSbDetail()">×</button>
+        <img class="sb-detail-img" id="sb-detail-img" src="" alt="">
+        <div class="sb-detail-header">
+          <h3 id="sb-detail-title"></h3>
+          <span class="sb-detail-type-badge" id="sb-detail-type-badge"></span>
+        </div>
+        <div class="sb-detail-body" id="sb-detail-body"></div>
+      </div>
     </div>
     <div class="ae-sandbox-zoom">
       <button class="ae-sandbox-zoom-btn" id="sandbox-zoom-in" title="Zoom in">+</button>
@@ -2449,6 +2541,7 @@ function toggleCollection() {
 const frames = [
   {
     id: 'cicero-monologue',
+    sceneBg: 'ae-cicero-wakeup.png',
     speaker: { name: 'Cicero', glyph: '†' },
     text: [
       'Morning, noon, evening — twilight by day, darkness by night... Our life is a loop of shadow and light. An endless loop of — well. But what <em class="inline">is</em> a loop? A circuit where we wake up, go to work, then fall asleep. Every day, the same exact thing, around and around — like a hamster in a wheel. Neuron A fires to B, B fires to C, C fires back to A, forever repeating the same cycle.',
@@ -2463,6 +2556,7 @@ const frames = [
   },
   {
     id: 'waking-up',
+    sceneBg: 'ae-waking-crossroads.png',
     speaker: { name: 'Cicero', glyph: '†' },
     text: [
       'The mist is rising — slowly, deliberately — from the obsidian landscape. Something fully strange, yet awfully familiar. As if you had been here before... in a dream you never quite finished.',
@@ -3362,8 +3456,8 @@ function renderCollectionFull() {
 ══════════════════════════════════════ */
 /* ── flowchart data: flat column structure ── */
 const fcIntro = [
-  { id:'cicero-monologue', label:'Cicero', type:'narrator', img:'ae-null-meridian.png', tip:'Opening monologue — loops, free will, the nature of choice' },
-  { id:'waking-up', label:'Waking', type:'narrator', img:'ae-null-meridian.png', tip:'The mist rises from the obsidian landscape' },
+  { id:'cicero-monologue', label:'Cicero', type:'narrator', img:'ae-cicero-wakeup.png', tip:'Opening monologue — loops, free will, the nature of choice' },
+  { id:'waking-up', label:'Waking', type:'narrator', img:'ae-waking-crossroads.png', tip:'The mist rises from the obsidian landscape' },
   { id:'stand-up', label:'Stand Up', type:'narrator', img:'ae-standup-crossroads.png', tip:'You stand. The crossroads reveals itself.' },
   { id:'crossroads-choice', label:'Crossroads', type:'choice', img:'ae-standup-crossroads.png', tip:'Three paths diverge at the fountain' },
 ];
@@ -3593,6 +3687,10 @@ let sbFitVB = { x:0, y:0, w:1600, h:1200 };
 (function() {
   const container = document.getElementById('sandbox-canvas');
 
+  container.addEventListener('click', function(e) {
+    if (!e.target.closest('.sb-node') && !e.target.closest('.sb-detail-panel')) closeSbDetail();
+  });
+
   container.addEventListener('mousedown', function(e) {
     if (e.button !== 0) return;
     sbDragging = true;
@@ -3653,47 +3751,95 @@ let sbFitVB = { x:0, y:0, w:1600, h:1200 };
   container.addEventListener('touchend', function() { sbDragging = false; });
 })();
 
-/* ── dummy decision tree ── */
-function buildDummyTree() {
-  const COL_W = 220, ROW_H = 100;
+/* ── real story tree layout from fcIntro + fcColumns ── */
+function buildRealTree() {
+  const COL_W = 220, ROW_H = 140;
   const nodes = [], edges = [];
   let nid = 0;
-  function add(id, label, type, x, y, filled) { const n = { nid:nid++, id, label, type, x, y, filled }; nodes.push(n); return n.nid; }
-  function link(a, b, cls) { edges.push({ from:a, to:b, cls:cls||'' }); }
 
-  const n0 = add('d-prologue','Prologue','narrator',0,0,true);
-  const n1 = add('d-awakening','Awakening','narrator',0,1,true);
-  const n2 = add('d-crossroads','Crossroads','choice',0,2,true);
-  link(n0,n1); link(n1,n2);
+  function addN(id, label, type, img) {
+    const n = { nid:nid++, id, label, type, img:img||'', x:0, y:0, filled:false };
+    nodes.push(n); return n;
+  }
+  function addE(a, b) { edges.push({ from:a, to:b, cls:'' }); }
 
-  const a0 = add('d-vault-enter','Enter Vault','narrator',-3,3.5,true);
-  const a1 = add('d-vault-lock','Pick Lock','dice',-3,4.8,true);
-  const a2 = add('d-vault-open','Treasure','collect',-3.8,6.2,true);
-  const a3 = add('d-vault-trap','Trap Spring','fail',-2.2,6.2,false);
-  link(n2,a0); link(a0,a1); link(a1,a2,'fork-success'); link(a1,a3,'fork-fail');
+  /* width (in grid cols) needed by a node sequence — driven by fork spread */
+  function calcW(seq) {
+    if (!seq || !seq.length) return 1;
+    let w = 1;
+    for (const item of seq) {
+      if (item.fork) {
+        const fw = item.fork.reduce((s, arm) => s + calcW(arm.nodes), 0);
+        if (fw > w) w = fw;
+      }
+    }
+    return w;
+  }
 
-  const b0 = add('d-oracle-path','Seek Oracle','narrator',0,3.5,true);
-  const b1 = add('d-oracle-meet','The Question','choice',0,4.8,true);
-  const b2 = add('d-oracle-truth','Truth','collect',-0.8,6.2,false);
-  const b3 = add('d-oracle-lie','Deception','narrator',0.8,6.2,true);
-  const b4 = add('d-oracle-end','Revelation','collect',0.8,7.5,false);
-  link(n2,b0); link(b0,b1); link(b1,b2); link(b1,b3); link(b3,b4);
+  /* lay out a sequence vertically; fork arms spread symmetrically around startX
+     returns { rootNid, depth } */
+  function layoutSeq(seq, startX, startY) {
+    if (!seq || !seq.length) return null;
+    let y = startY, rootNid = null, prevNid = null;
 
-  const c0 = add('d-wild-enter','Into the Wild','narrator',3,3.5,true);
-  const c1 = add('d-wild-beast','Beast','dice',3,4.8,false);
-  const c2 = add('d-wild-tame','Tame','collect',2.2,6.2,false);
-  const c3 = add('d-wild-flee','Flee','fail',3.8,6.2,false);
-  link(n2,c0); link(c0,c1); link(c1,c2,'fork-success'); link(c1,c3,'fork-fail');
+    for (const item of seq) {
+      const n = addN(item.id, item.label, item.type, item.img);
+      n.x = startX; n.y = y;
+      if (rootNid === null) rootNid = n.nid;
+      if (prevNid !== null) addE(prevNid, n.nid);
+      prevNid = n.nid;
+      y++;
 
+      if (item.fork) {
+        const armW = item.fork.map(arm => calcW(arm.nodes));
+        const total = armW.reduce((s, w) => s + w, 0);
+        let ax = startX - (total - 1) / 2;
+        let maxD = 0;
+
+        for (let i = 0; i < item.fork.length; i++) {
+          const cx = ax + (armW[i] - 1) / 2;
+          const r = layoutSeq(item.fork[i].nodes, cx, y);
+          if (r) { addE(n.nid, r.rootNid); if (r.depth > maxD) maxD = r.depth; }
+          ax += armW[i];
+        }
+        y += maxD;
+      }
+    }
+    return { rootNid, depth: y - startY };
+  }
+
+  /* ── intro spine (center, x=0) ── */
+  let y = 0, prevNid = null;
+  for (const item of fcIntro) {
+    const n = addN(item.id, item.label, item.type, item.img);
+    n.x = 0; n.y = y;
+    if (prevNid !== null) addE(prevNid, n.nid);
+    prevNid = n.nid; y++;
+  }
+  const crossNid = prevNid;
+
+  /* ── three column branches ── */
+  const colW = fcColumns.map(c => calcW(c.nodes));
+  const totalW = colW.reduce((s, w) => s + w, 0);
+  let cx = -(totalW - 1) / 2;
+  for (let i = 0; i < fcColumns.length; i++) {
+    const center = cx + (colW[i] - 1) / 2;
+    const r = layoutSeq(fcColumns[i].nodes, center, y);
+    if (r) addE(crossNid, r.rootNid);
+    cx += colW[i];
+  }
+
+  /* ── pixel conversion ── */
   let minX=Infinity, minY=Infinity, maxX=-Infinity, maxY=-Infinity;
   nodes.forEach(n => { if(n.x<minX)minX=n.x; if(n.y<minY)minY=n.y; if(n.x>maxX)maxX=n.x; if(n.y>maxY)maxY=n.y; });
-  const padX=180, padY=120;
+  const padX=240, padY=150;
   nodes.forEach(n => { n.px=(n.x-minX)*COL_W+padX; n.py=(n.y-minY)*ROW_H+padY; });
   return { nodes, edges, gridW:(maxX-minX)*COL_W+padX*2+COL_W, gridH:(maxY-minY)*ROW_H+padY*2+ROW_H };
 }
 
 function renderSandbox() {
-  const layout = buildDummyTree();
+  sbInitialized = false; // re-fit viewport to new layout
+  const layout = buildRealTree();
   const { nodes, edges } = layout;
 
   const edgesG = document.getElementById('sb-edges');
@@ -3705,7 +3851,7 @@ function renderSandbox() {
   nodes.forEach(n => { nodeMap[n.nid] = n; });
 
   // card dimensions
-  const CW = 140, CH = 56, IMG_H = 30;
+  const CW = 160, CH = 100;
 
   // edges — 90° orthogonal: down from bottom center, horizontal, down to top center
   edges.forEach(e => {
@@ -3726,13 +3872,68 @@ function renderSandbox() {
     edgesG.appendChild(p);
   });
 
-  // nodes — rectangular cards
+  // back-edges — one grouped 90° return path per column branch
+  const crossNode = nodes.find(n => n.id === 'crossroads-choice');
+  if (crossNode) {
+    // tree horizontal bounds for routing outside
+    let treeLX = Infinity, treeRX = -Infinity, treeBY = -Infinity;
+    nodes.forEach(n => {
+      treeLX = Math.min(treeLX, n.px - CW/2);
+      treeRX = Math.max(treeRX, n.px + CW/2);
+      treeBY = Math.max(treeBY, n.py + CH/2);
+    });
+    const bottomY = treeBY + 25; // below all nodes
+
+    // route defs: Scout & Cicero go LEFT, Fountain goes RIGHT
+    const routeDefs = [
+      { routeX: treeLX - 30, side: -1 },
+      { routeX: treeLX - 55, side: -1 },
+      { routeX: treeRX + 30, side:  1 },
+    ];
+
+    // collect all node IDs within a column (including fork descendants)
+    function collectIds(seq) {
+      const r = [];
+      if (!seq) return r;
+      for (const it of seq) { r.push(it.id); if (it.fork) it.fork.forEach(a => r.push(...collectIds(a.nodes))); }
+      return r;
+    }
+
+    fcColumns.forEach((col, ci) => {
+      const ids = new Set(collectIds(col.nodes));
+      const colNodes = nodes.filter(n => ids.has(n.id));
+      if (!colNodes.length) return;
+
+      // deepest node in this column — start point
+      const deepest = colNodes.reduce((a, b) => a.py > b.py ? a : b);
+      const { routeX, side } = routeDefs[ci];
+      const endX = crossNode.px + side * CW / 2;
+      const endY = crossNode.py;
+
+      // 90° path: down from deepest → horizontal below tree → up alongside → horizontal to crossroads
+      const p = document.createElementNS(SVG_NS, 'path');
+      p.setAttribute('d',
+        'M'+deepest.px+','+(deepest.py+CH/2)+
+        ' L'+deepest.px+','+bottomY+
+        ' L'+routeX+','+bottomY+
+        ' L'+routeX+','+endY+
+        ' L'+endX+','+endY);
+      p.setAttribute('class', 'sb-edge back');
+      edgesG.appendChild(p);
+    });
+  }
+
+  // nodes — image-backed cards
   const typeNames = { narrator:'narrative', choice:'divergence', dice:'fate check', collect:'acquisition', fail:'terminus' };
+  let selectedNodeG = null;
 
   nodes.forEach(n => {
     const g = document.createElementNS(SVG_NS, 'g');
     g.setAttribute('transform', 'translate('+n.px+','+n.py+')');
-    g.setAttribute('class', 'sb-node t-'+(n.type||'narrator')+(n.filled?' filled':' empty'));
+    const hasImg = !!n.img;
+    const frame = typeof frames !== 'undefined' ? frames.find(f => f.id === n.id) : null;
+    const isFilled = !!frame;
+    g.setAttribute('class', 'sb-node t-'+(n.type||'narrator')+(isFilled?' filled':' empty'));
 
     // card background
     const card = document.createElementNS(SVG_NS, 'rect');
@@ -3741,12 +3942,24 @@ function renderSandbox() {
     card.setAttribute('class', 'sb-card');
     g.appendChild(card);
 
-    // image placeholder area (top portion of card)
-    const img = document.createElementNS(SVG_NS, 'rect');
-    img.setAttribute('x', -CW/2+4); img.setAttribute('y', -CH/2+4);
-    img.setAttribute('width', CW-8); img.setAttribute('height', IMG_H);
-    img.setAttribute('class', 'sb-card-img');
-    g.appendChild(img);
+    // scene image as card background (clipped to card shape)
+    if (hasImg) {
+      const imgEl = document.createElementNS(SVG_NS, 'image');
+      imgEl.setAttribute('href', n.img);
+      imgEl.setAttribute('x', -CW/2); imgEl.setAttribute('y', -CH/2);
+      imgEl.setAttribute('width', CW); imgEl.setAttribute('height', CH);
+      imgEl.setAttribute('preserveAspectRatio', 'xMidYMid slice');
+      imgEl.setAttribute('clip-path', 'url(#sb-card-clip)');
+      imgEl.setAttribute('opacity', isFilled ? '0.75' : '0.4');
+      g.appendChild(imgEl);
+
+      // gradient overlay for text readability
+      const fade = document.createElementNS(SVG_NS, 'rect');
+      fade.setAttribute('x', -CW/2); fade.setAttribute('y', -CH/2);
+      fade.setAttribute('width', CW); fade.setAttribute('height', CH);
+      fade.setAttribute('class', 'sb-img-fade');
+      g.appendChild(fade);
+    }
 
     // type accent bar — left edge
     const accent = document.createElementNS(SVG_NS, 'rect');
@@ -3755,29 +3968,46 @@ function renderSandbox() {
     accent.setAttribute('class', 'sb-accent');
     g.appendChild(accent);
 
-    // label text — below image area
+    // label text — bottom area
     const lbl = document.createElementNS(SVG_NS, 'text');
-    lbl.setAttribute('x', -CW/2+10); lbl.setAttribute('y', CH/2-10);
+    lbl.setAttribute('x', -CW/2+10); lbl.setAttribute('y', CH/2-18);
     lbl.setAttribute('class', 'sb-label');
     lbl.textContent = n.label;
     g.appendChild(lbl);
 
+    // node id — very small, under label
+    const idLbl = document.createElementNS(SVG_NS, 'text');
+    idLbl.setAttribute('x', -CW/2+10); idLbl.setAttribute('y', CH/2-8);
+    idLbl.setAttribute('class', 'sb-id-label');
+    idLbl.textContent = n.id;
+    g.appendChild(idLbl);
+
     // type text — top right corner
     const typ = document.createElementNS(SVG_NS, 'text');
-    typ.setAttribute('x', CW/2-4); typ.setAttribute('y', -CH/2+10);
+    typ.setAttribute('x', CW/2-4); typ.setAttribute('y', -CH/2+12);
     typ.setAttribute('text-anchor', 'end');
     typ.setAttribute('class', 'sb-type-label');
     typ.textContent = typeNames[n.type] || '';
     g.appendChild(typ);
 
-    // tooltip
+    // click → open detail panel
+    g.addEventListener('click', function(ev) {
+      if (sbDragging) return;
+      ev.stopPropagation();
+      if (selectedNodeG) selectedNodeG.classList.remove('selected');
+      g.classList.add('selected');
+      selectedNodeG = g;
+      openSbDetail(n, frame);
+    });
+
+    // tooltip on hover
     g.addEventListener('mouseenter', function() {
       if (sbDragging) return;
       const tt = document.getElementById('sandbox-tooltip');
       document.getElementById('sandbox-tt-title').textContent = n.label;
-      document.getElementById('sandbox-tt-text').innerHTML = n.filled
-        ? '<p>Written — '+(typeNames[n.type]||'narrative')+' node</p>'
-        : '<p>Uncharted — awaiting content</p>';
+      document.getElementById('sandbox-tt-text').innerHTML = isFilled
+        ? '<p>'+(typeNames[n.type]||'narrative')+' — click to inspect</p>'
+        : '<p>Uncharted — no content yet</p>';
       tt.classList.add('show');
       const rect = g.getBoundingClientRect();
       tt.style.left = Math.min(rect.right+8, window.innerWidth-300)+'px';
@@ -3790,8 +4020,9 @@ function renderSandbox() {
     nodesG.appendChild(g);
   });
 
-  const filled = nodes.filter(n => n.filled).length;
-  document.getElementById('sandbox-stats').textContent = filled+' / '+nodes.length+' charted';
+  const written = typeof frames !== 'undefined'
+    ? nodes.filter(n => frames.some(f => f.id === n.id)).length : 0;
+  document.getElementById('sandbox-stats').textContent = written+' / '+nodes.length+' charted';
 
   // fit to content
   if (!sbInitialized) {
@@ -3812,6 +4043,51 @@ function renderSandbox() {
   }
 }
 
+/* ── detail panel logic ── */
+const fcTypeLabelsLong = { narrator:'Narrative', choice:'Choice Point', dice:'Dice Check', collect:'Collection', fail:'Outcome' };
+
+function openSbDetail(node, frame) {
+  const panel = document.getElementById('sb-detail-panel');
+  const img = document.getElementById('sb-detail-img');
+  const title = document.getElementById('sb-detail-title');
+  const badge = document.getElementById('sb-detail-type-badge');
+  const body = document.getElementById('sb-detail-body');
+
+  img.src = node.img || '';
+  title.textContent = node.label;
+  badge.textContent = fcTypeLabelsLong[node.type] || node.type;
+
+  let html = '';
+  if (frame) {
+    if (frame.speaker) {
+      html += '<div class="sb-d-speaker"><span class="glyph">'+frame.speaker.glyph+'</span> '+frame.speaker.name+'</div>';
+    }
+    if (frame.text && frame.text.length) {
+      html += '<div class="sb-d-text">'+frame.text.join('<br><br>')+'</div>';
+    }
+    if (frame.choices && frame.choices.length) {
+      html += '<div class="sb-d-choices">';
+      frame.choices.forEach(c => {
+        html += '<div class="sb-d-choice"><span class="icon">'+c.icon+'</span> '+c.label+'</div>';
+      });
+      html += '</div>';
+    }
+    if (frame.diceCheck) {
+      html += '<div class="sb-d-dice">🎲 '+frame.diceCheck.label+' — DC '+frame.diceCheck.dc+'</div>';
+    }
+  } else {
+    html = '<div class="sb-d-empty">No content written yet.<br>This node awaits its story.</div>';
+  }
+  body.innerHTML = html;
+  panel.classList.add('open');
+}
+
+function closeSbDetail() {
+  document.getElementById('sb-detail-panel').classList.remove('open');
+  const sel = document.querySelector('.sb-node.selected');
+  if (sel) sel.classList.remove('selected');
+}
+
 // image focus hints per image file
 const imgFocus = {
   'ae-cicero-close.png': 'center 25%',
@@ -3828,6 +4104,8 @@ const imgFocus = {
   'ae-tree-top.png': 'center 45%',
   'ae-tree-fall.png': 'center 60%',
   'ae-long-walk.png': 'center 50%',
+  'ae-cicero-wakeup.png': 'center 55%',
+  'ae-waking-crossroads.png': 'center 45%',
 };
 
 function mkBlock(n) {
