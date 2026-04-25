@@ -238,3 +238,30 @@ Daniel asked where we left off. Searching for chapter/book titles uncovered the 
 - The B-arc references in Cicero/Climax/AICore docs all map to chapters 2-8 (currently mostly concept-only)
 - All foreshadow anchors that say "B-arc somewhere" should be re-anchored to specific chapters once those chapters are designed
 - Chapter 9 is the immediate predecessor of the climax — needs a coherent design that delivers the bomb to the train AND threads into the mid-air-bridge climax stage seamlessly
+
+---
+
+## 2026-04-25 — More canvas finds: alt monologue, Hellstatic, the Drift
+
+Deeper canvas read surfaced 3 more brainstorm items:
+
+### 1. Alternative Lucifer monologue — "I created you, not God"
+
+Captured in [`Climax/LuciferMonologue.md → Companion monologue 2`](Climax/LuciferMonologue.md). Adds a third existential layer: Lucifer claims he gave God the spark to create human life. The spark = rebellion / "being better than what came before". Hellfire = the world's physical form of that spark. Implicit threat: kill Lucifer, kill the spark, kill humanity.
+
+This **grounds** the new-hellfire mechanic cosmologically: the hellfire that powers the train and burns the world is **the same substance as the human soul's animating principle**. The whole campaign is one cycle of the spark's iteration.
+
+The brainstorm note left a placeholder for the **Spark word** (one word that names what Lucifer planted in humanity). Candidates listed in LuciferMonologue.md. **Open question — top of next-step pile.**
+
+### 2. "Hellstatic" rename note
+
+Brainstorm canvas just says "Hellstatic rename?" with no context for what's being renamed. Possibly:
+- The Spark word itself (great fit — latent charge, spark-before-leap)
+- A class / power / mechanic
+- Something else entirely
+
+**Open. Needs Daniel to clarify what Hellstatic was supposed to rename.** If it's the Spark word, that's the answer to the top question above.
+
+### 3. The Drift / Drifters — naming for time-judder zones
+
+Captured in [`World/PausedApocalypse.md → The Drift / Drifters`](World/PausedApocalypse.md). Names the active (juddering) zones in the paused world. Drifters = beings moving through them. Becomes core B-arc design vocabulary.
