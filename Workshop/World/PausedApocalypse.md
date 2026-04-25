@@ -88,6 +88,22 @@ These **active zones** are where:
 > [!todo] Design implication for B-arc encounters
 > Most B-arc combat / puzzle locations should be **active zones** — there has to be SOMETHING happening to challenge the players. Pure-frozen zones are good for atmosphere, mystery, and "museum" exploration (per `(Procedure) Rarities`: *"the world became a museum"*).
 
+### Naming convention — The Drift / Drifters
+
+> Sourced from brainstorm canvas (`Assets/Canvas/(Canvas) Ideas brainstorming.canvas`).
+
+- **The Drift** — the active zones where time juddering occurs. Not a single place; a phenomenon distributed across the broken Earth wherever the chrono machine's hold weakens.
+- **Drifters** — the beings or people moving in / influenced by the Drift. Possibly:
+  - Anomalous creatures created by physics-disruption (time-folded entities)
+  - Half-revived humans whose deaths are paused mid-fall and partially reversed
+  - Wanderers (player-class?) who have learned to navigate the Drift
+  - Hostile entities that emerge specifically in juddering zones
+
+The naming **immediately enters the design vocabulary** — every B-arc scene that touches an active zone references "the Drift," and any anomalous combatant is a "Drifter" of some specific subtype.
+
+> [!todo] Drifter taxonomy
+> What types of Drifters exist? Hostile, neutral, allied? What rules govern their physics — do they "snap back" when the zone stops juddering?
+
 ---
 
 ## Why the train can move
