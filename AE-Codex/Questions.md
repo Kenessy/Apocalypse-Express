@@ -16,7 +16,11 @@ last_updated: 2026-04-25
 
 ## CORE — story-blocking
 
-### Q1 — What word names what Lucifer planted in humanity? *(re-asked clearly 2026-04-25)*
+### Q1 — What word names what Lucifer planted in humanity? *(re-asked clearly 2026-04-25; word DEFERRED 2026-04-25)*
+
+> [!important] **Word deferred by Daniel: "nemtom még mi azt egyelőre napoljuk"**. Constraints below remain valid for when we revisit. **Surrounding cosmology has been locked** — see Cosmology/Substrate.md "The Spark — divine source of life".
+
+
 
 **Prompt:** In Daniel's brainstorm Lucifer monologue draft, this exact phrasing appears:
 
@@ -102,14 +106,4 @@ Daniel's pick for direction (α / β) determines the candidate space. Then the a
 
 **Prompt:** Brainstorm Canto X title: "Gambit for the 9th rank". The 9 ranks could be the angelic hierarchy (Pseudo-Dionysius: Seraphim, Cherubim, Thrones, Dominions, Virtues, Powers, Principalities, Archangels, Angels) — Lucifer claiming the topmost throne. Or AE-specific cosmic ranks. Which?
 
-**Why it matters:** Affects what Lucifer is actually claiming in his climax monologue.
-
----
-
-## NICE-TO-HAVE — polish / deferred
-
-### Q10 — Drifter taxonomy
-
-What types of Drifters exist (anomalous beings, half-revived humans, others)? Hostility spectrum? Specific physics?
-
-### Q11 — The H
+**Why it matters:*
