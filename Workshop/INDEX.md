@@ -28,6 +28,7 @@ last_updated: 2026-04-25
 | [README.md](README.md) | Conventions for agents working in Workshop |
 | [INDEX.md](INDEX.md) | This file — navigable map |
 | [Factions.md](Factions.md) | Top-level faction map (humanity / Lucifer / AI Core) and the players as the only true free-will agent |
+| [Campaign/Outline.md](Campaign/Outline.md) | **The 10-chapter campaign outline** — backbone everything else hangs off |
 | [SCRATCHPAD.md](SCRATCHPAD.md) | Dated, append-only idea dump |
 
 ---
