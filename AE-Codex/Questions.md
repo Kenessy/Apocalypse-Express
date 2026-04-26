@@ -70,11 +70,19 @@ Daniel's pick for direction (α / β) determines the candidate space. Then the a
 
 ---
 
-### Q5 — Lucifer's first physical appearance — A5, Canto VII, both, or something else?
+### Q5 — Lucifer's presence modes — RESOLVED 2026-04-25 (three-mode system)
 
-**Prompt:** A5 Sundown Saloon has Lucifer in person at the bar (the pact-pitch). Canto VII has Lucifer "materialising for the first time" to chain-melt. Is A5's Lucifer a Hell-side projection / avatar / aspect, while Canto VII is his first **surface materialisation**? Or does A5 also count as a physical appearance?
+**Answer (Daniel):** Three distinct modes:
 
-**Why it matters:** Affects how we narrate Lucifer's presence escalation across the campaign.
+1. **Real form** — in Hell, and on the train at A5 Sundown Saloon (Hell-adjacent metaphysical space)
+2. **Avatar** — physical puppet body in the real world, fixed location, **cannot teleport** (this is why players must bring the Orb to him)
+3. **Hologram** — illusion-projected via mirrors, **player-eyes only**, anywhere
+
+A5 = real form (train is Hell-adjacent). Canto 7 chain-melt = avatar's first physical surface appearance ("Heaven notices"). Holograms throughout the campaign for narrative checkpoints.
+
+**See:** [`Characters/Lucifer.md → "The three presence modes"`](Characters/Lucifer.md#the-three-presence-modes--locked) for the full system.
+
+**Sub-questions opened:** when does the first hologram appearance happen, frequency, avatar persistence — see Q15.
 
 ---
 
@@ -90,10 +98,4 @@ Daniel's pick for direction (α / β) determines the candidate space. Then the a
 
 **Prompt:** Lucifer "stepped onto the fabric of reality and activated the chrono machine" to pause the world. What does it look like? Where does it sit (in Hell? on Earth? in the seal between?). How was it built / from what material?
 
-**Why it matters:** This is the central holding-mechanism of the entire setting. Knowing its form anchors the cosmology.
-
----
-
-### Q8 — Cicero's voice and speech pattern — RESOLVED 2026-04-25
-
-**Answer (Daniel):** *"sztem legyen normális okos dew kicsit régies ember mit akit régebbi korból hoztak el, ilyen davinci szerűség"* — Da Vinci-like Renaissance polymath. Smart, grounded, slightly archaic word choice (not theatrical archaic), patient cadence, observation-driven, 
+**Why it matters:** This is the central holding-mechanism of the entire setting. Knowing
