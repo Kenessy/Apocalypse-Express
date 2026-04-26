@@ -1,10 +1,16 @@
 ---
 type: climax
-status: locked
+status: PARTIALLY-CANON — verbatim text valid, surrounding context superseded
 related: [OVERVIEW.md, EndingsTable.md, ../Factions.md]
 canonical_sources: ["Database/40_Scenes/(Scene) A5 Sundown Saloon.md"]
 last_updated: 2026-04-25
+note: AE-Codex/Climax/Overview.md is the architectural canon; this doc holds the verbatim monologue text which remains valid
 ---
+
+> [!info] **Status: hybrid (2026-04-25)**
+> The **Hungarian verbatim monologue text** in this doc is **still canonical** — Daniel hasn't reframed it.
+>
+> The **surrounding architectural framing** (placement, what triggers it, how it interacts with other climax events) has been **reconsolidated** in [`AE-Codex/Climax/Overview.md`](../../AE-Codex/Climax/Overview.md). For climax-architecture questions, use that.
 
 # Lucifer's Monologue — climax address to God
 
@@ -173,16 +179,4 @@ The brainstorm note left a placeholder: *"in one word: 'xy — we need something
 
 Candidates:
 - **Hellstatic** — possibly the answer, since the brainstorm canvas also has a "Hellstatic rename?" note. Captures latent charge / spark-before-leap. Tonally on-brand.
-- **Will** — Schopenhauerian; the engine that drives all life
-- **Spark** — literal, simple, but maybe too plain
-- **Promethean** — references the myth of stolen fire
-- **Defiance** — direct, but loses the creative-life dimension
-- **Becoming** — captures "being better than what came before"
-- **Ascension** — close but more religious
-- **The Reach** — gestural, reaches past the creator
-- **Insistence** — quiet but heavy
-- **Ember** — already used as imagery in the monologue itself
-- **Surge** — kinetic, alive
-
-Decision blocks: the climax monologue is incomplete without this word.
-
+- 
