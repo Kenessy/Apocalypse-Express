@@ -42,9 +42,7 @@ When **active**:
 Other physical facts:
 - **Spine** with A-Tech-buried safeties (anti-tamper / self-defence measures, undefined specifics)
 - "**Mule-rated**" classification (cargo-class lifting and hauling)
-
-> [!todo] OPEN
-> Daniel-confirm-able: humanoid biped (implied by "loading chair," "spine," "chest panel," "unfolds") vs other body plan? Currently strongly implied humanoid but never stated explicitly.
+- **Humanoid bipedal, human-sized.** *[T1: Daniel 2026-04-26]* Engineering rationale: **standardized to fit human-rated equipment** — doorways, vehicles, tool ergonomics, control panels. Anything designed for human use also accommodates him. This is also why the "loading chair" works for him in the basement crypt.
 
 ---
 
@@ -202,4 +200,4 @@ Open Q18: do Cicero and PAVNN **see Lucifer themselves** in those mirror scenes 
 
 ## Workshop reference
 
-The fuller architecture, including foreshadow timeline and final-speech stub, lives in [`../../Workshop/AICore/PAVNN.md`](../../Workshop/AICore/PAVNN.md). This Codex doc captures only verified canonical content.
+The fuller architecture, including foreshadow timeline and final-speech stub, lives in [`../../Wo
