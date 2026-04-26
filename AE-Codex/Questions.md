@@ -94,10 +94,6 @@ Daniel's pick for direction (α / β) determines the candidate space. Then the a
 
 ---
 
-### Q8 — Cicero's voice and speech pattern
+### Q8 — Cicero's voice and speech pattern — RESOLVED 2026-04-25
 
-**Prompt:** Locked: he's a recurring chronicler-NPC. Open: how does he TALK? Formal/archaic? Clinical? Folksy/aphoristic? Ironic? Distracted? Some mix?
-
-**Why it matters:** Needed before we can write any new Cicero dialogue (e.g. the A3 boarding *"Ah. You're here. Good"* moment, or his train conversations).
-
----
+**Answer (Daniel):** *"sztem legyen normális okos dew kicsit régies ember mit akit régebbi korból hoztak el, ilyen davinci szerűség"* — Da Vinci-like Renaissance polymath. Smart, grounded, slightly archaic word choice (not theatrical archaic), patient cadence, observation-driven, 
