@@ -27,8 +27,13 @@ See [README.md](README.md) for the philosophy and source-tier rules.
 
 ## Empty folders awaiting content
 
-- `Characters/` — Cicero, PAVNN, AI Core, Lucifer, others (each gets a doc when verified facts accumulate)
 - `Items/` — Orb, Quill, Book, Chrono Machine, World Anchor, CRAM, Atomic Bomb (when verified)
+
+## Characters
+
+| Doc | Status |
+|---|---|
+| [Characters/Cicero.md](Characters/Cicero.md) | locked-core (name, voice, pact, awareness, quill, book, sacrifice; some sub-questions open) |
 
 ---
 
@@ -36,4 +41,4 @@ See [README.md](README.md) for the philosophy and source-tier rules.
 
 → [Questions.md](Questions.md)
 
-Ordered by priority: **CORE** (story-blocking) → **IMPORTANT** (next-design-step-blocking) → **NICE-TO-HAVE** (polish, optional).
+Ordered by priority: **CORE** (story-blocking) → **IMPO
