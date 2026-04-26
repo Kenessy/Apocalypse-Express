@@ -20,7 +20,5 @@ See [README.md](README.md) for the philosophy and source-tier rules.
 | [Cosmology/PausedApocalypse.md](Cosmology/PausedApocalypse.md) | The double apocalypse + chrono machine pause | seed | several |
 | [Cosmology/Overreach.md](Cosmology/Overreach.md) | **The 9th rank / overreach (túlnyúlás)** — intentionally undefined; willpower bends reality; cardinal rule "never get caught cheating" | locked-core | Q16 (race / coalition / something else) |
 | [Cosmology/DivineIgnore.md](Cosmology/DivineIgnore.md) | **The divine-ignore pact** — God filters Lucifer out; Lucifer exploits the blind spot; foundation of his entire operation | locked-core | several |
-| [Mechanics/Hellstatic.md](Mechanics/Hellstatic.md) | Soul-Shell desync at 3 Major injuries | full from Rule 1 | none current |
-| [Cantos/Outline.md](Cantos/Outline.md) | The 10-canto campaign structure (Obsidian-canon names) | partial | many |
-
-(more docs added as facts get
+| [Cosmology/SoulIndices.md](Cosmology/SoulIndices.md) | **The 4 soul archetypes** — Boiler/Crown/Maw/Mirror = Wrath/Pride/Greed/Envy; cosmic temperament axis of char creation | locked-core | a few |
+| [Mechanics/Hellstatic.md](Mechanics/Hellstatic.md) | Soul-Shell desync a
