@@ -62,11 +62,11 @@ Daniel's pick for direction (α / β) determines the candidate space. Then the a
 
 ## IMPORTANT — next-design-step-blocking
 
-### Q4 — Climax architecture vs Canto canon — does the Workshop climax design still hold?
+### Q4 — Climax architecture revisit — RESOLVED 2026-04-25 (consolidation)
 
-**Prompt:** Workshop/Climax/ describes a Phase-1 mid-air bridge parley + Phase-2 Hell-descent on humanity path, with the Orb activation as the trigger event. **But Obsidian Canto 1 says the Orb is mounted in the train at Canto I exit.** So by the time of the climax (~Canto X), the Orb has been in the train for the entire campaign, not just delivered. **Does the Workshop climax design still match Daniel's vision, or does it need restructuring?**
+**Resolution:** Created [`Climax/Overview.md`](Climax/Overview.md) as the canonical climax skeleton, derived from all currently-locked Codex facts (Orb = Eye of God, divine-ignore pact, Lucifer's three presence modes, Overreach, Orb-mounted-from-Chapter-1, Cicero awareness). Workshop/Climax/ docs marked SUPERSEDED.
 
-**Why it matters:** The whole back-half of the campaign hinges on this.
+Architectural truth is locked. Detailed beat sequencing (parley dialogue, exact monologue placement, locomotive launch puzzle, Hell-descent transit, final boss mechanics) **deferred** until Chapter 10 is actively being designed.
 
 ---
 
@@ -98,4 +98,4 @@ A5 = real form (train is Hell-adjacent). Canto 7 chain-melt = avatar's first phy
 
 **Prompt:** Lucifer "stepped onto the fabric of reality and activated the chrono machine" to pause the world. What does it look like? Where does it sit (in Hell? on Earth? in the seal between?). How was it built / from what material?
 
-**Why it matters:** This is the central holding-mechanism of the entire setting. Knowing
+**Why it matters:** This is the central holding-mechanism of the entire settin
