@@ -34,11 +34,4 @@ See [README.md](README.md) for the philosophy and source-tier rules.
 | Doc | Status |
 |---|---|
 | [Characters/Cicero.md](Characters/Cicero.md) | locked-core (name, voice, pact, awareness, quill, book, sacrifice; some sub-questions open) |
-
----
-
-## Open questions backlog
-
-→ [Questions.md](Questions.md)
-
-Ordered by priority: **CORE** (story-blocking) → **IMPO
+| [Characters/Lucifer.md](Characters/Lucifer.md) | locked-core (three presence modes, spark-source, chrono-machine, Cicero-p
