@@ -18,7 +18,7 @@ See [README.md](README.md) for the philosophy and source-tier rules.
 |---|---|---|---|
 | [Cosmology/Substrate.md](Cosmology/Substrate.md) | The spark / hellfire / Lucifer cosmology | seed | several |
 | [Cosmology/PausedApocalypse.md](Cosmology/PausedApocalypse.md) | The double apocalypse + chrono machine pause | seed | several |
-| [Cosmology/ChessGame.md](Cosmology/ChessGame.md) | **The cosmic chess metaphor** — board, pieces, 9th rank, gambit | locked-core | Q16 (race vs coalition) |
+| [Cosmology/Overreach.md](Cosmology/Overreach.md) | **The 9th rank / overreach (túlnyúlás)** — intentionally undefined; willpower bends reality; cardinal rule "never get caught cheating" | locked-core | Q16 (race / coalition / something else) |
 | [Mechanics/Hellstatic.md](Mechanics/Hellstatic.md) | Soul-Shell desync at 3 Major injuries | full from Rule 1 | none current |
 | [Cantos/Outline.md](Cantos/Outline.md) | The 10-canto campaign structure (Obsidian-canon names) | partial | many |
 
@@ -34,4 +34,4 @@ See [README.md](README.md) for the philosophy and source-tier rules.
 
 | Doc | Status |
 |---|---|
-| [Characters/Cicero.md](Characters/Cicero.md) | locked-core (name, voice, pact, awareness, quill, book, s
+| [Characters/Ci
