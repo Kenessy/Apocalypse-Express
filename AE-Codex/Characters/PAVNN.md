@@ -73,12 +73,20 @@ This is intentional uncertainty about personhood. GM can lean either way context
 
 Standard A-Tech androids of this class **require an activation phrase** to boot. The chapel staff (per Mason Harrow's GateLinq Advisory terminal log) **knew the phrase was needed but did not know what it was**, so PAVNN sat dormant in the basement until the apocalypse hit.
 
-**Lucifer activates him with a finger-snap** in B1.5 — bypassing the phrase requirement entirely. This is a privileged authentication channel: Lucifer has authorization that the standard A-Tech crew didn't. *[T1: Database/Scene B1.5]*
+**Lucifer activates him with a finger-snap** in B1.5 — bypassing the phrase requirement entirely. *[T1: Database/Scene B1.5]*
 
-**The activation phrase itself is never quoted in any vault source.** Mason Harrow's "Mule Workaround Proposal" memo describes a possible alternative — a **"maintenance hot-start"** (partial activation, not a full boot, just enough to get him upright and carrying) — but the GM-note on the handout flags this as **"non-actionable for players (no steps)."** It's flavor lore, not a player puzzle.
+### How Lucifer knows the phrase — LOCKED 2026-04-26
 
-> [!todo] OPEN
-> Was the activation-phrase backstory intended to be a **playable puzzle** (players have to find the phrase), or **only flavor** (the handouts establish that the phrase exists, but players never need it because Lucifer handles it)? Daniel-confirm.
+*[T1: Daniel 2026-04-26]*
+
+- **Activation phrases are aSync's standard security mechanism** — like a PIN code for their robots. (PAVNN is A-Tech-built, but A-Tech absorbed aSync, so the security standards bled across.)
+- **Lucifer knows them because he had pacts with multiple aSync employees** (not just Cicero). They told him the codes. Lucifer is a collector of talented souls; pacts get him both the people and their know-how.
+
+### Phrase status
+
+**The activation phrase is never quoted in any vault source.** Per Daniel 2026-04-26 lock: this is **intentional — flavor lore only, not a playable puzzle**. The handouts (Mason Harrow's GateLinq Advisory + Mule Workaround Proposal) establish that a phrase exists and is protected, but the players never need to find it because Lucifer handles activation in B1.
+
+**Game-design rationale (why no playable puzzle):** keeps players from recruiting random A-Tech robots they encounter on the surface and easy-moding the campaign. PAVNN is the *one* android who matters; the rest stay dormant. *[T1: Daniel 2026-04-26]*
 
 ---
 
@@ -193,11 +201,4 @@ Open Q18: do Cicero and PAVNN **see Lucifer themselves** in those mirror scenes 
 - [`../Factions/A-Tech.md`](../Factions/A-Tech.md) — the corp that built him
 - [`../Factions/aSync.md`](../Factions/aSync.md) — the absorbed sister-corp that built the AI Core that commands him
 - [`../Cosmology/Overreach.md`](../Cosmology/Overreach.md) — the chess metaphor that names him
-- [`../Climax/Overview.md`](../Climax/Overview.md) — his climactic sacrifice in context
-- [`../Items/ApocalypseExpress.md`](../Items/ApocalypseExpress.md) — the train that may "mistrust" him (per train-as-loyalty-being lock) if AI Core's agenda manifests too clearly
-
----
-
-## Workshop reference
-
-The fuller architecture, including foreshadow timeline and final-speech stub, lives in [`../../Wo
+- [`../Climax/Overview.md`](../Climax/Overvi
