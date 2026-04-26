@@ -43,20 +43,42 @@ Lucifer manifests in **three distinct modes**, each with its own location, audie
 
 ---
 
-### 3. Hologram (mirror-projection)
+### 3. Hologram (mirror-projection) — LOCKED 2026-04-25
 
-**Where:** Anywhere there's a mirror or mirror-like reflective surface.
+**Where:** Anywhere there's a mirror or mirror-like reflective surface. **Heavily anchored to the train** as his main hangout space.
 
-**Who sees:** **Only the players.** Bystanders see nothing.
+**Who sees:** **Only the players.** Bystanders see nothing. *[T1: Daniel 2026-04-25]*
 
-**Mechanics:** Illusion. Lucifer projects into the players' minds an image of himself appearing in the surface. Mirror-anchoring is the channel.
+**Mechanics:** Illusion. Lucifer projects into the players' minds an image of himself appearing in the surface. Mirror-anchoring is the channel. He cannot be detected by non-player observers.
 
 **Lucifer's general capability:** he can create illusions and deceive anyone with them. The mirror-projection is a specific use of that broader power, restricted to player-eyes for narrative checkpoints.
 
-**Use case:** Periodic check-ins, taunts, instructions, foreshadow beats throughout the campaign. The first real-world appearance of any kind is via hologram. *[T1: Daniel 2026-04-25]*
+#### First hologram appearance — B1 Chapel of Second Chances
 
-> [!todo] OPEN
-> WHEN does Lucifer's first hologram appearance happen — late prelude (B1 chapel, perhaps), early Chapter 1, or specifically gated to a story trigger? Frequency thereafter?
+**The first time Lucifer manifests via hologram is at the end of the prelude:** *[T1: Daniel 2026-04-25]*
+
+1. Players sign Lucifer's pact in A5 (Sundown Saloon, real form encounter on the train)
+2. They step through the mirror/gate from the train into the real world
+3. They wake in their new printed bodies in the chapel (B1)
+4. **Lucifer appears via hologram in the chapel mirror** — briefs them on their situation, restates the mission, gives the practical instructions for the road ahead
+5. He disappears
+
+This is the player's **first encounter with hologram-mode Lucifer**, and the moment they realize that the man from A5 isn't *gone* — he's just shifted modes.
+
+#### Recurring pattern across the campaign — semi-regular companion
+
+After B1, Lucifer becomes a **semi-regular hologram companion** on the Apocalypse Express. He appears periodically through reflective surfaces, mostly inside the train. The function is **information delivery + atmospheric presence**, not high-stakes confrontation. *[T1: Daniel 2026-04-25]*
+
+**Characteristic recurring scenes:**
+
+- **Chess in the mirror** with **Cicero** or **PAVNN** — Lucifer shows up as a reflection playing chess against one of his commissioned agents. Either side can be the player to watch. Diegetic foreshadow: the chess metaphor literally manifests at the visual level, in front of the players, throughout the campaign.
+- **Domestic intimacy** — Lucifer **sipping coffee**, smiling, reading something light. **Cosy, alulreagáló**. The deliberate normalcy is what makes the climax retrospectively chilling: he was always relaxed because everything was already going his way.
+- **Brief info-drops** — drops a line, a hint, a clarification, then is gone before they can press him for more.
+
+**Tonal note:** the recurring holograms should feel **welcome and familiar**, like a houseguest who's been around forever. The horror of the climax monologue lands harder when contrasted with hundreds of hours of the players seeing Lucifer be **comfortable** in their presence. *[T1: Daniel 2026-04-25]*
+
+> [!todo] OPEN — Q18 (NEW)
+> When Lucifer's hologram appears interacting with Cicero or PAVNN (chess-in-mirror scenes), **do Cicero and PAVNN see him too** (as commissioned agents privy to his presence), or do the players see them looking at a mirror that the players ALONE see Lucifer in? Different implications for whether Cicero/PAVNN are conscious participants in the chess metaphor or unwitting subjects of it.
 
 ---
 
@@ -83,37 +105,4 @@ The spark manifests physically as **hellfire** in this world, which fuels the tr
 
 ### He paused the apocalypse
 
-Lucifer stepped onto the fabric of reality and activated the **chrono machine** (his device) to pause time, blocking both the atomic and divine apocalypses from completing. The pause requires his continuous effort to maintain. *[T1: Database/Scene B1 + Daniel 2026-04-25]*
-
-See [`../Cosmology/PausedApocalypse.md`](../Cosmology/PausedApocalypse.md).
-
-### He commissioned Cicero
-
-Lucifer entered a long-standing pact with Cicero, granting him the chance to write the greatest story ever told, while secretly intending to use the manuscript as a source-document for designing the next universe. Cicero is unaware of the meta-purpose. *[T1: Daniel 2026-04-25]*
-
-See [`Cicero.md → "Pact with Lucifer"`](Cicero.md#pact-with-lucifer).
-
-### He must not be caught lying
-
-**REFRAMED 2026-04-25** based on the Overreach cosmology.
-
-Lucifer **must not be caught lying** — operational constraint at the 9th-rank tier, not physical inability. Getting caught cheating at this tier is fatal. He honours every contract he signs **because cheating openly would expose him**. But he speaks with **clever wording** that lets listeners misunderstand without his being technically untrue — this is the **player's craft of plausible deniability**. *[T1: Database/Scene A5 quote + Daniel 2026-04-25 reframing]*
-
-> *"I do not forge and I do not amend; I only honour what is freely given."* *[T1: Database/Scene A5]*
-
-The same applies to Cicero's "they cannot lie" rule, the new-hellfire reveal (technically "hellfire" is accurate), and every contract Lucifer makes. Discoverable lies = exposure = loss of the seat. Hence the operational discipline.
-
-See [`../Cosmology/Overreach.md → "The cardinal rule"`](../Cosmology/Overreach.md#the-cardinal-rule--never-get-caught-cheating).
-
----
-
-## Open about Lucifer
-
-> [!todo] See [../Questions.md](../Questions.md) for the question backlog.
-
-- **First hologram appearance — when?** (likely late prelude or early Chapter 1)
-- **Frequency of hologram appearances** through the campaign
-- **Avatar persistence** — between chapters, or only at story-gate moments
-- **Voice and speech pattern** for Lucifer specifically — A5 dialogue exists, climax monologue draft exists, but his recurring-NPC voice (for hologram check-ins, etc.) is not yet fully characterised
-- **Real-form vs avatar visual differences** — are they identical-looking, or does the avatar have tells (a flicker, a wrongness)?
-- **Why do
+Lucifer stepped onto the fabric of reality and activated the **chrono machine** (his device) to pause
