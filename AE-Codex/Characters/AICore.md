@@ -15,11 +15,13 @@ related: [PAVNN.md, Lucifer.md, ../Cosmology/Substrate.md]
 
 *[T1: Daniel 2026-04-26]*
 
-- **Built by:** aSync corporation
+- **Built by:** aSync corporation (now legacy-name of the absorbed unit; technically A-Tech property post-acquisition — see [`../Factions/aSync.md`](../Factions/aSync.md))
 - **Project type:** top-secret R&D direction
-- **Original purpose:** replace aSync's own corrupt leadership with a super-smart AI core (internal coup attempt)
+- **Original purpose:** replace the corrupt leadership with a super-smart AI core (internal coup attempt)
 - **Status at time of Lucifer-acquisition:** **never finished** — alignment problems blocked completion
 - **Lucifer's intervention:** grabbed the opportunity; saw utility as a group-helper; built it into a train carriage as the Apocalypse Express's mainframe / general intelligence
+
+**Why aSync specifically built it:** their entire corporate specialty was **time-asynchronous systems** ("a-sync" in the name is literal). The team knew how to build systems that operate outside conventional time-sync constraints. This is plausibly **why Lucifer found their abandoned core useful** — it was already designed to function in asynchronous environments, which means it could continue to operate in the Pause's frozen / juddering time. Most other AI projects on Earth would have died with the Pause. aSync's core was uniquely Pause-compatible by design. *[T1: Daniel 2026-04-26]*
 
 ---
 
@@ -54,14 +56,4 @@ This means the AI Core is **NOT fully aligned with Lucifer**. Lucifer grabbed it
 - **First explicit reveal to players** — when do they first realize the train's helpful AI has its own agenda?
 - **Path A (gamma broadcast) mechanics** — how does it physically use the Orb against Lucifer's possession? Race? Hijack?
 - **Path B (anti-Lucifer alliance) mechanics** — when does it offer the alliance?
-- **Relationship to PAVNN** — is PAVNN also aSync-built (same corp)? Same project, or separate? Does the AI Core directly command PAVNN's actions on the train, or is PAVNN's loyalty-chain mediated through Lucifer?
-- **Relationship to the surviving aSync corporation** — Canto 1 brainstorm doc has aSync as a hostile force around the Temple. Is that the same corp, the leadership the AI Core was supposed to replace? Are they unaware their stolen project is alive on a train?
-
----
-
-## Cross-references
-
-- [`Lucifer.md`](Lucifer.md) — the steward who grabbed the unfinished core
-- [`../Items/ApocalypseExpress.md`](../Items/ApocalypseExpress.md) — the train where the AI Core lives as a carriage
-- [`PAVNN.md`](PAVNN.md) — TBD if same-corp / same-project sibling
-- Workshop draft: [`../../Workshop/AICore/OVERVIEW.md`](../../Workshop/AICore/OVERVIEW.md) — fuller architecture (some Tier 3 still pending verification)
+- **Relationship to PAVNN** — is PAVNN also aSync-built (same corp)? Same project, or separate? Does the AI Core directly command PAVNN's actions on the train, or is PAVNN's loyalty-chain mediated t
