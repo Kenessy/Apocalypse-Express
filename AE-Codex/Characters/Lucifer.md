@@ -93,11 +93,17 @@ Lucifer entered a long-standing pact with Cicero, granting him the chance to wri
 
 See [`Cicero.md → "Pact with Lucifer"`](Cicero.md#pact-with-lucifer).
 
-### He cannot lie
+### He must not be caught lying
 
-Lucifer **cannot lie** — physical/ontological constraint, not virtue. He honours every contract he signs. But he speaks with **clever wording** that lets listeners misunderstand without him being technically untrue. *[T1: Database/Scene A5 — "I do not forge and I do not amend; I only honour what is freely given"]*
+**REFRAMED 2026-04-25** based on the Overreach cosmology.
 
-This is why the Pact at A5 is binding, why Cicero's "they cannot lie" rule is true, and why the new-hellfire reveal at the climax is fair (Lucifer never said it was *standard* hellfire, only "hellfire" — which is technically accurate).
+Lucifer **must not be caught lying** — operational constraint at the 9th-rank tier, not physical inability. Getting caught cheating at this tier is fatal. He honours every contract he signs **because cheating openly would expose him**. But he speaks with **clever wording** that lets listeners misunderstand without his being technically untrue — this is the **player's craft of plausible deniability**. *[T1: Database/Scene A5 quote + Daniel 2026-04-25 reframing]*
+
+> *"I do not forge and I do not amend; I only honour what is freely given."* *[T1: Database/Scene A5]*
+
+The same applies to Cicero's "they cannot lie" rule, the new-hellfire reveal (technically "hellfire" is accurate), and every contract Lucifer makes. Discoverable lies = exposure = loss of the seat. Hence the operational discipline.
+
+See [`../Cosmology/Overreach.md → "The cardinal rule"`](../Cosmology/Overreach.md#the-cardinal-rule--never-get-caught-cheating).
 
 ---
 
@@ -110,10 +116,4 @@ This is why the Pact at A5 is binding, why Cicero's "they cannot lie" rule is tr
 - **Avatar persistence** — between chapters, or only at story-gate moments
 - **Voice and speech pattern** for Lucifer specifically — A5 dialogue exists, climax monologue draft exists, but his recurring-NPC voice (for hologram check-ins, etc.) is not yet fully characterised
 - **Real-form vs avatar visual differences** — are they identical-looking, or does the avatar have tells (a flicker, a wrongness)?
-- **Why does the train have a Hell-adjacent car (Sundown Saloon)** at all? Is the whole train Hell-adjacent, or just specific cars?
-
----
-
-## Workshop reference
-
-Climax monologue verbatim (Hungarian + analysis): [`../../Workshop/Climax/LuciferMonologue.md`](../../Workshop/Climax/LuciferMonologue.md). Full climax architecture (currently being revisited in light of new chapter structure): [`../../Workshop/Climax/OVERVIEW.md`](../../Workshop/Climax/OVERVIEW.md).
+- **Why do
