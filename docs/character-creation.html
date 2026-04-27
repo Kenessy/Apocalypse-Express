@@ -2546,7 +2546,7 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
       <path d="M12 2 V5 M12 19 V22 M2 12 H5 M19 12 H22 M4.9 4.9 L7 7 M17 17 L19.1 19.1 M4.9 19.1 L7 17 M17 7 L19.1 4.9"/>
     </symbol>
 
-    <!-- LORE / BOOK — knowledge, reading, A-Tech literacy -->
+    <!-- LORE / BOOK — knowledge, reading, pre-collapse signage and manuals -->
     <symbol id="icon-lore" viewBox="0 0 24 24" fill="none" stroke="currentColor"
             stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
       <path d="M4 5 Q4 4 5 4 H11 V20 H5 Q4 20 4 19 Z"/>
@@ -3049,33 +3049,35 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
 const RACES = {
 
   mortal: {
-    eyebrow: 'Mortal · Old-Strain',
+    eyebrow: 'HUM · Inheritor',
     iconImage: 'img/races/inheritors/inheritor-overall.png',
     iconAlt:   'Inheritor — race umbrella icon (stained-glass mandala with the four archetype-color corona)',
     title: 'Inheritor',
-    subtitle: 'A damned human soul Lucifer brought back into the form your soul still remembered — close enough to the world that the lie holds. How much of you is original depends on how long you were down.',
+    subtitle: 'Old-World Flesh. The dead world still recognizes you.',
     bodyParas: [
-      'On a train of <strong>printed bodies, speaking machines, and infernal contracts</strong>, your plain mortality makes people uneasy. The crew glance at you when no one admits they are afraid, as if checking that somebody aboard <em>still remembers how a person is supposed to look</em>.',
-      'You carry the old world in meat, memory, and reflex. Your scars ache when the chronon haze thins. Your shadow arrives a heartbeat late. Your eyes catch what others have learned to ignore — a pre-Halt warning label, a dead protocol light, the exact tone people used <em>before everything stopped</em>.',
-      'That makes you the Express&#39;s <strong>human witness</strong> — the one the dead world still recognizes. You can bargain with the frozen, translate pre-collapse A-Tech into usable choices, and step first into preserved rooms where ordinary flesh still opens doors that infernal marks and machine signatures only anger.'
+      'Among printed bodies, speaking machines, infernal contracts, and souls carrying impossible scars, your ordinary mortality makes people uneasy. The crew look at you when no one admits they are afraid, as if checking that somebody aboard <em>still remembers how a person is supposed to be shaped</em>.',
+      'You carry the old world in meat, memory, and reflex. Your scars ache when the chronon haze thins. Your eyes catch what others step past: a warning label, a hospital protocol, a station custom, a human-facing A-Tech panel built for hands like yours.',
+      'That makes you the Express&#39;s <strong>human witness</strong>. You can speak to frozen survivors without sounding like a machine or a devil, read the manners of dead institutions, and step into biosealed rooms where ordinary flesh still opens doors that infernal marks and synthetic signatures only anger.',
+      'You are not the strongest thing aboard. You are the one the old world still opens for.'
     ],
     goodAt: [
-      { icon: 'negotiation', label: 'Old-world etiquette' },
-      { icon: 'human',       label: 'Human contact' },
-      { icon: 'lore',        label: 'A-Tech literacy' },
-      { icon: 'ruins',       label: 'Frozen ruins' },
-      { icon: 'heart',       label: 'Crew anchor' }
+      { icon: 'negotiation', label: 'Old-world etiquette and leverage' },
+      { icon: 'human',       label: 'Human contact under impossible conditions' },
+      { icon: 'lore',        label: 'Pre-collapse signage and manuals' },
+      { icon: 'ruins',       label: 'Biosealed or human-facing ruins' },
+      { icon: 'heart',       label: 'Keeping the crew emotionally grounded' }
     ],
     badAt: [
-      { icon: 'machine',   label: 'Pure-machine zones' },
-      { icon: 'hellfire',  label: 'Infernal contracts' },
-      { icon: 'endurance', label: 'Exposure & long watch' },
+      { icon: 'machine',   label: 'SYN-locked systems' },
+      { icon: 'machine',   label: 'Pure mechanical environments' },
+      { icon: 'hellfire',  label: 'Infernal contract games' },
+      { icon: 'endurance', label: 'Exhaustion and long watches' },
       { icon: 'combat',    label: 'Toe-to-toe combat' }
     ],
     flavor: [
       { icon: 'ghost',   label: 'Old-world ghost' },
-      { icon: 'fragile', label: 'Fragile but adaptable' },
-      { icon: 'eye',     label: 'Sees what others ignore' }
+      { icon: 'fragile', label: 'Fragile, observant, adaptable' },
+      { icon: 'eye',     label: 'Sees what others have learned not to see' }
     ],
     // Hell-depth zones · the four canonical Hell-layers an Inheritor might have
     // returned from, each leaving a different colored flame-mark and learned stance.
@@ -3108,7 +3110,7 @@ const RACES = {
           'Personal-injustice carry',
           'Untrained but raw'
         ],
-        overall: 'A pure human soul whose time in Hell was the briefest — barely past the gate, where Purgatory&#39;s red flame licked the skin and let them go. The mark is a sunburn that never faded; the eyes still burn with the freshness of injustice. They came back furious, and they brought that fury onto the train.',
+        overall: 'An Inheritor whose time in Hell was the briefest: barely past the gate, where Purgatory&#39;s red flame licked the skin and let them go. The mark is a sunburn that never faded; the eyes still burn with the freshness of injustice. They came back furious, and they brought that fury onto the train.',
         bodyHistory: 'Hell barely had time to take you. Most of what stands here is the <strong>original body</strong> — same skin, same scars, same name on the page. Purgatory&#39;s red flame just left a mark before you left.',
         bodyMarks: [
           'Red flame-tongue patterns on the right cheek and temple, fresh-looking, never quite healed',
@@ -3146,7 +3148,7 @@ const RACES = {
           'Slow to anger, slow to flinch',
           'Senses what lives underneath'
         ],
-        overall: 'A pure human soul that walked into Outer Hell&#39;s rot and stayed long enough to learn it. The green flame cured them like leather; the moss in the air settled into their skin. They came back patient — knowing that the rot does not rush, and survival is a matter of position.',
+        overall: 'An Inheritor who walked into Outer Hell&#39;s rot and stayed long enough to learn it. The green flame cured them like leather; the moss in the air settled into their skin. They came back patient, knowing that the rot does not rush, and survival is a matter of position.',
         bodyHistory: 'You were down long enough that something had to be <strong>rebuilt</strong>. Lucifer pulled from your soul&#39;s memory of itself; the body that returned is mostly real, with seams the rot still hates. You recognize the hands. You recognize the face. <em>The rest is faith.</em>',
         bodyMarks: [
           'Greenish discoloration in patches at the temple, neck, and along the jaw',
@@ -3184,7 +3186,7 @@ const RACES = {
           'Carries knowledge like currency',
           'Distrusts rage and emotion'
         ],
-        overall: 'A pure human soul that descended to where Hell&#39;s flames burn cold. The cold-blue flame burned without warming — the marks it left look like flame-tongues but feel like frostbite. They came back with the silence of someone who has read the rules of the place that wanted them dead, and trusts their patterns more than other people&#39;s words.',
+        overall: 'An Inheritor who descended to where Hell&#39;s flames burn cold. The cold-blue flame burned without warming: the marks it left look like flame-tongues but feel like frostbite. They came back with the silence of someone who has read the rules of the place that wanted them dead, and trusts their patterns more than other people&#39;s words.',
         bodyHistory: 'What went down is not what came back. The body that walks here is <strong>reconstructed</strong> from your soul&#39;s memory and Lucifer&#39;s archives — close enough that no one questions it, except <em>you</em>, when the cold reaches places nothing should reach. The original is dust in the deep blue.',
         bodyMarks: [
           'Pale-blue cast to the skin, deeper at temple and neck',
@@ -3222,7 +3224,7 @@ const RACES = {
           'Bound by hidden contracts',
           'Sees what others can\'t unsee'
         ],
-        overall: 'A pure human soul that descended to the deepest reach, where pure hellfire burns violet. The Pit demanded more than survival — it demanded singularity. The violet flame left kiss-marks where it touched: not wounds but acknowledgments. They came back with pacts and tricks no one else could write, and the quiet certainty of someone who has already won the deepest argument.',
+        overall: 'An Inheritor who descended to the deepest reach, where pure hellfire burns violet. The Pit demanded more than survival: it demanded singularity. The violet flame left kiss-marks where it touched, not wounds but acknowledgments. They came back with pacts and tricks no one else could write, and the quiet certainty of someone who has already won the deepest argument.',
         bodyHistory: 'There is <strong>no body to return</strong>. What you wear is a perfected reconstruction Lucifer pulled from the deepest archive of who you were — better than the original in places, missing in others. You are functionally <em>a stained-glass icon of yourself</em>: more remembered than alive. The kiss-marks are real. The skin is borrowed.',
         bodyMarks: [
           'Pale skin overlaid with violet kiss-marks — delicate, almost intimate, like prints from something ancient',
@@ -3244,7 +3246,7 @@ const RACES = {
         ]
       }
     ],
-    conflictHook: 'Absolution vs. sentence — can a pardon issued by the Devil ever be clean?',
+    conflictHook: 'Absolution vs. sentence: can a pardon issued by the Devil ever be clean?',
     conflictBody: 'You carry the memory of the old world in a body that now moves on Lucifer&#39;s schedule. Every life the Express saves feels like <em>evidence</em>. Every bargain with Lucifer feels like another <em>signature on the sentence</em>. The crew may call you their anchor, but at night the question keeps moving inside you: <strong>are you earning forgiveness, or only making damnation useful?</strong>'
   },
 
@@ -3288,7 +3290,7 @@ const RACES = {
       'On a train of damned humans, sin-shaped demons, and printed prototypes, your <strong>three-fold tragedy</strong> makes you the rarest visible thing aboard. A-Tech ripped your soul from Hell&#39;s deepest cells, jammed it into a V.E.S.S.E.L. military chassis, and lost containment when the project went wrong. <em>You should have died with the others. You did not.</em>',
       'Now you are <strong>walking failed alchemy</strong>: chassis-metal welded to soul-stuff, vents exhaling brimstone, infernal glyphs etched into the plating to barely hold the chaos in. Your voice is synthesized speech laced with a demon&#39;s growl. Your power core pulses against your sternum like a tortured second heart, the colour of whatever sub-form the lab labelled you.',
       'You serve Lucifer because <strong>his black feather is the only thing keeping the synchronicity from breaking</strong>. Without it, the chassis would purge the soul as a virus and the soul would eject the chassis as an implant. You are an elite weapon in his rebellion against divine silence — and a deal that can be revoked.',
-      'Every Hellforged who walks this train walks it <strong>already feather-bound</strong> — and that means <em>every Hellforged starts the journey one chaos-tick higher than the pure-strains beside them</em>. The cost of being held together by Lucifer&#39;s hand is starting one step closer to coming apart. They know it. They factor it in.'
+      'Every Hellforged who walks this train walks it <strong>already feather-bound</strong>, and that means <em>every Hellforged starts the journey one Chaos Level higher than the Inheritors beside them</em>. The cost of being held together by Lucifer&#39;s hand is starting one step closer to coming apart. They know it. They factor it in.'
     ],
     goodAt: [
       { icon: 'hellfire',    label: 'Hellfire bursts' },
@@ -3463,8 +3465,8 @@ const RACES = {
         ]
       }
     ],
-    conflictHook: 'Synchronicity vs. rejection — and one chaos-tick closer than the rest, every step of the way.',
-    conflictBody: 'Every action is a negotiation between two halves that should never have been joined. <strong>Synchronicity</strong> is the moment of perfect alignment — thoughts firing as fast as the chassis can move, decisions delivered like blade-strikes. <strong>Rejection</strong> is the cost: the chassis trying to purge the soul as a virus, the soul ejecting the chassis as an implant. Your name on Lucifer&#39;s ledger is the only thing keeping the war from finishing. <em>The black feather can be revoked. You spend every day not finding out what that feels like.</em><br><br><strong>Mechanically:</strong> every Hellforged enters the campaign already feather-bound. Their starting <strong>chaos-level is +1</strong> over the human pure-strains — the cost of stability is starting one tick closer to the edge.'
+    conflictHook: 'Synchronicity vs. rejection, and one Chaos Level closer than the rest, every step of the way.',
+    conflictBody: 'Every action is a negotiation between two halves that should never have been joined. <strong>Synchronicity</strong> is the moment of perfect alignment: thoughts firing as fast as the chassis can move, decisions delivered like blade-strikes. <strong>Rejection</strong> is the cost: the chassis trying to purge the soul as a virus, the soul ejecting the chassis as an implant. Your name on Lucifer&#39;s ledger is the only thing keeping the war from finishing. <em>The black feather can be revoked. You spend every day not finding out what that feels like.</em><br><br><strong>Hellforged Cost - Black Feather Leash:</strong> every Hellforged begins at <strong>+1 Chaos Level</strong> compared to a normal body of their tier. This affects future Chaos Rolls only. It does not alter Harmony, Devil&#39;s Mercy, Soul Index, or Lucifer&#39;s Mark. <em>(Canon flavor locked, exact D&amp;D math TBD.)</em>'
   },
 
   hell: {
@@ -4107,10 +4109,4 @@ document.getElementById('tabNav').addEventListener('click', e => {
   const tabId = t.dataset.tab;
   document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
   t.classList.add('active');
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-  document.getElementById('tab-' + tabId).classList.add('active');
-});
-</script>
-
-</body>
-</html>
+  document.query

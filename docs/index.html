@@ -3257,7 +3257,7 @@ const frames = [
     ],
     choices: [
       { icon: '✋', tint: 'gold', label: 'Keep it', next: 'postcard-take' },
-      { icon: '↩', tint: 'grey', label: 'Leave it on the obelisk', next: 'postcard-leave' },
+      { icon: '↩', tint: 'grey', label: 'Refuse the card', next: 'postcard-leave' },
     ],
   },
   {
@@ -3277,7 +3277,7 @@ const frames = [
     id: 'postcard-leave',
     speaker: null,
     text: [
-      'You pull your hand back. The card stays. The gum holds. The vivid colours dim slightly — or maybe your eyes are adjusting. Either way, the moment passes.',
+      'You pull your hand back. The card stays. The gum holds. The vivid colours dim slightly, or maybe your eyes are adjusting. <em class="inline">The card refuses your refusal.</em>',
       'You step back from the obelisk. The black-and-white postcards stare blankly at you — dead stations, forgotten platforms, snow and ash and empty tracks. The colour card watches from among them. Patient. Not offended. Just... <em class="inline">waiting</em>.',
       'You walk away. But your palm is warm. Not where you touched the obelisk — where you touched the <em class="inline">card</em>. The heat lingers, faint at first, then slowly growing. A soft burn that creeps up from the skin, settling into something you can\'t quite shake.',
       'A few steps later, you feel it. A weight in your pocket — small, rectangular, unmistakable. You didn\'t put anything there. You <em class="inline">know</em> you didn\'t. But there it is, warm and patient, as though it has always been there.',
@@ -4563,5 +4563,4 @@ renderCollection();
 updateTabBadge();
 renderFrame(0);
 </script>
-</body>
-</html>
+</b

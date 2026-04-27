@@ -24,16 +24,16 @@ Apocalypse Express is a tabletop RPG campaign built on a D&D 5e (2014) foundatio
 
 ## Key systems
 
-- **Triad Codes** — core resolution mechanic
-- **Chaos Drift (CDR)** — escalating entropy tracker
-- **Revival** — Train-only resurrection, bodies printed damaged
-- **Soul Indices** — Boiler / Crown / Maw / Mirror ancestry system
-- **Body Tags** — [FLESH] / [STEEL] mechanical tags across all systems
-- **Roll State Priority** — structured action economy
+- **Roll State Priority**: Gate, Hard Override, Soft Override, d20, Offsets, Bands
+- **Chaos Drift (CDR)**: escalating per-zone entropy tracker
+- **Revival**: Train-only resurrection, bodies printed damaged
+- **Soul Indices**: Boiler / Crown / Maw / Mirror soul-temperament axis
+- **Body Tags**: HUM / CYB / SYN physical-form gates for social, biological, mechanical, and endurance tasks
+- **Triad Codes**: canonical ID system for rules, scenes, items, NPCs, clocks, and tables
 
 ## Links
 
 - [Project site (GitHub Pages)](https://kenessy.github.io/Apocalypse-Express/)
 - [Database](https://github.com/Kenessy/Apocalypse-Express/tree/main/Database)
 - [Player Rulebook](https://github.com/Kenessy/Apocalypse-Express/blob/main/Database/Compiled/Player%20Rulebook.md)
-- [GM Operations Manual](https://github.com/Kenessy/Apocalypse-Express/blob/main/Database/Compiled/GM%20Operations%20Manual.md)
+- [GM Operations 

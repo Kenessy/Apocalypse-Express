@@ -3,6 +3,9 @@
 > **Purpose:** A single, table-facing procedure for building an Apocalypse Express character that feels like **5e (2014-era)** while honoring AE’s core constraints.  
 > **Status:** WORKING. Only sections explicitly labeled **LOCKED** are final.
 
+> [!warning] Legacy draft
+> This character-creation master doc uses the older [FLESH] / [STEEL] body-tag model. The current VN-format body axis is HUM / CYB / SYN. Treat this file as a legacy D&D working draft until it is migrated.
+
 ---
 
 ## 🔒 Locked Decisions (so far)
@@ -516,10 +519,3 @@ Convert your starting gear into **Ballast (BL)** and **pocket items (pBL)** per 
 ## Appendix A — Reference Links (vault)
 - [[(Reference) 5e Baseline (SRD 5.1)]]  
 - [[Ancestry Layer - Soul Indices + Body Tags v2]]  
-- [[(Rule) 1. Revival]]  
-- [[(Rule) Injuries]]  
-- [[(Rule) 2. Skills & Postures]]  
-- [[(Rule) 4. Simple Inventory]]  
-- [[(Rule) Chaos and Harmony]]  
-- [[(Rule) 8. Hardcore overlay]]  
-- [[(Procedure) Immediate Action Zone]]  
