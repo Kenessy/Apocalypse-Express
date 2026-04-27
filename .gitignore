@@ -1,0 +1,22 @@
+# === Apocalypse-Express .gitignore ===
+
+# --- Image generation backups (large, ChatGPT alternates — internal only)
+docs/img/**/_source/
+docs/img/**/_alternates/
+
+# --- OS / editor noise
+.DS_Store
+Thumbs.db
+*.tmp
+*.bak
+*~
+
+# --- Sensitive (just in case — already local-only but safety net)
+**/github*token*.txt
+**/*.env
+**/secrets/
+
+# --- Obsidian internal cache (config IS tracked, but caches aren't)
+Vault_Config/workspace*.json.bak
+.obsidian/workspace.json.bak
+

@@ -1,0 +1,16 @@
+# === Apocalypse-Express .gitattributes ===
+# Normalize all text to LF in repo. Editors (VS Code, Obsidian) handle LF
+# fine on all platforms. This kills the CRLF/LF flip-flop noise in diffs.
+
+* text=auto eol=lf
+
+# Binary assets — never normalize
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.ico  binary
+*.pdf  binary
+*.zip  binary
+*.canvas binary
+

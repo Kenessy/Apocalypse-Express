@@ -1,9 +1,14 @@
 ---
 type: climax
-status: locked
+status: SUPERSEDED — see AE-Codex/Climax/Overview.md
 related: [OVERVIEW.md, LuciferMonologue.md, ../Factions.md]
 last_updated: 2026-04-25
+superseded_by: AE-Codex/Climax/Overview.md
+superseded_on: 2026-04-25
 ---
+
+> [!warning] **SUPERSEDED 2026-04-25**
+> Endings architecture is now consolidated in [`AE-Codex/Climax/Overview.md → "The three endings"`](../../AE-Codex/Climax/Overview.md). This Workshop doc preserved for the design trail; not canon.
 
 # Endings Table
 

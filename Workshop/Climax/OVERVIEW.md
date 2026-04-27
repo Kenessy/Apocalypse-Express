@@ -1,10 +1,17 @@
 ---
 type: climax
-status: locked
+status: SUPERSEDED — see AE-Codex/Climax/Overview.md
 related: [LuciferMonologue.md, EndingsTable.md, ../Factions.md, ../Cicero/OVERVIEW.md, ../AICore/OVERVIEW.md, ../World/PausedApocalypse.md]
 canonical_sources: ["Database/40_Scenes/(Scene) A5 Sundown Saloon.md", "Database/20_Rules/(Rule) 6. Currencies in A.E..md", "Database/20_Rules/(Rule) 1. Revival.md"]
 last_updated: 2026-04-25
+superseded_by: AE-Codex/Climax/Overview.md
+superseded_on: 2026-04-25
 ---
+
+> [!warning] **SUPERSEDED 2026-04-25**
+> This doc was written before several major cosmology locks (Orb = Eye of God, divine-ignore pact, Overreach concept, Lucifer's three presence modes, Orb-mounted-from-Chapter-1). **The current canonical climax architecture lives in [`AE-Codex/Climax/Overview.md`](../../AE-Codex/Climax/Overview.md).**
+>
+> This Workshop doc is preserved for the design-conversation trail. Do not use as canon.
 
 # Climax — full architecture
 
