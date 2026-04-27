@@ -384,6 +384,135 @@ html, body {
 }
 .ae-sandbox-tooltip-text p { margin:0 0 6px; }
 
+/* ── detail panel (left side, opens on node click) ── */
+.sb-detail {
+  position:fixed; top:44px; left:0; bottom:0; width:480px; z-index:50;
+  background:rgba(8,6,14,.97);
+  backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px);
+  border-right:1px solid rgba(201,156,90,.15);
+  display:flex; flex-direction:column;
+  transform:translateX(-100%);
+  transition:transform .35s cubic-bezier(.22,1,.36,1);
+  overflow:hidden;
+}
+.sb-detail.open { transform:translateX(0); }
+
+.sb-detail-close {
+  position:absolute; top:12px; right:12px; z-index:5;
+  width:32px; height:32px; border-radius:6px;
+  background:rgba(201,156,90,.1); border:1px solid rgba(201,156,90,.18);
+  color:var(--gold); font-size:18px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  opacity:.6; transition:opacity .2s, background .2s;
+}
+.sb-detail-close:hover { opacity:1; background:rgba(201,156,90,.22); }
+
+.sb-detail-header {
+  padding:24px 28px 16px; flex-shrink:0;
+  border-bottom:1px solid rgba(201,156,90,.1);
+}
+.sb-detail-type {
+  font:600 11px/1 'IBM Plex Mono'; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--gold); opacity:.75; display:block; margin-bottom:8px;
+}
+.sb-detail-title {
+  font:700 26px/1.2 'Cinzel',serif; letter-spacing:.03em;
+  color:var(--gold2); margin:0;
+}
+
+.sb-detail-img-wrap {
+  flex-shrink:0; height:180px; overflow:hidden;
+  position:relative;
+}
+.sb-detail-img-wrap img {
+  width:100%; height:100%; object-fit:cover;
+  filter:brightness(.75) saturate(.85);
+}
+.sb-detail-img-wrap::after {
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background:linear-gradient(to top, rgba(8,6,14,1) 0%, rgba(8,6,14,.3) 40%, transparent 100%);
+}
+.sb-detail-img-wrap:empty { display:none; }
+
+.sb-detail-body {
+  flex:1; overflow-y:auto; padding:22px 28px 40px;
+}
+.sb-detail-body::-webkit-scrollbar { width:4px; }
+.sb-detail-body::-webkit-scrollbar-thumb { background:rgba(201,156,90,.25); border-radius:2px; }
+
+/* body content styles */
+.sb-detail-body p {
+  font:300 19px/1.85 'Cormorant Garamond','Garamond','Georgia',serif;
+  color:rgba(248,245,240,.92); margin:0 0 18px;
+}
+.sb-detail-body p em.inline { font-style:italic; color:var(--gold2); }
+.sb-detail-body p em.standalone {
+  display:block; padding:14px 20px; margin:12px 0;
+  border-left:2px solid rgba(201,156,90,.35);
+  color:var(--gold2); opacity:.92; font-style:italic;
+  font-size:18px;
+}
+
+.sb-detail-speaker {
+  display:flex; align-items:center; gap:10px;
+  margin-bottom:18px; padding-bottom:12px;
+  border-bottom:1px solid rgba(201,156,90,.1);
+}
+.sb-detail-speaker-glyph {
+  font-size:20px; color:var(--gold); opacity:.8;
+}
+.sb-detail-speaker-name {
+  font:600 18px/1 'Cinzel',serif; letter-spacing:.06em;
+  color:var(--gold2); opacity:.9;
+}
+
+.sb-detail-choices {
+  display:flex; flex-direction:column; gap:10px; margin-top:20px;
+}
+.sb-detail-choice {
+  padding:12px 16px; border-radius:6px;
+  background:rgba(40,189,216,.07); border:1px solid rgba(40,189,216,.18);
+  font:400 15px/1.5 'IBM Plex Mono'; color:rgba(40,189,216,.88);
+  display:flex; align-items:center; gap:10px;
+}
+.sb-detail-choice-icon { font-size:16px; opacity:.75; }
+
+.sb-detail-dice {
+  margin-top:20px; padding:14px 16px; border-radius:6px;
+  background:rgba(255,200,40,.07); border:1px solid rgba(255,200,40,.18);
+  display:flex; align-items:center; gap:12px;
+  font:500 15px/1 'IBM Plex Mono'; color:rgba(255,200,40,.88);
+}
+.sb-detail-dice-icon { font-size:22px; }
+.sb-detail-dice-dc { margin-left:auto; font-weight:700; }
+
+.sb-detail-continue {
+  margin-top:20px; padding:12px 16px; border-radius:6px;
+  background:rgba(201,156,90,.07); border:1px solid rgba(201,156,90,.15);
+  font:400 15px/1.5 'IBM Plex Mono'; color:rgba(201,156,90,.85);
+  display:flex; align-items:center; gap:10px;
+}
+.sb-detail-continue-arrow { font-size:13px; opacity:.7; }
+
+.sb-detail-tip {
+  margin-top:16px; padding:14px 18px; border-radius:6px;
+  background:rgba(201,156,90,.05); border:1px solid rgba(201,156,90,.1);
+  font:italic 300 17px/1.7 'Cormorant Garamond',serif;
+  color:rgba(200,180,150,.75);
+}
+.sb-detail-status {
+  display:inline-block; margin-bottom:14px; padding:4px 12px; border-radius:4px;
+  font:600 10px/1 'IBM Plex Mono'; letter-spacing:.14em; text-transform:uppercase;
+}
+.sb-detail-status.written {
+  background:rgba(140,240,170,.1); border:1px solid rgba(140,240,170,.2);
+  color:rgba(140,240,170,.75);
+}
+.sb-detail-status.planned {
+  background:rgba(180,160,140,.08); border:1px solid rgba(180,160,140,.14);
+  color:rgba(180,160,140,.55);
+}
+
 /* ══ FLOWCHART — fullscreen presentation ══ */
 .ae-fc {
   flex: 1; position: relative; overflow: hidden;
@@ -2128,7 +2257,7 @@ html, body {
 <div class="ae-panel" id="panel-sandbox" data-panel="sandbox">
   <div class="ae-sandbox" id="sandbox-container">
     <div class="ae-sandbox-toolbar">
-      <span class="ae-sandbox-toolbar-title">Story Tree</span>
+      <span class="ae-sandbox-toolbar-title">Campaign Map</span>
       <div class="ae-sandbox-toolbar-right">
         <span class="ae-sandbox-stats" id="sandbox-stats"></span>
         <button class="ae-sandbox-toggle" id="sandbox-dev-toggle">Dev Mode</button>
@@ -2185,6 +2314,16 @@ html, body {
       <button class="ae-sandbox-zoom-btn fit" id="sandbox-zoom-fit" title="Fit to screen">⊡</button>
     </div>
   </div>
+</div>
+<!-- sandbox detail panel (left side) -->
+<div class="sb-detail" id="sb-detail">
+  <button class="sb-detail-close" id="sb-detail-close">&times;</button>
+  <div class="sb-detail-header">
+    <span class="sb-detail-type" id="sb-detail-type"></span>
+    <h3 class="sb-detail-title" id="sb-detail-title"></h3>
+  </div>
+  <div class="sb-detail-img-wrap" id="sb-detail-img-wrap"></div>
+  <div class="sb-detail-body" id="sb-detail-body"></div>
 </div>
 <div class="ae-sandbox-tooltip" id="sandbox-tooltip">
   <div class="ae-sandbox-tooltip-title" id="sandbox-tt-title"></div>
@@ -2495,6 +2634,15 @@ const collection = [
     desc: 'A crumbling message that never reached its destination. Weapons orders, darkening forests, a father\'s warning to his son. The letter was never sent. No one read it — until you.',
     lore: 'Buried in the ruins of a collapsed desk at the crossroads. The ink has faded but the fear hasn\'t. Whoever wrote this knew something was wrong — forests growing too fast, nights growing too dangerous, supply lines failing. And at the bottom, not an order but a plea: tell my son to lock the doors.',
     hint: 'Search thoroughly near the fountain.',
+    unlocked: false,
+  },
+  {
+    id: 'silver-postcard',
+    title: 'The Silver Postcard',
+    img: 'ae-obelisk-fountain.png',
+    desc: 'A postcard in impossible colour — a red-lined train crossing a storm-lit viaduct. The image shifts when you look away. It feels warm, heavy, alive. Whatever it is, it chose you.',
+    lore: 'Found stuck to the obelisk among a dozen faded black-and-white cards. Each monochrome card shows a different station — snow depots, jungle halts, seaside piers, desert sidings. But this one blazes in full colour, its details changing with each glance. The moment you took it, you felt vertigo, heard a station chime only you could hear, and saw dozens of stations superimposed like double exposures. The place seemed satisfied. You are on the list now.',
+    hint: 'Take the colour card from the obelisk.',
     unlocked: false,
   },
 ];
@@ -2963,9 +3111,8 @@ const frames = [
     ],
     continueLabel: 'return',
     continueIcon: '↩',
-    next: 'crossroads-choice',
+    next: 'obelisk-clock',
   },
-  // ── WANDER EXPLORE (fallback scout) ──
   {
     id: 'wander-explore',
     speaker: null,
@@ -3038,6 +3185,122 @@ const frames = [
     continueIcon: '↩',
     next: 'crossroads-choice',
   },
+  // ══════════════════════════════════════════════
+  //  A2 — OBELISK, CLOCK & POSTCARDS
+  // ══════════════════════════════════════════════
+  {
+    id: 'obelisk-clock',
+    speaker: null,
+    text: [
+      'A crack. Sharp and sudden — the sound of stone splitting in the cold. It comes from above, from the top of the obelisk, and it echoes across the platform like a shot.',
+      'You look up. A fissure runs down from the peak — dark, jagged, widening. Then another. And another. The obsidian at the crown of the obelisk is <em class="inline">breaking apart</em>. Fragments peel away and tumble down the smooth face, bouncing off the stone, shattering on the ground at the base. Black shards skitter across the platform like teeth knocked loose.',
+      'And beneath the falling pieces — something. A glint of gold, dull at first, then brighter as more stone falls away. A shape. Round. Mechanical. An <em class="inline">object</em> buried inside the obelisk, sealed within the stone since before you arrived, since before anyone arrived, now cracking free like something hatching.',
+      'A clock. Golden, tarnished, set into the raw stone where the obsidian shell has fallen away. Its face is pale, its numerals fine and deliberate. And it is ticking. Slowly. <em class="inline">Backward.</em>',
+      'The mist stirs. Not wind — there is no wind here — but something else. The fog that has been sitting heavy and still since you woke begins to <em class="inline">move</em>. Curling first, then rising, thinning, lifting off the obsidian like steam from cooling glass. The air clears. Not much. But enough that the platform feels larger, the distances longer, the silence thinner.',
+      'Whatever this clock is counting toward — it has started.',
+    ],
+    continueLabel: 'approach',
+    continueIcon: '◎',
+    next: 'obelisk-approach',
+  },
+  {
+    id: 'obelisk-approach',
+    speaker: null,
+    text: [
+      'Your eyes keep drifting back to it. The obelisk — that black needle at the centre of everything — and now, near its top, that glint. Gold. Faint but persistent, catching in the mist like a coin at the bottom of dark water. The numbers. Ticking.',
+      'You walk closer. Not because anything pulls you — because you <em class="inline">want to see</em>.',
+      'Up close, it\'s taller than you thought — three metres, maybe four — and the surface is so smooth that it doesn\'t reflect light so much as <em class="inline">swallow</em> it. Your reflection smears across the stone like something drowned beneath black water. No seams. No joints. No runes or inscriptions. Just obsidian, polished to the point of impossibility, standing on the platform as though the ground grew it. <em class="inline">Placed</em>.',
+      'The golden clock ticks above your head — a faint mechanical heartbeat, regular as breathing. The numbers are too high to read clearly, but their steady descent is unmistakable.',
+      'And there — on one face of the obelisk, at eye level — something else. Postcards. A ragged fan of them, stuck to the obsidian with ugly lumps of dried grey gum.',
+    ],
+    continueLabel: 'examine the postcards',
+    continueIcon: '◎',
+    next: 'obelisk-postcards',
+  },
+  {
+    id: 'obelisk-postcards',
+    speaker: null,
+    text: [
+      'A dozen cards, maybe more, pasted to the stone in overlapping rows. Most are black-and-white — grainy, faded, the kind of photography that belongs to a century you can\'t name. Each one shows a different place.',
+      'A snow-covered railway depot, lanterns burning in the fog. A jungle halt, vines swallowing the platform. A seaside pier where the tracks end at the waterline. A desert siding, sun-bleached and empty. A ruined marshalling yard, half-buried in ash.',
+      'Stations. All of them stations. Different worlds, different weathers, different states of ruin or beauty — but all unmistakably <em class="inline">stops along a line</em>.',
+      'And among them — one card that doesn\'t belong. Slightly larger than the rest, fresher, held by a fat wad of gum at eye level. While everything around it is monochrome and faded, this card is in <em class="inline">full, vivid colour</em>. It practically glows against the obsidian.',
+    ],
+    choices: [
+      { icon: '✦', tint: 'gold', label: 'Reach for the colour card', next: 'silver-postcard' },
+      { icon: '⏱', tint: 'blue', label: 'Study the clock above', next: 'obelisk-clock-study' },
+    ],
+  },
+  {
+    id: 'obelisk-clock-study',
+    speaker: null,
+    text: [
+      'You tilt your head back. The pale numerals drift downward — unhurried, steady, like sand through an hourglass no one\'s watching. Each tick is soft. Almost gentle. Whatever it\'s counting toward, it doesn\'t seem to be in any rush to get there.',
+      'But it <em class="inline">is</em> counting. Backward. Toward something. Toward <em class="inline">when</em>?',
+      'You don\'t know what the numbers mean. You can\'t read them clearly from here — they\'re too high, too small, and the pale gold light bleeds at the edges. But the direction is unmistakable. Down. Always down. A signal, not an alarm. A marker, not a warning.',
+      'Not urgent. Not yet. But it\'s there. And now you know it\'s there.',
+      'Your eyes fall back to the postcards. The colour card is still there, vivid and impossible, waiting at eye level.',
+    ],
+    continueLabel: 'reach for the colour card',
+    continueIcon: '✦',
+    next: 'silver-postcard',
+  },
+  {
+    id: 'silver-postcard',
+    speaker: null,
+    text: [
+      'You lean in. The card shows a train. Red-lined, iron-dark, crossing a viaduct under a sky split by lightning. The colours are too saturated for this place — too <em class="inline">alive</em>. The red of the train\'s livery is the colour of arterial blood. The storm-light is silver-white. The rails gleam like wet bone.',
+      'You blink. The crowd on the platform has shifted — the same people, but in different positions. The weather has changed. The lightning is in a different place. You didn\'t see it move. It just <em class="inline">did</em>.',
+      'Your fingers find the edge. The card is warm — warmer than the stone, warmer than anything you\'ve touched in this place. You tilt it, just enough to glimpse the back. Handwriting. Ink the colour of old rust, in a script you shouldn\'t be able to read — but you can:',
+      '<em class="inline">To thee whom I loved and lost, I long to see again and mend what has been broken. Mercy I seek, for deeds long past, for thee, and all, whose hope I cast. I yearn to feel thy light embrace, to cleanse us in its fiery grace.</em>',
+      'The gum resists for a moment, then <em class="inline">relaxes</em>, as if it was waiting for the right hand. It could come free. You could take it.',
+    ],
+    choices: [
+      { icon: '✋', tint: 'gold', label: 'Keep it', next: 'postcard-take' },
+      { icon: '↩', tint: 'grey', label: 'Leave it on the obelisk', next: 'postcard-leave' },
+    ],
+  },
+  {
+    id: 'postcard-take',
+    speaker: null,
+    text: [
+      'You pull. The gum lets go with a soft, wet sound, and the card comes free in your hand.',
+      'It\'s warm. Not faintly warm — <em class="inline">warm</em>. Like something alive. Like holding a small creature that has just fallen asleep in your palm. The heat spreads through your fingers, up your wrist, and settles somewhere in your chest. Odd. Not unpleasant. Just... there.',
+      'You turn it over. The verse stares back at you. The ink seems darker now — richer — as if the words have settled deeper into the cardstock since you last looked.',
+      'You tuck it away. The warmth stays.',
+    ],
+    continueLabel: 'look up at the clock',
+    continueIcon: '◎',
+    next: 'clock-quicken',
+  },
+  {
+    id: 'postcard-leave',
+    speaker: null,
+    text: [
+      'You pull your hand back. The card stays. The gum holds. The vivid colours dim slightly — or maybe your eyes are adjusting. Either way, the moment passes.',
+      'You step back from the obelisk. The black-and-white postcards stare blankly at you — dead stations, forgotten platforms, snow and ash and empty tracks. The colour card watches from among them. Patient. Not offended. Just... <em class="inline">waiting</em>.',
+      'You walk away. But your palm is warm. Not where you touched the obelisk — where you touched the <em class="inline">card</em>. The heat lingers, faint at first, then slowly growing. A soft burn that creeps up from the skin, settling into something you can\'t quite shake.',
+      'A few steps later, you feel it. A weight in your pocket — small, rectangular, unmistakable. You didn\'t put anything there. You <em class="inline">know</em> you didn\'t. But there it is, warm and patient, as though it has always been there.',
+      'You don\'t need to check. You already know what it is.',
+    ],
+    continueLabel: 'look up at the clock',
+    continueIcon: '◎',
+    next: 'clock-quicken',
+  },
+  {
+    id: 'clock-quicken',
+    speaker: null,
+    text: [
+      'The clock has changed. The numbers are falling faster now — not racing, not panicked, but <em class="inline">purposeful</em>. The patient drift has become a steady march. Whatever the obelisk was waiting for, you\'ve triggered it. Or it was always going to happen, and you just happened to be here when it did.',
+      'The ticking spreads through the obsidian underfoot. You can feel it in your soles — a vibration, deep and regular, like the heartbeat of something impossibly large stirring beneath the surface.',
+      'And then — far away, at the edge of the mist where distance stops meaning anything — two red dots. Faint. Steady. Like eyes opening in the dark.',
+      'They grow. Slowly at first, then faster — stretching, elongating, resolving into two parallel lines of red light. They\'re not eyes. They\'re not dots. They\'re <em class="inline">tracks</em>. A pair of rails, glowing faintly, cutting through the obsidian toward you like old scars that have just remembered how to bleed.',
+      'Something is coming.',
+    ],
+    continueLabel: 'wait',
+    continueIcon: '⏳',
+    next: null,
+  },
 ];
 
 let currentFrameIdx = 0;
@@ -3068,6 +3331,8 @@ function renderFrame(idx) {
     'tree-success': 'glimpse-fog',
     'wander-explore': 'panorama-void',
     'scroll-revelation': 'unsent-letter',
+    'postcard-take': 'silver-postcard',
+    'postcard-leave': 'silver-postcard',
   };
   if (unlocks[f.id]) unlockCollection(unlocks[f.id]);
 
@@ -3638,7 +3903,7 @@ const SVG_NS = 'http://www.w3.org/2000/svg';
 let sandboxDevMode = false;
 let vbX = 0, vbY = 0, vbW = 1600, vbH = 1200;
 let sbInitW = 1600, sbInitH = 1200;
-let sbDragging = false, sbDragStartX = 0, sbDragStartY = 0, sbDragVBX = 0, sbDragVBY = 0;
+let sbDragging = false, sbDragMoved = false, sbDragStartX = 0, sbDragStartY = 0, sbDragVBX = 0, sbDragVBY = 0;
 let sbInitialized = false;
 
 document.getElementById('sandbox-dev-toggle').addEventListener('click', function() {
@@ -3693,7 +3958,7 @@ let sbFitVB = { x:0, y:0, w:1600, h:1200 };
 
   container.addEventListener('mousedown', function(e) {
     if (e.button !== 0) return;
-    sbDragging = true;
+    sbDragging = true; sbDragMoved = false;
     sbDragStartX = e.clientX; sbDragStartY = e.clientY;
     sbDragVBX = vbX; sbDragVBY = vbY;
     container.classList.add('dragging');
@@ -3701,10 +3966,12 @@ let sbFitVB = { x:0, y:0, w:1600, h:1200 };
   });
   window.addEventListener('mousemove', function(e) {
     if (!sbDragging) return;
+    const dx = e.clientX - sbDragStartX, dy = e.clientY - sbDragStartY;
+    if (Math.abs(dx) > 4 || Math.abs(dy) > 4) sbDragMoved = true;
     const svg = document.getElementById('sandbox-svg');
     const r = svg.getBoundingClientRect();
-    vbX = sbDragVBX - (e.clientX - sbDragStartX) * (vbW / r.width);
-    vbY = sbDragVBY - (e.clientY - sbDragStartY) * (vbH / r.height);
+    vbX = sbDragVBX - dx * (vbW / r.width);
+    vbY = sbDragVBY - dy * (vbH / r.height);
     sbApplyViewBox();
   });
   window.addEventListener('mouseup', function() {
@@ -3834,7 +4101,13 @@ function buildRealTree() {
   nodes.forEach(n => { if(n.x<minX)minX=n.x; if(n.y<minY)minY=n.y; if(n.x>maxX)maxX=n.x; if(n.y>maxY)maxY=n.y; });
   const padX=240, padY=150;
   nodes.forEach(n => { n.px=(n.x-minX)*COL_W+padX; n.py=(n.y-minY)*ROW_H+padY; });
-  return { nodes, edges, gridW:(maxX-minX)*COL_W+padX*2+COL_W, gridH:(maxY-minY)*ROW_H+padY*2+ROW_H };
+  groups.forEach(g => {
+    g.pyStart=(g.yStart-minY)*ROW_H+padY-60;
+    g.pyEnd=(g.yEnd-minY)*ROW_H+padY+60;
+    g.pxLeft=(minX-minX)*COL_W+padX-180;
+    g.pxRight=(maxX-minX)*COL_W+padX+180;
+  });
+  return { nodes, edges, groups, gridW:(maxX-minX)*COL_W+padX*2+COL_W, gridH:(maxY-minY)*ROW_H+padY*2+ROW_H };
 }
 
 function renderSandbox() {
@@ -3842,8 +4115,12 @@ function renderSandbox() {
   const layout = buildRealTree();
   const { nodes, edges } = layout;
 
+  const svg = document.getElementById('sandbox-svg');
   const edgesG = document.getElementById('sb-edges');
   const nodesG = document.getElementById('sb-nodes');
+
+  // remove previous chapter groups
+  svg.querySelectorAll('.sb-chapter-group').forEach(el => el.remove());
   edgesG.innerHTML = '';
   nodesG.innerHTML = '';
 
@@ -3853,16 +4130,44 @@ function renderSandbox() {
   // card dimensions
   const CW = 160, CH = 100;
 
-  // edges — 90° orthogonal: down from bottom center, horizontal, down to top center
+  // ── chapter group backgrounds ──
+  if (groups) {
+    const groupsG = document.createElementNS(SVG_NS, 'g');
+    groupsG.setAttribute('class', 'sb-chapter-group');
+    groups.forEach(g => {
+      const pad = 20;
+      const r = document.createElementNS(SVG_NS, 'rect');
+      r.setAttribute('x', g.pxLeft - pad);
+      r.setAttribute('y', g.pyStart - pad);
+      r.setAttribute('width', g.pxRight - g.pxLeft + pad*2);
+      r.setAttribute('height', g.pyEnd - g.pyStart + pad*2);
+      r.setAttribute('rx', 8); r.setAttribute('ry', 8);
+      r.setAttribute('fill', g.color);
+      r.setAttribute('stroke', g.color.replace(/[\d.]+\)$/, s => (parseFloat(s)*3)+')'));
+      r.setAttribute('stroke-width', '1');
+      groupsG.appendChild(r);
+
+      const lbl = document.createElementNS(SVG_NS, 'text');
+      lbl.setAttribute('x', g.pxLeft - pad + 12);
+      lbl.setAttribute('y', g.pyStart - pad + 18);
+      lbl.setAttribute('class', 'sb-chapter-label');
+      lbl.textContent = g.label;
+      groupsG.appendChild(lbl);
+    });
+    svg.insertBefore(groupsG, edgesG);
+  }
+
+  // ── edges — 90° orthogonal ──
   edges.forEach(e => {
     const from = nodeMap[e.from], to = nodeMap[e.to];
     if (!from || !to) return;
     const both = from.filled && to.filled;
+    const fh = from.scene ? CH_S : CH;
+    const th = to.scene ? CH_S : CH;
     const p = document.createElementNS(SVG_NS, 'path');
-    const x1 = from.px, y1 = from.py + CH/2;
-    const x2 = to.px, y2 = to.py - CH/2;
+    const x1 = from.px, y1 = from.py + fh/2;
+    const x2 = to.px, y2 = to.py - th/2;
     const midY = y1 + (y2 - y1) / 2;
-    // straight vertical if same column, otherwise L-shaped with horizontal segment
     if (Math.abs(x1 - x2) < 1) {
       p.setAttribute('d', 'M'+x1+','+y1+' L'+x2+','+y2);
     } else {
@@ -3928,6 +4233,10 @@ function renderSandbox() {
   let selectedNodeG = null;
 
   nodes.forEach(n => {
+    const isScene = n.scene;
+    const cw = isScene ? CW_S : CW;
+    const ch = isScene ? CH_S : CH;
+
     const g = document.createElementNS(SVG_NS, 'g');
     g.setAttribute('transform', 'translate('+n.px+','+n.py+')');
     const hasImg = !!n.img;
@@ -3937,8 +4246,8 @@ function renderSandbox() {
 
     // card background
     const card = document.createElementNS(SVG_NS, 'rect');
-    card.setAttribute('x', -CW/2); card.setAttribute('y', -CH/2);
-    card.setAttribute('width', CW); card.setAttribute('height', CH);
+    card.setAttribute('x', -cw/2); card.setAttribute('y', -ch/2);
+    card.setAttribute('width', cw); card.setAttribute('height', ch);
     card.setAttribute('class', 'sb-card');
     g.appendChild(card);
 
@@ -3963,8 +4272,8 @@ function renderSandbox() {
 
     // type accent bar — left edge
     const accent = document.createElementNS(SVG_NS, 'rect');
-    accent.setAttribute('x', -CW/2); accent.setAttribute('y', -CH/2);
-    accent.setAttribute('width', 3); accent.setAttribute('height', CH);
+    accent.setAttribute('x', -cw/2); accent.setAttribute('y', -ch/2);
+    accent.setAttribute('width', isScene ? 4 : 3); accent.setAttribute('height', ch);
     accent.setAttribute('class', 'sb-accent');
     g.appendChild(accent);
 
@@ -4015,6 +4324,14 @@ function renderSandbox() {
     });
     g.addEventListener('mouseleave', function() {
       document.getElementById('sandbox-tooltip').classList.remove('show');
+    });
+
+    // click → open detail panel
+    g.style.cursor = 'pointer';
+    g.addEventListener('click', function(e) {
+      if (sbDragMoved) return;
+      e.stopPropagation();
+      sbOpenDetail(n);
     });
 
     nodesG.appendChild(g);
