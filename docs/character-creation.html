@@ -3273,22 +3273,22 @@ const RACES = {
       'A faded <strong>T.A.L.O.S.</strong> logo stays on your shoulder. A serial number on your hipbone. Property tags that never wear off. You spent the rest of your life paying for the choice, and then you died, and the choice came back with you.'
     ],
     goodAt: [
-      { icon: 'tech',      label: 'Hybrid mediation between HUM and SYN' },
-      { icon: 'machine',   label: 'Partial machine access (~50% hacking)' },
+      { icon: 'tech',      label: 'Hybrid HUM/SYN mediation' },
+      { icon: 'machine',   label: 'Partial machine access (~50%)' },
       { icon: 'survival',  label: 'Augmented industrial labour' },
       { icon: 'endurance', label: 'Reduced-sleep long watches' },
-      { icon: 'lore',      label: 'Pre-collapse A-Tech corporate manuals and procedures' }
+      { icon: 'lore',      label: 'Pre-collapse A-Tech manuals' }
     ],
     badAt: [
-      { icon: 'fragile',  label: 'Body dysphoria flare-ups when the chronon haze thins' },
-      { icon: 'human',    label: 'Pure-organic biosealed rooms (the sensors give you away)' },
-      { icon: 'hellfire', label: 'Infernal contract games (Lucifer reads property tags)' },
-      { icon: 'ghost',    label: 'The mirror question, every time it catches you off guard' }
+      { icon: 'fragile',  label: 'Body dysphoria flare-ups' },
+      { icon: 'human',    label: 'Pure-organic biosealed rooms' },
+      { icon: 'hellfire', label: 'Infernal contract games' },
+      { icon: 'ghost',    label: 'The mirror question' }
     ],
     flavor: [
       { icon: 'tech',    label: 'A walking compromise' },
-      { icon: 'machine', label: 'Working-class saint, patron of mechanics' },
-      { icon: 'eye',     label: 'Body-aware, seam-aware, always feeling the join' }
+      { icon: 'machine', label: 'Working-class saint of mechanics' },
+      { icon: 'eye',     label: 'Body-aware, seam-aware' }
     ],
     // T.A.L.O.S. product-line family · the four canonical A-Tech augmentation
     // tracks an Augmented might have been processed through, each driven by
@@ -3922,4 +3922,12 @@ function renderSubraceTabstrip(subs, activeIndex) {
     return `
       <button type="button" class="subrace-tab${isActive ? ' active' : ''}"
               data-index="${i}" role="tab"
-              aria-selected="${isActive ? 
+              aria-selected="${isActive ? 'true' : 'false'}"${styleAttr}>
+        ${thumb}
+        <span class="subrace-tab-name">${s.name}</span>
+      </button>
+    `;
+  }).join('');
+}
+
+// ─────────────────�
