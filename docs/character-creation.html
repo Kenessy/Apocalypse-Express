@@ -3344,8 +3344,8 @@ const RACES = {
         archetype: 'defensive',
         accentColor: '#3b6d11',
         subtitle: 'Wound-trigger · the medic frame that watches everything',
-        image:      null,
-        thumbImage: null,
+        image:      'img/races/augmented/augmented-argus.png',
+        thumbImage: 'img/races/augmented/thumbs/augmented-argus-thumb.png',
         alt:  'Augmented — ARGUS (medical-frame, integrated diagnostic tools, wound-trigger)',
         desc: 'Medical-replacement T.A.L.O.S.-ARGUS series. The diagnosis was terminal, the surgery was experimental, and you came out the other side with a sensor array where your eyes used to be and an integrated tool kit you can feel in your fingertips.',
         traits: [
@@ -3922,7 +3922,4 @@ function renderSubraceTabstrip(subs, activeIndex) {
     return `
       <button type="button" class="subrace-tab${isActive ? ' active' : ''}"
               data-index="${i}" role="tab"
-              aria-selected="${isActive ? 'true' : 'false'}"${styleAttr}>
-        ${thumb}
-        <span class="subrace-tab-name">${s.name}</span>
-      </b
+              aria-selected="${isActive ? 'true' : 'false'}"${styleAt
