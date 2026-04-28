@@ -1912,6 +1912,606 @@ body {
   text-transform: uppercase;
 }
 
+/* ════════════════════════════════════════════════════════════════════
+   LAYER 2 · SOUL + SKILL MANDALA
+   Cathedral aesthetic continuity with Body tab: gold tracery, dark
+   stained-glass plates, faint inner glow, monospace prose. Per-soul
+   accent injected via inline `--soul-accent` on each card.
+   ════════════════════════════════════════════════════════════════════ */
+.soul-altarpiece {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ── Layer header inside soul tab ── */
+.soul-altarpiece .layer-header {
+  margin-bottom: 8px;
+}
+.soul-altarpiece .soul-title {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: var(--fs-title);
+  letter-spacing: 0.16em;
+  color: var(--gold);
+  margin: 8px 0 12px;
+  line-height: 1.1;
+}
+.soul-altarpiece .soul-lede {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: var(--fs-prose-mono);
+  font-weight: 400;
+  line-height: 1.7;
+  color: var(--text);
+  letter-spacing: 0.005em;
+  opacity: .92;
+  max-width: 920px;
+}
+.soul-altarpiece .soul-lede em { color: var(--gold2); font-style: italic; }
+
+/* ── Shared section header treatment ── */
+.soul-picker-header {
+  margin-bottom: 18px;
+  max-width: 980px;
+}
+.soul-picker-eyebrow {
+  margin-bottom: 10px;
+}
+.soul-picker-title {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: 0.10em;
+  color: var(--gold2);
+  line-height: 1.2;
+  margin-top: 4px;
+  margin-bottom: 6px;
+}
+.soul-picker-sub {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: var(--fs-body);
+  font-weight: 400;
+  color: var(--muted);
+  line-height: 1.65;
+  letter-spacing: 0.005em;
+  opacity: .92;
+}
+.soul-picker-sub em { color: var(--gold2); font-style: italic; }
+
+/* ── Soul picker section panel (stained-glass plate) ── */
+.soul-picker,
+.skill-mandala-panel,
+.side-tracks,
+.dispatch-summary {
+  background:
+    linear-gradient(180deg, rgba(14,12,24,.88), rgba(14,12,24,.94)),
+    radial-gradient(620px 220px at 12% 0%, rgba(201,156,90,.06), transparent 70%),
+    radial-gradient(540px 220px at 92% 100%, rgba(255,123,92,.04), transparent 70%);
+  border: 0.5px solid rgba(201,156,90,.30);
+  border-radius: var(--r-card);
+  padding: 26px 30px 28px;
+  box-shadow:
+    inset 0 0 0 0.5px rgba(201,156,90,.12),
+    0 8px 28px rgba(0,0,0,.45);
+  position: relative;
+}
+
+/* ── 4-card grid for Soul Index picker ── */
+.soul-card-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-top: 4px;
+}
+@media (max-width: 1100px) {
+  .soul-card-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .soul-card-grid { grid-template-columns: 1fr; }
+}
+
+.soul-card {
+  appearance: none;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.018), rgba(0,0,0,.26)),
+    radial-gradient(80% 60% at 50% 0%,
+      color-mix(in srgb, var(--soul-accent, var(--gold)) 18%, transparent),
+      transparent 70%),
+    rgba(0,0,0,.18);
+  border: 0.5px solid color-mix(in srgb, var(--soul-accent, var(--gold)) 32%, rgba(201,156,90,.20));
+  border-radius: var(--r-card);
+  padding: 18px 16px 16px;
+  text-align: left;
+  cursor: pointer;
+  color: var(--text);
+  font-family: 'IBM Plex Mono', monospace;
+  position: relative;
+  overflow: hidden;
+  transition: border-color .22s, box-shadow .22s, transform .22s, background .22s;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.soul-card:hover {
+  border-color: color-mix(in srgb, var(--soul-accent, var(--gold)) 60%, var(--gold2));
+  transform: translateY(-2px);
+  box-shadow:
+    0 10px 30px rgba(0,0,0,.45),
+    0 0 22px color-mix(in srgb, var(--soul-accent, var(--gold)) 28%, transparent),
+    inset 0 0 0 0.5px rgba(230,207,161,.18);
+}
+.soul-card:focus-visible {
+  outline: none;
+  border-color: var(--gold2);
+  box-shadow:
+    0 0 0 2px color-mix(in srgb, var(--gold2) 55%, transparent),
+    0 10px 30px rgba(0,0,0,.45);
+}
+.soul-card.is-selected {
+  border-color: var(--gold2);
+  box-shadow:
+    0 0 0 1px var(--gold2),
+    0 0 0 3px color-mix(in srgb, var(--soul-accent) 42%, rgba(0,0,0,.55)),
+    0 14px 36px rgba(0,0,0,.55),
+    0 0 28px color-mix(in srgb, var(--soul-accent) 38%, transparent);
+}
+.soul-card.is-selected::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(60% 40% at 50% 0%,
+      color-mix(in srgb, var(--soul-accent) 22%, transparent),
+      transparent 70%);
+}
+
+.soul-card-rune {
+  width: 40px; height: 40px;
+  color: var(--soul-accent, var(--gold));
+  opacity: .92;
+  flex: 0 0 40px;
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--soul-accent, var(--gold)) 50%, transparent));
+}
+.soul-card-rune svg { width: 100%; height: 100%; display: block; }
+.soul-card-head { display: flex; flex-direction: column; gap: 2px; }
+.soul-card-sin {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: var(--fs-caption);
+  font-weight: 600;
+  letter-spacing: 0.20em;
+  color: var(--soul-accent, var(--gold));
+  text-transform: uppercase;
+  opacity: .92;
+}
+.soul-card-name {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: 0.06em;
+  color: var(--gold2);
+  line-height: 1.1;
+}
+.soul-card-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: var(--fs-caption);
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+.soul-card-subtitle {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.35;
+  color: var(--gold2);
+  opacity: .95;
+}
+.soul-card-cosmic {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--muted);
+  letter-spacing: 0.005em;
+}
+.soul-card-mech {
+  margin-top: 4px;
+  border-top: 0.5px dashed rgba(201,156,90,.20);
+  padding-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.scm-row {
+  display: grid;
+  grid-template-columns: 78px 1fr;
+  gap: 8px;
+  font-size: 11.5px;
+  line-height: 1.4;
+}
+.scm-key {
+  color: var(--gold);
+  font-weight: 600;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  opacity: .80;
+}
+.scm-val {
+  color: var(--text);
+  opacity: .95;
+}
+.scm-warn .scm-val { color: var(--ember); opacity: .90; }
+
+.soul-clear-row {
+  margin-top: 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.soul-clear-btn {
+  appearance: none;
+  background: linear-gradient(180deg, rgba(201,156,90,.08), rgba(0,0,0,.18));
+  border: 0.5px solid rgba(201,156,90,.30);
+  border-radius: 18px;
+  color: var(--gold);
+  padding: 6px 14px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: var(--fs-caption);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color .2s, border-color .2s, background .2s;
+}
+.soul-clear-btn:hover {
+  color: var(--gold2);
+  border-color: var(--gold2);
+  background: linear-gradient(180deg, rgba(201,156,90,.16), rgba(0,0,0,.20));
+}
+.soul-current-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: var(--fs-caption);
+  font-weight: 500;
+  letter-spacing: 0.10em;
+  color: var(--muted);
+  text-transform: uppercase;
+  opacity: .85;
+}
+
+/* ── Skill Mandala stage ── */
+.mandala-stage {
+  display: grid;
+  grid-template-columns: minmax(220px, 280px) 1fr minmax(180px, 240px);
+  gap: 20px;
+  align-items: stretch;
+  margin-top: 4px;
+}
+@media (max-width: 1100px) {
+  .mandala-stage {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "ctx"
+      "svg"
+      "leg";
+  }
+  .mandala-context  { grid-area: ctx; }
+  .mandala-svg-wrap { grid-area: svg; }
+  .mandala-legend   { grid-area: leg; }
+}
+
+.mandala-context {
+  background: rgba(0,0,0,.32);
+  border: 0.5px solid rgba(201,156,90,.16);
+  border-radius: 6px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: var(--fs-caption);
+  letter-spacing: 0.10em;
+  color: var(--muted);
+  text-transform: uppercase;
+  align-self: start;
+}
+.mctx-row { display: flex; flex-direction: column; gap: 2px; }
+.mctx-key {
+  font-size: 10px;
+  color: var(--gold);
+  font-weight: 600;
+  letter-spacing: 0.20em;
+  opacity: .80;
+}
+.mctx-val {
+  font-size: var(--fs-label);
+  color: var(--text);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  opacity: .95;
+}
+
+.mandala-svg-wrap {
+  background: rgba(0,0,0,.32);
+  border: 0.5px solid rgba(201,156,90,.20);
+  border-radius: 6px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+  min-height: 360px;
+  box-shadow: inset 0 0 36px rgba(0,0,0,.40);
+}
+.mandala-svg-wrap svg { width: 100%; height: auto; max-width: 660px; display: block; }
+
+.mandala-legend {
+  background: rgba(0,0,0,.32);
+  border: 0.5px solid rgba(201,156,90,.16);
+  border-radius: 6px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-self: start;
+}
+.mleg-row {
+  display: grid;
+  grid-template-columns: 12px 1fr 28px;
+  align-items: center;
+  gap: 8px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--text);
+}
+.mleg-row .mleg-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  display: block;
+}
+.mleg-row .mleg-name {
+  font-weight: 500;
+  color: var(--text);
+  opacity: .95;
+}
+.mleg-row .mleg-num {
+  font-weight: 600;
+  color: var(--gold2);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.mleg-row .mleg-bonus {
+  color: var(--ember);
+  font-weight: 500;
+  font-size: 10px;
+  margin-left: 4px;
+}
+
+/* ── Cuts/redirects row beneath mandala ── */
+.mandala-cuts {
+  margin-top: 18px;
+  border-top: 0.5px dashed rgba(201,156,90,.20);
+  padding-top: 14px;
+}
+.mcuts-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.20em;
+  color: var(--gold);
+  text-transform: uppercase;
+  opacity: .80;
+  margin-bottom: 8px;
+}
+.mcuts-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.mcut-tag {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: var(--r-pill);
+  background: rgba(201,156,90,.06);
+  border: 0.5px solid rgba(201,156,90,.22);
+  color: var(--muted);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  cursor: help;
+}
+
+/* ── Side-tracks ── */
+.side-tracks-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 4px;
+}
+@media (max-width: 980px) {
+  .side-tracks-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .side-tracks-grid { grid-template-columns: 1fr; }
+}
+.st-block {
+  background: rgba(0,0,0,.28);
+  border: 0.5px solid rgba(201,156,90,.18);
+  border-radius: 6px;
+  padding: 12px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.st-block-disciplines { grid-column: 1 / -1; }
+.st-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.20em;
+  color: var(--gold);
+  text-transform: uppercase;
+  opacity: .85;
+}
+.st-pips {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-top: 2px;
+}
+.st-pips .pip {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  border: 0.5px solid rgba(201,156,90,.35);
+  background: rgba(0,0,0,.5);
+  display: inline-block;
+}
+.st-pips .pip.is-on {
+  background: var(--gold);
+  border-color: var(--gold2);
+  box-shadow: 0 0 8px rgba(201,156,90,.45);
+}
+.st-pips[data-track="dark"] .pip.is-on {
+  background: #2a2330;
+  border-color: #6e687d;
+  box-shadow: 0 0 8px rgba(0,0,0,.6);
+}
+.st-pips[data-track="white"] .pip.is-on {
+  background: #f8f5f0;
+  border-color: #e6cfa1;
+  box-shadow: 0 0 8px rgba(248,245,240,.45);
+}
+.st-pips[data-track="atech"] .pip.is-on {
+  background: var(--cyan);
+  border-color: #aae6f1;
+  box-shadow: 0 0 8px rgba(40,189,216,.45);
+}
+.st-pips[data-track="hell"] .pip.is-on {
+  background: var(--ember);
+  border-color: #ffaa90;
+  box-shadow: 0 0 8px rgba(255,123,92,.45);
+}
+.st-pips[data-track="oldworld"] .pip.is-on {
+  background: var(--gold2);
+  border-color: #fff0d3;
+  box-shadow: 0 0 8px rgba(230,207,161,.45);
+}
+.st-note {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  opacity: .80;
+  margin-top: 2px;
+}
+.discipline-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+}
+.discipline-pill {
+  appearance: none;
+  background: rgba(0,0,0,.30);
+  border: 0.5px solid rgba(201,156,90,.30);
+  border-radius: var(--r-pill);
+  padding: 6px 12px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  transition: border-color .18s, background .18s, color .18s;
+}
+.discipline-pill .dp-code {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--gold);
+  text-transform: uppercase;
+}
+.discipline-pill .dp-name { font-weight: 500; }
+.discipline-pill:hover {
+  border-color: var(--gold2);
+  color: var(--text);
+}
+.discipline-pill[aria-pressed="true"] {
+  background: rgba(201,156,90,.16);
+  border-color: var(--gold2);
+  color: var(--gold2);
+  box-shadow: 0 0 12px rgba(201,156,90,.30) inset;
+}
+.discipline-pill[aria-pressed="true"] .dp-code { color: var(--gold2); }
+
+/* ── Dispatch summary ── */
+.dispatch-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 4px;
+}
+@media (max-width: 600px) {
+  .dispatch-grid { grid-template-columns: 1fr; }
+}
+.dispatch-block {
+  background: rgba(0,0,0,.28);
+  border: 0.5px solid rgba(201,156,90,.18);
+  border-radius: 6px;
+  padding: 14px 16px 16px;
+}
+.dispatch-good { border-color: var(--green-line); background: var(--green-soft); }
+.dispatch-bad  { border-color: var(--red-line);   background: var(--red-soft); }
+.db-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  opacity: .85;
+  margin-bottom: 8px;
+}
+.dispatch-good .db-label { color: var(--green-good); }
+.dispatch-bad  .db-label { color: var(--red-bad); }
+.db-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.db-tag {
+  display: inline-block;
+  padding: 5px 12px;
+  border-radius: var(--r-pill);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+}
+.dispatch-good .db-tag {
+  background: rgba(151,196,89,.10);
+  border: 0.5px solid var(--green-line);
+  color: var(--green-good);
+}
+.dispatch-bad .db-tag {
+  background: rgba(255,123,92,.08);
+  border: 0.5px solid var(--red-line);
+  color: var(--red-bad);
+}
+.db-empty {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--dim);
+  font-style: italic;
+}
+
 /* ───────── FOOTER ───────── */
 .foot {
   border-top: 0.5px solid rgba(201,156,90,.12);
@@ -2670,7 +3270,7 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
 
 <nav class="tab-nav" id="tabNav">
   <button class="tab active" data-tab="test"><span class="num">1</span>Body</button>
-  <button class="tab disabled" data-tab="lelek"><span class="num">2</span>Soul</button>
+  <button class="tab" data-tab="lelek"><span class="num">2</span>Soul</button>
   <button class="tab disabled" data-tab="szem"><span class="num">3</span>Personality</button>
   <button class="tab disabled" data-tab="vagon"><span class="num">4</span>Carriages</button>
 </nav>
@@ -3013,11 +3613,279 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
      TAB 2-4 — placeholders
      ═══════════════════════════════════════════════════════ -->
 <section class="tab-panel" id="tab-lelek">
-  <div class="coming-soon">
-    <h2>LAYER 2 · SOUL</h2>
-    <p>The four Soul Index archetypes — <em>Boiler</em> (Wrath), <em>Crown</em> (Pride), <em>Maw</em> (Greed), <em>Mirror</em> (Envy) — the cosmic temperament axis layered on top of every race. This is where you&#39;ll learn what kind of soulward pull your character carried out of Hell.</p>
-    <p class="badge">Coming soon</p>
-  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       LAYER 2 · SOUL + SKILL MANDALA
+       ═══════════════════════════════════════════════════════ -->
+  <div class="soul-altarpiece">
+
+    <!-- Layer header -->
+    <div class="layer-header">
+      <div class="bi-eyebrow cath-eyebrow">
+        <span class="ce-orn" aria-hidden="true"><svg><use href="#orn-arch-small"/></svg></span>
+        Layer 2 of 4 · Soul + Skill
+      </div>
+      <h2 class="soul-title">Soul Index &amp; Skill Mandala</h2>
+      <p class="soul-lede">
+        Your Body decided <em>what you are</em>. Your Soul Index decides <em>how you behave under pressure</em>: the cosmic temperament that bends every roll a few degrees off true. Pick one of four. The mandala beneath shows where dispatch can send you with confidence, and where to send someone else.
+      </p>
+    </div>
+
+    <!-- ═══ SOUL INDEX PICKER — 4 CARDS ═══ -->
+    <section class="soul-picker" aria-labelledby="soulPickerHeader">
+      <div class="soul-picker-header">
+        <div class="soul-picker-eyebrow cath-eyebrow">
+          <span class="ce-orn" aria-hidden="true"><svg><use href="#orn-quatrefoil"/></svg></span>
+          Soul Index · the four sins that drive a spark
+        </div>
+        <h3 class="soul-picker-title" id="soulPickerHeader">Pick a temperament</h3>
+        <p class="soul-picker-sub">Each Index gives a Skill Imprint (a +1 nudge to two specific skills), one signature move, and a permanent drawback. Click a card to apply it to the mandala.</p>
+      </div>
+
+      <div class="soul-card-grid" id="soulCardGrid" role="radiogroup" aria-label="Soul Index choice">
+
+        <button type="button" class="soul-card" data-soul="boiler" role="radio" aria-checked="false"
+                style="--soul-accent: #A32D2D;">
+          <div class="soul-card-rune" aria-hidden="true">
+            <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="20" cy="20" r="14" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".55"/>
+              <path d="M20 8 Q14 16 16 22 Q12 23 12 27 Q12 31 20 32 Q28 31 28 27 Q28 23 24 22 Q26 16 20 8 Z"
+                    fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+              <path d="M20 22 Q18 25 19 27 Q20 28 21 27 Q22 25 20 22 Z"
+                    fill="currentColor" fill-opacity=".7" stroke="none"/>
+            </svg>
+          </div>
+          <div class="soul-card-head">
+            <div class="soul-card-sin">Wrath</div>
+            <div class="soul-card-name">Boiler</div>
+            <div class="soul-card-tag">Redline</div>
+          </div>
+          <p class="soul-card-subtitle">Burns hot. Refuses to back down.</p>
+          <p class="soul-card-cosmic">Frame-bound, world-first, immediate. Frame-grade temperament that drives a soul to break limits.</p>
+          <div class="soul-card-mech">
+            <div class="scm-row"><span class="scm-key">Boost</span><span class="scm-val">STR +1, CON +1</span></div>
+            <div class="scm-row"><span class="scm-key">Imprint</span><span class="scm-val">Pry, Soul Grit</span></div>
+            <div class="scm-row"><span class="scm-key">Active</span><span class="scm-val">Overboil</span></div>
+            <div class="scm-row scm-warn"><span class="scm-key">Drawback</span><span class="scm-val">-1 OFS Riddlecraft</span></div>
+          </div>
+        </button>
+
+        <button type="button" class="soul-card" data-soul="crown" role="radio" aria-checked="false"
+                style="--soul-accent: #854F0B;">
+          <div class="soul-card-rune" aria-hidden="true">
+            <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="20" cy="20" r="14" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".55"/>
+              <path d="M9 26 L13 14 L17 22 L20 12 L23 22 L27 14 L31 26 Z"
+                    fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+              <path d="M9 28 H31" stroke="currentColor" stroke-width="1.2"/>
+              <circle cx="13" cy="14" r="1.2" fill="currentColor"/>
+              <circle cx="20" cy="12" r="1.2" fill="currentColor"/>
+              <circle cx="27" cy="14" r="1.2" fill="currentColor"/>
+            </svg>
+          </div>
+          <div class="soul-card-head">
+            <div class="soul-card-sin">Pride</div>
+            <div class="soul-card-name">Crown</div>
+            <div class="soul-card-tag">Command</div>
+          </div>
+          <p class="soul-card-subtitle">Routes power through chains-of-command.</p>
+          <p class="soul-card-cosmic">Systematic, world-first, rhythmic. Hierarchy that imposes structure on the world.</p>
+          <div class="soul-card-mech">
+            <div class="scm-row"><span class="scm-key">Boost</span><span class="scm-val">CHA +2</span></div>
+            <div class="scm-row"><span class="scm-key">Imprint</span><span class="scm-val">Influence, Guile</span></div>
+            <div class="scm-row"><span class="scm-key">Active</span><span class="scm-val">Priority Target</span></div>
+            <div class="scm-row scm-warn"><span class="scm-key">Drawback</span><span class="scm-val">solo-multitasking penalty</span></div>
+          </div>
+        </button>
+
+        <button type="button" class="soul-card" data-soul="maw" role="radio" aria-checked="false"
+                style="--soul-accent: #3B6D11;">
+          <div class="soul-card-rune" aria-hidden="true">
+            <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="20" cy="20" r="14" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".55"/>
+              <path d="M10 18 Q20 8 30 18 Q26 24 20 24 Q14 24 10 18 Z"
+                    fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+              <path d="M13 19 L15 22 L17 19 L19 22 L21 19 L23 22 L25 19 L27 22"
+                    fill="none" stroke="currentColor" stroke-width="1"/>
+              <circle cx="20" cy="14" r="1.4" fill="currentColor"/>
+            </svg>
+          </div>
+          <div class="soul-card-head">
+            <div class="soul-card-sin">Greed</div>
+            <div class="soul-card-name">Maw</div>
+            <div class="soul-card-tag">Hoarder</div>
+          </div>
+          <p class="soul-card-subtitle">Always slightly better at fiddling with things for value.</p>
+          <p class="soul-card-cosmic">Systematic, balanced, eventual. Acquisition that gathers power slowly.</p>
+          <div class="soul-card-mech">
+            <div class="scm-row"><span class="scm-key">Boost</span><span class="scm-val">DEX +1, WIS +1</span></div>
+            <div class="scm-row"><span class="scm-key">Imprint</span><span class="scm-val">Tinker, Riddlecraft</span></div>
+            <div class="scm-row"><span class="scm-key">Active</span><span class="scm-val">Jackpot Pull</span></div>
+            <div class="scm-row scm-warn"><span class="scm-key">Drawback</span><span class="scm-val">Loot Itch</span></div>
+          </div>
+        </button>
+
+        <button type="button" class="soul-card" data-soul="mirror" role="radio" aria-checked="false"
+                style="--soul-accent: #534AB7;">
+          <div class="soul-card-rune" aria-hidden="true">
+            <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="20" cy="20" r="14" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".55"/>
+              <path d="M20 8 Q26 14 26 20 Q26 26 20 32 Q14 26 14 20 Q14 14 20 8 Z"
+                    fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+              <path d="M20 8 V32" stroke="currentColor" stroke-width="0.8" stroke-dasharray="2 2" opacity=".7"/>
+              <circle cx="20" cy="20" r="2.4" fill="currentColor" fill-opacity=".7"/>
+            </svg>
+          </div>
+          <div class="soul-card-head">
+            <div class="soul-card-sin">Envy</div>
+            <div class="soul-card-name">Mirror</div>
+            <div class="soul-card-tag">Adaptation</div>
+          </div>
+          <p class="soul-card-subtitle">Reads danger patterns; takes the form of what hurt them.</p>
+          <p class="soul-card-cosmic">Wild, self-first, rhythmic. Mimicry that adapts to threat.</p>
+          <div class="soul-card-mech">
+            <div class="scm-row"><span class="scm-key">Boost</span><span class="scm-val">INT +1, WIS +1</span></div>
+            <div class="scm-row"><span class="scm-key">Imprint</span><span class="scm-val">Stillsense, Godsight</span></div>
+            <div class="scm-row"><span class="scm-key">Active</span><span class="scm-val">Reflected Strike</span></div>
+            <div class="scm-row scm-warn"><span class="scm-key">Drawback</span><span class="scm-val">cold-task penalty</span></div>
+          </div>
+        </button>
+
+      </div>
+
+      <div class="soul-clear-row">
+        <button type="button" id="soulClearBtn" class="soul-clear-btn" aria-label="Clear Soul Index choice">
+          Clear choice
+        </button>
+        <span class="soul-current-tag" id="soulCurrentTag">No Soul Index picked. Mandala shows raw race baseline.</span>
+      </div>
+    </section>
+
+    <!-- ═══ SKILL MANDALA ═══ -->
+    <section class="skill-mandala-panel" aria-labelledby="mandalaHeader">
+      <div class="soul-picker-header">
+        <div class="soul-picker-eyebrow cath-eyebrow">
+          <span class="ce-orn" aria-hidden="true"><svg><use href="#orn-rose-petal"/></svg></span>
+          Skill Mandala · dispatch fingerprint
+        </div>
+        <h3 class="soul-picker-title" id="mandalaHeader">Where this character lands a roll</h3>
+        <p class="soul-picker-sub">
+          Six axes, one per ability. Each axis is the <em>primary</em> skill of its ability pair: the broader, more dispatch-relevant of the two. Polygon shape = the character's current dispatch fingerprint, computed live from the race+sub-type baseline plus the chosen Soul Index modifier.
+        </p>
+      </div>
+
+      <div class="mandala-stage">
+        <div class="mandala-context" id="mandalaContext">
+          <span class="mctx-row"><span class="mctx-key">Body</span> <span class="mctx-val" id="mctxRace">No race selected</span></span>
+          <span class="mctx-row"><span class="mctx-key">Soul</span> <span class="mctx-val" id="mctxSoul">None picked</span></span>
+        </div>
+        <div class="mandala-svg-wrap" id="mandalaSvgWrap" aria-live="polite">
+          <!-- SVG injected by JS -->
+        </div>
+        <div class="mandala-legend" id="mandalaLegend">
+          <!-- Per-axis numeric readout injected by JS -->
+        </div>
+      </div>
+
+      <!-- Cut/redirect skills explainer -->
+      <div class="mandala-cuts">
+        <div class="mcuts-eyebrow">Off-axis &amp; redirect skills</div>
+        <div class="mcuts-tags">
+          <span class="mcut-tag" title="Raw force / leverage. Redirected from STR-axis.">Pry · STR</span>
+          <span class="mcut-tag" title="Balance / precision. Redirected from DEX-axis.">Acrobatics · DEX</span>
+          <span class="mcut-tag" title="Metaphysical resilience. Powers the 1-HP test.">Soul Grit · CON</span>
+          <span class="mcut-tag" title="Reading the new physics. Redirected from INT-axis.">Stillsense · INT</span>
+          <span class="mcut-tag" title="Numinous layer; rites, wards, spoor.">Godsight · WIS</span>
+          <span class="mcut-tag" title="Misdirection &amp; disguise. Redirected from CHA-axis.">Guile · CHA</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ SIDE-TRACKS ═══ -->
+    <section class="side-tracks" aria-labelledby="sideTracksHeader">
+      <div class="soul-picker-header">
+        <div class="soul-picker-eyebrow cath-eyebrow">
+          <span class="ce-orn" aria-hidden="true"><svg><use href="#orn-arch-small"/></svg></span>
+          Side-tracks · feathers, bonds, disciplines
+        </div>
+        <h3 class="soul-picker-title" id="sideTracksHeader">What else colours the soul</h3>
+        <p class="soul-picker-sub">Auto-derived starting values from race+sub-type. Disciplines are off by default; toggle the ones the character was trained in.</p>
+      </div>
+
+      <div class="side-tracks-grid">
+
+        <div class="st-block">
+          <div class="st-label">Dark Feather</div>
+          <div class="st-pips" id="darkFeatherPips" data-track="dark"></div>
+          <div class="st-note" id="darkFeatherNote">0 / 5</div>
+        </div>
+
+        <div class="st-block">
+          <div class="st-label">White Feather</div>
+          <div class="st-pips" id="whiteFeatherPips" data-track="white"></div>
+          <div class="st-note" id="whiteFeatherNote">0 / 5</div>
+        </div>
+
+        <div class="st-block">
+          <div class="st-label">A-Tech bond</div>
+          <div class="st-pips st-pips-bond" id="atechBondPips" data-track="atech"></div>
+          <div class="st-note" id="atechBondNote">0 / 3</div>
+        </div>
+
+        <div class="st-block">
+          <div class="st-label">Hell bond</div>
+          <div class="st-pips st-pips-bond" id="hellBondPips" data-track="hell"></div>
+          <div class="st-note" id="hellBondNote">0 / 3</div>
+        </div>
+
+        <div class="st-block">
+          <div class="st-label">Old-World bond</div>
+          <div class="st-pips st-pips-bond" id="oldworldBondPips" data-track="oldworld"></div>
+          <div class="st-note" id="oldworldBondNote">0 / 3</div>
+        </div>
+
+        <div class="st-block st-block-disciplines">
+          <div class="st-label">Disciplines (licenses)</div>
+          <div class="discipline-row">
+            <button type="button" class="discipline-pill" data-disc="MED" aria-pressed="false">
+              <span class="dp-code">MED</span> <span class="dp-name">MedTech</span>
+            </button>
+            <button type="button" class="discipline-pill" data-disc="EOD" aria-pressed="false">
+              <span class="dp-code">EOD</span> <span class="dp-name">Demolitions</span>
+            </button>
+            <button type="button" class="discipline-pill" data-disc="RCP" aria-pressed="false">
+              <span class="dp-code">RCP</span> <span class="dp-name">Railcraft</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ═══ DISPATCH SUMMARY ═══ -->
+    <section class="dispatch-summary" aria-labelledby="dispatchHeader">
+      <div class="soul-picker-header">
+        <div class="soul-picker-eyebrow cath-eyebrow">
+          <span class="ce-orn" aria-hidden="true"><svg><use href="#orn-quatrefoil"/></svg></span>
+          Dispatch summary · the playable upshot
+        </div>
+        <h3 class="soul-picker-title" id="dispatchHeader">Where to send them, where not to</h3>
+      </div>
+
+      <div class="dispatch-grid">
+        <div class="dispatch-block dispatch-good">
+          <div class="db-label">Send for</div>
+          <div class="db-tags" id="dispatchSendTags"><span class="db-empty">No race selected.</span></div>
+        </div>
+        <div class="dispatch-block dispatch-bad">
+          <div class="db-label">Avoid</div>
+          <div class="db-tags" id="dispatchAvoidTags"><span class="db-empty">No race selected.</span></div>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /.soul-altarpiece -->
+
 </section>
 
 <section class="tab-panel" id="tab-szem">
@@ -3039,7 +3907,7 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
 </main>
 
 <footer class="foot">
-  AE Codex · Character Creation Tutorial · Layer 1 of 4
+  AE Codex · Character Creation Tutorial · Layer 2 of 4 · Body + Soul
 </footer>
 
 <script>
@@ -3453,471 +4321,4 @@ const RACES = {
           'Reads exits before entrances'
         ],
         roleOnTrain: 'The crew&#39;s bypass. Steps where others cannot, gets out without trace, brings back what was supposed to stay sealed. Useful, untrusted, and necessary anyway.',
-        hooks: [
-          'Who built the chassis, and what does the next favour cost?',
-          'What were you trying to escape when you took this contract?',
-          'When the cloaking-shimmer holds, are you still the same person underneath?'
-        ]
-      }
-    ],
-    conflictHook: 'Body dysphoria: phantom flesh, real metal. Was it worth what you sold?',
-    conflictBody: 'Every motion is a small decision the augmentation made on your behalf. <strong>Phantom limbs</strong> ache where the prosthetic took over. The <strong>seam between flesh and metal</strong> is the only honest part of your skin: the place where memory ends and the contract begins. Your sensors read other people&#39;s grief as cold telemetry; you feel it as data first, person second, and the gap between the two never quite closes. <em>The faded T.A.L.O.S. logo on your shoulder is a property tag, and it does not wash off.</em><br><br><strong>The Augmented question:</strong> not <em>who am I</em>, but <em>who was I before I signed</em>. You spent the rest of your life paying for the choice, and then you died, and the choice came back with you.'
-  },
-
-  cindered: {
-    eyebrow: 'Mortal × Hell · sin-shaped form, human soul base',
-    title: 'Cindered',
-    subtitle: 'Your form: a sin-statue. Your soul: damned human. A black feather holds the two together.',
-    body: 'Your sin ran deep enough that Hell itself rewrote your form — <em>wrath&#39;s</em> magma veins, <em>pride&#39;s</em> ember eyes, <em>deceit&#39;s</em> shadow tendrils. You poured through the rifts as a mindless horde across the frozen earth — until <strong>Lucifer saw your potential and pressed a black feather into you</strong>: will and purpose returned. You are now a directed demon, kept on a leash. The pure Hell pole below would be unbroken hellfire — but <strong>you sit on the edge, not the corner</strong>, because a damned human soul still beats underneath.',
-    role: 'Manipulation · scouting via demonic agility · forbidden pacts · social disruption · rift-walker',
-    subs: 'Wrath-Forged (magma veins) · Pride-Born (towering, ember-eyed) · Veil-Born (mist-shrouded, deceit-leaning).',
-    conflict: 'Atonement vs. deeper demonic immersion — the black feather can snap if you push too far, and you fall back into the horde.'
-  },
-
-  hellforged: {
-    eyebrow:   'Construct × Hell · V.E.S.S.E.L. series',
-    iconImage: 'img/races/hellforged/hellforged-overall.png',
-    iconAlt:   'Hellforged — race umbrella icon (skull-mask chassis with the four archetype-color corner medallions and black feather)',
-    title:     'Hellforged',
-    subtitle:  'A damned human soul torn from Hell and forced into a V.E.S.S.E.L. chassis — held together by Lucifer&#39;s black feather and a contract that cannot be read in full.',
-    bodyParas: [
-      'On a train of damned humans, sin-shaped demons, and printed prototypes, your <strong>three-fold tragedy</strong> makes you the rarest visible thing aboard. A-Tech ripped your soul from Hell&#39;s deepest cells, jammed it into a V.E.S.S.E.L. military chassis, and lost containment when the project went wrong. <em>You should have died with the others. You did not.</em>',
-      'Now you are <strong>walking failed alchemy</strong>: chassis-metal welded to soul-stuff, vents exhaling brimstone, infernal glyphs etched into the plating to barely hold the chaos in. Your voice is synthesized speech laced with a demon&#39;s growl. Your power core pulses against your sternum like a tortured second heart, the colour of whatever sub-form the lab labelled you.',
-      'You serve Lucifer because <strong>his black feather is the only thing keeping the synchronicity from breaking</strong>. Without it, the chassis would purge the soul as a virus and the soul would eject the chassis as an implant. You are an elite weapon in his rebellion against divine silence — and a deal that can be revoked.',
-      'Every Hellforged who walks this train walks it <strong>already feather-bound</strong>, and that means <em>every Hellforged starts the journey one Chaos Level higher than the Inheritors beside them</em>. The cost of being held together by Lucifer&#39;s hand is starting one step closer to coming apart. They know it. They factor it in.'
-    ],
-    goodAt: [
-      { icon: 'hellfire',    label: 'Hellfire bursts' },
-      { icon: 'machine',     label: 'Demonic-tech hacks' },
-      { icon: 'eye',         label: 'Rift sensing' },
-      { icon: 'combat',      label: 'High raw damage' },
-      { icon: 'exploration', label: 'Infernal-zone navigation' }
-    ],
-    badAt: [
-      { icon: 'human',     label: 'Reading mortals' },
-      { icon: 'social',    label: 'Polite contracts' },
-      { icon: 'endurance', label: 'Long sync stretches' },
-      { icon: 'fragile',   label: 'Maintaining stability' }
-    ],
-    flavor: [
-      { icon: 'ghost',    label: 'Three-fold tragedy' },
-      { icon: 'machine',  label: 'Soul-machine fusion' },
-      { icon: 'hellfire', label: 'Lucifer-bound elite' }
-    ],
-    subTypeAxis: 'Chassis-temperature variants — V.E.S.S.E.L. evolution stages',
-    subTypeRich: [
-      {
-        name: 'Carnelian',
-        archetype: 'offensive',
-        accentColor: '#a32d2d',
-        subtitle: 'Earliest cycle · the soul-furnace that never cooled',
-        image:      'img/races/hellforged/hellforged-carnelian.png',
-        thumbImage: 'img/races/hellforged/thumbs/hellforged-carnelian-thumb.png',
-        alt: 'Hellforged — Carnelian (red-hot, magma-cracked chassis, earliest V.E.S.S.E.L. cycle)',
-        desc: 'The first V.E.S.S.E.L. line that survived. Magma-cracks split the metal where the soul-fuel bleeds through. The chassis melts itself, slowly, and refuses to slow down.',
-        overall: 'The first V.E.S.S.E.L. line that survived. CARNELIAN-class chassis run perpetually hot — magma cracks split the metal where the soul-fuel bleeds through, the power core holds at a colour somewhere between molten gold and arterial red. Lab-cycle one, problem one: nothing in this iteration was ever cool enough to stand still in.',
-        bodyHistory: 'Lab-cycle 1, V.E.S.S.E.L. project. A-Tech learned that pulling a wrath-class soul into a chassis does not produce a stable system; it produces a <strong>forge that hates being a forge</strong>. CARNELIAN chassis were called &quot;successes&quot; because they did not explode — but they melt their own external plating over years of operation. The soul still burns. The chassis can no longer pretend not to.',
-        bodyMarks: [
-          'Magma-cracks running down the chest plate, glowing dim-red even at rest',
-          'Black-iron exterior with patches of softened, partly re-flowed metal',
-          'Heat-haze at the collar and joints — air visibly distorts above the shoulders',
-          'Power core: deep arterial red, audibly working'
-        ],
-        soulTrace: [
-          'Wrath preserved as fuel — never cools, never repays',
-          'Acts before thinking; thinks while still acting',
-          'Distrusts patience as a kind of cowardice',
-          'Knows the chassis is melting and refuses to slow down'
-        ],
-        roleOnTrain: 'The forge-arm. The Hellforged you point at the thing that will not move otherwise. Brings hellfire bursts, cleaves through wards designed for cold flesh.',
-        traits: [
-          'Offensive primary direction',
-          'Magma-cracked exterior',
-          'Heat-leakage signature',
-          'Earliest V.E.S.S.E.L. cycle survivor',
-          'Self-overheats under stress',
-          'Wrath as fuel, never spent'
-        ],
-        hooks: [
-          'What did you burn, in life, that earned you this chassis?',
-          'Whose name does the chassis remember when you forget?',
-          'When does the forge stop being yours and start being its own thing?'
-        ]
-      },
-      {
-        name: 'Verdant',
-        archetype: 'defensive',
-        accentColor: '#3b6d11',
-        subtitle: 'Second cycle · the cooling that grew teeth',
-        image:      'img/races/hellforged/hellforged-verdant.png',
-        thumbImage: 'img/races/hellforged/thumbs/hellforged-verdant-thumb.png',
-        alt: 'Hellforged — Verdant (cool-green, vegetated chassis, second V.E.S.S.E.L. cycle)',
-        desc: 'A-Tech&#39;s answer to CARNELIAN. The chassis stopped melting — and life started growing on the warm plating. Half-instrument, half-garden.',
-        overall: 'A-Tech&#39;s answer to CARNELIAN: cool the chassis enough that it survives a deployment. They succeeded — and discovered that <em>once the metal is cool enough to host life, life starts hosting it</em>. VERDANT-class chassis are partially overgrown, lichened, mossed at the seams. The plating breathes. The breathing is your own.',
-        bodyHistory: 'Lab-cycle 2, V.E.S.S.E.L. project. A-Tech tuned the heat-bleed; the chassis stopped melting. Then bog-grade mosses found the warm-but-not-burning plating and <strong>turned the body into half-instrument, half-garden</strong>. The lab tried to scrape it off three times. It always grew back. They classed it a feature, then shipped the model.',
-        bodyMarks: [
-          'Patinas of dark-green moss in the plating seams and at the neck',
-          'Vine-like wire-weeds curling at the elbow and knee joints',
-          'Power core: deep verdant green, slow steady pulse',
-          'Posture squared, planted, gives ground only on order'
-        ],
-        soulTrace: [
-          'Patient where CARNELIAN is impatient',
-          'Reads cover, position, exits as easily as breathing',
-          'Distrusts speed as a kind of haste',
-          'Knows the chassis is alive in ways it should not be'
-        ],
-        roleOnTrain: 'The shield-of-iron-and-vine. Holds the doorway, holds the line, lets the others pass through it. The thing the CARNELIAN doesn&#39;t kill, the VERDANT outwaits.',
-        traits: [
-          'Defensive primary direction',
-          'Vegetated cooling chassis',
-          'Slow heat dissipation',
-          'Patinated organic surfaces',
-          'Roots-down stance',
-          'Patience as armor'
-        ],
-        hooks: [
-          'What grew in you while you were down there?',
-          'Whose ground did you fail to hold, in life?',
-          'When was the last time you let something pass that you could have stopped?'
-        ]
-      },
-      {
-        name: 'Azure',
-        archetype: 'science',
-        accentColor: '#185fa5',
-        subtitle: 'Third cycle · the chassis that learned its own physics',
-        image:      'img/races/hellforged/hellforged-azure.png',
-        thumbImage: 'img/races/hellforged/thumbs/hellforged-azure-thumb.png',
-        alt: 'Hellforged — Azure (super-cooled blue, condensation-shedding chassis, perfected V.E.S.S.E.L. cycle)',
-        desc: 'The &quot;perfected&quot; V.E.S.S.E.L. line. Super-cooled to a point where condensation drips off the plating. The mechanics are precise. Nothing inside is allowed to be warm.',
-        overall: 'The &quot;perfected&quot; V.E.S.S.E.L. line. AZURE-class chassis were super-cooled to a point where condensation drips off the plating in any room above freezing. The soul holds quiet. The mechanics are precise. The cost: <em>nothing inside the chassis is allowed to be warm</em>. Including the part of you that used to be warm.',
-        bodyHistory: 'Lab-cycle 3, V.E.S.S.E.L. project. A-Tech finally understood the CARNELIAN/VERDANT problem: <strong>the soul-bleed is heat</strong>. So they cooled the soul. They called it efficient. The decant logs note that AZURE-class subjects rarely speak in their first month of operation, and never raise their voice in their first year.',
-        bodyMarks: [
-          'Condensation droplets visibly forming and falling on the chest plate',
-          'Pale-blue cast in the metal itself — chilled, sub-zero plating',
-          'Frost rings at the joints when stationary',
-          'Power core: ice-blue, almost silent, almost still'
-        ],
-        soulTrace: [
-          'Pattern-matcher. Reads systems before reading people.',
-          'Distrusts rage; knows it gets you killed in the lab.',
-          'Knowledge as currency — knows what to spend, what to hoard.',
-          'Content with knowing, even when nothing can be said.'
-        ],
-        roleOnTrain: 'The intelligence officer. Pieces together what is coming from signals others cannot resolve. Trades knowledge for position, position for time, time for advantage.',
-        traits: [
-          'Science primary oriented',
-          'Super-cooled stable chassis',
-          'Condensation-shedding plating',
-          '&quot;Perfected&quot; V.E.S.S.E.L. iteration',
-          'No wasted motion',
-          'Distrusts emotion as inefficiency'
-        ],
-        hooks: [
-          'What did you understand, in life, that put you in the wrath cells?',
-          'Whose pattern have you noticed that no one else has?',
-          'When did you last share something true at any cost to yourself?'
-        ]
-      },
-      {
-        name: 'Amethyst',
-        archetype: 'unique',
-        accentColor: '#7c40b0',
-        subtitle: 'Rogue lab variant · the chassis that found its own current',
-        image:      'img/races/hellforged/hellforged-amethyst.png',
-        thumbImage: 'img/races/hellforged/thumbs/hellforged-amethyst-thumb.png',
-        alt: 'Hellforged — Amethyst (volatile purple, electrical-arc chassis, off-the-books V.E.S.S.E.L. cycle)',
-        desc: 'Off-the-books lab cycle. The chassis converts heat into electrical arcing instead of bleeding it out. Lights up purple at random. AMETHYST-class shouldn&#39;t exist. AMETHYST-class is here anyway.',
-        overall: 'AMETHYST-class is what came out of the lab when one engineer went off-spec. Instead of cooling, they <em>let the chassis convert</em> — bleed the heat into electrical arcing instead of bleeding it out. The chassis lights up purple at random; the power core is a violet-black star. Lab-cycle four was officially never sanctioned. AMETHYST-class shouldn&#39;t exist. AMETHYST-class is here anyway.',
-        bodyHistory: 'Lab-cycle 4 (off-the-books). A single A-Tech engineer rewired the heat-conversion system to channel the soul-bleed as electrical surge instead of thermal drift. The chassis runs cooler than CARNELIAN, less stable than AZURE, and <strong>occasionally lit-up purple in ways the rest of the lab found alarming</strong>. The lab disowned the build. Lucifer collected it personally.',
-        bodyMarks: [
-          'Periodic violet-purple electrical arcs across the plating, especially at stress',
-          'Black-amethyst chassis, slight crystalline edge to the plate joints',
-          'Power core: violet-black star, with brief brighter pulses',
-          'Not always exactly where you remember leaving them — slight teleportive drift in motion'
-        ],
-        soulTrace: [
-          'Singular. Does not blend. Cannot blend.',
-          'Knows the chassis is unique and this is both gift and isolation',
-          'Stopped expecting fairness; expects deals',
-          'Carries the rogue-engineer&#39;s last note like a private contract'
-        ],
-        roleOnTrain: 'The wildcard. Knows the deal underneath the deal. Brings unique tools no one else has — including some the lab never sanctioned. Negotiates with what others would fight or flee.',
-        traits: [
-          'Unique primary direction',
-          'Volatile electrical conversion',
-          'Rogue-lab variant',
-          'Off-the-books V.E.S.S.E.L. cycle',
-          'Unstable by design',
-          'Carries the engineer&#39;s last note'
-        ],
-        hooks: [
-          'What did the engineer who built you write in their final note?',
-          'Why does Lucifer keep you in particular close?',
-          'What deal of yours is the crew not allowed to know about?'
-        ]
-      }
-    ],
-    conflictHook: 'Synchronicity vs. rejection, and one Chaos Level closer than the rest, every step of the way.',
-    conflictBody: 'Every action is a negotiation between two halves that should never have been joined. <strong>Synchronicity</strong> is the moment of perfect alignment: thoughts firing as fast as the chassis can move, decisions delivered like blade-strikes. <strong>Rejection</strong> is the cost: the chassis trying to purge the soul as a virus, the soul ejecting the chassis as an implant. Your name on Lucifer&#39;s ledger is the only thing keeping the war from finishing. <em>The black feather can be revoked. You spend every day not finding out what that feels like.</em><br><br><strong>Hellforged Cost - Black Feather Leash:</strong> every Hellforged begins at <strong>+1 Chaos Level</strong> compared to a normal body of their tier. This affects future Chaos Rolls only. It does not alter Harmony, Devil&#39;s Mercy, Soul Index, or Lucifer&#39;s Mark. <em>(Canon flavor locked, exact D&amp;D math TBD.)</em>'
-  },
-
-  hell: {
-    eyebrow: 'Masked pole · NPC zone',
-    title: "Lucifer's Domain",
-    subtitle: 'No man&#39;s land. Not a PC, not an ally. Only the Devil himself.',
-    body: 'This pole has <strong>no damned human soul</strong>. The beings who belong here are rift-spawned mindless demon hordes — what you&#39;ll meet on the rails as enemies. No character can be created here, because there&#39;s no soul-core for the game&#39;s emotional axes (Soul Index, Personality) to grip. <strong>You won&#39;t find allies here either:</strong> the Cindered and Hellforged races (both hellfire-touched) sit on the <em>edges</em>, not in the corner — Lucifer&#39;s black feather pulled them part of the way back toward humanity. The only <em>named</em> entity who belongs here is:',
-    role: '— · no PC can be placed here · enemy-encounter zone',
-    subs: 'Rift-spawned hordes (mindless, NPC) · the Wild Demon (occasional boss) · ' + '<strong style="color:#e6cfa1">Lucifer himself</strong> (otherworldly — your patron and unknowable backdrop).',
-    conflict: 'No internal conflict — pure Hell has no soul to wrestle with. That&#39;s why it can&#39;t be a PC.',
-    warning: '⚠ Information only — no character can be created here. The lone "someone" on this pole is Lucifer himself.'
-  }
-};
-
-// ═══════════════════════════════════════════════════════
-// INTRO (default state)
-// ═══════════════════════════════════════════════════════
-const INTRO_HTML = `
-  <div class="intro-block">
-    <div class="race-eyebrow">Layer 1 · Body Axis</div>
-    <h2 class="race-title">Read the triangle</h2>
-    <p class="race-body">The triangle is <strong>inverted</strong>: the two top corners are the two "pure" player poles, and the bottom corner is Hell — <em>but you can&#39;t go there</em>. Only the top two corners and the three edges are PC territory; the 5 races are distributed across them:</p>
-    <ul>
-      <li><strong>Corner</strong> = pure form (Inheritor, Construct)</li>
-      <li><strong>Edge</strong> = hybrid form (Augmented, Cindered, Hellforged)</li>
-      <li><strong>Masked corner</strong> = info-only zone where Lucifer himself "lives"</li>
-    </ul>
-    <p class="race-body" style="margin-top:22px;">Click any node to read the race lore. Each entry includes the <em>A-Tech series name</em>, <em>sub-archetypes</em>, <em>party role</em>, and the <em>internal conflict</em> driving the character.</p>
-  </div>
-`;
-
-// ═══════════════════════════════════════════════════════
-// RENDER + INTERACTION
-// ═══════════════════════════════════════════════════════
-const panel                 = document.getElementById('infoPanel');
-const subracePickerTitle    = document.getElementById('subracePickerTitle');
-const subracePickerSub      = document.getElementById('subracePickerSub');
-const subracePickerEyebrow  = document.getElementById('subracePickerEyebrow');
-const subracePickerFrame    = document.getElementById('subracePickerFrame');
-const subraceTabstrip       = document.getElementById('subraceTabstrip');
-// Museum layout: image lives in the showcase row, content sits full-width
-// below. Both elements are cross-faded together when the active sub-type
-// changes (see `swapActiveCard`).
-const subraceFeaturedImage  = document.getElementById('subraceFeaturedImage');
-const subraceContentBelow   = document.getElementById('subraceContentBelow');
-const subraceNavPrev        = document.getElementById('subraceNavPrev');
-const subraceNavNext        = document.getElementById('subraceNavNext');
-
-// Default state for the sub-race picker before any race is selected.
-const SUBRACE_PICKER_EMPTY_HTML = `
-  <div class="subrace-picker-empty">
-    Click a race on the triangle above to see its sub-races
-  </div>
-`;
-
-// ── Detect the new rich schema (Inheritor today, others later) ──
-function isRichRace(r) {
-  return Array.isArray(r.bodyParas)
-      || Array.isArray(r.goodAt)
-      || Array.isArray(r.badAt)
-      || Array.isArray(r.subTypeRich);
-}
-
-// ── Render a single tag pill ──
-function tagPill(t, variant) {
-  const icon = t.icon ? `<svg aria-hidden="true"><use href="#icon-${t.icon}"/></svg>` : '';
-  return `<span class="tag ${variant}">${icon}<span>${t.label}</span></span>`;
-}
-
-function tagRow(label, items, variant) {
-  if (!items || !items.length) return '';
-  const pills = items.map(t => tagPill(t, variant)).join('');
-  return `
-    <div class="tag-row">
-      <div class="tag-row-label">${label}<span class="arrow">&rarr;</span></div>
-      <div class="tag-group">${pills}</div>
-    </div>
-  `;
-}
-
-function renderRichRace(id, r) {
-  // Render the race umbrella icon image. (Future races without an iconImage will
-  // simply leave the silhouette slot empty; the previous RACE_SILHOUETTES inline
-  // SVG fallback was removed because it was unreachable — every rich race so
-  // far has an iconImage.)
-  const heroFigure = r.iconImage
-    ? `<img src="${r.iconImage}" alt="${r.iconAlt || (r.title + ' — race icon')}" loading="lazy" decoding="async"/>`
-    : '';
-  const paras = (r.bodyParas || []).map(p => `<p>${p}</p>`).join('');
-
-  const tagRows = `
-    <div class="tag-rows">
-      ${tagRow('Good at',        r.goodAt, 'good')}
-      ${tagRow('Struggles with', r.badAt,  'bad')}
-      ${tagRow('Flavor',         r.flavor, 'flavor')}
-    </div>
-  `;
-
-  const conflict = (r.conflictHook || r.conflictBody) ? `
-    <div class="conflict-callout">
-      <div class="conflict-callout-label">Internal conflict</div>
-      ${r.conflictHook ? `<div class="conflict-callout-hook">${r.conflictHook}</div>` : ''}
-      ${r.conflictBody ? `<div class="conflict-callout-body">${r.conflictBody}</div>` : ''}
-    </div>
-  ` : '';
-
-  return `
-    <div class="race-card">
-      <div class="race-card-head">
-        <div class="silhouette"${r.iconImage ? '' : ' aria-hidden="true"'}>${heroFigure}</div>
-        <div class="race-card-titles">
-          <div class="race-eyebrow">${r.eyebrow}</div>
-          <h2 class="race-title">${r.title}</h2>
-          <p class="race-subtitle">${r.subtitle}</p>
-        </div>
-      </div>
-      <div class="race-card-body">${paras}</div>
-      ${tagRows}
-      ${conflict}
-    </div>
-  `;
-}
-
-// ── Legacy flat layout — kept for the 4 races still on the old schema ──
-// The legacy `Sub-types` meta row is dropped here because sub-types now render
-// in the dedicated third panel.
-function renderLegacyRace(r) {
-  let html = `
-    <div class="race-eyebrow">${r.eyebrow}</div>
-    <h2 class="race-title">${r.title}</h2>
-    <p class="race-subtitle">${r.subtitle}</p>
-    <p class="race-body">${r.body}</p>
-    <div class="race-meta">
-      <div class="meta-row">
-        <div class="meta-label">Role</div>
-        <div class="meta-value">${r.role}</div>
-      </div>
-      <div class="meta-row">
-        <div class="meta-label">Conflict</div>
-        <div class="meta-value">${r.conflict}</div>
-      </div>
-    </div>
-  `;
-  if (r.warning) {
-    html += `<div class="warning-banner">${r.warning}</div>`;
-  }
-  return html;
-}
-
-// ─────────────────────────────────────────────────────────
-// SUB-RACE PICKER RENDER
-// ─────────────────────────────────────────────────────────
-// The picker section has two halves:
-//   1. Header  — eyebrow + dynamic title + sub-line, set per race.
-//   2. Grid    — cards. Three branches by race shape:
-//      • Rich race  (subTypeRich array)         → 4 large image-cards w/ structured detail sections
-//      • Legacy race (subs string, ·-separated) → fallback cards in same grid chrome
-//      • Hell race  (no PCs allowed)            → single centered info-only card
-
-// Update the eyebrow's text WITHOUT clobbering the ornament span that lives
-// inside it (the .ce-orn arch glyph injected by the cathedral redesign).
-// We find the trailing text node (or create one) and replace its contents.
-function setEyebrowText(el, text) {
-  if (!el) return;
-  // If the eyebrow contains a .ce-orn child, update only the trailing text
-  // node; otherwise fall back to plain textContent.
-  const orn = el.querySelector('.ce-orn');
-  if (!orn) { el.textContent = text; return; }
-  // Remove every node after the orn span, then append a fresh text node.
-  let n = orn.nextSibling;
-  while (n) { const next = n.nextSibling; el.removeChild(n); n = next; }
-  el.appendChild(document.createTextNode(' ' + text));
-}
-
-// Set the picker header text dynamically. Hell gets a special title; everyone
-// else gets "Choose your <Title>" + the race's `subTypeAxis` if present.
-function renderSubracePickerHeader(id, r) {
-  if (id === 'hell') {
-    setEyebrowText(subracePickerEyebrow, 'Sub-race picker');
-    subracePickerTitle.textContent   = "Lucifer's Domain — Enemy zone";
-    subracePickerSub.textContent     = 'No PC sub-types. This pole has no damned human soul to anchor a character.';
-    return;
-  }
-  setEyebrowText(subracePickerEyebrow, 'Sub-race picker');
-  subracePickerTitle.textContent   = `Choose your ${r.title}`;
-  subracePickerSub.textContent     = r.subTypeAxis || 'Sub-types · description coming';
-}
-
-// Default header (no race selected yet).
-function renderSubracePickerHeaderEmpty() {
-  setEyebrowText(subracePickerEyebrow, 'Sub-race picker');
-  subracePickerTitle.textContent   = 'Choose your sub-race';
-  subracePickerSub.textContent     = 'Click a race on the triangle above to see its sub-races.';
-}
-
-// ─────────────────────────────────────────────────────────
-// SUB-TYPE LIST EXTRACTION
-// ─────────────────────────────────────────────────────────
-// Returns a normalised array of sub-type entries for any race. Three shapes
-// are handled and the consumer (tab strip + active-card renderer) works
-// uniformly off this:
-//   • rich   — entries with image / desc / archetype / accentColor / etc.
-//   • legacy — name-only entries derived from `r.subs` ('A · B · C' string)
-//   • hell   — single info-only entry; tab strip is hidden
-// Returns [] when no sub-types apply (e.g. unrecognised race).
-function getSubTypes(id, r) {
-  if (id === 'hell') {
-    return [{
-      kind: 'info-only',
-      name: 'Lucifer\'s Domain',
-      label: 'Info only · enemy zone',
-      body: 'No PC sub-types. This pole has no damned human soul to anchor a character — only rift-spawned hordes and Lucifer himself.'
-    }];
-  }
-  if (Array.isArray(r.subTypeRich) && r.subTypeRich.length) {
-    return r.subTypeRich.map(s => Object.assign({ kind: 'rich' }, s));
-  }
-  if (typeof r.subs === 'string' && r.subs.length) {
-    return r.subs
-      .split('·')
-      .map(s => s.replace(/<[^>]*>/g, '').trim())
-      .filter(Boolean)
-      .map(name => ({ kind: 'legacy', name }));
-  }
-  return [];
-}
-
-// ─────────────────────────────────────────────────────────
-// TAB STRIP RENDER
-// ─────────────────────────────────────────────────────────
-// Builds one button per sub-type. Each tab carries:
-//   • a 3:4 thumbnail (image OR placeholder ghost-icon for legacy / no-art)
-//   • a name label below the thumbnail
-// The active tab gets `.active`. Hidden entirely for races with 0 or 1
-// sub-types (Hell info-only included — only one entry, no tabs needed).
-function renderSubraceTabstrip(subs, activeIndex) {
-  if (!subraceTabstrip) return;
-  // Hide the strip when there's nothing to switch between.
-  if (subs.length <= 1) {
-    subraceTabstrip.classList.add('is-hidden');
-    subraceTabstrip.innerHTML = '';
-    return;
-  }
-  subraceTabstrip.classList.remove('is-hidden');
-  subraceTabstrip.innerHTML = subs.map((s, i) => {
-    const isActive = i === activeIndex;
-    const accent = s.accentColor || '';
-    const styleAttr = accent ? ` style="--tab-accent: ${accent};"` : '';
-    // Prefer a thumb-sized image if provided (avoids 7× browser downscale
-     // of the full portrait); otherwise fall back to the full image.
-    const thumbSrc = s.thumbImage || s.image;
-    const thumb = thumbSrc
-      ? `<span class="subrace-tab-thumb${s.thumbImage ? ' has-thumb-asset' : ''}">
-           <img src="${thumbSrc}" alt="${s.alt || s.name}" loading="lazy" decoding="async"/>
-         </span>`
-      : `<span class="subrace-tab-thumb placeholder" aria-hidden="true">
-           <svg><use href="#icon-ghost"/></svg>
-         </span>`;
-    return `
-      <butto
+        
