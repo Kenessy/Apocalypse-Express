@@ -3297,7 +3297,7 @@ const RACES = {
     // Maps onto the canonical 4-archetype color system (RED offensive /
     // GREEN defensive / BLUE science / PURPLE unique). Sub-type portraits
     // are still pending; image / thumbImage carry null until art is wired.
-    subTypeAxis: 'T.A.L.O.S. product-line family — what trigger-event sent you under the surgical lights',
+    subTypeAxis: 'T.A.L.O.S. product lines · the trigger-event family',
     subTypeRich: [
       {
         name: 'ATLAS',
@@ -3922,4 +3922,4 @@ function renderSubraceTabstrip(subs, activeIndex) {
     return `
       <button type="button" class="subrace-tab${isActive ? ' active' : ''}"
               data-index="${i}" role="tab"
-      
+              aria-selected="${isActive ? 
