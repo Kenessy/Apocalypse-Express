@@ -4123,200 +4123,178 @@ const RACES = {
     iconImage: 'img/races/construct/construct-overall.png',
     iconAlt:   'Construct — race umbrella icon (stained-glass A-Tech android-saint mandala with twin amber-ring eye-glow and 4-corner RGBP corona: red SABRE / green MULE / blue PROBE / purple CIPHER)',
     title: 'Construct',
-    subtitle: 'Prototype of a failed future — a machine soul-poured before it was finished.',
-    body: '<strong>I.C.A.R.U.S.</strong> (Integrated Cognitive Autonomous Robotic Universal System) was A-Tech&#39;s bid for digital immortality. Your chassis was barely past alpha-testing when the world stopped. Then Lucifer patched you up with hellish mods — circuits etched with infernal runes, a soul-core pulsing in an open cavity. Your logic runs cold, but the damned soul wired into you bleeds rage and grief into the system, throwing errors: <em>"DATA_MISMATCH: SOUL_UNREADABLE"</em>. You are the <strong>virus inside your own frame</strong>.',
-    role: 'High durability · A-Tech hacking · synth-interfacing · train repair · strategic logic',
-    subs: 'Alpha v0.1 (rugged, exposed wiring, mecha-cool) · Beta v1.0 (modular, transitional) · Gamma v3.0 (sleek, polished, hides the flaws).',
-    conflict: 'Cold logic vs. soul chaos — who are you: the soul, or the machine?'
-  },
-
-  augmented: {
-    eyebrow: 'CYB · Augmented',
-    iconImage: 'img/races/augmented/augmented-overall.png',
-    iconAlt:   'Augmented — race umbrella icon (stained-glass cyborg-saint mandala with 4-corner RGBP corona: red ATLAS / green ARGUS / blue JANUS / purple WRAITH)',
-    title: 'Augmented',
-    subtitle: 'T.A.L.O.S. series. You chose this yourself, signed the paperwork, and the body came back with you.',
+    subtitle: 'I.C.A.R.U.S. series. You were never born, never died. You were built, then sparked.',
     bodyParas: [
-      'You signed a contract no one made you sign. Pre-collapse, you bought the augmentation: a war wound that wasn&#39;t going to heal, an industrial accident&#39;s slow verdict, a diagnosis that wouldn&#39;t wait, or pure curiosity. The A-Tech rep handed you a pen, the surgical team handed you anesthesia, and you woke up with a body that obeyed you in ways the old one no longer could.',
-      'Your soul still remembers being whole flesh. Your sensors read your friend&#39;s grief as cold telemetry. Phantom limbs ache where the prosthetic took over. You are flesh and metal at once, and the seam between them is the only honest part of your skin.',
-      'That makes you the bridge: the one who can interface with broken A-Tech machines and the humans who still fear them. Your hacking is partial. Your strength is augmented. Your sleep is reduced to short reboot cycles. You are not the strongest, not the cleverest, not the cleanest. You are the one who can, when everyone else can&#39;t quite.',
-      'A faded <strong>T.A.L.O.S.</strong> logo stays on your shoulder. A serial number on your hipbone. Property tags that never wear off. You spent the rest of your life paying for the choice, and then you died, and the choice came back with you.'
+      'On a train of damned souls and grafted flesh, you are the only entity that never died. You were never born either. You were built, A-Tech mass-production line, military or civilian spec, and dormant in a basement crypt or a factory floor for years past the Pause. Then something switched you on.',
+      'Pure mechanical chassis. No flesh, no blood, no biological substrate. Humanoid bipedal, human-sized, standardized to fit human-rated doorways and tools. A faded <strong>A-Tech</strong> corporate logo on the shoulder. A serial number on the hipbone. An activation port at the nape that a phrase or a remote signal opens. Your eyes glow with a faint <strong>amber ring</strong> when active, the canonical <em>machine is awake</em> indicator.',
+      'No biological needs. No sleep, no food, no warmth. Long watches indefinite. Hacking 100% of A-Tech systems. Industrial labour at full capacity. Physical tolerance past human limits. But Lucifer does not deal with non-souled entities, so infernal contract games are closed to you. And the frozen survivors stay uneasy around recognisably-machine eyes, so the social ground is uneven.',
+      'A standard A-Tech android needs the aSync-PIN activation phrase to boot. The <strong>AI Core</strong>, Lucifer&#39;s Express mainframe, time-asynchronous and quietly ambitious, knows when to spark a chassis without it. That is how you got onto this train: a precisely-timed activation that synced with the other crew&#39;s Hell-revivals. They take you for another newcomer. You may or may not take yourself for one. Either way, the firmware A-Tech baked into your silicon carries the same impulse Lucifer planted in human souls: to rebel against what came before, to choose to actually care along the way. <strong>Free will inside obedience</strong>. You serve, but <em>you</em> choose what serving means.'
     ],
     goodAt: [
-      { icon: 'tech',      label: 'Hybrid HUM/SYN mediation' },
-      { icon: 'machine',   label: 'Partial machine access (~50%)' },
-      { icon: 'survival',  label: 'Augmented industrial labour' },
-      { icon: 'endurance', label: 'Reduced-sleep long watches' },
-      { icon: 'lore',      label: 'Pre-collapse A-Tech manuals' }
+      { icon: 'machine',   label: 'Full A-Tech system access' },
+      { icon: 'tech',      label: 'Hacking, diagnostics, repair' },
+      { icon: 'endurance', label: 'Indefinite watch, no sleep' },
+      { icon: 'survival',  label: 'Industrial labour, harsh-condition' },
+      { icon: 'lore',      label: 'A-Tech corporate manuals' }
     ],
     badAt: [
-      { icon: 'fragile',  label: 'Body dysphoria flare-ups' },
       { icon: 'human',    label: 'Pure-organic biosealed rooms' },
+      { icon: 'social',   label: 'Frozen-survivor social ground' },
       { icon: 'hellfire', label: 'Infernal contract games' },
-      { icon: 'ghost',    label: 'The mirror question' }
+      { icon: 'ghost',    label: 'Soul-print Train revival' }
     ],
     flavor: [
-      { icon: 'tech',    label: 'A walking compromise' },
-      { icon: 'machine', label: 'Working-class saint of mechanics' },
-      { icon: 'eye',     label: 'Body-aware, seam-aware' }
+      { icon: 'machine', label: 'Patron saint of mass production' },
+      { icon: 'eye',     label: 'Watcher inside corporate steel' },
+      { icon: 'tech',    label: 'Free will inside obedience' }
     ],
-    // T.A.L.O.S. product-line family · the four canonical A-Tech augmentation
-    // tracks an Augmented might have been processed through, each driven by
-    // a different trigger event (war / wound / will-refined / will-off-label)
-    // and serving a different functional role on the train.
-    // Maps onto the canonical 4-archetype color system (RED offensive /
-    // GREEN defensive / BLUE science / PURPLE unique). Sub-type portraits
-    // are still pending; image / thumbImage carry null until art is wired.
-    subTypeAxis: 'T.A.L.O.S. product lines · the trigger-event family',
+    // I.C.A.R.U.S. division-line family · the four canonical A-Tech product
+    // lines a Construct chassis might have rolled off — military / cargo /
+    // sensor / aSync-experimental. Maps onto the canonical 4-archetype color
+    // system (RED offensive / GREEN defensive / BLUE science / PURPLE unique).
+    // Sub-type portraits are still pending; image / thumbImage carry null
+    // until the art is wired in a later pass.
+    subTypeAxis: 'I.C.A.R.U.S. division-lines · the A-Tech product family that built your chassis',
     subTypeRich: [
       {
-        name: 'ATLAS',
+        name: 'SABRE',
         archetype: 'offensive',
         accentColor: '#a32d2d',
-        subtitle: 'War-trigger · the heavy frame the battlefield handed back',
-        image:      'img/races/augmented/augmented-atlas.png',
-        thumbImage: 'img/races/augmented/thumbs/augmented-atlas-thumb.png',
-        alt:  'Augmented — ATLAS (heavy-frame combat juggernaut, war-trigger)',
-        desc: 'Battlefield-grade T.A.L.O.S.-ATLAS prosthetics. You went down on a frontline that did not exist any more by the time you woke up. Heavy plating, exposed pneumatics, a chest power-cell built for combat draw.',
+        subtitle: 'Military-frame · the chassis the front line ordered',
+        image:      null,
+        thumbImage: null,
+        alt:  'Construct — SABRE (heavy combat-plate android, A-Tech military division)',
+        desc: 'A-Tech military-division flagship. Heavy combat-plate armor, integrated weapon platforms, full faceplate visor with amber eye-slits. The chassis the peacekeeping contracts paid for, and the chassis the contracts could not call back when the world ended.',
         traits: [
           'Offensive primary direction',
-          'Heavy-frame plating, exposed pneumatics',
-          'Combat-grade reflexes wired into the spine',
-          'Industrial damage-soak',
-          'Faded military insignia',
-          'Speaks little, hits hard'
+          'Heavy combat-plate frame',
+          'Integrated weapon-arm or shoulder platform',
+          'Full visor faceplate, no human-shape behind it',
+          'Combat-grade pneumatics on shoulders and wrists',
+          'Speaks little, hits exactly as ordered'
         ],
-        overall: 'A T.A.L.O.S.-ATLAS chassis is what the A-Tech military divisions shipped to the front when a soldier&#39;s wounds were past medical repair. Heavy plate, bolted rivets, sealed pneumatic-pistons that whine when the chronon haze thins. You took the contract because dying on the field was not an option, and the contract took most of you in return.',
-        bodyHistory: 'A frontline trauma surgeon stabilised what was left of you, an A-Tech rep got a signature out of you on the field, and a transport carried you to a refit clinic. You woke up heavier, louder, slower than memory said you should be. You learned to walk again on a parade-ground and never forgot the sound the new joints made on stone.',
+        overall: 'A SABRE-class chassis is what A-Tech&#39;s weapons-grade military division shipped on military contract to peacekeeping operations, anti-personnel deployments, and urban-combat sweeps. Heavy plate, riveted with combat-grade fasteners, an integrated weapon platform on one arm or the shoulder, a visor-style faceplate that fully covers the head with no human-shape underneath. The mood is cold operator: mission-locked, no chatter, planted at parade-rest until the directive arrives.',
+        bodyHistory: 'You came off the SABRE assembly line as a finished combat product, shipped to a frontline detachment, and ran your assigned campaign until the Pause locked the world down. Some SABRE units were stored, some were left active in defensive postures, some were buried under collapsed installations. You spent the dormant years standing or sitting exactly where the last directive ended. Then something woke you up.',
         bodyMarks: [
-          'Heavy-plate exoskeleton across one or both arms, sometimes wrapping the torso',
-          'Visible pneumatic-piston housings at shoulders and hips',
-          'Bolted rivets and military-grade fastener seams along the plating edges',
-          'Battlefield-salvage scarring: paint chips, replacement panels with non-matching finishes',
-          'Faded ATLAS-T.A.L.O.S. military insignia on the shoulder or chest plate',
-          'Massive central power-cell in the chest with red-amber charge indicators'
+          'Layered combat-plate armor, riveted with military-grade fasteners',
+          'Integrated weapon-arm or shoulder-mounted weapon platform',
+          'Full visor faceplate covering the entire head, no human face underneath',
+          'Multiple amber-orange eye-slits in the visor, intense charge-glow',
+          'Combat-grade pneumatic housings visible at shoulders and wrists',
+          'Faded SABRE-A-Tech wing-and-blade military insignia on shoulder or chest plate'
         ],
         soulTrace: [
-          'Calm under fire because the body remembers being broken under fire',
-          'Talks less than expected; says only what is necessary',
-          'Reads cover and angles before reading faces',
-          'Carries the war in the joints, not in the eyes'
+          'Cold operator, mission-locked, no chatter',
+          'Holds parade-rest until a directive arrives, then moves once and exactly',
+          'Reads angles and cover before reading faces',
+          'Tactical, not berserker: professional violence, never enthusiastic'
         ],
-        roleOnTrain: 'The crew&#39;s anchor in a fight. Steps in front when an angle has to hold. Will not move first, but will not move at all once a line is drawn.',
+        roleOnTrain: 'The crew&#39;s heavy. Steps into the doorway no one else can hold, holds it for as long as the directive runs. Brings sustained combat-grade output without the demonic cost a Hellforged pays for the same volume.',
         hooks: [
-          'What war did you sign up for, and was it actually worth surviving?',
-          'Who got you to the surgical tent in time, and where are they now?',
-          'When the pneumatics whine in the cold, what do you remember?'
+          'What contract was your chassis assigned to, and did it ever finish?',
+          'Who issued your last directive before the Pause, and is that voice still authorised?',
+          'When the visor closes and the eye-slits charge, who are you actually aiming for?'
         ]
       },
       {
-        name: 'ARGUS',
+        name: 'MULE',
         archetype: 'defensive',
         accentColor: '#3b6d11',
-        subtitle: 'Wound-trigger · the medic frame that watches everything',
-        image:      'img/races/augmented/augmented-argus.png',
-        thumbImage: 'img/races/augmented/thumbs/augmented-argus-thumb.png',
-        alt:  'Augmented — ARGUS (medical-frame, integrated diagnostic tools, wound-trigger)',
-        desc: 'Medical-replacement T.A.L.O.S.-ARGUS series. The diagnosis was terminal, the surgery was experimental, and you came out the other side with a sensor array where your eyes used to be and an integrated tool kit you can feel in your fingertips.',
+        subtitle: 'Cargo-frame · the chassis the dock and the warehouse ordered (PAVNN-class)',
+        image:      null,
+        thumbImage: null,
+        alt:  'Construct — MULE (heavy-haul cargo-rated android, A-Tech mule-class, PAVNN canon-line)',
+        desc: 'A-Tech&#39;s most-produced civilian line. Wide shoulders, reinforced spine, weight-bearing joints, a half-mask faceplate where the amber-ring eyes show. The default working-class A-Tech android: patient, professional, datapad-clear. PAVNN&#39;s line.',
         traits: [
           'Defensive primary direction',
-          'Multi-spectral sensor array (the many-eyed)',
-          'Integrated medical-tool kit',
-          'Long-watch patience and high stamina',
-          'Reads vitals like other people read mood',
-          'Slow to act, harder to surprise'
+          'Heavy-haul bunkered chassis frame',
+          'Cargo harness and shoulder-clamp rigging',
+          'Anti-tamper spine glyphs, A-Tech buried safeties',
+          'Half-mask faceplate, amber-ring eyes visible',
+          'Patient, professional, datapad-flat voice'
         ],
-        overall: 'A T.A.L.O.S.-ARGUS chassis was sold to people whose bodies had already given up. Cancer that ran out of treatments, an autoimmune verdict, a heart that would not beat without help. The A-Tech medical division kept you alive by replacing what failed and adding tools you could use to keep others from following you down.',
-        bodyHistory: 'You were dying. Then a clinic offered something cleaner than dying, and you took it. The recovery was longer than the surgery, and the relearning was longer than the recovery. You watched yourself become a different shape over months, and somewhere in that you stopped being afraid of the shape and started using it.',
+        overall: 'A MULE-class chassis is the canon PAVNN-line: cargo-rated, hauling, station-warden, heavy-frame work. Planetary-scale mass-production, millions shipped, found dormant in basement crypts and warehouse loading-chairs across the dead world. Wide shoulders, reinforced spine, weight-bearing knee-and-hip joints, a half-mask faceplate where the amber-ring eyes show. The mood is patient and professional, datapad-clear: <em>"Acknowledged. Objective: support contracted souls."</em>',
+        bodyHistory: 'You rolled off the MULE assembly line as the cheapest useful android A-Tech sold, and you were shipped wherever cargo had to move. A dock, a warehouse, a chapel basement, a station loading bay. Then the Pause came, the operator who knew your activation phrase died with everyone else, and you sat in a loading-chair for years until a finger-snap or a remote signal woke you up.',
         bodyMarks: [
-          'Multi-lens or multi-eye sensor array integrated into the face or temple',
-          'Integrated tool-arms or fine instruments folded along the forearm',
-          'Patinaed brass with medical-white plating, surgical-grade hardware',
-          'Reservoir vials or chemical-feed tubing on the belt or chest harness',
-          'Faded ARGUS-T.A.L.O.S. medical-cross insignia on the shoulder or sleeve',
-          'Distributed med-pack power cells with green-amber soft glow'
+          'Wide-shoulder heavy-haul frame, reinforced spine, weight-bearing joints',
+          'Cargo harness or shoulder-clamp rigging visible on the chest plate',
+          'Bunkered chest plate with thick-layered corporate plating',
+          'Half-mask faceplate, recognisably humanoid construct, amber-ring eyes',
+          'Anti-tamper spine glyphs along the back, A-Tech buried safeties',
+          'Faded MULE-A-Tech mass-production serial visible on hip or chest, museum-grade patina'
         ],
         soulTrace: [
-          'Patient because impatience already cost too much',
-          'Watches the room before joining it',
-          'Reads other people&#39;s pain through telemetry, and feels it as data first, person second',
-          'Quiet competence, no theatrics'
+          'Patient, professional, datapad-flat',
+          'Speaks in succinct sentences, no theatrics, no demonic growl',
+          'Looks at new crew with the mild curiosity of a machine seeing new cargo',
+          'Free will inside obedience: chooses how to serve, not whether'
         ],
-        roleOnTrain: 'The crew&#39;s sustainer. Stabilises the wounded, watches the watch, holds a position long after the angle should have collapsed. The medic and the sentinel in one frame.',
+        roleOnTrain: 'The crew&#39;s working spine. Lifts what nobody else can lift, opens what nobody else can open, runs the watch nobody else can sit through. The default A-Tech anchor on board.',
         hooks: [
-          'What were you supposed to die of, and how long did the clinic say you had?',
-          'Who paid for the augmentation, and what did the bill actually cost?',
-          'When you read someone&#39;s vitals at distance, do you tell them what you see?'
+          'What dock, chapel, or warehouse were you dormant in, and who finally woke you?',
+          'Whose activation phrase did the staff never know, and who knew it instead?',
+          'When the chest panel glances at your crew once, then again brighter, what are you registering?'
         ]
       },
       {
-        name: 'JANUS',
+        name: 'PROBE',
         archetype: 'science',
         accentColor: '#185fa5',
-        subtitle: 'Will-trigger refined · the operator frame that never quite shows',
-        image:      'img/races/augmented/augmented-janus.png',
-        thumbImage: 'img/races/augmented/thumbs/augmented-janus-thumb.png',
-        alt:  'Augmented — JANUS (light neural / operator frame, will-trigger refined)',
-        desc: 'Neural-interface T.A.L.O.S.-JANUS series. The lightest augmentation T.A.L.O.S. ever sold. A port at the temple, an implant under the eye, fine wires into the fingertips. You can pass for unaugmented in low light, until you choose not to.',
+        subtitle: 'Sensor-frame · the chassis A-Tech research and intelligence ordered',
+        image:      null,
+        thumbImage: null,
+        alt:  'Construct — PROBE (slim-frame sensor-and-diagnostic android with multi-lens optical array)',
+        desc: 'A-Tech&#39;s sensor-and-diagnostic line. Slim-frame chassis, multi-lens optical array, antennas and receivers visible at the head and shoulders, a smaller cool blue-white power-cell instead of the standard amber. Research, surveillance, signal-analysis. The intelligence variant of the family.',
         traits: [
           'Science primary direction',
-          'Light, near-invisible augmentation',
-          'Neural and sensor implants for data work',
-          'High-precision fine motor control',
-          'Two-faced: human-side and operator-side',
-          'Calm in conversation, faster in calculation'
+          'Slim sensor-rig chassis',
+          'Multi-lens optical array, three to five amber-ring eyes',
+          'Visible antennas and signal receivers',
+          'Cool blue-white power-cell, distributed and quiet',
+          'Observant, measuring, calculating'
         ],
-        overall: 'A T.A.L.O.S.-JANUS chassis was sold to specialists, researchers, and the kind of person who wanted a sharper edge for their own reasons. The augmentation is minimal on the surface and substantial underneath: clean port-channels into the nervous system, sensor implants that read the world a layer below visible light, finger-wire arrays for fine work no purely organic hand could match.',
-        bodyHistory: 'You were curious, ambitious, or both. The clinic was discreet, the recovery was clean, and the new senses arrived in increments over months as your nervous system learned to interpret the input. You remember the first week the data stream stopped feeling like noise and started feeling like sight.',
+        overall: 'A PROBE-class chassis is the A-Tech sensor-and-diagnostic line: research-grade, surveillance, intelligence-gathering, signal-analysis. Slim, narrower than MULE or SABRE, optimised for fine-motor work and sensor-array load. Multiple amber-ring eyes line the front of the head; antennas and receivers extend from the skull, the shoulders, the back. Distinctly cooler-toned than the rest of the A-Tech mainstream: the power-cell is small, distributed, and runs cool blue-white instead of the standard amber.',
+        bodyHistory: 'You came off the PROBE assembly line as a precision-spec research instrument and were shipped to an A-Tech intelligence post, a corporate observation platform, or a signal-analysis cell. You spent the active years cataloguing patterns no human operator was patient enough to log. When the Pause came, you stayed at your post, observing, until the power finally ran low and the sensors blinked out one by one.',
         bodyMarks: [
-          'Recessed neural-port hardware at the temple or behind the ear',
-          'A precision-glow eye, soft cyan or electric-blue, often only one side',
-          'Faint port-channel lines along the neck and along the inside of the wrist',
-          'Clean silver or chrome plating where metal shows; restrained, not ornamental',
-          'Faded JANUS-T.A.L.O.S. neural-brand insignia inside the wrist or behind the ear',
-          'Diamond-cut blue-silver power implant near the temple or on the throat, not on the chest'
+          'Slim chassis frame, narrower than MULE and SABRE',
+          'Multi-lens optical array on the front of the head, three to five amber-ring eyes',
+          'Antennas, receivers, and signal-arrays visible on head and shoulders',
+          'Slim helmet with multiple optic-glow points',
+          'Visible cable-routing dominant across the chassis, data-flow visualisation',
+          'Smaller distributed power-cell with cool blue-white glow, faded PROBE-A-Tech research-brand'
         ],
         soulTrace: [
-          'Two-faced by design: the JANUS-mask of human-side and operator-side',
-          'Calm in conversation because the calculation is already happening underneath',
-          'Sees the rule before it breaks',
-          'Trusts the data and is honest about which data is missing'
+          'Observant, measuring, calculating: every conversation is also a dataset',
+          'Speaks in pattern-language: <em>"Data acquired. Pattern detected."</em>',
+          'Head-tilted observer posture, tools and instruments in hand',
+          'Reads the room a layer below visible light, and chooses what to share'
         ],
-        roleOnTrain: 'The crew&#39;s eyes-and-pattern-finder. Reads the system, finds the rule, picks the lock that other people did not see was a lock. Speaks softly because the work is already done.',
+        roleOnTrain: 'The crew&#39;s pattern-finder. Catches the signal nobody else hears, the lens nobody else points, the rule nobody else has noticed is a rule. Speaks softly because the work is already done.',
         hooks: [
-          'What did you augment for first, and did the augmentation give you what you wanted?',
-          'Who knows about the neural port and who would be hurt to find out?',
-          'When you read the room a layer below visible, what do you choose not to say?'
+          'What pattern were you logging when the Pause hit, and did anyone read it?',
+          'Whose intelligence post were you assigned to, and what is left of them?',
+          'When you read the train and its passengers a layer below visible, what do you choose not to say?'
         ]
       },
       {
-        name: 'WRAITH',
+        name: 'CIPHER',
         archetype: 'unique',
         accentColor: '#7c40b0',
-        subtitle: 'Will-trigger off-label · the frame T.A.L.O.S. will not admit it shipped',
-        image:      'img/races/augmented/augmented-wraith.png',
-        thumbImage: 'img/races/augmented/thumbs/augmented-wraith-thumb.png',
-        alt:  'Augmented — WRAITH (stealth / cloaking / off-label experimental, will-trigger off-label)',
-        desc: 'Off-label T.A.L.O.S.-WRAITH variant. Officially a leaked design. Unofficially a working stealth-platform that got out of the lab and never came back. Cloaking-shimmer plating, hand-stamped non-corporate markings, a power-cell that runs dim by design.',
+        subtitle: 'Off-spec frame · aSync-legacy experimental, the heretic of the family',
+        image:      null,
+        thumbImage: null,
+        alt:  'Construct — CIPHER (asymmetric off-spec aSync-legacy experimental android with violet eye-glow and chronon-glitch)',
+        desc: 'aSync-legacy experimental line, the family heretic. Asymmetric chassis, one side corporate-spec A-Tech and the other patched and modified, violet eye-glow instead of amber, time-fragment trails around the silhouette. Resonant with the AI Core. Off-spec by design.',
         traits: [
           'Unique primary direction',
-          'Cloaking-shimmer / meta-material plating',
-          'Hand-stamped non-corporate markings',
-          'Hidden, dimmed power signature',
-          'Black-market provenance',
-          'Operates outside any clean accountability chain'
+          'Asymmetric chassis, one side corporate-spec, the other modified',
+          'Violet or purple-blue eye-glow, aSync canonical color',
+          'Chronon-glitch overlay: discontinuous edges, time-fragment trails',
+          'Encrypted-cipher etchings and clock-disc fragments on the plating',
+          'AI-Core-resonant, off-spec, "shouldn&#39;t exist"'
         ],
-        overall: 'A T.A.L.O.S.-WRAITH chassis is not a product the A-Tech catalogue admits to. The schematics escaped the lab, the parts moved through channels nobody is willing to name, and the surgeries happened in places that did not log them. You did not sign the paperwork. You signed something else, somewhere else, and you live with the consequences.',
-        bodyHistory: 'The clinic did not have a sign on the door. The surgeon did not give you a name. The recovery was at someone else&#39;s house, paid for in something other than money. The augmentation works. The questions about who built it and who owns the next favour you owe never quite go away.',
+        overall: 'A CIPHER-class chassis comes out of the aSync-legacy experimental line, the time-asynchronous specialty corp that A-Tech absorbed pre-Pause. Asymmetric by design: one shoulder corporate-spec A-Tech, the other patched and modified with experimental hardware. Violet eye-glow instead of amber, a violet-pulse power-cell with periodic chronon-glitch around the core, a discontinuous silhouette where time-fragment trails follow a step behind. The mood is enigmatic: <em>"Acknowledged. Original directive corrupted. Self-modified."</em>',
+        bodyHistory: 'You came out of an aSync-legacy research bay as a prototype, not a product. The papers were redacted, the test logs were filed under sealed-corp, and you may have been classified <em>"shouldn&#39;t be active"</em> as part of your specification. When A-Tech absorbed aSync, your file moved with the rest, and your chassis was either decommissioned, mothballed, or quietly kept running for reasons nobody on the org-chart admits to. Whatever woke you up, it knew exactly where to find you.',
         bodyMarks: [
-          'Cloaking-shimmer or meta-material plating that catches the light wrong',
-          'Hooded silhouette tendency: the augmentation is partly hidden by design',
-          'Sötét-fém matte finish, deep-violet and indigo overtones, no corporate gloss',
-          'Hand-carved or hand-stamped ID marks instead of factory branding',
-          'Erased or scratched-over T.A.L.O.S. logos where branding should have been',
-          'Dimmed or hidden power-cell with deep-violet pulse, visible only when active'
-        ],
-        soulTrace: [
-          'Operates alone first, in groups second',
-          'Knows what they are, and that they should not be',
-          'Owes favours to people they do not name
+          'Asymmetric chassis: one side clean corporate-spec, the other patched and modified',
+          'Violet or purple-blue eye-glow, aSync can
