@@ -3261,13 +3261,207 @@ const RACES = {
   },
 
   augmented: {
-    eyebrow: 'Mortal × Construct · T.A.L.O.S. series',
+    eyebrow: 'CYB · Augmented',
+    iconImage: 'img/races/augmented/augmented-overall.png',
+    iconAlt:   'Augmented — race umbrella icon (stained-glass cyborg-saint mandala with 4-corner RGBP corona: red ATLAS / green ARGUS / blue JANUS / purple WRAITH)',
     title: 'Augmented',
-    subtitle: 'You chose this yourself — bought your strength with grafts, and Lucifer rebooted you.',
-    body: 'Your body is a stitched-together monument to ambition. <strong>T.A.L.O.S.</strong> brand — faded corp logo, the soft hum of power cells, joints that spark in the timeline frays. You suffer from <strong>body dysphoria</strong>: your soul remembers being whole flesh, while your implants read your friend&#39;s grief as cold telemetry. Phantom pain in a hand you no longer have. You are flesh and metal at once, and neither completely — but you can reach into both worlds.',
-    role: 'Hybrid mediator · decent hacking + superior strength · all-rounder · bridge across the tech-human divide',
-    subs: 'JANUS (operator/hacker, near-human) · ATLAS (juggernaut, exoskeleton) · ARGUS (medic/patcher, integrated tools) · WRAITH (stealth, cloaking — DLC).',
-    conflict: 'Cold machine power vs. fading humanity — does what you control make up for what it costs?'
+    subtitle: 'T.A.L.O.S. series. You chose this yourself, signed the paperwork, and the body came back with you.',
+    bodyParas: [
+      'You signed a contract no one made you sign. Pre-collapse, you bought the augmentation: a war wound that wasn&#39;t going to heal, an industrial accident&#39;s slow verdict, a diagnosis that wouldn&#39;t wait, or pure curiosity. The A-Tech rep handed you a pen, the surgical team handed you anesthesia, and you woke up with a body that obeyed you in ways the old one no longer could.',
+      'Your soul still remembers being whole flesh. Your sensors read your friend&#39;s grief as cold telemetry. Phantom limbs ache where the prosthetic took over. You are flesh and metal at once, and the seam between them is the only honest part of your skin.',
+      'That makes you the bridge: the one who can interface with broken A-Tech machines and the humans who still fear them. Your hacking is partial. Your strength is augmented. Your sleep is reduced to short reboot cycles. You are not the strongest, not the cleverest, not the cleanest. You are the one who can, when everyone else can&#39;t quite.',
+      'A faded <strong>T.A.L.O.S.</strong> logo stays on your shoulder. A serial number on your hipbone. Property tags that never wear off. You spent the rest of your life paying for the choice, and then you died, and the choice came back with you.'
+    ],
+    goodAt: [
+      { icon: 'tech',      label: 'Hybrid mediation between HUM and SYN' },
+      { icon: 'machine',   label: 'Partial machine access (~50% hacking)' },
+      { icon: 'survival',  label: 'Augmented industrial labour' },
+      { icon: 'endurance', label: 'Reduced-sleep long watches' },
+      { icon: 'lore',      label: 'Pre-collapse A-Tech corporate manuals and procedures' }
+    ],
+    badAt: [
+      { icon: 'fragile',  label: 'Body dysphoria flare-ups when the chronon haze thins' },
+      { icon: 'human',    label: 'Pure-organic biosealed rooms (the sensors give you away)' },
+      { icon: 'hellfire', label: 'Infernal contract games (Lucifer reads property tags)' },
+      { icon: 'ghost',    label: 'The mirror question, every time it catches you off guard' }
+    ],
+    flavor: [
+      { icon: 'tech',    label: 'A walking compromise' },
+      { icon: 'machine', label: 'Working-class saint, patron of mechanics' },
+      { icon: 'eye',     label: 'Body-aware, seam-aware, always feeling the join' }
+    ],
+    // T.A.L.O.S. product-line family · the four canonical A-Tech augmentation
+    // tracks an Augmented might have been processed through, each driven by
+    // a different trigger event (war / wound / will-refined / will-off-label)
+    // and serving a different functional role on the train.
+    // Maps onto the canonical 4-archetype color system (RED offensive /
+    // GREEN defensive / BLUE science / PURPLE unique). Sub-type portraits
+    // are still pending; image / thumbImage carry null until art is wired.
+    subTypeAxis: 'T.A.L.O.S. product-line family — what trigger-event sent you under the surgical lights',
+    subTypeRich: [
+      {
+        name: 'ATLAS',
+        archetype: 'offensive',
+        accentColor: '#a32d2d',
+        subtitle: 'War-trigger · the heavy frame the battlefield handed back',
+        image:      null,
+        thumbImage: null,
+        alt:  'Augmented — ATLAS (heavy-frame combat juggernaut, war-trigger)',
+        desc: 'Battlefield-grade T.A.L.O.S.-ATLAS prosthetics. You went down on a frontline that did not exist any more by the time you woke up. Heavy plating, exposed pneumatics, a chest power-cell built for combat draw.',
+        traits: [
+          'Offensive primary direction',
+          'Heavy-frame plating, exposed pneumatics',
+          'Combat-grade reflexes wired into the spine',
+          'Industrial damage-soak',
+          'Faded military insignia',
+          'Speaks little, hits hard'
+        ],
+        overall: 'A T.A.L.O.S.-ATLAS chassis is what the A-Tech military divisions shipped to the front when a soldier&#39;s wounds were past medical repair. Heavy plate, bolted rivets, sealed pneumatic-pistons that whine when the chronon haze thins. You took the contract because dying on the field was not an option, and the contract took most of you in return.',
+        bodyHistory: 'A frontline trauma surgeon stabilised what was left of you, an A-Tech rep got a signature out of you on the field, and a transport carried you to a refit clinic. You woke up heavier, louder, slower than memory said you should be. You learned to walk again on a parade-ground and never forgot the sound the new joints made on stone.',
+        bodyMarks: [
+          'Heavy-plate exoskeleton across one or both arms, sometimes wrapping the torso',
+          'Visible pneumatic-piston housings at shoulders and hips',
+          'Bolted rivets and military-grade fastener seams along the plating edges',
+          'Battlefield-salvage scarring: paint chips, replacement panels with non-matching finishes',
+          'Faded ATLAS-T.A.L.O.S. military insignia on the shoulder or chest plate',
+          'Massive central power-cell in the chest with red-amber charge indicators'
+        ],
+        soulTrace: [
+          'Calm under fire because the body remembers being broken under fire',
+          'Talks less than expected; says only what is necessary',
+          'Reads cover and angles before reading faces',
+          'Carries the war in the joints, not in the eyes'
+        ],
+        roleOnTrain: 'The crew&#39;s anchor in a fight. Steps in front when an angle has to hold. Will not move first, but will not move at all once a line is drawn.',
+        hooks: [
+          'What war did you sign up for, and was it actually worth surviving?',
+          'Who got you to the surgical tent in time, and where are they now?',
+          'When the pneumatics whine in the cold, what do you remember?'
+        ]
+      },
+      {
+        name: 'ARGUS',
+        archetype: 'defensive',
+        accentColor: '#3b6d11',
+        subtitle: 'Wound-trigger · the medic frame that watches everything',
+        image:      null,
+        thumbImage: null,
+        alt:  'Augmented — ARGUS (medical-frame, integrated diagnostic tools, wound-trigger)',
+        desc: 'Medical-replacement T.A.L.O.S.-ARGUS series. The diagnosis was terminal, the surgery was experimental, and you came out the other side with a sensor array where your eyes used to be and an integrated tool kit you can feel in your fingertips.',
+        traits: [
+          'Defensive primary direction',
+          'Multi-spectral sensor array (the many-eyed)',
+          'Integrated medical-tool kit',
+          'Long-watch patience and high stamina',
+          'Reads vitals like other people read mood',
+          'Slow to act, harder to surprise'
+        ],
+        overall: 'A T.A.L.O.S.-ARGUS chassis was sold to people whose bodies had already given up. Cancer that ran out of treatments, an autoimmune verdict, a heart that would not beat without help. The A-Tech medical division kept you alive by replacing what failed and adding tools you could use to keep others from following you down.',
+        bodyHistory: 'You were dying. Then a clinic offered something cleaner than dying, and you took it. The recovery was longer than the surgery, and the relearning was longer than the recovery. You watched yourself become a different shape over months, and somewhere in that you stopped being afraid of the shape and started using it.',
+        bodyMarks: [
+          'Multi-lens or multi-eye sensor array integrated into the face or temple',
+          'Integrated tool-arms or fine instruments folded along the forearm',
+          'Patinaed brass with medical-white plating, surgical-grade hardware',
+          'Reservoir vials or chemical-feed tubing on the belt or chest harness',
+          'Faded ARGUS-T.A.L.O.S. medical-cross insignia on the shoulder or sleeve',
+          'Distributed med-pack power cells with green-amber soft glow'
+        ],
+        soulTrace: [
+          'Patient because impatience already cost too much',
+          'Watches the room before joining it',
+          'Reads other people&#39;s pain through telemetry, and feels it as data first, person second',
+          'Quiet competence, no theatrics'
+        ],
+        roleOnTrain: 'The crew&#39;s sustainer. Stabilises the wounded, watches the watch, holds a position long after the angle should have collapsed. The medic and the sentinel in one frame.',
+        hooks: [
+          'What were you supposed to die of, and how long did the clinic say you had?',
+          'Who paid for the augmentation, and what did the bill actually cost?',
+          'When you read someone&#39;s vitals at distance, do you tell them what you see?'
+        ]
+      },
+      {
+        name: 'JANUS',
+        archetype: 'science',
+        accentColor: '#185fa5',
+        subtitle: 'Will-trigger refined · the operator frame that never quite shows',
+        image:      null,
+        thumbImage: null,
+        alt:  'Augmented — JANUS (light neural / operator frame, will-trigger refined)',
+        desc: 'Neural-interface T.A.L.O.S.-JANUS series. The lightest augmentation T.A.L.O.S. ever sold. A port at the temple, an implant under the eye, fine wires into the fingertips. You can pass for unaugmented in low light, until you choose not to.',
+        traits: [
+          'Science primary direction',
+          'Light, near-invisible augmentation',
+          'Neural and sensor implants for data work',
+          'High-precision fine motor control',
+          'Two-faced: human-side and operator-side',
+          'Calm in conversation, faster in calculation'
+        ],
+        overall: 'A T.A.L.O.S.-JANUS chassis was sold to specialists, researchers, and the kind of person who wanted a sharper edge for their own reasons. The augmentation is minimal on the surface and substantial underneath: clean port-channels into the nervous system, sensor implants that read the world a layer below visible light, finger-wire arrays for fine work no purely organic hand could match.',
+        bodyHistory: 'You were curious, ambitious, or both. The clinic was discreet, the recovery was clean, and the new senses arrived in increments over months as your nervous system learned to interpret the input. You remember the first week the data stream stopped feeling like noise and started feeling like sight.',
+        bodyMarks: [
+          'Recessed neural-port hardware at the temple or behind the ear',
+          'A precision-glow eye, soft cyan or electric-blue, often only one side',
+          'Faint port-channel lines along the neck and along the inside of the wrist',
+          'Clean silver or chrome plating where metal shows; restrained, not ornamental',
+          'Faded JANUS-T.A.L.O.S. neural-brand insignia inside the wrist or behind the ear',
+          'Diamond-cut blue-silver power implant near the temple or on the throat, not on the chest'
+        ],
+        soulTrace: [
+          'Two-faced by design: the JANUS-mask of human-side and operator-side',
+          'Calm in conversation because the calculation is already happening underneath',
+          'Sees the rule before it breaks',
+          'Trusts the data and is honest about which data is missing'
+        ],
+        roleOnTrain: 'The crew&#39;s eyes-and-pattern-finder. Reads the system, finds the rule, picks the lock that other people did not see was a lock. Speaks softly because the work is already done.',
+        hooks: [
+          'What did you augment for first, and did the augmentation give you what you wanted?',
+          'Who knows about the neural port and who would be hurt to find out?',
+          'When you read the room a layer below visible, what do you choose not to say?'
+        ]
+      },
+      {
+        name: 'WRAITH',
+        archetype: 'unique',
+        accentColor: '#7c40b0',
+        subtitle: 'Will-trigger off-label · the frame T.A.L.O.S. will not admit it shipped',
+        image:      null,
+        thumbImage: null,
+        alt:  'Augmented — WRAITH (stealth / cloaking / off-label experimental, will-trigger off-label)',
+        desc: 'Off-label T.A.L.O.S.-WRAITH variant. Officially a leaked design. Unofficially a working stealth-platform that got out of the lab and never came back. Cloaking-shimmer plating, hand-stamped non-corporate markings, a power-cell that runs dim by design.',
+        traits: [
+          'Unique primary direction',
+          'Cloaking-shimmer / meta-material plating',
+          'Hand-stamped non-corporate markings',
+          'Hidden, dimmed power signature',
+          'Black-market provenance',
+          'Operates outside any clean accountability chain'
+        ],
+        overall: 'A T.A.L.O.S.-WRAITH chassis is not a product the A-Tech catalogue admits to. The schematics escaped the lab, the parts moved through channels nobody is willing to name, and the surgeries happened in places that did not log them. You did not sign the paperwork. You signed something else, somewhere else, and you live with the consequences.',
+        bodyHistory: 'The clinic did not have a sign on the door. The surgeon did not give you a name. The recovery was at someone else&#39;s house, paid for in something other than money. The augmentation works. The questions about who built it and who owns the next favour you owe never quite go away.',
+        bodyMarks: [
+          'Cloaking-shimmer or meta-material plating that catches the light wrong',
+          'Hooded silhouette tendency: the augmentation is partly hidden by design',
+          'Sötét-fém matte finish, deep-violet and indigo overtones, no corporate gloss',
+          'Hand-carved or hand-stamped ID marks instead of factory branding',
+          'Erased or scratched-over T.A.L.O.S. logos where branding should have been',
+          'Dimmed or hidden power-cell with deep-violet pulse, visible only when active'
+        ],
+        soulTrace: [
+          'Operates alone first, in groups second',
+          'Knows what they are, and that they should not be',
+          'Owes favours to people they do not name',
+          'Reads exits before entrances'
+        ],
+        roleOnTrain: 'The crew&#39;s bypass. Steps where others cannot, gets out without trace, brings back what was supposed to stay sealed. Useful, untrusted, and necessary anyway.',
+        hooks: [
+          'Who built the chassis, and what does the next favour cost?',
+          'What were you trying to escape when you took this contract?',
+          'When the cloaking-shimmer holds, are you still the same person underneath?'
+        ]
+      }
+    ],
+    conflictHook: 'Body dysphoria: phantom flesh, real metal. Was it worth what you sold?',
+    conflictBody: 'Every motion is a small decision the augmentation made on your behalf. <strong>Phantom limbs</strong> ache where the prosthetic took over. The <strong>seam between flesh and metal</strong> is the only honest part of your skin: the place where memory ends and the contract begins. Your sensors read other people&#39;s grief as cold telemetry; you feel it as data first, person second, and the gap between the two never quite closes. <em>The faded T.A.L.O.S. logo on your shoulder is a property tag, and it does not wash off.</em><br><br><strong>The Augmented question:</strong> not <em>who am I</em>, but <em>who was I before I signed</em>. You spent the rest of your life paying for the choice, and then you died, and the choice came back with you.'
   },
 
   cindered: {
@@ -3728,385 +3922,4 @@ function renderSubraceTabstrip(subs, activeIndex) {
     return `
       <button type="button" class="subrace-tab${isActive ? ' active' : ''}"
               data-index="${i}" role="tab"
-              aria-selected="${isActive ? 'true' : 'false'}"${styleAttr}>
-        ${thumb}
-        <span class="subrace-tab-name">${s.name}</span>
-      </button>
-    `;
-  }).join('');
-}
-
-// ─────────────────────────────────────────────────────────
-// ACTIVE CARD RENDER (museum-split)
-// ─────────────────────────────────────────────────────────
-// Returns { imageHTML, contentHTML } so the picker can drop the portrait
-// into the showcase row's featured-image wrap and the text into the full-
-// width content-below region. Three branches mirroring `getSubTypes()`'s
-// `kind` field. `accentStyle` carries the per-subtype `--accent` so both
-// halves coordinate (border tint, eyebrow, hook color, etc.).
-function renderActiveCardHTML(sub) {
-  // Hell info-only card — no image, ember-tinted panel of prose.
-  if (sub.kind === 'info-only') {
-    return {
-      imageHTML: '',
-      contentHTML: `
-        <div class="subrace-card info-only">
-          <div class="subrace-card-text">
-            <div class="subrace-info-label">${sub.label}</div>
-            <div class="subrace-info-body">${sub.body}</div>
-          </div>
-        </div>
-      `
-    };
-  }
-
-  // Legacy (name-only) — no image, no desc, art/copy-pending caption.
-  if (sub.kind === 'legacy') {
-    return {
-      imageHTML: '',
-      contentHTML: `
-        <div class="subrace-card legacy-fallback" data-subrace="${sub.name}">
-          <div class="subrace-card-text">
-            <div class="subrace-card-name">${sub.name}</div>
-            <div class="subrace-card-fallback-caption">Description coming</div>
-          </div>
-        </div>
-      `
-    };
-  }
-
-  // Rich entry — split into image block (showcase row) + content block
-  // (content-below). Inline `--accent` is set on BOTH halves so the
-  // featured-image border/glow and the content-block tints match.
-  const accent = sub.accentColor || '';
-  const styleAttr = accent ? ` style="--accent: ${accent};"` : '';
-  const imageHTML = sub.image
-    ? `<div class="subrace-card-image"${styleAttr}>
-         <img src="${sub.image}" alt="${sub.alt || sub.name}" loading="lazy" decoding="async"/>
-       </div>`
-    : `<div class="subrace-card-image placeholder"${styleAttr} aria-label="${sub.alt || (sub.name + ' — art pending')}">
-         <div class="subrace-placeholder-inner">
-           <svg aria-hidden="true"><use href="#icon-ghost"/></svg>
-           <div class="subrace-placeholder-caption">Art pending</div>
-         </div>
-       </div>`;
-  const archetypeTag = sub.archetype
-    ? `<span class="subrace-archetype-tag">${sub.archetype}</span>`
-    : '';
-  const subtitle = sub.subtitle
-    ? `<div class="subrace-card-subtitle">${sub.subtitle}</div>`
-    : '';
-
-  // ── Structured-content branch ──
-  const hasStructured = typeof sub.overall === 'string' && sub.overall.length > 0;
-
-  if (hasStructured) {
-    const bullets = (arr) => (Array.isArray(arr) ? arr : [])
-      .map(item => `<li>${item}</li>`)
-      .join('');
-    const hooks = (Array.isArray(sub.hooks) ? sub.hooks : [])
-      .map(q => `<li>${q}</li>`)
-      .join('');
-    const bodyHistorySection = sub.bodyHistory
-      ? `<div class="subrace-section">
-           <div class="subrace-section-label">What returned</div>
-           <p class="subrace-section-prose">${sub.bodyHistory}</p>
-         </div>`
-      : '';
-    const bodyMarksSection = Array.isArray(sub.bodyMarks) && sub.bodyMarks.length
-      ? `<div class="subrace-section">
-           <div class="subrace-section-label">Body marks</div>
-           <ul class="subrace-section-bullets">${bullets(sub.bodyMarks)}</ul>
-         </div>`
-      : '';
-    const soulTraceSection = Array.isArray(sub.soulTrace) && sub.soulTrace.length
-      ? `<div class="subrace-section">
-           <div class="subrace-section-label">Soul trace</div>
-           <ul class="subrace-section-bullets">${bullets(sub.soulTrace)}</ul>
-         </div>`
-      : '';
-    const roleSection = sub.roleOnTrain
-      ? `<div class="subrace-section">
-           <div class="subrace-section-label">Role on the train</div>
-           <p class="subrace-section-prose">${sub.roleOnTrain}</p>
-         </div>`
-      : '';
-    const hooksSection = hooks
-      ? `<div class="subrace-section">
-           <div class="subrace-section-label">Roleplay hooks</div>
-           <ul class="subrace-section-hooks">${hooks}</ul>
-         </div>`
-      : '';
-
-    // Body marks + soul trace render side-by-side in the museum layout
-    // (full-width text region has the horizontal real estate for it).
-    const pairSection = (bodyMarksSection || soulTraceSection)
-      ? `<div class="subrace-section-pair">
-           ${bodyMarksSection}
-           ${soulTraceSection}
-         </div>`
-      : '';
-
-    // NEW traits/direction row — 6 big text-only stance pills (general
-    // direction-language, distinct from the icon-based race-level tags above).
-    // Renders only when sub.traits is a non-empty array (Inheritor today;
-    // other races simply omit the row).
-    const traitsRow = Array.isArray(sub.traits) && sub.traits.length
-      ? `<div class="subrace-traits">${sub.traits
-          .map(t => `<span class="subrace-trait">${t}</span>`)
-          .join('')}</div>`
-      : '';
-
-    const contentHTML = `
-      <div class="subrace-card" data-subrace="${sub.name}"${styleAttr}>
-        <div class="subrace-card-text">
-          <h3 class="subrace-card-name-big">${sub.name}</h3>
-          <div class="subrace-card-meta-row">
-            ${archetypeTag}
-            ${subtitle}
-          </div>
-
-          ${traitsRow}
-
-          <p class="subrace-overall">${sub.overall}</p>
-
-          ${bodyHistorySection}
-
-          <hr class="subrace-divider" aria-hidden="true">
-
-          ${pairSection}
-
-          <hr class="subrace-divider" aria-hidden="true">
-
-          ${roleSection}
-          ${hooksSection}
-        </div>
-      </div>
-    `;
-    return { imageHTML, contentHTML };
-  }
-
-  // Legacy rich entry — pre-structured-fields fallback.
-  const contentHTML = `
-    <div class="subrace-card" data-subrace="${sub.name}"${styleAttr}>
-      <div class="subrace-card-text">
-        ${archetypeTag}
-        <div class="subrace-card-name">${sub.name}</div>
-        ${subtitle}
-        <div class="subrace-card-desc">${sub.desc || 'Description coming'}</div>
-      </div>
-    </div>
-  `;
-  return { imageHTML, contentHTML };
-}
-
-// Swap both the featured image AND the content-below text with a brief
-// cross-fade (~120ms out, then the new HTML is injected and the fade-in
-// is unblocked on next frame). Both halves animate together so the swap
-// reads as a single museum-display change.
-function swapActiveCard(parts) {
-  const slots = [
-    [subraceFeaturedImage, parts.imageHTML || ''],
-    [subraceContentBelow,  parts.contentHTML || '']
-  ].filter(([el]) => !!el);
-  slots.forEach(([el]) => el.classList.add('is-swapping'));
-  setTimeout(() => {
-    slots.forEach(([el, html]) => {
-      el.innerHTML = html;
-      // Force reflow so the transition fires when we remove the class.
-      void el.offsetHeight;
-      el.classList.remove('is-swapping');
-    });
-  }, 120);
-}
-
-// ─────────────────────────────────────────────────────────
-// PICKER STATE — current race + active sub-type index
-// ─────────────────────────────────────────────────────────
-// `currentSubs` is the cached normalised sub-type array for the active
-// race; `currentIndex` is the index into that array. Both reset on race
-// change. `currentRaceId` lets us distinguish "no race selected" (intro
-// state) from "race active".
-let currentRaceId = null;
-let currentSubs   = [];
-let currentIndex  = 0;
-
-function refreshNavButtons() {
-  if (!subraceNavPrev || !subraceNavNext) return;
-  // Hide arrows entirely when there's nothing to flip between.
-  const visible = currentSubs.length > 1;
-  subraceNavPrev.classList.toggle('is-hidden', !visible);
-  subraceNavNext.classList.toggle('is-hidden', !visible);
-  // Disable in intro state (no race active).
-  const disabled = currentRaceId === null;
-  subraceNavPrev.classList.toggle('is-disabled', disabled);
-  subraceNavNext.classList.toggle('is-disabled', disabled);
-}
-
-function renderActiveSubrace(animate) {
-  if (!subraceContentBelow && !subraceFeaturedImage) return;
-  if (!currentSubs.length) {
-    if (subraceFeaturedImage) subraceFeaturedImage.innerHTML = '';
-    if (subraceContentBelow)  subraceContentBelow.innerHTML  = SUBRACE_PICKER_EMPTY_HTML;
-    return;
-  }
-  const sub = currentSubs[currentIndex];
-  const parts = renderActiveCardHTML(sub);
-  if (animate) {
-    swapActiveCard(parts);
-  } else {
-    if (subraceFeaturedImage) subraceFeaturedImage.innerHTML = parts.imageHTML || '';
-    if (subraceContentBelow)  subraceContentBelow.innerHTML  = parts.contentHTML || '';
-  }
-}
-
-function setActiveSubraceIndex(nextIndex, animate) {
-  if (!currentSubs.length) return;
-  const len = currentSubs.length;
-  // Wrap-around (so prev on first → last, next on last → first).
-  currentIndex = ((nextIndex % len) + len) % len;
-  // Update tab active state without rebuilding the strip.
-  if (subraceTabstrip) {
-    subraceTabstrip.querySelectorAll('.subrace-tab').forEach((tab, i) => {
-      const active = i === currentIndex;
-      tab.classList.toggle('active', active);
-      tab.setAttribute('aria-selected', active ? 'true' : 'false');
-    });
-  }
-  renderActiveSubrace(animate);
-}
-
-// Tab clicks → switch active index (with cross-fade animation).
-if (subraceTabstrip) {
-  subraceTabstrip.addEventListener('click', e => {
-    const btn = e.target.closest('.subrace-tab');
-    if (!btn) return;
-    const i = parseInt(btn.dataset.index, 10);
-    if (Number.isNaN(i) || i === currentIndex) return;
-    setActiveSubraceIndex(i, true);
-  });
-}
-
-// Arrow clicks → prev/next with wrap-around.
-if (subraceNavPrev) {
-  subraceNavPrev.addEventListener('click', () => {
-    if (subraceNavPrev.classList.contains('is-disabled')) return;
-    if (subraceNavPrev.classList.contains('is-hidden')) return;
-    setActiveSubraceIndex(currentIndex - 1, true);
-  });
-}
-if (subraceNavNext) {
-  subraceNavNext.addEventListener('click', () => {
-    if (subraceNavNext.classList.contains('is-disabled')) return;
-    if (subraceNavNext.classList.contains('is-hidden')) return;
-    setActiveSubraceIndex(currentIndex + 1, true);
-  });
-}
-
-function renderSubracePicker(id, r) {
-  renderSubracePickerHeader(id, r);
-  currentRaceId = id;
-  currentSubs   = getSubTypes(id, r);
-  currentIndex  = 0;
-  // Render strip first, then active card. Strip-fade applies on race change.
-  renderSubraceTabstrip(currentSubs, currentIndex);
-  if (subraceTabstrip && currentSubs.length > 1) {
-    subraceTabstrip.classList.add('is-entering');
-    requestAnimationFrame(() => {
-      subraceTabstrip.classList.remove('is-entering');
-    });
-  }
-  renderActiveSubrace(false);
-  refreshNavButtons();
-}
-
-function renderRace(id) {
-  const r = RACES[id];
-  if (!r) return;
-  panel.innerHTML = isRichRace(r) ? renderRichRace(id, r) : renderLegacyRace(r);
-  renderSubracePicker(id, r);
-}
-
-function renderIntro() {
-  panel.innerHTML = INTRO_HTML;
-  renderSubracePickerHeaderEmpty();
-  currentRaceId = null;
-  currentSubs   = [];
-  currentIndex  = 0;
-  if (subraceTabstrip) {
-    subraceTabstrip.classList.add('is-hidden');
-    subraceTabstrip.innerHTML = '';
-  }
-  if (subraceFeaturedImage) {
-    subraceFeaturedImage.innerHTML = '';
-  }
-  if (subraceContentBelow) {
-    subraceContentBelow.innerHTML = SUBRACE_PICKER_EMPTY_HTML;
-  }
-  refreshNavButtons();
-}
-
-// Shared selection routine — used by triangle-node clicks, pole-card click-proxies,
-// and keyboard activation (Enter / Space). Centralised so a11y + click both call
-// the same code path.
-const bodyAxisSvg = document.getElementById('bodyAxis');
-function selectRace(id) {
-  if (!id) return;
-  // Highlight the matching triangle node + dim siblings via CSS.
-  const targetNode = document.querySelector(`.node-group[data-race="${id}"]`);
-  document.querySelectorAll('.node-group').forEach(n => n.classList.remove('selected'));
-  if (targetNode) targetNode.classList.add('selected');
-  if (bodyAxisSvg) bodyAxisSvg.classList.add('has-selection');
-  renderRace(id);
-  if (window.innerWidth < 980) {
-    panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
-}
-
-// Bind clicks + keyboard (Enter / Space) on every triangle node.
-document.querySelectorAll('.node-group').forEach(node => {
-  node.addEventListener('click', () => selectRace(node.dataset.race));
-  node.addEventListener('keydown', e => {
-    if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
-      e.preventDefault();
-      selectRace(node.dataset.race);
-    }
-  });
-});
-
-// Pole-cards are click-proxies for the corresponding triangle node — clicking
-// the Mortal pole-card triggers the Mortal node, etc. Keyboard activation
-// mirrors the triangle nodes (Enter / Space).
-document.querySelectorAll('.pole-card[data-race-proxy]').forEach(card => {
-  const id = card.dataset.raceProxy;
-  card.addEventListener('click', () => selectRace(id));
-  card.addEventListener('keydown', e => {
-    if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
-      e.preventDefault();
-      selectRace(id);
-    }
-  });
-});
-
-// Initial state — auto-select Mortal/Inheritor so the page loads with content
-(function autoSelectInitial() {
-  const mortalNode = document.querySelector('.node-group[data-race="mortal"]');
-  if (!mortalNode) {
-    renderIntro();
-    return;
-  }
-  mortalNode.classList.add('selected');
-  if (bodyAxisSvg) bodyAxisSvg.classList.add('has-selection');
-  renderRace('mortal');
-})();
-
-// ═══════════════════════════════════════════════════════
-// TAB SWITCHING
-// ═══════════════════════════════════════════════════════
-document.getElementById('tabNav').addEventListener('click', e => {
-  const t = e.target.closest('.tab');
-  if (!t || t.classList.contains('disabled')) return;
-  const tabId = t.dataset.tab;
-  document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
-  t.classList.add('active');
-  document.query
+      
