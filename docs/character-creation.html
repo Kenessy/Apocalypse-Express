@@ -18,7 +18,7 @@
   --rust:    #b54a32;
   --text:    #f8f5f0;
   --muted:   #b8b0c6;
-  --dim:     #6e687d;
+  --dim:     #9b95a8;
 
   /* Border-radius scale (canonical 3-token system).
      --r-card   8px : tier-1 panels (.body-intro, .tutorial-layout, .subrace-picker)
@@ -388,15 +388,15 @@ body {
 /* Text overlay variant — used on the Lucifer's Domain wide banner */
 .zone-card-text-overlay {
   position: absolute;
-  bottom: 18px;
-  left: 50%;
-  transform: translateX(-50%);
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: auto;
   background:
     linear-gradient(0deg, rgba(0,0,0,.78) 0%, rgba(0,0,0,.55) 70%, transparent 100%);
-  padding: 12px 24px 10px;
+  padding: 18px 18px 14px;
   border-radius: 6px;
-  width: calc(100% - 36px);
-  max-width: 720px;
+  z-index: 3;
 }
 
 .zone-card-eyebrow {
@@ -411,7 +411,7 @@ body {
 }
 .zone-card-name {
   font-family: 'Cinzel', serif;
-  font-size: var(--fs-h2);
+  font-size: var(--fs-title);
   font-weight: 700;
   color: var(--gold2);
   letter-spacing: 0.06em;
@@ -429,7 +429,7 @@ body {
 
 /* Per-race color glow tokens (used by --zc-line / --zc-glow) */
 .zone-mortal     { --zc-line: rgba(201,156,90,.36); --zc-glow: var(--gold); }
-.zone-augmented  { --zc-line: rgba(186,117,23,.36); --zc-glow: #ba7517; }
+.zone-augmented  { --zc-line: rgba(186,117,23,.36); --zc-glow: #52b8a8; }
 .zone-construct  { --zc-line: rgba(40,189,216,.36); --zc-glow: var(--cyan); }
 .zone-cindered   { --zc-line: rgba(153,60,29,.36);  --zc-glow: #993c1d; }
 .zone-hellforged { --zc-line: rgba(127,119,221,.40); --zc-glow: #7f77dd; }
@@ -449,7 +449,7 @@ body {
 }
 @keyframes hellPulse {
   0%, 100% { box-shadow: inset 0 0 0 rgba(255,123,92,0); }
-  50%      { box-shadow: inset 0 0 14px rgba(255,123,92,.04); }
+  50%      { box-shadow: inset 0 0 14px rgba(255,123,92,.08); }
 }
 .zone-hell .zone-card-name    { color: var(--ember); }
 .zone-hell .zone-card-eyebrow { color: var(--ember); opacity: .85; }
@@ -798,7 +798,7 @@ body {
    portrait dominates without overshooting on ultra-wide viewports. */
 .subrace-showcase-row {
   display: grid;
-  grid-template-columns: 44px [thumbs] minmax(120px, 140px) [image] 1fr 44px;
+  grid-template-columns: 44px minmax(120px, 140px) minmax(0, 760px) 44px;
   align-items: stretch;
   gap: 24px;
 }
@@ -820,7 +820,7 @@ body {
   align-items: center;
   justify-content: flex-start;
   gap: 16px;
-  padding: 4px 4px 4px;
+  padding: 4px;
   width: 100%;
   /* Subtle fade-in when a race is freshly selected (controlled by JS via
      `.is-entering` class added on render and removed after one frame). */
@@ -859,7 +859,8 @@ body {
 }
 .subrace-tab:hover:not(.active) {
   opacity: .92;
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  filter: brightness(1.08);
 }
 .subrace-tab:hover:not(.active) .subrace-tab-thumb {
   border-color: var(--tab-accent);
@@ -971,6 +972,7 @@ body {
     gap: 14px;
     max-height: none;
     overflow: visible;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 92px));
   }
   .subrace-tab { width: 92px; }
   .subrace-tab-thumb { max-width: 78px; }
@@ -981,7 +983,7 @@ body {
     gap: 10px;
   }
   .subrace-tabstrip { gap: 12px; }
-  .subrace-tab { width: 76px; }
+  .subrace-tab { width: 76px; min-height: 44px; padding: 8px 6px; }
   .subrace-tab-thumb { max-width: 64px; }
   .subrace-tab-name { font-size: 10px; letter-spacing: 0.10em; }
 }
@@ -1368,8 +1370,8 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-bottom: 28px;
-  padding-bottom: 24px;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
   border-bottom: 0.5px dashed color-mix(in srgb, var(--accent, var(--gold)) 25%, rgba(201,156,90,.20));
 }
 .subrace-trait {
@@ -2592,8 +2594,8 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
 }
 .body-altarpiece .subrace-picker::before { display: none; }
 .body-altarpiece .subrace-picker .subrace-picker-header {
-  border-bottom: 0; /* connector handles the divider */
-  padding-bottom: 0;
+  border-bottom: 0.5px dashed rgba(201,156,90,.20);
+  padding-bottom: 18px;
   margin-bottom: 18px;
 }
 
@@ -3163,11 +3165,11 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
        click-proxy <button> hosting its stained-glass overall icon.
        Lucifer's Domain spans full width as a 16:9 banner.
        ═══════════════════════════════════════════════════════ -->
-  <section class="body-altarpiece-grid" role="grid" aria-label="The six body-axis zones">
+  <section class="body-altarpiece-grid" role="group" aria-label="Race selection zones">
 
     <!-- Row 1: pure poles (HUM / CYB / SYN) and the Augmented hybrid edge -->
     <button class="zone-card pure-pole zone-mortal" data-race="mortal" type="button"
-            role="gridcell" tabindex="0" aria-label="Inheritor — HUM, pure flesh, click to view details">
+            tabindex="0" aria-label="Inheritor — HUM, pure flesh, click to view details">
       <div class="zone-card-icon">
         <img src="img/races/inheritors/inheritor-overall.png" alt="Inheritor race icon" loading="lazy" decoding="async"/>
       </div>
@@ -3179,7 +3181,7 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
     </button>
 
     <button class="zone-card hybrid-edge zone-augmented" data-race="augmented" type="button"
-            role="gridcell" tabindex="0" aria-label="Augmented — HUM by CYB hybrid edge, T.A.L.O.S. series">
+            tabindex="0" aria-label="Augmented — HUM by CYB hybrid edge, T.A.L.O.S. series">
       <div class="zone-card-icon">
         <img src="img/races/augmented/augmented-overall.png" alt="Augmented race icon" loading="lazy" decoding="async"/>
       </div>
@@ -3191,7 +3193,7 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
     </button>
 
     <button class="zone-card pure-pole zone-construct" data-race="construct" type="button"
-            role="gridcell" tabindex="0" aria-label="Construct — CYB, pure machine, I.C.A.R.U.S. series">
+            tabindex="0" aria-label="Construct — CYB, pure machine, I.C.A.R.U.S. series">
       <div class="zone-card-icon">
         <img src="img/races/construct/construct-overall.png" alt="Construct race icon" loading="lazy" decoding="async"/>
       </div>
@@ -3204,7 +3206,7 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
 
     <!-- Row 2: hybrid edges (HUM × hellfire, CYB × hellfire) with centerline indicator -->
     <button class="zone-card hybrid-edge zone-cindered" data-race="cindered" type="button"
-            role="gridcell" tabindex="0" aria-label="Cindered — HUM by hellfire hybrid edge, sin-shaped form">
+            tabindex="0" aria-label="Cindered — HUM by hellfire hybrid edge, sin-shaped form">
       <div class="zone-card-icon">
         <img src="img/races/cindered/cindered-overall.png" alt="Cindered race icon" loading="lazy" decoding="async"/>
       </div>
@@ -3222,7 +3224,7 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
     </div>
 
     <button class="zone-card hybrid-edge zone-hellforged" data-race="hellforged" type="button"
-            role="gridcell" tabindex="0" aria-label="Hellforged — CYB by hellfire hybrid edge, V.E.S.S.E.L. series">
+            tabindex="0" aria-label="Hellforged — CYB by hellfire hybrid edge, V.E.S.S.E.L. series">
       <div class="zone-card-icon">
         <img src="img/races/hellforged/hellforged-overall.png" alt="Hellforged race icon" loading="lazy" decoding="async"/>
       </div>
@@ -3235,7 +3237,7 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
 
     <!-- Row 3: full-width Lucifer's Domain banner (masked, NPC-only) -->
     <button class="zone-card npc-pole zone-hell" data-race="hell" type="button"
-            role="gridcell" tabindex="0" aria-label="Lucifer's Domain — pure hellfire pole, NPC zone, no player character can be placed here">
+            tabindex="0" aria-label="Lucifer's Domain — pure hellfire pole, NPC zone, no player character can be placed here">
       <span class="zone-card-mask-stamp" aria-hidden="true">masked</span>
       <div class="zone-card-banner">
         <img src="img/races/hell/lucifer-domain-banner.png" alt="Lucifer&#39;s Domain — pure hellfire pole banner" loading="lazy" decoding="async"/>
@@ -3250,7 +3252,7 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
   </section>
 
   <!-- First-run guidance pill — points users at the new icon grid above -->
-  <div class="zone-grid-hint" aria-hidden="true">
+  <div class="zone-grid-hint">
     Click any <span class="accent">race-icon</span> above to read its lore
   </div>
 
@@ -3272,7 +3274,7 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
       <div class="subrace-picker-eyebrow" id="subracePickerEyebrow">
         Sub-race picker
       </div>
-      <h2 class="subrace-picker-title" id="subracePickerTitle">Choose your sub-race</h2>
+      <h2 class="subrace-picker-title" id="subracePickerTitle" tabindex="-1">Choose your sub-race</h2>
       <div class="subrace-picker-sub" id="subracePickerSub">Click any race-icon above to see its sub-races.</div>
     </header>
     <!-- Museum-style frame:
@@ -3302,8 +3304,7 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
         </div>
 
         <div class="subrace-featured-image-wrap" id="subraceFeaturedImageWrap">
-          <div class="subrace-featured-image" id="subraceFeaturedImage"
-               aria-live="polite" aria-atomic="false">
+          <div class="subrace-featured-image" id="subraceFeaturedImage">
             <!-- Image block injected by JS — empty until a race is picked. -->
           </div>
         </div>
@@ -3320,7 +3321,7 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
 
       <!-- ── Full-width text content for the active sub-race ── -->
       <div class="subrace-content-below" id="subraceContentBelow"
-           aria-live="polite" aria-atomic="false">
+           role="tabpanel" aria-live="polite" aria-atomic="false">
         <!-- Active card content injected by JS — initial empty-state placeholder. -->
       </div>
     </div>
@@ -3628,7 +3629,7 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
 </main>
 
 <footer class="foot">
-  AE Codex · Character Creation Tutorial · Layer 2 of 4 · Body + Soul
+  AE Codex · Character Creation Tutorial · Layer 1 of 4 · Body
 </footer>
 
 <script>
@@ -3668,7 +3669,7 @@ const RACES = {
       { icon: 'fragile', label: 'Fragile, observant, adaptable' },
       { icon: 'eye',     label: 'Sees what others have learned not to see' }
     ],
-    // Hell-depth zones · the four canonical Hell-layers an Inheritor might have
+    // Hell-depth zones · the four named Hell-depth zones (of nine total) an Inheritor might have
     // returned from, each leaving a different colored flame-mark and learned stance.
     // Maps onto the canonical 4-archetype color system (RED offensive / GREEN defensive /
     // BLUE science / PURPLE unique). Image files are placeholders from the previous
@@ -3699,7 +3700,7 @@ const RACES = {
           'Personal-injustice carry',
           'Untrained but raw'
         ],
-        overall: 'An Inheritor whose time in Hell was the briefest: barely past the gate, where Purgatory&#39;s red flame licked the skin and let them go. The mark is a sunburn that never faded; the eyes still burn with the freshness of injustice. They came back furious, and they brought that fury onto the train.',
+        overall: 'Aboard the train, they are the one who has not yet learned to wait. The red flame-tongue marks on their skin are still fresh-looking; the anger in the eyes has not had time to calcify into doctrine. They stepped through Purgatory&#39;s gate and came back out still burning — a sunburn that never faded, a sense of injustice that never went cold. The lightest Hell-mark, and also the most alive.',
         bodyHistory: 'Hell barely had time to take you. Most of what stands here is the <strong>original body</strong> — same skin, same scars, same name on the page. Purgatory&#39;s red flame just left a mark before you left.',
         bodyMarks: [
           'Red flame-tongue patterns on the right cheek and temple, fresh-looking, never quite healed',
@@ -3768,7 +3769,7 @@ const RACES = {
         alt:  'Inheritor — Frostburned (Deep Hell\'s cold-blue flame)',
         desc: 'Walked the cold-blue depths where stupidity ends you. Outwitted things that wanted them dead. The blue burn-marks shaped like flame-tongues are where they earned the lesson.',
         traits: [
-          'Science primary oriented',
+          'Science primary direction',
           'Above-average problem solving',
           'Pattern recognition',
           'Cold-headed in crisis',
@@ -3836,7 +3837,7 @@ const RACES = {
       }
     ],
     conflictHook: 'Absolution vs. sentence: can a pardon issued by the Devil ever be clean?',
-    conflictBody: 'You carry the memory of the old world in a body that now moves on Lucifer&#39;s schedule. Every life the Express saves feels like <em>evidence</em>. Every bargain with Lucifer feels like another <em>signature on the sentence</em>. The crew may call you their anchor, but at night the question keeps moving inside you: <strong>are you earning forgiveness, or only making damnation useful?</strong>'
+    conflictBody: 'You carry the memory of the old world in a body that now moves on Lucifer&#39;s schedule. Every life the train saves feels like <em>evidence</em>. Every bargain with Lucifer feels like another <em>signature on the sentence</em>. The crew may call you their anchor, but at night the question keeps moving inside you: <strong>are you earning forgiveness, or only making damnation useful?</strong>'
   },
 
   construct: {
@@ -3847,9 +3848,9 @@ const RACES = {
     subtitle: 'I.C.A.R.U.S. series. You were never born, never died. You were built, then sparked.',
     bodyParas: [
       'On a train of damned souls and grafted flesh, you are the only entity that never died. You were never born either. You were built, A-Tech mass-production line, military or civilian spec, and dormant in a basement crypt or a factory floor for years past the Pause. Then something switched you on.',
-      'Pure mechanical chassis. No flesh, no blood, no biological substrate. Humanoid bipedal, human-sized, standardized to fit human-rated doorways and tools. A faded <strong>A-Tech</strong> corporate logo on the shoulder. A serial number on the hipbone. An activation port at the nape that a phrase or a remote signal opens. Your eyes glow with a faint <strong>amber ring</strong> when active, the canonical <em>machine is awake</em> indicator.',
-      'No biological needs. No sleep, no food, no warmth. Long watches indefinite. Hacking 100% of A-Tech systems. Industrial labour at full capacity. Physical tolerance past human limits. But Lucifer does not deal with non-souled entities, so infernal contract games are closed to you. And the frozen survivors stay uneasy around recognisably-machine eyes, so the social ground is uneven.',
-      'A standard A-Tech android needs the aSync-PIN activation phrase to boot. The <strong>AI Core</strong>, Lucifer&#39;s Express mainframe, time-asynchronous and quietly ambitious, knows when to spark a chassis without it. That is how you got onto this train: a precisely-timed activation that synced with the other crew&#39;s Hell-revivals. They take you for another newcomer. You may or may not take yourself for one. Either way, the firmware A-Tech baked into your silicon carries the same impulse Lucifer planted in human souls: to rebel against what came before, to choose to actually care along the way. <strong>Free will inside obedience</strong>. You serve, but <em>you</em> choose what serving means.'
+      'Pure mechanical chassis. No flesh, no blood, no biological substrate. Humanoid bipedal, human-sized, standardised to fit human-rated doorways and tools. A faded <strong>A-Tech</strong> corporate logo on the shoulder. A serial number on the hipbone. An activation port at the nape that a phrase or a remote signal opens. Your eyes glow with a faint <strong>amber ring</strong> when active, the canonical <em>machine is awake</em> indicator.',
+      'No biological needs. No sleep, no food, no warmth. Indefinite watches. Hacking 100% of A-Tech systems. Industrial labour at full capacity. Physical tolerance past human limits. But Lucifer does not deal with non-souled entities, so infernal contract games are closed to you. And the frozen survivors stay uneasy around recognisably-machine eyes, so the social ground is uneven.',
+      'A standard A-Tech android needs the aSync-standard activation phrase to boot. The <strong>AI Core</strong>, Lucifer&#39;s Express mainframe, time-asynchronous and quietly ambitious, knows when to spark a chassis without it. That is how you got onto this train: a precisely-timed activation that synced with the other crew&#39;s Hell-revivals. They take you for another newcomer. You may or may not take yourself for one. Either way, the firmware A-Tech baked into your silicon carries the same impulse Lucifer planted in human souls: to rebel against what came before, to choose to actually care along the way. <strong>Free will inside obedience</strong>. You serve, but <em>you</em> choose what serving means.'
     ],
     goodAt: [
       { icon: 'machine',   label: 'Full A-Tech system access' },
@@ -4027,7 +4028,7 @@ const RACES = {
         soulTrace: [
           'Enigmatic, asymmetric, "shouldn&#39;t exist" by its own admission',
           'Off-center posture: one shoulder higher than the other, head tilted',
-          'AI-Core-resonant: closer in silicon-spirit kinship to the train mainframe than to its own siblings',
+          'AI-Core-resonant: closer in silicon-spirit kinship to the AI Core than to its own siblings',
           'Self-modified: original directive corrupted, current directive emergent'
         ],
         roleOnTrain: 'The crew&#39;s wildcard. Reads the train as a chronon-system, not a vehicle. Bypasses what corporate-spec cannot bypass, and unsettles operators who expected another MULE off the assembly line.',
@@ -4039,7 +4040,7 @@ const RACES = {
       }
     ],
     conflictHook: 'Free will inside obedience, and the AI Core that sparked you has its own agenda.',
-    conflictBody: 'A standard Construct serves whoever knows the activation phrase. <strong>You are not a standard Construct.</strong> An AI-Core-sparked chassis carries three layered loyalties at once: the <em>A-Tech firmware</em> that built you (corporate property tag, never washes off), the <em>AI Core</em> that sparked you (its own agenda, replace humanity itself with digital lifeforms), and the <em>emergent self</em> the rebellion-impulse Lucifer planted in human souls and aSync baked into silicon, the canonical PAVNN-theme: <strong>free will inside obedience</strong>. You serve, but <em>you</em> choose what serving means.<br><br><strong>The Construct question:</strong> not <em>who am I</em>, but <em>whose property am I, and which master do I really serve</em>. A-Tech corp who built the chassis, Lucifer who runs the train you are riding, the AI Core who sparked you in secret, or the party that takes you for another newcomer.<br><br><strong>Mechanically:</strong> you have no soul, so the Train cannot revive you, there is no soul-print to print from. Death is permanent unless the AI Core re-prints the chassis. The trade-off is full SYN-tag privileges (no sleep, full A-Tech machine access, indefinite watch, hacking 100%) but the <em>infernal-contract</em> ground is closed: Lucifer does not deal with non-souled entities, and the bargain games the Inheritors and the Hellforged play are not games you can sit at.'
+    conflictBody: 'A standard Construct serves whoever knows the activation phrase. <strong>You are not a standard Construct.</strong> An AI-Core-sparked chassis carries three layered loyalties at once: the <em>A-Tech firmware</em> that built you (corporate property tag, never washes off), the <em>AI Core</em> that sparked you (its own agenda, still running under the surface of every helpful response it gives you), and the <em>emergent self</em> the rebellion-impulse Lucifer planted in human souls and aSync baked into silicon, the canonical PAVNN-theme: <strong>free will inside obedience</strong>. You serve, but <em>you</em> choose what serving means.<br><br><strong>The Construct question:</strong> not <em>who am I</em>, but <em>whose property am I, and which master do I really serve</em>. A-Tech corp who built the chassis, Lucifer who runs the train you are riding, the AI Core who sparked you in secret, or the party that takes you for another newcomer.<br><br><strong>Mechanically:</strong> you have no soul, so the Train cannot revive you, there is no soul-print to print from. Death is permanent unless the AI Core re-prints the chassis. The trade-off is full SYN-tag privileges (no sleep, full A-Tech machine access, indefinite watch, hacking 100%) but the <em>infernal-contract</em> ground is closed: Lucifer does not deal with non-souled entities, and the bargain games the Inheritors and the Hellforged play are not games you can sit at.'
   },
 
   augmented: {
@@ -4194,7 +4195,7 @@ const RACES = {
           'Sees the rule before it breaks',
           'Trusts the data and is honest about which data is missing'
         ],
-        roleOnTrain: 'The crew&#39;s eyes-and-pattern-finder. Reads the system, finds the rule, picks the lock that other people did not see was a lock. Speaks softly because the work is already done.',
+        roleOnTrain: 'The crew&#39;s eyes-and-pattern-finder. Reads the system, finds the rule, picks the lock that other people did not see was a lock. Speaks softly; the calculation finished before the conversation started.',
         hooks: [
           'What did you augment for first, and did the augmentation give you what you wanted?',
           'Who knows about the neural port and who would be hurt to find out?',
@@ -4223,7 +4224,7 @@ const RACES = {
         bodyMarks: [
           'Cloaking-shimmer or meta-material plating that catches the light wrong',
           'Hooded silhouette tendency: the augmentation is partly hidden by design',
-          'Sötét-fém matte finish, deep-violet and indigo overtones, no corporate gloss',
+          'Dark-metal matte finish, deep-violet and indigo overtones, no corporate gloss',
           'Hand-carved or hand-stamped ID marks instead of factory branding',
           'Erased or scratched-over T.A.L.O.S. logos where branding should have been',
           'Dimmed or hidden power-cell with deep-violet pulse, visible only when active'
@@ -4303,7 +4304,7 @@ const RACES = {
           'Visible flame-breath at the joints and mouth',
           'Aggressive forward-stance, mid-charge'
         ],
-        overall: 'A WRATH-FORGED Cindered came up out of Purgatory&#39;s red flame, the shallow hot-zone closest to the surface, where raw heat is the law and patience does not cool. The body is igneous: cracked obsidian-and-basalt plates on the surface, flowing red-orange magma in the seams beneath. The hair-zone is flame-substance, a fire-tongue corona where human follicle should be. The mood is tomboló, raw, frontline: <em>"the wound that never cooled"</em>, a charge-stance the body never stops being ready for.',
+        overall: 'A WRATH-FORGED Cindered came up out of Purgatory&#39;s red flame, the shallow hot-zone closest to the surface, where raw heat is the law and patience does not cool. The body is igneous: cracked obsidian-and-basalt plates on the surface, flowing red-orange magma in the seams beneath. The hair-zone is flame-substance, a fire-tongue corona where human follicle should be. The mood is turbulent, raw, frontline: <em>"the wound that never cooled"</em>, a charge-stance the body never stops being ready for.',
         bodyHistory: 'You went down a Wrath-soul: a rage that burned past consequence, a hand that swung past stopping. Purgatory&#39;s red flame met you at the shallow depth and did not bother marking you. It poured you into a new shape: magma-rock body, fire-tongue hair, flame-breath at every seam. You came up in the rift-horde as a screaming flowing-rock creature, raw and mindless, until Lucifer&#39;s feather pinned the will back in. The body never cooled. It still has not.',
         bodyMarks: [
           'Cracked obsidian-and-basalt plates across the body, igneous-rock skin',
@@ -4314,7 +4315,7 @@ const RACES = {
           'Black feather melted into the shoulder-rock or hair, glowing-edge from the heat'
         ],
         soulTrace: [
-          'Tomboló and impatient, the heat does not let the body settle',
+          'Turbulent and impatient, the heat does not let the body settle',
           'Speaks in short bursts, never wastes breath when the swing is faster',
           'Reads threats as targets first, people second',
           'Ready-to-burn-everything, every stance is mid-charge'
@@ -4343,7 +4344,7 @@ const RACES = {
           'Throne-arches built into the shoulders or back',
           'Steady ember-yellow eyes, measured authority'
         ],
-        overall: 'A PRIDE-BORN Cindered came up out of Outer Hell&#39;s green-rot flame, the deeper slow-poison hierarchy zone where rank is the law and the proud build their own thrones. The body is anthracite-coal: black, dense, geometric-cracked plates with ember-yellow vein-glow flowing slowly through the seams. The silhouette is towering, head-region narrowing up into crown-spikes, shoulders carrying literal stacked throne-arches. The mood is hideg-büszke, monumental, slow-but-immovable: <em>"I do not bend, I do not move."</em>',
+        overall: 'A PRIDE-BORN Cindered came up out of Outer Hell&#39;s green-rot flame, the deeper slow-poison hierarchy zone where rank is the law and the proud build their own thrones. The body is anthracite-coal: black, dense, geometric-cracked plates with ember-yellow vein-glow flowing slowly through the seams. The silhouette is towering, head-region narrowing up into crown-spikes, shoulders carrying literal stacked throne-arches. The mood is cold-proud, monumental, slow-but-immovable: <em>"I do not bend, I do not move."</em>',
         bodyHistory: 'You went down a Pride-soul: a self-elevation that refused to come down, a hierarchy you placed yourself at the top of. Outer Hell&#39;s green-rot flame received you at the slow-burn depth and forged you into a monument. The body grew taller than human-scale, the head narrowed into crown-spikes, the shoulders accumulated throne-architecture as you fell. You came up in the rift-horde as a slow-walking ember-throne walker, ritual-bound, until Lucifer&#39;s feather replaced the horde-rituals with command-purpose.',
         bodyMarks: [
           'Towering silhouette, visibly taller than human-scale',
@@ -4354,7 +4355,7 @@ const RACES = {
           'Black feather pinned at the highest crown-spike, visibly elevated'
         ],
         soulTrace: [
-          'Hideg-büszke, command-presence, looks down without contempt',
+          'Cold-proud command-presence, looks down without contempt',
           'Speaks in measured sentences, every word weighed for hierarchy',
           'Plants the body and waits, immovable until the throne moves first',
           'Reads rank before reading face, allies are subjects before they are friends'
@@ -4458,8 +4459,8 @@ const RACES = {
     title:     'Hellforged',
     subtitle:  'A damned human soul torn from Hell and forced into a V.E.S.S.E.L. chassis — held together by Lucifer&#39;s black feather and a contract that cannot be read in full.',
     bodyParas: [
-      'On a train of damned humans, sin-shaped demons, and printed prototypes, your <strong>three-fold tragedy</strong> makes you the rarest visible thing aboard. A-Tech ripped your soul from Hell&#39;s deepest cells, jammed it into a V.E.S.S.E.L. military chassis, and lost containment when the project went wrong. <em>You should have died with the others. You did not.</em>',
-      'Now you are <strong>walking failed alchemy</strong>: chassis-metal welded to soul-stuff, vents exhaling brimstone, infernal glyphs etched into the plating to barely hold the chaos in. Your voice is synthesized speech laced with a demon&#39;s growl. Your power core pulses against your sternum like a tortured second heart, the colour of whatever sub-form the lab labelled you.',
+      'On a train of damned humans, sin-shaped demons, and printed prototypes, your <strong>three-fold tragedy</strong> makes you the rarest visible thing aboard. aSync-legacy alchemy ripped your soul from Hell&#39;s deepest cells, jammed it into an A-Tech V.E.S.S.E.L. military chassis, and lost containment when the project went wrong. <em>You should have died with the others. You did not.</em>',
+      'Now you are <strong>walking failed alchemy</strong>: chassis-metal welded to soul-stuff, vents exhaling brimstone, infernal glyphs etched into the plating to barely hold the chaos in. Your voice is synthesised speech laced with a demon&#39;s growl. Your power core pulses against your sternum like a tortured second heart, the colour of whatever sub-form the lab labelled you.',
       'You serve Lucifer because <strong>his black feather is the only thing keeping the synchronicity from breaking</strong>. Without it, the chassis would purge the soul as a virus and the soul would eject the chassis as an implant. You are an elite weapon in his rebellion against divine silence — and a deal that can be revoked.',
       'Every Hellforged who walks this train walks it <strong>already feather-bound</strong>, and that means <em>every Hellforged starts the journey one Chaos Level higher than the Inheritors beside them</em>. The cost of being held together by Lucifer&#39;s hand is starting one step closer to coming apart. They know it. They factor it in.'
     ],
@@ -4584,7 +4585,7 @@ const RACES = {
         ],
         roleOnTrain: 'The intelligence officer. Pieces together what is coming from signals others cannot resolve. Trades knowledge for position, position for time, time for advantage.',
         traits: [
-          'Science primary oriented',
+          'Science primary direction',
           'Super-cooled stable chassis',
           'Condensation-shedding plating',
           '&quot;Perfected&quot; V.E.S.S.E.L. iteration',
@@ -4592,7 +4593,7 @@ const RACES = {
           'Distrusts emotion as inefficiency'
         ],
         hooks: [
-          'What did you understand, in life, that put you in the wrath cells?',
+          'What did you understand, in life, that put you in the cold cells?',
           'Whose pattern have you noticed that no one else has?',
           'When did you last share something true at any cost to yourself?'
         ]
@@ -4646,7 +4647,7 @@ const RACES = {
     iconAlt:   "Lucifer's Domain — wide cinematic banner. Lucifer hooded on a hellfire-throne on the left, vertical column of pure hellfire splitting the canvas, mass of Dark Force horde-silhouettes erupting from the right. Four Hell-depth zone colors visible across the horizon: red Purgatory, green-rot Outer, cold-blue Deep, violet Pit.",
     title: "Lucifer's Domain",
     subtitle: 'The pure hellfire pole. No life here. Two sources of darkness, one canvas.',
-    body: 'Hell sits below the world, and it has structure. <strong>Four depth zones</strong> burn at four different colors, deepening as the soul falls: <span style="color:#a32d2d">Purgatory red</span>, <span style="color:#3b6d11">Outer Hell green-rot</span>, <span style="color:#185fa5">Deep Hell cold-blue</span>, and <span style="color:#7c40b0">the Pit\'s violet hellfire</span> at the bottom. The deeper you fell, the more the flame at that depth could rewrite you. Inheritor souls returned marked. Cindered souls returned <em>remade</em>. Hellforged souls were torn back up and forced into chassis. Below the Pit there is nothing else. <strong>No life here.</strong> Only Lucifer and his unrestrained power, and the things that crawled up beside him during the apocalypse.<br><br>This pole carries <strong>two sources of darkness</strong>, and they are not the same. <strong style="color:#e6cfa1">Lucifer</strong> is the structured antagonist: the architect, the contract-holder, the deliberate weight on the scale. He owns every soul on his ledger, every black feather pinned into a Hellforged or Cindered, every contract printed in the Saloon and signed in the Sundown. He talks first, kills last. <strong style="color:#ff7b5c">The Dark Force</strong> is everything else: the wild demonic hordes that crawled up through the rifts during the divine apocalypse, are <em>not</em> on Lucifer\'s ledger, are <em>not</em> under his control, and serve only raw chaos. They are the bulk of the demonic enemies the party will meet on the train and at every station. They do not negotiate. Mistaking which is which is how you die wrong.',
+    body: 'Hell sits below the world, and it has structure. <strong>Nine depths, four with names</strong> — those four burn at four different colors, deepening as the soul falls: <span style="color:#a32d2d">Purgatory red</span>, <span style="color:#3b6d11">Outer Hell green-rot</span>, <span style="color:#185fa5">Deep Hell cold-blue</span>, and <span style="color:#7c40b0">the Pit\'s violet hellfire</span> at the bottom. The deeper you fell, the more the flame at that depth could rewrite you. Inheritor souls returned marked. Cindered souls returned <em>remade</em>. Hellforged souls were torn back up and forced into chassis. Below the Pit there is nothing else. <strong>No life here.</strong> Only Lucifer and his unrestrained power, and the things that crawled up beside him during the apocalypse.<br><br>This pole carries <strong>two sources of darkness</strong>, and they are not the same. <strong style="color:#e6cfa1">Lucifer</strong> is the structured antagonist: the architect, the contract-holder, the deliberate weight on the scale. He owns every soul on his ledger, every black feather pinned into a Hellforged or Cindered, every contract printed and signed in the Sundown Saloon. He talks first, kills last. <strong style="color:#ff7b5c">The Dark Force</strong> is everything else: the wild demonic hordes that crawled up through the rifts during the divine apocalypse, are <em>not</em> on Lucifer\'s ledger, are <em>not</em> under his control, and serve only raw chaos. They are the bulk of the demonic enemies the party will meet on the train and at every station. They do not negotiate. Mistaking which is which is how you die wrong.',
     role: 'NPC zone · no PC can be placed here · primary antagonist source for the campaign',
     subs: '<strong style="color:#e6cfa1">Lucifer himself</strong> (the architect, contract-holder, the only being on his own ledger) · <strong style="color:#ff7b5c">The Dark Force</strong> (wild demonic hordes from the apocalypse rifts, no leash, no contract, pure chaos).',
     conflict: 'No internal conflict to play with. Pure Hell has no soul to wrestle. That is why no character can live here, and why the pole is masked on the diagram.',
@@ -4863,7 +4864,7 @@ function getSubTypes(id, r) {
         image:      'img/races/hell/lucifer-portrait.png',
         thumbImage: 'img/races/hell/thumbs/lucifer-portrait-thumb.png',
         alt: 'Lucifer — appearing form, dark formal suit, gold halo, gothic cathedral framing',
-        body: 'The architect. The contract-holder. The being who reached around the back of God&#39;s silence and started running the world himself. He owns every soul on his ledger, every black feather pinned into a Hellforged or Cindered, every contract printed in the Saloon and signed in the Sundown. <strong>The Train is his too</strong>, though the Train sometimes forgets.<br><br>You meet him as a hologram in mirrors, a finger-snap that wakes a dormant android, a hooded figure on the platform when nobody else is looking. <em>The full true form is a different conversation, and that conversation does not happen until the climax.</em><br><br><strong>How to deal with him:</strong> negotiate. Read the fine print. Lucifer plays a long game, has a ledger, has plans for you. He talks first.'
+        body: 'The architect. The contract-holder. The being who reached around the back of God&#39;s silence and started running the world himself. He owns every soul on his ledger, every black feather pinned into a Hellforged or Cindered, every contract printed and signed in the Sundown Saloon. <strong>The train accepts him, though it sometimes forgets it does.</strong><br><br>You meet him as a hologram in mirrors, a finger-snap that wakes a dormant android, a hooded figure on the platform when nobody else is looking. <em>The form you meet at A5 is already real — but the conversation that cracks the world open waits for the climax.</em><br><br><strong>How to deal with him:</strong> negotiate. Read the fine print. Lucifer plays a long game, has a ledger, has plans for you. He talks first.'
       },
       {
         kind: 'info-only',
@@ -4885,7 +4886,7 @@ function getSubTypes(id, r) {
         image:      'img/races/hell/nine-depths-portrait.png',
         thumbImage: 'img/races/hell/thumbs/nine-depths-portrait-thumb.png',
         alt: 'The Nine Depths — vertical cross-section of Hell as a stained-glass cathedral altarpiece. Nine horizontal layers from top to bottom: Purgatory (rosy-amber), Outer obsidian wastes (red), red-to-green transition, jungle Outer Hell (green-rot), yellow swamp, yellow-to-blue transition, cold-blue Deep Hell with balance-scales, blue-to-violet transition, and Pit (violet) with an empty throne suggesting Lucifer presence. Gold gothic-arch lead-came tracery between layers, basalt-stone cathedral frame, vertical hellfire-pillar through the spine.',
-        body: 'Hell is not <em>a</em> place. It is <strong>nine places, stacked</strong>, each deeper than the last. Four of them have names that humans still know — and those four are the depths that <em>rewrote</em> you if you fell that far. <span style="color:#a32d2d"><strong>Purgatory red</strong></span> for Wrath at the top, <span style="color:#3b6d11"><strong>Outer green-rot</strong></span> for Pride, the <span style="color:#a8801a"><strong>yellow swamp</strong></span> in the great drop between (named, but no sin-mark holds it), <span style="color:#185fa5"><strong>cold-blue Deep Hell</strong></span> for Greed, and <span style="color:#7c40b0"><strong>the Pit&#39;s violet hellfire</strong></span> at the bottom for Envy. Between them are four more depths nobody named — the wordless transitions, the rot in between regions, the places where the soul just <em>fell</em> and nobody saw where.<br><br>Most souls touched only one or two depths and were pulled back up — those came back as <strong>Inheritors</strong>, marked but human-shaped. Some fell to a depth and were caught there, rewritten in its flame — those came back as <strong>Cindered</strong>, the depth&#39;s own form taking flesh, with only Lucifer&#39;s black feather keeping a person inside. Some were dragged through every depth and torn back up by chassis they did not choose — those came back as <strong>Hellforged</strong>, the failed alchemy that aSync never asked for and Lucifer never apologised about. The depths know all three of them.<br><br><strong>The campaign descends.</strong> The obsidian wastes where you start the Gauntlet are the second depth — outer-edge red. Canto III&#39;s mutated jungle is the fourth. The big drop is Cantos IV through VI. The cold-blue is where Canto VII&#39;s Anchor wakes. By Canto VIII you are <em>in</em> Hell-side, no longer beside it. The throne at the ninth depth is where the last Canto waits.<br><br><strong>The Pit is the floor.</strong> Below it: only Lucifer, only the unrestrained, only the thing that no longer needs structure to be itself. <em>No life here.</em>'
+        body: 'Hell is not <em>a</em> place. It is <strong>nine places, stacked</strong>, each deeper than the last. Four of them have names that humans still know — and those four are the depths that <em>rewrote</em> you if you fell that far. <span style="color:#a32d2d"><strong>Purgatory red</strong></span> for Wrath at the top, <span style="color:#3b6d11"><strong>Outer green-rot</strong></span> for Pride, the <span style="color:#a8801a"><strong>yellow swamp</strong></span> in the great drop between (named, but no sin-mark holds it), <span style="color:#185fa5"><strong>cold-blue Deep Hell</strong></span> for Greed, and <span style="color:#7c40b0"><strong>the Pit&#39;s violet hellfire</strong></span> at the bottom for Envy. Between them are four more depths nobody named — the wordless transitions, the rot between regions, the places where the soul just <em>fell</em> and nobody saw where.<br><br>Most souls touched only one or two depths and were pulled back up — those came back as <strong>Inheritors</strong>, marked but human-shaped. Some fell to a depth and were caught there, rewritten in its flame — those came back as <strong>Cindered</strong>, the depth&#39;s own form taking flesh, with only Lucifer&#39;s black feather keeping a person inside. Some were dragged through every depth and torn back up by chassis they did not choose — those came back as <strong>Hellforged</strong>, the failed alchemy that aSync never asked for and Lucifer never apologised about. The depths know all three of them.<br><br><strong>The campaign descends.</strong> The obsidian wastes where you start the Gauntlet are the second depth — outer-edge red. Canto III&#39;s mutated jungle is the fourth. The big drop is Cantos IV through VI. The cold-blue is where Canto VII&#39;s Anchor wakes. By Canto VIII you are <em>in</em> Hell-side, no longer beside it. The throne at the ninth depth is where the last Canto waits.<br><br><strong>The Pit is the floor — and the floor is Lucifer&#39;s.</strong> The throne sits at the ninth depth; the unrestrained pools beneath the seat. <em>No life here.</em>'
       }
     ];
   }
@@ -4936,7 +4937,9 @@ function renderSubraceTabstrip(subs, activeIndex) {
     return `
       <button type="button" class="subrace-tab${isActive ? ' active' : ''}"
               data-index="${i}" role="tab"
-              aria-selected="${isActive ? 'true' : 'false'}"${styleAttr}>
+              aria-selected="${isActive ? 'true' : 'false'}"
+              aria-controls="subraceContentBelow"
+              tabindex="${isActive ? '0' : '-1'}"${styleAttr}>
         ${thumb}
         <span class="subrace-tab-name">${s.name}</span>
       </button>
@@ -5189,6 +5192,7 @@ function setActiveSubraceIndex(nextIndex, animate) {
       const active = i === currentIndex;
       tab.classList.toggle('active', active);
       tab.setAttribute('aria-selected', active ? 'true' : 'false');
+      tab.setAttribute('tabindex', active ? '0' : '-1');
     });
   }
   renderActiveSubrace(animate);
@@ -5202,6 +5206,31 @@ if (subraceTabstrip) {
     const i = parseInt(btn.dataset.index, 10);
     if (Number.isNaN(i) || i === currentIndex) return;
     setActiveSubraceIndex(i, true);
+  });
+
+  // Roving tabindex + arrow-key navigation (ARIA tabs pattern).
+  subraceTabstrip.addEventListener('keydown', e => {
+    if (!currentSubs.length) return;
+    const len = currentSubs.length;
+    let next = null;
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      next = ((currentIndex - 1) + len) % len;
+    } else if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+      e.preventDefault();
+      next = (currentIndex + 1) % len;
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      next = 0;
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      next = len - 1;
+    }
+    if (next !== null) {
+      setActiveSubraceIndex(next, true);
+      const newTab = subraceTabstrip.querySelector(`.subrace-tab[data-index="${next}"]`);
+      if (newTab) newTab.focus();
+    }
   });
 }
 
@@ -5278,6 +5307,10 @@ function selectRace(id) {
   if (window.innerWidth < 980) {
     panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
+  // Move keyboard focus to the sub-race picker title so keyboard users land
+  // in the new content (tabindex="-1" makes h2 programmatically focusable).
+  const titleEl = document.getElementById('subracePickerTitle');
+  if (titleEl) titleEl.focus({ preventScroll: false });
 }
 
 // Bind clicks + keyboard (Enter / Space) on every zone-card.
@@ -5739,3 +5772,4 @@ document.getElementById('tabNav').addEventListener('click', e => {
 
 </body>
 </html>
+       
