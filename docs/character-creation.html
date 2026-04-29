@@ -4610,8 +4610,8 @@ const RACES = {
         archetype: 'defensive',
         accentColor: '#3b6d11',
         subtitle: 'Pride-cast in Outer Hell&#39;s green-rot, the throne the body would not step down from',
-        image:      null,
-        thumbImage: null,
+        image:      'img/races/cindered/cindered-pride-born.png',
+        thumbImage: 'img/races/cindered/thumbs/cindered-pride-born-thumb.png',
         alt:  'Cindered — PRIDE-BORN (towering anthracite-coal body, ember-yellow vein-glow, crown-spike silhouette, throne-shoulders, Outer-green-rot Hell-depth)',
         desc: 'Pride / Crown · Outer Hell green-rot flame. A soul whose self-elevation rose so high that Outer Hell forged it into a towering anthracite-coal monument. Crown-spike silhouette, ember-yellow veins, throne-arches built into the shoulders, a posture that does not bend.',
         traits: [
@@ -5530,5 +5530,4 @@ document.querySelectorAll('.node-group').forEach(node => {
 document.querySelectorAll('.pole-card[data-race-proxy]').forEach(card => {
   const id = card.dataset.raceProxy;
   card.addEventListener('click', () => selectRace(id));
-  card.addEventListener('keydown', e => {
-    if (e.key === 'Enter' || e.key === ' ' || e.key === 'Space
+  card.addE
