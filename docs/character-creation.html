@@ -2153,6 +2153,27 @@ body {
   margin-top: 1px;
 }
 
+.rd-bonus.is-choice {
+  border-color: rgba(82,184,168,.30);
+  background: rgba(82,184,168,.05);
+  position: relative;
+}
+.rd-bonus.is-choice::after {
+  content: 'CHOOSE';
+  position: absolute;
+  top: -7px;
+  right: 8px;
+  padding: 1px 6px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.10em;
+  color: #52b8a8;
+  background: rgba(14,12,24,.96);
+  border: 0.5px solid rgba(82,184,168,.50);
+  border-radius: 999px;
+  font-weight: 700;
+}
+
 .rd-bonus-or {
   text-align: center;
   font-family: 'Cinzel', serif;
@@ -4797,7 +4818,7 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
           What each race gets · the threshold leosztás
         </div>
         <h3 class="soul-picker-title" id="raceDistributionHeader">Distribution at the Body / Soul threshold</h3>
-        <p class="soul-picker-sub">Your race choice baked passives into the body before the soul layer was added. Some races start with a <strong>feather</strong> &mdash; either <em>Chaos</em> (a head start along the same path everyone walks) or <em>Harmony</em>; some get raw <strong>attribute points</strong>; one race gets to <em>choose</em>. Below: every race&#39;s threshold gift, with your current pick highlighted.</p>
+        <p class="soul-picker-sub">Your race choice baked passives into the body before the soul layer was added. Most races start with a <strong>feather</strong> &mdash; either <em>Chaos</em> (a head start along the same path everyone walks) or <em>Harmony</em> &mdash; <strong>plus</strong> a thematic skill bump. <strong>Construct</strong> trades the feather for raw skill power. <strong>Augmented</strong> gets a feather <em>and</em> picks its technical axis. Below: every race&#39;s threshold gift, with your current pick highlighted.</p>
       </div>
       <div class="race-dist-grid" id="raceDistGrid" role="list">
         <!-- 5 cards rendered by renderRaceDistribution() -->
@@ -7279,22 +7300,21 @@ const RACE_DISTRIBUTION = [
     bodyTag: 'HUM',
     accent: '#c99c5a',
     bonuses: [
-      { type: 'feather', kind: 'harmony', label: '+1 Harmony', sub: 'Pure-soul reservoir' }
+      { type: 'feather', kind: 'harmony', label: '+1 Harmony', sub: 'Pure-soul reservoir' },
+      { type: 'skill', label: '+1 Riddlecraft', sub: 'WIS axis &middot; investigation, ciphers, contracts' }
     ],
-    note: 'No raw skill bumps &mdash; the unblemished returnee&#39;s value is moral-flexibility, not stat-floor.'
+    note: 'Pure-soul flexibility plus a head for puzzles. The unblemished returnee reads what others miss.'
   },
   {
     id: 'augmented',
     name: 'Augmented',
     bodyTag: 'CYB',
     accent: '#52b8a8',
-    isChoice: true,
     bonuses: [
       { type: 'feather', kind: 'any', label: '+1 Feather', sub: 'choose Chaos or Harmony' },
-      { type: 'or' },
-      { type: 'skill', label: '+1 STR · +1 Systems', sub: 'two raw axis bumps' }
+      { type: 'skill-choice', label: '+1 Tinker OR +1 Systems', sub: 'DEX or INT axis &middot; technical lean' }
     ],
-    note: 'You chose your grafts; you choose your bonus. Moral lever, or technical lift.'
+    note: 'Two layers of choice. The cyborg picks moral direction with the feather, technical direction with the axis.'
   },
   {
     id: 'construct',
@@ -7302,8 +7322,8 @@ const RACE_DISTRIBUTION = [
     bodyTag: 'SYN',
     accent: '#185fa5',
     bonuses: [
-      { type: 'skill', label: '+2 Systems', sub: 'INT axis (the I.C.A.R.U.S. anchor)' },
-      { type: 'skill', label: '+1 STR', sub: 'STR axis (chassis-bulk)' }
+      { type: 'skill', label: '+2 Systems', sub: 'INT axis &middot; the I.C.A.R.U.S. anchor' },
+      { type: 'skill', label: '+1 STR', sub: 'STR axis &middot; chassis-bulk' }
     ],
     note: 'No soul, no Lucifer-leash, no feather. Pragmatic skill points instead &mdash; specialist over moral-axis.'
   },
@@ -7313,9 +7333,10 @@ const RACE_DISTRIBUTION = [
     bodyTag: 'HUM × HELL',
     accent: '#A32D2D',
     bonuses: [
-      { type: 'feather', kind: 'chaos', label: '+1 Chaos', sub: 'Black Feather Pin' }
+      { type: 'feather', kind: 'chaos', label: '+1 Chaos', sub: 'Black Feather Pin' },
+      { type: 'skill', label: '+1 Influence', sub: 'CHA axis &middot; negotiation, command, persuasion' }
     ],
-    note: 'Sin-form pinned by Lucifer&#39;s feather. The Chaos counter starts one tick higher than baseline.'
+    note: 'Sin-form pinned by Lucifer&#39;s feather, but the human voice still bargains. Earlier on the Chaos path everyone walks.'
   },
   {
     id: 'hellforged',
@@ -7323,9 +7344,10 @@ const RACE_DISTRIBUTION = [
     bodyTag: 'SYN × HELL',
     accent: '#534AB7',
     bonuses: [
-      { type: 'feather', kind: 'chaos', label: '+1 Chaos', sub: 'Black Feather Leash' }
+      { type: 'feather', kind: 'chaos', label: '+1 Chaos', sub: 'Black Feather Leash' },
+      { type: 'skill', label: '+1 Resilience', sub: 'CON axis &middot; long watches, harsh-condition' }
     ],
-    note: 'Soul-chassis sync held by Lucifer&#39;s feather. The Chaos counter starts one tick higher than baseline.'
+    note: 'Soul-chassis sync held by Lucifer&#39;s feather, hardened against the strain. Earlier on the Chaos path everyone walks.'
   }
 ];
 
@@ -7358,12 +7380,16 @@ function renderRaceDistribution() {
       }
       let icon = RD_ICON_SKILL;
       let color = r.accent;
+      let extraClass = '';
       if (b.type === 'feather') {
         icon = RD_ICON_HARMONY;
         color = b.kind === 'chaos' ? '#9a7acc' : (b.kind === 'harmony' ? '#f5d68a' : '#d8b86a');
+      } else if (b.type === 'skill-choice') {
+        // Player picks one of two skills; show with a "CHOOSE" indicator
+        extraClass = ' is-choice';
       }
       return `
-        <div class="rd-bonus" style="--rd-bonus-color: ${color};">
+        <div class="rd-bonus${extraClass}" style="--rd-bonus-color: ${color};">
           <div class="rd-bonus-icon">${icon}</div>
           <div class="rd-bonus-text">${b.label}<small>${b.sub}</small></div>
         </div>
