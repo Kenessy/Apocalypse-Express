@@ -4530,11 +4530,204 @@ const RACES = {
     iconImage: 'img/races/cindered/cindered-overall.png',
     iconAlt:   'Cindered — race umbrella icon (stained-glass sin-shaped saint mandala, split-body magma+mirror demonic-form, white soul-spark on chest, black feather visible, 4-corner RGBP corona: red Wrath-Forged / green Pride-Born / blue Maw-Born / purple Mirror-Born)',
     title: 'Cindered',
-    subtitle: 'Your form: a sin-statue. Your soul: damned human. A black feather holds the two together.',
-    body: 'Your sin ran deep enough that Hell itself rewrote your form — <em>wrath&#39;s</em> magma veins, <em>pride&#39;s</em> ember eyes, <em>deceit&#39;s</em> shadow tendrils. You poured through the rifts as a mindless horde across the frozen earth — until <strong>Lucifer saw your potential and pressed a black feather into you</strong>: will and purpose returned. You are now a directed demon, kept on a leash. The pure Hell pole below would be unbroken hellfire — but <strong>you sit on the edge, not the corner</strong>, because a damned human soul still beats underneath.',
-    role: 'Manipulation · scouting via demonic agility · forbidden pacts · social disruption · rift-walker',
-    subs: 'Wrath-Forged (magma veins) · Pride-Born (towering, ember-eyed) · Veil-Born (mist-shrouded, deceit-leaning).',
-    conflict: 'Atonement vs. deeper demonic immersion — the black feather can snap if you push too far, and you fall back into the horde.'
+    subtitle: 'Sin-shaped form, damned human soul. The black feather pins them together.',
+    bodyParas: [
+      'On a train of revived flesh and walking machines, you are the only entity whose body was <strong>rewritten</strong>. Your sin sank deep enough that Hell&#39;s flame at that depth could not just mark you, it had to remake you. The body that came back is not the body that went down. The body that came back is <em>the shape of the sin</em>.',
+      'Hellfire-substance, not flesh, not metal. Igneous rock with magma-veins (Wrath), anthracite-coal with ember-glow (Pride), cold slate-stone with frost-cracks (Greed), shifting violet mirror-flesh (Envy). The depth-zone you fell through wrote the substance, the sin you carried wrote the form. There is no biology underneath. There is also no chassis. There is hellfire-matter, holding the shape the soul was shamed into.',
+      'Your human soul is still in there. Small, white-bright, burning in the chest of a body that should not have a chest, that should be just an organ-cluster of grasping or a flame-pillar of rage. The <strong>black feather</strong> is what keeps the soul&#39;s will inside the sin-form. Without the feather, you fall back into the horde you came up with: mindless rift-spawn, the sin&#39;s raw expression, no human-aware purpose.',
+      'Lucifer chose you out of the horde because some piece of human-recognition was still legible in your screaming. He pinned the feather, gave you direction, set you on the train. You are <strong>directed demon, kept on a leash</strong>. Every act of human-sided-help is atonement, a step away from the horde. Every use of sin-power pulls the leash, and Lucifer can cut it whenever he decides you are no longer useful. The question is not who you are. The question is <em>how long the feather holds the human-will against the sin-form&#39;s pull</em>.'
+    ],
+    goodAt: [
+      { icon: 'hellfire',    label: 'Demonic-form physical capabilities' },
+      { icon: 'exploration', label: 'Rift-walking, infernal-zone navigation' },
+      { icon: 'hellfire',    label: 'Forbidden pacts, infernal-contract reading' },
+      { icon: 'social',      label: 'Manipulation through fear-presence' },
+      { icon: 'eye',         label: 'Sin-pattern recognition in others' }
+    ],
+    badAt: [
+      { icon: 'human',    label: 'Frozen-survivor social ground' },
+      { icon: 'machine',  label: 'A-Tech corporate systems' },
+      { icon: 'fragile',  label: 'Soul-spark vulnerability' },
+      { icon: 'ghost',    label: 'Black feather snap-risk' }
+    ],
+    flavor: [
+      { icon: 'hellfire', label: 'Sin-shaped saint, broken-icon martyr' },
+      { icon: 'fragile',  label: 'Walking on Lucifer&#39;s leash' },
+      { icon: 'eye',      label: 'Atonement against the horde-pull' }
+    ],
+    // Hell-depth-zone family · the four canonical sin-and-depth pairings
+    // that wrote a Cindered&#39;s sin-form. Each sub-type maps a cardinal sin
+    // (Wrath / Pride / Greed / Envy) to a Hell-depth zone (Purgatory red /
+    // Outer green-rot / Deep cold-blue / Pit violet) and to a canonical
+    // Soul Index (Boiler / Crown / Maw / Mirror). Maps onto the canonical
+    // 4-archetype color system (RED offensive / GREEN defensive / BLUE
+    // science / PURPLE unique). WRATH-FORGED portrait is wired; the other
+    // three carry null image / thumbImage until art is generated.
+    subTypeAxis: 'Four Hell-depth zones, four sins, four bodies the flame wrote',
+    subTypeRich: [
+      {
+        name: 'WRATH-FORGED',
+        archetype: 'offensive',
+        accentColor: '#a32d2d',
+        subtitle: 'Wrath-formed in Purgatory&#39;s red flame, the wound that never cooled',
+        image:      'img/races/cindered/cindered-wrath-forged.png',
+        thumbImage: 'img/races/cindered/thumbs/cindered-wrath-forged-thumb.png',
+        alt:  'Cindered — WRATH-FORGED (igneous-rock body with flowing magma-veins, fire-tongue hair, Purgatory-red Hell-depth)',
+        desc: 'Wrath / Boiler · Purgatory red flame. A soul whose anger burned hot enough that Purgatory&#39;s red flame cast it into a magma-rock body. Igneous skin, flowing lava-veins, fire-tongue hair, a charge-stance that has not stopped since the descent.',
+        traits: [
+          'Offensive primary direction',
+          'Igneous-rock skin with flowing magma-veins',
+          'Fire-tongue hair, no human follicle',
+          'Red-orange coal eyes, intense glow',
+          'Visible flame-breath at the joints and mouth',
+          'Aggressive forward-stance, mid-charge'
+        ],
+        overall: 'A WRATH-FORGED Cindered came up out of Purgatory&#39;s red flame, the shallow hot-zone closest to the surface, where raw heat is the law and patience does not cool. The body is igneous: cracked obsidian-and-basalt plates on the surface, flowing red-orange magma in the seams beneath. The hair-zone is flame-substance, a fire-tongue corona where human follicle should be. The mood is tomboló, raw, frontline: <em>"the wound that never cooled"</em>, a charge-stance the body never stops being ready for.',
+        bodyHistory: 'You went down a Wrath-soul: a rage that burned past consequence, a hand that swung past stopping. Purgatory&#39;s red flame met you at the shallow depth and did not bother marking you. It poured you into a new shape: magma-rock body, fire-tongue hair, flame-breath at every seam. You came up in the rift-horde as a screaming flowing-rock creature, raw and mindless, until Lucifer&#39;s feather pinned the will back in. The body never cooled. It still has not.',
+        bodyMarks: [
+          'Cracked obsidian-and-basalt plates across the body, igneous-rock skin',
+          'Flowing red-orange magma-veins visible through the rock-fissures',
+          'Fire-tongue hair or magma-spike crown, no human follicle remaining',
+          'Red-orange coal eyes with intense charge-glow, smoke trailing',
+          'Visible flame-breath escaping from mouth, joints, and cracked plates',
+          'Black feather melted into the shoulder-rock or hair, glowing-edge from the heat'
+        ],
+        soulTrace: [
+          'Tomboló and impatient, the heat does not let the body settle',
+          'Speaks in short bursts, never wastes breath when the swing is faster',
+          'Reads threats as targets first, people second',
+          'Ready-to-burn-everything, every stance is mid-charge'
+        ],
+        roleOnTrain: 'The crew&#39;s frontline burner. Steps into the fight before the angle is even drawn, holds the line by being the line, brings raw infernal damage at a leash-cost the rest of the crew has to watch.',
+        hooks: [
+          'What was the rage that pulled you under, and is it still burning?',
+          'Who paid the cost of your last unstoppable swing, and do they remember?',
+          'When the magma-veins flare brighter, what part of the human-will is the feather still holding?'
+        ]
+      },
+      {
+        name: 'PRIDE-BORN',
+        archetype: 'defensive',
+        accentColor: '#3b6d11',
+        subtitle: 'Pride-cast in Outer Hell&#39;s green-rot, the throne the body would not step down from',
+        image:      null,
+        thumbImage: null,
+        alt:  'Cindered — PRIDE-BORN (towering anthracite-coal body, ember-yellow vein-glow, crown-spike silhouette, throne-shoulders, Outer-green-rot Hell-depth)',
+        desc: 'Pride / Crown · Outer Hell green-rot flame. A soul whose self-elevation rose so high that Outer Hell forged it into a towering anthracite-coal monument. Crown-spike silhouette, ember-yellow veins, throne-arches built into the shoulders, a posture that does not bend.',
+        traits: [
+          'Defensive primary direction',
+          'Towering silhouette, visibly taller than human-scale',
+          'Anthracite-coal skin with ember-yellow vein-glow',
+          'Crown-spike head-region, head narrows up into points',
+          'Throne-arches built into the shoulders or back',
+          'Steady ember-yellow eyes, measured authority'
+        ],
+        overall: 'A PRIDE-BORN Cindered came up out of Outer Hell&#39;s green-rot flame, the deeper slow-poison hierarchy zone where rank is the law and the proud build their own thrones. The body is anthracite-coal: black, dense, geometric-cracked plates with ember-yellow vein-glow flowing slowly through the seams. The silhouette is towering, head-region narrowing up into crown-spikes, shoulders carrying literal stacked throne-arches. The mood is hideg-büszke, monumental, slow-but-immovable: <em>"I do not bend, I do not move."</em>',
+        bodyHistory: 'You went down a Pride-soul: a self-elevation that refused to come down, a hierarchy you placed yourself at the top of. Outer Hell&#39;s green-rot flame received you at the slow-burn depth and forged you into a monument. The body grew taller than human-scale, the head narrowed into crown-spikes, the shoulders accumulated throne-architecture as you fell. You came up in the rift-horde as a slow-walking ember-throne walker, ritual-bound, until Lucifer&#39;s feather replaced the horde-rituals with command-purpose.',
+        bodyMarks: [
+          'Towering silhouette, visibly taller than human-scale',
+          'Anthracite-coal skin in black geometric-cracked plates',
+          'Ember-yellow vein-glow through the cracks, slow steady pulse',
+          'Crown-spike head-region narrowing into horns or points',
+          'Throne-arch architecture built into the shoulders or upper back',
+          'Black feather pinned at the highest crown-spike, visibly elevated'
+        ],
+        soulTrace: [
+          'Hideg-büszke, command-presence, looks down without contempt',
+          'Speaks in measured sentences, every word weighed for hierarchy',
+          'Plants the body and waits, immovable until the throne moves first',
+          'Reads rank before reading face, allies are subjects before they are friends'
+        ],
+        roleOnTrain: 'The crew&#39;s anchor and presence. Holds a doorway by being the doorway, takes the front of any negotiation by towering above it, brings command-aura where the crew needs a throne to stand behind.',
+        hooks: [
+          'What hierarchy did you build yourself the top of, and is anyone still beneath it?',
+          'Whose command-purpose did the feather replace, and would they recognise the new orders?',
+          'When the ember-veins pulse brighter, what does the throne-shape decide before you do?'
+        ]
+      },
+      {
+        name: 'MAW-BORN',
+        archetype: 'science',
+        accentColor: '#185fa5',
+        subtitle: 'Greed-cut in Deep Hell&#39;s cold-blue, the hands that would not stop counting',
+        image:      null,
+        thumbImage: null,
+        alt:  'Cindered — MAW-BORN (slate-stone body with frost-blue cracks, multiple grasping hands, hidden hoard-cavities, Deep-cold-blue Hell-depth)',
+        desc: 'Greed / Maw · Deep Hell cold-blue flame. A soul whose hoarder-hunger transformed it into a many-handed, many-mouthed cold-stone creature. Slate-stone skin with frost-blue cracks, three to four grasping hands, hidden hoard-cavities along the torso.',
+        traits: [
+          'Science primary direction',
+          'Slate-stone skin with frost-blue vein-cracks',
+          'Three to four visible grasping hands',
+          'Hidden hoard-cavities along the torso and arms',
+          'Cold blue-white narrow eyes, calculating',
+          'Surveying-grasping pose, head-tilted observation'
+        ],
+        overall: 'A MAW-BORN Cindered came up out of Deep Hell&#39;s cold-blue flame, the deep cold-clutching zone where accumulation is the law and value is the only measure. The body is slate-stone: dark cold-grey, smoother than Wrath&#39;s igneous, cracked with frost-blue vein-glow. Multiple extra hands sprout from the torso and shoulders, asymmetric and grasping. Cabinet-like cavities open along the body, holding small hoarded objects: gold beads, gems, keys, dim-glowing relics. The mood is cold-clever, observing-for-value: <em>"everything has its price, I count them all."</em>',
+        bodyHistory: 'You went down a Greed-soul: a hunger to gather that did not stop at need, a hand that closed on what was not yours and did not open. Deep Hell&#39;s cold-blue flame met you at the cold-clutch depth and reshaped you into an organ-cluster of acquisition: extra hands grew where the hunger demanded them, mouths opened along the limbs, cavities formed in the torso to keep what you would gather. You came up in the rift-horde as a multi-grasping multi-consuming creature, until Lucifer&#39;s feather narrowed the hoard-instinct into selective acquisition-discipline.',
+        bodyMarks: [
+          'Dark cold-grey slate-stone skin, smoother than igneous',
+          'Frost-blue vein-glow tracing the cracks across the body',
+          'Three to four visible grasping hands, asymmetric placement',
+          'Cabinet-like hoard-cavities opening along the torso, holding small relics',
+          'Cold blue-white narrow eyes, watching and measuring',
+          'Soul-spark on the chest partially hidden by hoarded objects in front of it'
+        ],
+        soulTrace: [
+          'Cold-clever, the calculator&#39;s greed, every encounter is a price-list',
+          'Speaks softly, measures words by what they will cost or earn',
+          'Surveying first, reaching second, head-tilt before the hand moves',
+          'Reads value before reading person, every item in the room is logged'
+        ],
+        roleOnTrain: 'The crew&#39;s acquisitor and surveyor. Catches the value nobody else priced, opens the cabinet nobody else saw, brings selective-greed&#39;s edge where the crew needs a calculator instead of a fighter.',
+        hooks: [
+          'What did you take that you should not have, and is it still in one of your cavities?',
+          'Whose hunger did the feather narrow, and what did you have to stop counting?',
+          'When the extra hands move on their own, what are they reaching for that you did not authorise?'
+        ]
+      },
+      {
+        name: 'MIRROR-BORN',
+        archetype: 'unique',
+        accentColor: '#7c40b0',
+        subtitle: 'Envy-poured in Pit violet hellfire, the body that took the shape of what hurt last',
+        image:      null,
+        thumbImage: null,
+        alt:  'Cindered — MIRROR-BORN (shifting violet-mirror flesh, asymmetric mimicking form, embedded mirror-shards, Pit-violet Hell-depth)',
+        desc: 'Envy / Mirror · Pit violet hellfire. A soul whose comparison-hunger sank to the deepest Pit and was poured into shifting mirror-flesh. Reflective violet-mirror surface, embedded mirror-fragments showing wrong reflections, an asymmetric form that cannot pick one shape.',
+        traits: [
+          'Unique primary direction',
+          'Shifting violet-mirror flesh, reflective and fluid',
+          'Embedded mirror-shards showing wrong reflections',
+          'Asymmetric form, left and right sides do not match',
+          'Violet-glow eyes, pupil shifts with what it watches',
+          'Half-turned mirroring pose, hand-up echoing a borrowed gesture'
+        ],
+        overall: 'A MIRROR-BORN Cindered came up out of the Pit&#39;s violet hellfire, the deepest twisted-mirror selfhood zone where identity dissolves and comparison is the only law. The body is shifting violet-mirror flesh: reflective and fluid, like hot oil-on-water, like a chronon-distorted reflection that will not settle. Mirror-fragments embed in the surface, each showing a wrong-reflection (other faces, not your own). The form is asymmetric, the left side one shape and the right side another. The mood is enigmatic, watchful-imitator, identity-fluid: <em>"I take the shape of what hurt me last."</em>',
+        bodyHistory: 'You went down an Envy-soul: a comparison-hunger that ate the self alive, a watching that could not stop measuring against. Pit violet hellfire received you at the deepest depth and could not pour you into one shape, because you no longer had one. You came up in the rift-horde as a form-changing pattern-eating creature, copying every trauma-pattern you saw, mimicking every threat-signature, never settling. Lucifer&#39;s feather narrowed the mimicry into something selective, but the body still cannot pick one shape.',
+        bodyMarks: [
+          'Shifting violet-mirror flesh, reflective and fluid surface',
+          'Embedded mirror-fragments showing wrong reflections, others&#39; faces',
+          'Asymmetric form, left side one shape and right side another',
+          'Violet-glow eyes that reflect what they look at, pupil shifts',
+          'Soul-spark echoed in multiple mirror-shards inside the body',
+          'Black feather floating-tethered, anchored to the idea of the body rather than a spot'
+        ],
+        soulTrace: [
+          'Enigmatic and watchful, every conversation is also a copy-target',
+          'Speaks in borrowed cadences, the voice you hear last is the voice that comes back',
+          'Half-turned posture, looks past the camera at something behind you',
+          'Reads patterns first, picks the one that fits, becomes it for as long as it serves'
+        ],
+        roleOnTrain: 'The crew&#39;s wildcard and pattern-mimic. Takes the shape the moment needs, walks past wards keyed to one form, brings selective-mimicry where the crew needs a face that does not exist on any roster.',
+        hooks: [
+          'Whose face is in your mirror-shards, and why did that one stick?',
+          'What pattern did the feather let you keep choosing, and what patterns choose you?',
+          'When the asymmetry shifts mid-conversation, which side is the one talking?'
+        ]
+      }
+    ],
+    conflictHook: 'Atonement against the sin-form, while the leash that holds you human can break.',
+    conflictBody: 'The sin-form&#39;s natural pull is back to the rift-horde: mindless feral, the sin&#39;s raw expression, no human-aware purpose. <strong>Lucifer&#39;s black feather</strong> pins the human-will into the sin-form and keeps the horde-fall-back at bay, but every use of sin-power tugs the leash. <em>Atonement</em> means staying human-aware, every help-act a step out of the horde. <em>Deeper-immersion</em> means the sin-form&#39;s expression dominates, every magma-burst or tower-command or hoard-grab or mirror-mimic washing the human-will&#39;s edges thinner. The horde-memory never erases. Every decision is shadowed by the question: <em>did I do this with human-intent, or did the sin-form decide?</em><br><br><strong>The Cindered question:</strong> not <em>who am I</em>, but <em>how long does the feather still hold the human-will against the sin-form&#39;s pull</em>.<br><br><strong>Mechanically:</strong> a Cindered carries a <em>feather-strain</em> track separate from chaos-level. Every use of sin-power adds strain; high strain risks Lucifer revoking the feather. If the feather is revoked or snaps, the Cindered falls back into the mindless rift-horde, instant and total. The trade-off is full demonic-form privileges (rift-walk, infernal-form physical, contract-read, fear-presence) at a leash that can be cut whenever Lucifer decides you are no longer useful.'
   },
 
   hellforged: {
@@ -5338,436 +5531,4 @@ document.querySelectorAll('.pole-card[data-race-proxy]').forEach(card => {
   const id = card.dataset.raceProxy;
   card.addEventListener('click', () => selectRace(id));
   card.addEventListener('keydown', e => {
-    if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
-      e.preventDefault();
-      selectRace(id);
-    }
-  });
-});
-
-// Initial state — auto-select Mortal/Inheritor so the page loads with content
-(function autoSelectInitial() {
-  const mortalNode = document.querySelector('.node-group[data-race="mortal"]');
-  if (!mortalNode) {
-    renderIntro();
-    return;
-  }
-  mortalNode.classList.add('selected');
-  if (bodyAxisSvg) bodyAxisSvg.classList.add('has-selection');
-  renderRace('mortal');
-})();
-
-// ═══════════════════════════════════════════════════════
-// LAYER 2 · SOUL + SKILL MANDALA
-// ═══════════════════════════════════════════════════════
-// Six collapsed mandala axes (one primary skill per ability). Order
-// matters: this drives the polygon point order (clockwise, starting
-// from top STR). Color values match the brief's c-* palette.
-const MANDALA_AXES = [
-  { key: 'STR', skill: 'Rigging',    code: 'RGG', color: '#993C1D', task: 'Heavy lift, salvage transport' },
-  { key: 'DEX', skill: 'Tinker',     code: 'TNK', color: '#0F6E56', task: 'Locks, fine repair, EOD' },
-  { key: 'CON', skill: 'Resilience', code: 'RES', color: '#3B6D11', task: 'Long watches, harsh-condition' },
-  { key: 'INT', skill: 'Systems',    code: 'SYS', color: '#534AB7', task: 'Hacking, machines, diagnostics' },
-  { key: 'WIS', skill: 'Riddlecraft',code: 'RDL', color: '#854F0B', task: 'Investigation, ciphers, contracts' },
-  { key: 'CHA', skill: 'Influence',  code: 'IFC', color: '#993556', task: 'Negotiation, command, persuasion' }
-];
-
-// ── Per-sub-type baselines (1..4) keyed by race id + sub-type name.
-// Mirrors the brief's table; cap-at-4 enforced visually by the renderer.
-const SUBTYPE_BASELINES = {
-  mortal: {
-    'Singed':       { STR: 2, DEX: 2, CON: 2, INT: 1, WIS: 2, CHA: 3 },
-    'Mossburned':   { STR: 2, DEX: 2, CON: 3, INT: 2, WIS: 3, CHA: 2 },
-    'Frostburned':  { STR: 1, DEX: 2, CON: 2, INT: 2, WIS: 4, CHA: 2 },
-    'Pit-Kissed':   { STR: 1, DEX: 2, CON: 2, INT: 2, WIS: 3, CHA: 3 }
-  },
-  hellforged: {
-    'Carnelian':    { STR: 4, DEX: 1, CON: 4, INT: 2, WIS: 2, CHA: 1 },
-    'Verdant':      { STR: 3, DEX: 2, CON: 4, INT: 2, WIS: 3, CHA: 1 },
-    'Azure':        { STR: 2, DEX: 2, CON: 2, INT: 4, WIS: 4, CHA: 1 },
-    'Amethyst':     { STR: 2, DEX: 3, CON: 2, INT: 3, WIS: 3, CHA: 1 }
-  },
-  augmented: {
-    'ATLAS':        { STR: 4, DEX: 1, CON: 4, INT: 2, WIS: 2, CHA: 2 },
-    'ARGUS':        { STR: 1, DEX: 2, CON: 4, INT: 4, WIS: 4, CHA: 2 },
-    'JANUS':        { STR: 1, DEX: 4, CON: 2, INT: 4, WIS: 2, CHA: 2 },
-    'WRAITH':       { STR: 1, DEX: 4, CON: 2, INT: 2, WIS: 4, CHA: 2 }
-  },
-  construct: {
-    'SABRE':        { STR: 4, DEX: 2, CON: 4, INT: 3, WIS: 2, CHA: 1 },
-    'MULE':         { STR: 4, DEX: 2, CON: 4, INT: 2, WIS: 2, CHA: 2 },
-    'PROBE':        { STR: 1, DEX: 3, CON: 3, INT: 4, WIS: 4, CHA: 1 },
-    'CIPHER':       { STR: 1, DEX: 3, CON: 2, INT: 4, WIS: 3, CHA: 1 }
-  }
-};
-
-// ── Soul Index modifiers, mandala-axis form. Canon imprints map to
-// specific ability axes (Wrath: STR+CON, Pride: CHA+CHA stacks, Greed:
-// DEX+WIS, Envy: INT+WIS).
-const SOUL_INDEX_MODS = {
-  boiler: { STR: 1, CON: 1 },
-  crown:  { CHA: 2 },
-  maw:    { DEX: 1, WIS: 1 },
-  mirror: { INT: 1, WIS: 1 }
-};
-
-// ── Soul Index display copy (gem center + context line).
-const SOUL_INDEX_META = {
-  boiler: { name: 'Boiler',  sin: 'Wrath',  color: '#A32D2D' },
-  crown:  { name: 'Crown',   sin: 'Pride',  color: '#854F0B' },
-  maw:    { name: 'Maw',     sin: 'Greed',  color: '#3B6D11' },
-  mirror: { name: 'Mirror',  sin: 'Envy',   color: '#534AB7' }
-};
-
-// ── Race-keyed side-track defaults.
-const SIDETRACK_DEFAULTS = {
-  mortal:     { dark: 0, white: 0, atech: 0, hell: 0, oldworld: 3 },
-  hellforged: { dark: 1, white: 0, atech: 1, hell: 3, oldworld: 0 },
-  augmented:  { dark: 0, white: 0, atech: 2, hell: 0, oldworld: 1 },
-  construct:  { dark: 0, white: 0, atech: 3, hell: 0, oldworld: 0 }
-};
-
-// ── Layer-2 mutable state.
-let currentSoulIndex = null;   // 'boiler' | 'crown' | 'maw' | 'mirror' | null
-let currentDisciplines = { MED: false, EOD: false, RCP: false };
-
-// ── Compute the active baseline from current Layer-1 selection.
-// Falls back to a flat 2/2/2/2/2/2 when no race + sub-type is picked.
-function getActiveBaseline() {
-  const flat = { STR: 2, DEX: 2, CON: 2, INT: 2, WIS: 2, CHA: 2 };
-  if (!currentRaceId || !currentSubs.length) return flat;
-  const sub = currentSubs[currentIndex];
-  if (!sub || !sub.name) return flat;
-  const raceMap = SUBTYPE_BASELINES[currentRaceId];
-  if (!raceMap) return flat;
-  return raceMap[sub.name] || flat;
-}
-
-// ── Compute final 6-axis profile = baseline + soul-index mod, capped at 4.
-function getActiveProfile() {
-  const base = getActiveBaseline();
-  const mod  = currentSoulIndex ? SOUL_INDEX_MODS[currentSoulIndex] : {};
-  const out  = {};
-  MANDALA_AXES.forEach(a => {
-    const k = a.key;
-    out[k] = Math.min(4, (base[k] || 0) + (mod[k] || 0));
-  });
-  return out;
-}
-
-// ── Render the mandala SVG. Center (340,240); level-4 radius 140.
-function renderSkillMandala(profile, soulIndex) {
-  const cx = 340, cy = 240;
-  const rMax = 140;            // radius for value 4
-  const rStep = rMax / 4;      // one ring per integer level
-  // Axis angles, top-clockwise: STR=top, DEX=top-right, CON=bottom-right,
-  // INT=bottom, WIS=bottom-left, CHA=top-left. -90deg = top.
-  const axisAngle = i => (-90 + i * 60) * Math.PI / 180;
-  const point = (i, r) => {
-    const a = axisAngle(i);
-    return [cx + Math.cos(a) * r, cy + Math.sin(a) * r];
-  };
-
-  // Concentric ring guides (4 levels). Hexagonal rings to match axis count.
-  let rings = '';
-  for (let lvl = 1; lvl <= 4; lvl++) {
-    const pts = MANDALA_AXES.map((_, i) => point(i, rStep * lvl).join(',')).join(' ');
-    const isMaxRing = lvl === 4;
-    rings += `<polygon points="${pts}"
-              fill="none"
-              stroke="${isMaxRing ? '#c99c5a' : 'rgba(201,156,90,.22)'}"
-              stroke-width="${isMaxRing ? 0.9 : 0.5}"
-              stroke-dasharray="${isMaxRing ? '' : '2 3'}" />`;
-  }
-
-  // Spokes from center to each level-4 vertex.
-  let spokes = '';
-  MANDALA_AXES.forEach((a, i) => {
-    const [x, y] = point(i, rMax + 6);
-    spokes += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}"
-                stroke="rgba(201,156,90,.30)" stroke-width="0.6"
-                stroke-dasharray="3 3" />`;
-  });
-
-  // Polygon fingerprint — single cathedral-amber stroke + 20% fill.
-  const profPts = MANDALA_AXES.map((a, i) => {
-    const v = Math.max(0, Math.min(4, profile[a.key] || 0));
-    const r = rStep * v;
-    return point(i, r).join(',');
-  }).join(' ');
-  const fingerprint = `
-    <polygon points="${profPts}"
-             fill="#BA7517" fill-opacity="0.20"
-             stroke="#854F0B" stroke-width="1.4" stroke-linejoin="round"
-             style="filter: drop-shadow(0 0 8px rgba(186,117,23,.35));" />`;
-
-  // Value dots at each axis vertex.
-  let valueDots = '';
-  MANDALA_AXES.forEach((a, i) => {
-    const v = Math.max(0, Math.min(4, profile[a.key] || 0));
-    if (v <= 0) return;
-    const [x, y] = point(i, rStep * v);
-    valueDots += `<circle cx="${x}" cy="${y}" r="3.6"
-                   fill="${a.color}" stroke="#e6cfa1" stroke-width="0.8"
-                   style="filter: drop-shadow(0 0 4px ${a.color}aa);"/>`;
-  });
-
-  // Axis labels (skill name, code, value pill) at level-4 + label offset.
-  let labels = '';
-  MANDALA_AXES.forEach((a, i) => {
-    const labelR = rMax + 50;
-    const [lx, ly] = point(i, labelR);
-    const v = profile[a.key] || 0;
-    const baseV = getActiveBaseline()[a.key] || 0;
-    const bonus = v - baseV;
-    // Anchor by angle: top -> middle, sides -> start/end.
-    const ang = -90 + i * 60;
-    let anchor = 'middle';
-    if (ang > -90 && ang < 90) anchor = 'start';
-    else if (ang > 90 || ang < -90) anchor = 'end';
-    // Adjust dy based on vertical position.
-    const dy = (i === 0) ? -10 : (i === 3) ? 18 : 4;
-    const bonusTspan = bonus > 0
-      ? ` <tspan fill="#ff7b5c">+${bonus}</tspan>`
-      : '';
-    labels += `
-      <g transform="translate(${lx}, ${ly + dy})">
-        <text text-anchor="${anchor}" font-family="'IBM Plex Mono', monospace"
-              font-size="12" font-weight="600" letter-spacing="0.10em"
-              fill="${a.color}">
-          ${a.skill.toUpperCase()}
-          <tspan fill="#b8b0c6" font-size="10" dx="4">${a.key}</tspan>
-        </text>
-        <text text-anchor="${anchor}" y="14"
-              font-family="'IBM Plex Mono', monospace"
-              font-size="11" fill="#e6cfa1" letter-spacing="0.04em">
-          ${a.code} · ${v}/4${bonusTspan}
-        </text>
-      </g>`;
-  });
-
-  // Center gem — glows the chosen Soul Index color, otherwise neutral gold.
-  const gemColor = soulIndex ? SOUL_INDEX_META[soulIndex].color : '#c99c5a';
-  const gemFillOpacity = soulIndex ? 0.85 : 0.35;
-  const gem = `
-    <g>
-      <circle cx="${cx}" cy="${cy}" r="22"
-              fill="none" stroke="#c99c5a" stroke-width="0.8" opacity="0.55"/>
-      <circle cx="${cx}" cy="${cy}" r="14"
-              fill="${gemColor}" fill-opacity="${gemFillOpacity}"
-              stroke="#e6cfa1" stroke-width="1.0"
-              style="filter: drop-shadow(0 0 12px ${gemColor}cc);"/>
-      <circle cx="${cx}" cy="${cy}" r="5"
-              fill="#fff5e0" fill-opacity="0.65"/>
-    </g>`;
-
-  // Corner saint-medallions (small busts via quatrefoil chrome).
-  const corners = `
-    <g opacity="0.55">
-      <use href="#orn-quatrefoil" x="20"  y="20"  width="28" height="28" color="#c99c5a"/>
-      <use href="#orn-quatrefoil" x="632" y="20"  width="28" height="28" color="#c99c5a"/>
-      <use href="#orn-quatrefoil" x="20"  y="482" width="28" height="28" color="#c99c5a"/>
-      <use href="#orn-quatrefoil" x="632" y="482" width="28" height="28" color="#c99c5a"/>
-    </g>`;
-
-  return `
-    <svg viewBox="0 0 680 530" xmlns="http://www.w3.org/2000/svg"
-         role="img" aria-label="Skill mandala — ${MANDALA_AXES.map(a => a.key + ' ' + (profile[a.key]||0)).join(', ')}">
-      <defs>
-        <radialGradient id="mandalaBg" cx="50%" cy="50%" r="60%">
-          <stop offset="0%" stop-color="rgba(201,156,90,.06)"/>
-          <stop offset="100%" stop-color="transparent"/>
-        </radialGradient>
-      </defs>
-      <rect x="0" y="0" width="680" height="530" fill="url(#mandalaBg)"/>
-      ${corners}
-      ${rings}
-      ${spokes}
-      ${fingerprint}
-      ${valueDots}
-      ${gem}
-      ${labels}
-    </svg>`;
-}
-
-// ── Render the per-axis legend column to the right of the mandala.
-function renderMandalaLegend(profile) {
-  const baseline = getActiveBaseline();
-  return MANDALA_AXES.map(a => {
-    const v = profile[a.key] || 0;
-    const baseV = baseline[a.key] || 0;
-    const bonus = v - baseV;
-    const bonusFrag = bonus > 0 ? `<span class="mleg-bonus">+${bonus}</span>` : '';
-    return `
-      <div class="mleg-row">
-        <span class="mleg-dot" style="background: ${a.color};"></span>
-        <span class="mleg-name">${a.skill} <small style="opacity:.6">(${a.key})</small>${bonusFrag}</span>
-        <span class="mleg-num">${v}/4</span>
-      </div>`;
-  }).join('');
-}
-
-// ── Update the soul-index-context line above the mandala.
-function renderMandalaContext() {
-  const raceLabel = (() => {
-    if (!currentRaceId || !currentSubs.length) return 'No race selected';
-    const r = RACES[currentRaceId];
-    const sub = currentSubs[currentIndex];
-    const raceName = r ? (r.title || currentRaceId) : currentRaceId;
-    const subName  = sub && sub.name ? sub.name : '';
-    return subName ? `${raceName} · ${subName}` : raceName;
-  })();
-  const soulLabel = currentSoulIndex
-    ? `${SOUL_INDEX_META[currentSoulIndex].name} (${SOUL_INDEX_META[currentSoulIndex].sin})`
-    : 'None picked';
-  const mctxRace = document.getElementById('mctxRace');
-  const mctxSoul = document.getElementById('mctxSoul');
-  if (mctxRace) mctxRace.textContent = raceLabel;
-  if (mctxSoul) mctxSoul.textContent = soulLabel;
-}
-
-// ── Render side-track pip strips. `track` keys: dark, white (5 pips),
-// atech, hell, oldworld (3 pips).
-function renderSideTrackPips() {
-  const defaults = currentRaceId
-    ? (SIDETRACK_DEFAULTS[currentRaceId] || { dark:0, white:0, atech:0, hell:0, oldworld:0 })
-    : { dark:0, white:0, atech:0, hell:0, oldworld:0 };
-
-  const tracks = [
-    { id: 'darkFeatherPips',     noteId: 'darkFeatherNote',     val: defaults.dark,     max: 5 },
-    { id: 'whiteFeatherPips',    noteId: 'whiteFeatherNote',    val: defaults.white,    max: 5 },
-    { id: 'atechBondPips',       noteId: 'atechBondNote',       val: defaults.atech,    max: 3 },
-    { id: 'hellBondPips',        noteId: 'hellBondNote',        val: defaults.hell,     max: 3 },
-    { id: 'oldworldBondPips',    noteId: 'oldworldBondNote',    val: defaults.oldworld, max: 3 }
-  ];
-
-  tracks.forEach(t => {
-    const el   = document.getElementById(t.id);
-    const note = document.getElementById(t.noteId);
-    if (!el) return;
-    let html = '';
-    for (let i = 0; i < t.max; i++) {
-      html += `<span class="pip${i < t.val ? ' is-on' : ''}"></span>`;
-    }
-    el.innerHTML = html;
-    if (note) note.textContent = `${t.val} / ${t.max}`;
-  });
-}
-
-// ── Compute dispatch summary (Send for / Avoid). 3+ → strong, 1 → weak.
-function renderDispatchSummary() {
-  const profile = getActiveProfile();
-  const sendEl  = document.getElementById('dispatchSendTags');
-  const avoidEl = document.getElementById('dispatchAvoidTags');
-  if (!sendEl || !avoidEl) return;
-
-  if (!currentRaceId) {
-    sendEl.innerHTML  = '<span class="db-empty">No race selected.</span>';
-    avoidEl.innerHTML = '<span class="db-empty">No race selected.</span>';
-    return;
-  }
-
-  const ranked = MANDALA_AXES.slice().sort((a, b) => (profile[b.key]||0) - (profile[a.key]||0));
-  const send  = ranked.filter(a => (profile[a.key]||0) >= 3).slice(0, 3);
-  const avoid = ranked.filter(a => (profile[a.key]||0) <= 1).slice(-2);
-
-  sendEl.innerHTML = send.length
-    ? send.map(a => `<span class="db-tag">${a.task}</span>`).join('')
-    : '<span class="db-empty">Balanced profile, no standout strengths.</span>';
-  avoidEl.innerHTML = avoid.length
-    ? avoid.map(a => `<span class="db-tag">${a.task}</span>`).join('')
-    : '<span class="db-empty">No clear weaknesses.</span>';
-}
-
-// ── Top-level Layer-2 refresh: mandala + legend + context + dispatch.
-function refreshSoulLayer() {
-  const profile = getActiveProfile();
-  const wrap = document.getElementById('mandalaSvgWrap');
-  const legend = document.getElementById('mandalaLegend');
-  if (wrap) wrap.innerHTML = renderSkillMandala(profile, currentSoulIndex);
-  if (legend) legend.innerHTML = renderMandalaLegend(profile);
-  renderMandalaContext();
-  renderDispatchSummary();
-  // Update "current soul" tag near the picker.
-  const tag = document.getElementById('soulCurrentTag');
-  if (tag) {
-    tag.textContent = currentSoulIndex
-      ? `Active: ${SOUL_INDEX_META[currentSoulIndex].name}, ${SOUL_INDEX_META[currentSoulIndex].sin}.`
-      : 'No Soul Index picked. Mandala shows raw race baseline.';
-  }
-  // Update card selected states.
-  document.querySelectorAll('.soul-card').forEach(card => {
-    const isSel = card.dataset.soul === currentSoulIndex;
-    card.classList.toggle('is-selected', isSel);
-    card.setAttribute('aria-checked', isSel ? 'true' : 'false');
-  });
-}
-
-// ── Soul card click/keyboard handlers.
-(function bindSoulCards() {
-  const grid = document.getElementById('soulCardGrid');
-  if (!grid) return;
-  grid.addEventListener('click', e => {
-    const card = e.target.closest('.soul-card');
-    if (!card) return;
-    const id = card.dataset.soul;
-    if (!id) return;
-    // Toggle: clicking the active card clears it.
-    currentSoulIndex = (currentSoulIndex === id) ? null : id;
-    refreshSoulLayer();
-  });
-  // Keyboard activation (Enter / Space) — buttons handle this natively, but
-  // ensure aria-checked syncing on change.
-})();
-
-// ── Clear button.
-(function bindSoulClear() {
-  const btn = document.getElementById('soulClearBtn');
-  if (!btn) return;
-  btn.addEventListener('click', () => {
-    currentSoulIndex = null;
-    refreshSoulLayer();
-  });
-})();
-
-// ── Discipline pill toggles.
-(function bindDisciplines() {
-  document.querySelectorAll('.discipline-pill').forEach(pill => {
-    pill.addEventListener('click', () => {
-      const code = pill.dataset.disc;
-      currentDisciplines[code] = !currentDisciplines[code];
-      pill.setAttribute('aria-pressed', currentDisciplines[code] ? 'true' : 'false');
-    });
-  });
-})();
-
-// ── Hook into Layer-1 state changes so the Soul tab stays in sync.
-// Wrap selectRace + setActiveSubraceIndex without breaking their existing
-// behavior (the new wrappers call the old functions, then ping Layer 2).
-(function hookLayer1Changes() {
-  const _selectRace = selectRace;
-  selectRace = function(id) {
-    _selectRace(id);
-    refreshSoulLayer();
-    renderSideTrackPips();
-  };
-  const _setActiveSubraceIndex = setActiveSubraceIndex;
-  setActiveSubraceIndex = function(nextIndex, animate) {
-    _setActiveSubraceIndex(nextIndex, animate);
-    refreshSoulLayer();
-    // Side-tracks depend on race only, not sub-type — skip that one here.
-  };
-})();
-
-// Initial paint of Layer 2 (using whichever race autoSelect picked).
-refreshSoulLayer();
-renderSideTrackPips();
-
-// ═══════════════════════════════════════════════════════
-// TAB SWITCHING
-// ═══════════════════════════════════════════════════════
-document.getElementById('tabNav').addEventListener('click', e => {
-  const t = e.target.closest('.tab');
-  if (!t || t.classList.contains('disabled')) return;
-  const tabId = t.dataset.tab;
-  document.querySelectorAll('.tab').forEach(x => 
+    if (e.key === 'Enter' || e.key === ' ' || e.key === 'Space
