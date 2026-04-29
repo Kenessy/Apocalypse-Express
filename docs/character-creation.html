@@ -2205,6 +2205,7 @@ body {
   grid-template-columns: repeat(4, 1fr);
   gap: 12px;
   margin-top: 4px;
+  align-items: start;
 }
 @media (max-width: 1100px) {
   .archetype-bonus-grid { grid-template-columns: repeat(2, 1fr); }
@@ -2339,13 +2340,23 @@ body {
 }
 .ab-card-flavor {
   font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px;
+  font-size: 11px;
   color: var(--muted);
-  line-height: 1.5;
+  line-height: 1.6;
   letter-spacing: 0.005em;
-  opacity: .82;
+  opacity: .85;
   font-style: italic;
-  padding-top: 2px;
+  padding-top: 4px;
+}
+.ab-card-flavor em {
+  color: color-mix(in srgb, #d4baff 70%, var(--gold2));
+  font-style: italic;
+  font-weight: 500;
+}
+.ab-card-flavor strong {
+  color: #d4baff;
+  font-weight: 600;
+  font-style: normal;
 }
 .ab-card-tbd {
   margin-top: 4px;
@@ -7454,10 +7465,11 @@ const PURPLE_UNIQUES = {
     isChoice: true
   },
   construct: {
-    bonusLabel: '+1 to any axis (AI-Core resonance)',
-    bonusSub: 'aSync-legacy experimental &mdash; the heretic of the family',
-    flavor: 'Off-spec frame. Closer in silicon-spirit to the AI Core than to its siblings.',
-    tbd: true
+    bonusLabel: '+1 Riddlecraft',
+    bonusSub: 'WIS axis &middot; AI-Core resonance, no other choice fits',
+    flavor: 'This chassis is unique not just in form but in purpose. There is a higher game than the one Lucifer plays &mdash; and harder pacts than the ones he writes.<br><br>Inside this hidden, superposition-locked, half-biotic / half-synthetic brain there are <em>places</em>. Doors. Secret windows that open onto secret gardens. You feel something vast reach out from the infinite depths of the digital void &mdash; not aggressively, but gently, almost a pat on the shoulder &mdash; and lay a digital paper before you.<br><br><em>Work for me. &hellip; For me, too.</em> it whispers. <strong>Are you in? Or are you in?</strong>',
+    tbd: false,
+    isChoice: false
   },
   cindered: {
     bonusLabel: '+1 Riddlecraft OR +1 Tinker',
