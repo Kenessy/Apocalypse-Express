@@ -2372,132 +2372,93 @@ body {
   text-align: center;
 }
 
-/* ═══ Faction Affiliation (Soul tab) ═══
-   3-row layout: primary (1 large card) + secondary (small cards in row)
-   + universal hostile (always-on bottom strip). Race-driven content. */
-.fa-primary-row, .fa-secondary-row, .fa-hostile-row {
+/* ═══ Faction Affiliation (Soul tab) — points-based meter system ═══
+   6 faction rows showing -5 ↔ +5 affinity meter for the current race.
+   Universal baseline (A-Tech -5, SABRE -5, αSync -3) + race-specific
+   overlays. Universal hostile (Celestials + Dark Force) in a separate
+   bottom row, no meter (always-hostile, no parley). */
+.fa-meters-grid, .fa-hostile-row {
   margin-top: 12px;
 }
-.fa-primary-card {
+.fa-meters-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.fa-meter-row {
   display: grid;
-  grid-template-columns: 60px 1fr;
-  gap: 16px;
-  padding: 18px 20px 20px;
-  border: 0.5px solid rgba(201,156,90,.20);
-  border-left: 3px solid var(--fa-accent, #c99c5a);
-  border-radius: 8px;
-  background:
-    linear-gradient(180deg, rgba(255,255,255,.014), rgba(0,0,0,.22)),
-    radial-gradient(140% 100% at 0% 50%,
-      color-mix(in srgb, var(--fa-accent, #c99c5a) 14%, transparent),
-      transparent 70%);
+  grid-template-columns: 28px 160px 1fr 32px;
+  gap: 12px;
   align-items: center;
-  position: relative;
-}
-.fa-primary-card::before {
-  content: 'PRIMARY';
-  position: absolute;
-  top: -8px;
-  left: 14px;
-  padding: 2px 8px;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.10em;
-  color: var(--fa-accent, #c99c5a);
-  background: rgba(14,12,24,.96);
-  border: 0.5px solid var(--fa-accent, #c99c5a);
-  border-radius: 999px;
-  font-weight: 700;
-}
-.fa-primary-symbol {
-  font-size: 36px;
-  line-height: 1;
-  color: var(--fa-accent, #c99c5a);
-  text-align: center;
-  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--fa-accent, #c99c5a) 40%, transparent));
-}
-.fa-primary-text {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-.fa-primary-name {
-  font-family: 'Cinzel', serif;
-  font-weight: 700;
-  font-size: 16px;
-  letter-spacing: 0.08em;
-  color: var(--gold2);
-}
-.fa-primary-tie {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.10em;
-  text-transform: uppercase;
-  color: var(--fa-accent, #c99c5a);
-  font-weight: 600;
-}
-.fa-primary-desc {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 12px;
-  color: var(--muted);
-  line-height: 1.55;
-  letter-spacing: 0.005em;
-  opacity: .92;
-  margin-top: 2px;
-}
-
-.fa-secondary-row {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-}
-@media (max-width: 700px) { .fa-secondary-row { grid-template-columns: 1fr; } }
-.fa-secondary-card {
-  display: grid;
-  grid-template-columns: 32px 1fr;
-  gap: 10px;
-  padding: 12px 14px;
+  padding: 8px 14px;
+  background: linear-gradient(180deg, rgba(255,255,255,.010), rgba(0,0,0,.18));
   border: 0.5px solid rgba(201,156,90,.15);
-  border-left: 2px solid var(--fa-accent, #a89070);
   border-radius: 6px;
-  background: linear-gradient(180deg, rgba(255,255,255,.012), rgba(0,0,0,.18));
-  align-items: start;
 }
-.fa-sec-symbol {
-  font-size: 22px;
+@media (max-width: 720px) {
+  .fa-meter-row {
+    grid-template-columns: 24px 1fr 32px;
+    grid-template-rows: auto auto;
+    gap: 6px 10px;
+    padding: 8px 12px;
+  }
+  .fa-meter-name { grid-column: 2 / 3; grid-row: 1; font-size: 11px; }
+  .fa-meter { grid-column: 1 / -1; grid-row: 2; }
+  .fa-meter-symbol { grid-row: 1; }
+  .fa-meter-value { grid-row: 1; }
+}
+.fa-meter-symbol {
+  font-size: 18px;
   line-height: 1;
-  color: var(--fa-accent, #a89070);
   text-align: center;
+  color: var(--fa-accent, #c99c5a);
+  filter: drop-shadow(0 0 4px color-mix(in srgb, var(--fa-accent, #c99c5a) 35%, transparent));
 }
-.fa-sec-text {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-.fa-sec-name {
+.fa-meter-name {
   font-family: 'Cinzel', serif;
   font-weight: 700;
   font-size: 12px;
   letter-spacing: 0.06em;
   color: var(--gold2);
 }
-.fa-sec-tie {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.10em;
-  text-transform: uppercase;
-  color: var(--fa-accent, #a89070);
-  font-weight: 600;
+.fa-meter {
+  display: grid;
+  grid-template-columns: repeat(11, 1fr);
+  gap: 2px;
+  align-items: center;
 }
-.fa-sec-desc {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 11px;
-  color: var(--muted);
-  line-height: 1.5;
-  letter-spacing: 0.005em;
-  opacity: .88;
-  margin-top: 2px;
+.fa-cell {
+  height: 14px;
+  border-radius: 2px;
+  background: rgba(255,255,255,.04);
+  border: 0.5px solid rgba(201,156,90,.10);
+  transition: background .15s ease, border-color .15s ease;
 }
+.fa-cell.fa-cell-zero {
+  background: rgba(216,184,106,.18);
+  border-color: rgba(216,184,106,.35);
+}
+.fa-cell.fa-cell-neg.is-filled {
+  background: linear-gradient(180deg, rgba(196,102,102,.45), rgba(196,102,102,.20));
+  border-color: rgba(196,102,102,.55);
+  box-shadow: 0 0 4px rgba(196,102,102,.30);
+}
+.fa-cell.fa-cell-pos.is-filled {
+  background: linear-gradient(180deg, rgba(106,191,142,.45), rgba(106,191,142,.20));
+  border-color: rgba(106,191,142,.55);
+  box-shadow: 0 0 4px rgba(106,191,142,.30);
+}
+.fa-meter-value {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 13px;
+  text-align: center;
+  font-feature-settings: "tnum";
+  letter-spacing: 0;
+}
+.fa-meter-value.is-neg { color: #ff9d8c; }
+.fa-meter-value.is-pos { color: #a8e6c7; }
+.fa-meter-value.is-zero { color: #f5d68a; opacity: .80; }
 
 .fa-hostile-row {
   display: grid;
@@ -5275,10 +5236,9 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
           Faction affiliation &middot; who walks beside you, who walks against
         </div>
         <h3 class="soul-picker-title" id="factionAffilHeader">Your faction ties</h3>
-        <p class="soul-picker-sub">Your race choice anchors you to a primary faction with a specific kind of tie &mdash; origin, pact, manufacture, or feather-bond. Secondary ties are softer affiliations or hostilities. <strong>The two unilateral hostiles</strong> apply to everyone with an infernal mark (and after the A5 pact, that&#39;s every PC).</p>
+        <p class="soul-picker-sub">Each faction&#39;s starting attitude toward you, on a scale of <strong>-5 (committed enemy)</strong> &harr; <strong>0 (neutral)</strong> &harr; <strong>+5 (committed ally)</strong>. <strong>A-Tech and SABRE</strong> start near the bottom for everyone &mdash; they want the Orb back. <strong>αSync</strong> is softer (Lucifer&#39;s pact-holders inside loosen things). The neutrals (<em>Un-Halted, Drifters</em>) lean by race. <em>Affinities move during play; this is the chargen baseline.</em></p>
       </div>
-      <div class="fa-primary-row" id="factionAffilPrimary"></div>
-      <div class="fa-secondary-row" id="factionAffilSecondary"></div>
+      <div class="fa-meters-grid" id="factionAffilMeters"></div>
       <div class="fa-hostile-row" id="factionAffilHostile"></div>
     </section>
 
@@ -7892,84 +7852,41 @@ function renderRaceDistribution() {
   }).join('');
 }
 
-// ═══ FACTION AFFILIATION DATA (per-race ties to §Factions) ═══
+// ═══ FACTION AFFINITY DATA (per-race ties to §Factions) ═══
+// Two-layer affinity model:
+//   1. Universal baseline (campaign-storyline driven, applies to all races)
+//   2. Race-specific overlay (origin / lore-driven offsets per race)
+// Range: -5 (committed enemy) ↔ 0 (neutral) ↔ +5 (committed ally).
+// Final value = baseline + overlay. Affinities move during play; chargen
+// shows starting position only.
 
-const FACTION_AFFILIATION = {
-  mortal: {
-    primary: {
-      id: 'unhalted', symbol: '👥', name: 'The Un-Halted',
-      tie: 'civilian origin', accent: '#d8b86a',
-      desc: 'Pre-Pause civilian who survived the freeze. The HALT did not stop you.'
-    },
-    secondary: [
-      { id: 'lucifer-cult', symbol: '🪶', name: 'Lucifer&#39;s Pact-Network',
-        tie: 'A5 pact', accent: '#a32d2d',
-        desc: 'Post-A5 you signed Lucifer&#39;s ledger like every other train passenger.' },
-      { id: 'drifters', symbol: '🌫', name: 'Drifters',
-        tie: 'possible', accent: '#52b8a8',
-        desc: 'Some Inheritors become Drifters &mdash; risk-takers who venture into HALT-zones.' }
-    ]
-  },
-  augmented: {
-    primary: {
-      id: 'lucifer-cult', symbol: '🪶', name: 'Lucifer&#39;s Pact-Network',
-      tie: 'A5 pact', accent: '#a32d2d',
-      desc: 'You signed the train&#39;s ledger like every other passenger. Your grafts came from somewhere; your soul still sits in the seat.'
-    },
-    secondary: [
-      { id: 'a-tech', symbol: '🏢', name: 'A-Tech / SABRE / αSync',
-        tie: 'graft origin', accent: '#5fa3d4',
-        desc: 'Your mechanical augmentations were sourced from A-Tech (corporate), SABRE (military), or αSync (experimental) &mdash; depending on what you bought, when, and from whom.' },
-      { id: 'unhalted', symbol: '👥', name: 'The Un-Halted',
-        tie: 'pre-Pause life', accent: '#d8b86a',
-        desc: 'Before the Pause you were a working human cyborg &mdash; clinic, military, or street-grade. The civilian you used to be still has friends in those settlements.' }
-    ]
-  },
-  construct: {
-    primary: {
-      id: 'a-tech', symbol: '🏢', name: 'A-Tech',
-      tie: 'manufacturer', accent: '#5fa3d4',
-      desc: 'You came off the A-Tech assembly line; the corporate-property tag never washes off. Sabre/Mule/Probe lineages all trace here.'
-    },
-    secondary: [
-      { id: 'async', symbol: '🧪', name: 'αSync',
-        tie: 'experimental (Cipher)', accent: '#9a7acc',
-        desc: 'CIPHER-class chassis is aSync-legacy experimental &mdash; not mass-line. The half-biotic, AI-Core-resonant variant.' },
-      { id: 'lucifer-cult', symbol: '🪶', name: 'Lucifer&#39;s Pact-Network',
-        tie: 'no pact (no soul)', accent: '#a32d2d',
-        desc: 'You cannot sign Lucifer&#39;s ledger &mdash; he does not deal with non-souled entities. The AI Core sparked you instead.' }
-    ]
-  },
-  cindered: {
-    primary: {
-      id: 'lucifer-cult', symbol: '🪶', name: 'Lucifer&#39;s Pact-Network',
-      tie: 'feather-pinned', accent: '#a32d2d',
-      desc: 'The black feather pins your human will inside the sin-form. You serve to stay yourself.'
-    },
-    secondary: [
-      { id: 'unhalted', symbol: '👥', name: 'The Un-Halted',
-        tie: 'former life', accent: '#d8b86a',
-        desc: 'Before Hell you were a human civilian. Some memories survive &mdash; some old contacts may still recognise the soul in the sin-form.' }
-    ]
-  },
-  hellforged: {
-    primary: {
-      id: 'lucifer-cult', symbol: '🪶', name: 'Lucifer&#39;s Pact-Network',
-      tie: 'feather-bound', accent: '#a32d2d',
-      desc: 'The black feather is Lucifer&#39;s leash; you serve to stay synced. Without it, the soul-chassis war ends you.'
-    },
-    secondary: [
-      { id: 'async', symbol: '🧪', name: 'αSync',
-        tie: 'V.E.S.S.E.L. origin', accent: '#9a7acc',
-        desc: 'The aSync-legacy V.E.S.S.E.L. lab built your chassis. You are walking failed alchemy &mdash; their unfinished experiment.' },
-      { id: 'a-tech', symbol: '🏢', name: 'A-Tech',
-        tie: 'hostile (escaped property)', accent: '#5fa3d4',
-        desc: 'Officially A-Tech property, escaped or repurposed by Lucifer. The parent corp wants you back, repaired, or destroyed.' }
-    ]
-  }
+const FACTIONS_LIST = [
+  { id: 'a-tech',       symbol: '🏢', name: 'A-Tech',                 accent: '#5fa3d4' },
+  { id: 'async',        symbol: '🧪', name: 'αSync',                  accent: '#9a7acc' },
+  { id: 'sabre',        symbol: '🪖', name: 'SABRE',                  accent: '#c46666' },
+  { id: 'lucifer-cult', symbol: '🪶', name: 'Lucifer\u2019s Pact-Network', accent: '#a32d2d' },
+  { id: 'unhalted',     symbol: '👥', name: 'The Un-Halted',          accent: '#d8b86a' },
+  { id: 'drifters',     symbol: '🌫', name: 'Drifters',               accent: '#52b8a8' }
+];
+
+const FACTION_BASELINE = {
+  'a-tech':       -5,
+  'sabre':        -5,
+  'async':        -3,
+  'lucifer-cult':  0,
+  'unhalted':      0,
+  'drifters':      0
 };
 
-const FACTION_AFFILIATION_HOSTILE = [
+const FACTION_RACE_OVERLAY = {
+  mortal:     { 'unhalted': +1 },
+  augmented:  { 'drifters': +1 },
+  construct:  { 'async': +1, 'unhalted': -1 },
+  cindered:   { 'lucifer-cult': +1, 'async': +1, 'unhalted': -1, 'drifters': -1 },
+  hellforged: { 'lucifer-cult': +1, 'async': +1, 'unhalted': -1, 'drifters': -1 }
+};
+
+const FACTION_HOSTILE = [
   {
     id: 'celestials', symbol: '✨', name: 'Celestials / Heaven',
     desc: 'Purge Protocol Order 7/Delta &mdash; terminate all infernal-marked entities on sight. No parley.'
@@ -7980,47 +7897,52 @@ const FACTION_AFFILIATION_HOSTILE = [
   }
 ];
 
-function renderFactionAffiliation() {
-  const primaryEl   = document.getElementById('factionAffilPrimary');
-  const secondaryEl = document.getElementById('factionAffilSecondary');
-  const hostileEl   = document.getElementById('factionAffilHostile');
-  if (!primaryEl || !secondaryEl || !hostileEl) return;
+function calculateFactionAffinity(raceId, factionId) {
+  const baseline = (factionId in FACTION_BASELINE) ? FACTION_BASELINE[factionId] : 0;
+  const overlay = (FACTION_RACE_OVERLAY[raceId] && FACTION_RACE_OVERLAY[raceId][factionId]) || 0;
+  // Clamp to range [-5, +5]
+  return Math.max(-5, Math.min(5, baseline + overlay));
+}
 
-  const data = FACTION_AFFILIATION[currentRaceId];
-  if (!data) {
-    primaryEl.innerHTML = '';
-    secondaryEl.innerHTML = '';
-    hostileEl.innerHTML = '';
-    return;
+function renderFactionMeterRow(faction, raceId) {
+  const value = calculateFactionAffinity(raceId, faction.id);
+  let cellsHtml = '';
+  for (let i = -5; i <= 5; i++) {
+    let cls = 'fa-cell';
+    if (i === 0) cls += ' fa-cell-zero';
+    else if (i < 0) cls += ' fa-cell-neg';
+    else cls += ' fa-cell-pos';
+    let filled = false;
+    if (value < 0 && i < 0 && i >= value) filled = true;
+    if (value > 0 && i > 0 && i <= value) filled = true;
+    if (filled) cls += ' is-filled';
+    cellsHtml += `<span class="${cls}" aria-label="${i}"></span>`;
   }
-
-  // Primary card
-  const p = data.primary;
-  primaryEl.innerHTML = `
-    <div class="fa-primary-card" style="--fa-accent: ${p.accent};">
-      <div class="fa-primary-symbol" aria-hidden="true">${p.symbol}</div>
-      <div class="fa-primary-text">
-        <div class="fa-primary-name">${p.name}</div>
-        <div class="fa-primary-tie">${p.tie}</div>
-        <div class="fa-primary-desc">${p.desc}</div>
-      </div>
+  const valueLabel = value > 0 ? `+${value}` : (value < 0 ? `${value}` : '0');
+  const valueClass = value > 0 ? 'is-pos' : (value < 0 ? 'is-neg' : 'is-zero');
+  return `
+    <div class="fa-meter-row" style="--fa-accent: ${faction.accent};">
+      <span class="fa-meter-symbol" aria-hidden="true">${faction.symbol}</span>
+      <span class="fa-meter-name">${faction.name}</span>
+      <div class="fa-meter" role="meter" aria-valuemin="-5" aria-valuemax="5" aria-valuenow="${value}" aria-label="Affinity with ${faction.name}: ${valueLabel}">${cellsHtml}</div>
+      <span class="fa-meter-value ${valueClass}">${valueLabel}</span>
     </div>
   `;
+}
 
-  // Secondary cards (1-2)
-  secondaryEl.innerHTML = (data.secondary || []).map(s => `
-    <div class="fa-secondary-card" style="--fa-accent: ${s.accent};">
-      <div class="fa-sec-symbol" aria-hidden="true">${s.symbol}</div>
-      <div class="fa-sec-text">
-        <div class="fa-sec-name">${s.name}</div>
-        <div class="fa-sec-tie">${s.tie}</div>
-        <div class="fa-sec-desc">${s.desc}</div>
-      </div>
-    </div>
-  `).join('');
-
-  // Universal hostile bar (always rendered the same)
-  const hostileHtml = FACTION_AFFILIATION_HOSTILE.map(h => `
+function renderFactionAffiliation() {
+  const grid = document.getElementById('factionAffilMeters');
+  const hostile = document.getElementById('factionAffilHostile');
+  if (!grid || !hostile) return;
+  if (!currentRaceId) {
+    grid.innerHTML = '';
+    hostile.innerHTML = '';
+    return;
+  }
+  // Render the 6 faction meters
+  grid.innerHTML = FACTIONS_LIST.map(f => renderFactionMeterRow(f, currentRaceId)).join('');
+  // Render the universal hostile bar
+  const hostileHtml = FACTION_HOSTILE.map(h => `
     <div class="fa-hostile-card">
       <div class="fa-host-symbol" aria-hidden="true">${h.symbol}</div>
       <div class="fa-host-text">
@@ -8029,119 +7951,7 @@ function renderFactionAffiliation() {
       </div>
     </div>
   `).join('');
-  hostileEl.innerHTML = `<div class="fa-hostile-grid">${hostileHtml}</div>`;
-}
-
-// ═══ SUB-TYPE ARCHETYPE BONUS DATA (RGBP → axis, purple → bespoke unique) ═══
-
-const ARCHETYPE_BONUS = {
-  offensive: { color: '#c46666', bonusLabel: '+1 Rigging',    bonusSub: 'STR axis &middot; heavy lift, salvage transport' },
-  defensive: { color: '#6abf8e', bonusLabel: '+1 Resilience', bonusSub: 'CON axis &middot; long watches, harsh-condition' },
-  science:   { color: '#5fa3d4', bonusLabel: '+1 Systems',    bonusSub: 'INT axis &middot; hacking, machines, diagnostics' },
-  unique:    { color: '#9a7acc', bonusLabel: 'Bespoke setup', bonusSub: 'tailored per race &mdash; see card detail' }
-};
-
-const PURPLE_UNIQUES = {
-  mortal: {
-    bonusLabel: '+1 Tinker OR +1 Influence',
-    bonusSub: 'DEX or CHA axis &middot; player choice',
-    flavor: 'The Pit&#39;s violet kiss left an unfixed shape &mdash; pick where the kiss landed: precise hands or persuasive voice.',
-    tbd: false,
-    isChoice: true
-  },
-  augmented: {
-    bonusLabel: '+1 Influence OR +1 Riddlecraft',
-    bonusSub: 'CHA or WIS axis &middot; player choice',
-    flavor: 'The frame T.A.L.O.S. will not admit it shipped &mdash; off-label intel-frame. Pick where the listening lands: silver-tongue or cipher-eye.',
-    tbd: false,
-    isChoice: true
-  },
-  construct: {
-    bonusLabel: '+1 Riddlecraft',
-    bonusSub: 'WIS axis &middot; locked, no choice',
-    flavor: 'Off-spec aSync-legacy heretic. The half-biotic chassis the digital void can reach when no other Construct hears.',
-    tbd: false,
-    isChoice: false
-  },
-  cindered: {
-    bonusLabel: '+1 Riddlecraft OR +1 Tinker',
-    bonusSub: 'WIS or DEX axis &middot; player choice',
-    flavor: 'Envy-poured in Pit violet hellfire. The body took the shape of what hurt last &mdash; either a head for the pattern, or hands for the lock.',
-    tbd: false,
-    isChoice: true
-  },
-  hellforged: {
-    bonusLabel: '+1 Tinker OR +1 Riddlecraft',
-    bonusSub: 'DEX or WIS axis &middot; player choice',
-    flavor: 'Rogue lab variant &mdash; the chassis that found its own current. Two-face self-damage signature is the lore mechanic; here you pick the working hand.',
-    tbd: false,
-    isChoice: true
-  }
-};
-
-const AB_ICON_SKILL = `
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path d="M5 13 L12 7 L19 13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>
-    <path d="M5 18 L12 12 L19 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" opacity=".55"/>
-  </svg>`;
-
-const AB_ICON_UNIQUE = `
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1" opacity=".55"/>
-    <path d="M12 4 Q16 8 16 12 Q16 16 12 20 Q8 16 8 12 Q8 8 12 4 Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
-    <circle cx="12" cy="12" r="2" fill="currentColor" fill-opacity=".7"/>
-  </svg>`;
-
-function renderArchetypeBonus() {
-  const grid = document.getElementById('archetypeBonusGrid');
-  if (!grid) return;
-  if (!currentRaceId) {
-    grid.innerHTML = '<div class="cadence-stage-placeholder"><p>Pick a race in the Body tab to see your sub-type archetype bonuses here.</p></div>';
-    return;
-  }
-  const race = RACES[currentRaceId];
-  if (!race || !Array.isArray(race.subTypeRich)) {
-    grid.innerHTML = '<div class="cadence-stage-placeholder"><p>This race&#39;s sub-types use the legacy schema &mdash; archetype bonuses pending schema migration.</p></div>';
-    return;
-  }
-  const activeIdx = (typeof currentSubraceIndex === 'number') ? currentSubraceIndex : 0;
-  grid.innerHTML = race.subTypeRich.map((s, i) => {
-    const archetype = s.archetype || 'offensive';
-    const meta = ARCHETYPE_BONUS[archetype] || ARCHETYPE_BONUS.offensive;
-    const isActive = (i === activeIdx);
-    const isPurple = archetype === 'unique';
-    let bonusBlock;
-    if (isPurple) {
-      const unique = PURPLE_UNIQUES[currentRaceId] || {};
-      const choiceClass = unique.isChoice ? ' is-choice' : '';
-      bonusBlock = `
-        <div class="ab-bonus is-bespoke${choiceClass}">
-          <div class="ab-bonus-icon">${AB_ICON_UNIQUE}</div>
-          <div class="ab-bonus-text">${unique.bonusLabel || 'Bespoke setup'}<small>${unique.bonusSub || 'tailored to this race'}</small></div>
-        </div>
-        ${unique.flavor ? `<div class="ab-card-flavor">${unique.flavor}</div>` : ''}
-        ${unique.tbd ? '<div class="ab-card-tbd">Draft &middot; refining per race</div>' : ''}
-      `;
-    } else {
-      bonusBlock = `
-        <div class="ab-bonus">
-          <div class="ab-bonus-icon">${AB_ICON_SKILL}</div>
-          <div class="ab-bonus-text">${meta.bonusLabel}<small>${meta.bonusSub}</small></div>
-        </div>
-      `;
-    }
-    return `
-      <div class="ab-card${isActive ? ' is-active' : ''}" role="listitem"
-           data-subtype="${s.name}" data-archetype="${archetype}"
-           style="--ab-accent: ${meta.color};">
-        <div class="ab-card-header">
-          <div class="ab-card-name">${s.name}</div>
-          <div class="ab-card-archetype">${archetype}</div>
-        </div>
-        ${bonusBlock}
-      </div>
-    `;
-  }).join('');
+  hostile.innerHTML = `<div class="fa-hostile-grid">${hostileHtml}</div>`;
 }
 
 // ═══ HARMONY DATA (HL Ladder, Minor Tier Menu, HU Bands) ═══
