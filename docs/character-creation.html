@@ -2030,6 +2030,152 @@ body {
   .mt-pips { gap: 4px; }
 }
 
+/* ═══ Race Distribution (Soul tab — replaces Soul Index picker) ═══
+   5-card horizontal grid showing every race's body-legacy bonus side-by-side.
+   Active race (currentRaceId) gets highlighted border + box-glow. */
+.race-dist-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-top: 4px;
+}
+@media (max-width: 1100px) {
+  .race-dist-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 720px) {
+  .race-dist-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+}
+@media (max-width: 480px) {
+  .race-dist-grid { grid-template-columns: 1fr; }
+}
+
+.rd-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 14px 16px;
+  border: 0.5px solid rgba(201,156,90,.18);
+  border-top: 2px solid var(--rd-accent, #c99c5a);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.012), rgba(0,0,0,.22)),
+    radial-gradient(140% 100% at 50% 0%,
+      color-mix(in srgb, var(--rd-accent, #c99c5a) 10%, transparent),
+      transparent 70%);
+  position: relative;
+  transition: border-color .15s ease, box-shadow .15s ease, opacity .15s ease;
+  opacity: .80;
+}
+.rd-card.is-active {
+  border-color: var(--rd-accent, #f5d68a);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--rd-accent, #f5d68a) 28%, transparent);
+  opacity: 1;
+}
+.rd-card.is-active::before {
+  content: 'YOUR PICK';
+  position: absolute;
+  top: -9px;
+  right: 10px;
+  padding: 2px 8px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.10em;
+  color: var(--rd-accent, #f5d68a);
+  background: rgba(14,12,24,.96);
+  border: 0.5px solid var(--rd-accent, #f5d68a);
+  border-radius: 999px;
+  font-weight: 700;
+}
+
+.rd-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 6px;
+  border-bottom: 0.5px dashed rgba(201,156,90,.18);
+}
+.rd-card-name {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  color: var(--gold2);
+  flex: 1;
+}
+.rd-card-bodytag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.10em;
+  color: var(--muted);
+  opacity: .80;
+}
+
+.rd-bonus-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.rd-bonus {
+  display: grid;
+  grid-template-columns: 26px 1fr;
+  gap: 8px;
+  align-items: center;
+  padding: 6px 8px;
+  background: rgba(255,255,255,.012);
+  border: 0.5px solid rgba(201,156,90,.10);
+  border-radius: 5px;
+}
+.rd-bonus-icon {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--rd-bonus-color, var(--rd-accent, #c99c5a));
+  filter: drop-shadow(0 0 5px color-mix(in srgb, var(--rd-bonus-color, #c99c5a) 50%, transparent));
+}
+.rd-bonus-icon svg { width: 100%; height: 100%; }
+.rd-bonus-text {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--gold2);
+  letter-spacing: 0.005em;
+  line-height: 1.3;
+}
+.rd-bonus-text small {
+  display: block;
+  font-weight: 400;
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.005em;
+  opacity: .82;
+  margin-top: 1px;
+}
+
+.rd-bonus-or {
+  text-align: center;
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.20em;
+  color: var(--muted);
+  opacity: .65;
+  padding: 2px 0;
+}
+
+.rd-card-note {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  line-height: 1.5;
+  letter-spacing: 0.005em;
+  opacity: .85;
+  font-style: italic;
+  padding-top: 4px;
+  border-top: 0.5px dashed rgba(201,156,90,.10);
+}
+
 /* ═══════════════════════════════════════════════════════
    CHAOS & HARMONY (Cadence) tab — reference / mechanics primer
    ═══════════════════════════════════════════════════════ */
@@ -2959,6 +3105,7 @@ body {
 
 /* ── Soul picker section panel (stained-glass plate) ── */
 .soul-picker,
+.race-distribution,
 .skill-mandala-panel,
 .side-tracks,
 .dispatch-summary,
@@ -4493,133 +4640,21 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
       </div>
     </section>
 
-    <!-- ═══ SOUL INDEX PICKER — 4 CARDS ═══ -->
-    <section class="soul-picker" aria-labelledby="soulPickerHeader">
+    <!-- ═══ RACE DISTRIBUTION — what each race gets (replaces Soul Index picker) ═══
+         Read-only display: shows all 5 races side-by-side with their body-legacy
+         bonuses. Active race is highlighted. No clicking — Daniel-locked: "ne kelljen
+         pickelni sehol csak simán lássuk." Soul Index pick is deferred to end-of-creator. -->
+    <section class="race-distribution" aria-labelledby="raceDistributionHeader">
       <div class="soul-picker-header">
         <div class="soul-picker-eyebrow cath-eyebrow">
           <span class="ce-orn" aria-hidden="true"><svg><use href="#orn-quatrefoil"/></svg></span>
-          Soul Index · the four sins that drive a spark
+          What each race gets · the threshold leosztás
         </div>
-        <h3 class="soul-picker-title" id="soulPickerHeader">Pick a temperament</h3>
-        <p class="soul-picker-sub">Each Index gives a Skill Imprint (a +1 nudge to two specific skills), one signature move, and a permanent drawback. Click a card to apply it to the mandala.</p>
+        <h3 class="soul-picker-title" id="raceDistributionHeader">Distribution at the Body / Soul threshold</h3>
+        <p class="soul-picker-sub">Your race choice baked passives into the body before the soul layer was added. Some races get a <strong>feather</strong> (moral-axis lever — Chaos or Harmony); some get raw <strong>attribute points</strong>; one race gets to <em>choose</em>. Below: every race&#39;s threshold gift, with your current pick highlighted.</p>
       </div>
-
-      <div class="soul-card-grid" id="soulCardGrid" role="radiogroup" aria-label="Soul Index choice">
-
-        <button type="button" class="soul-card" data-soul="boiler" role="radio" aria-checked="false"
-                style="--soul-accent: #A32D2D;">
-          <div class="soul-card-rune" aria-hidden="true">
-            <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="20" cy="20" r="14" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".55"/>
-              <path d="M20 8 Q14 16 16 22 Q12 23 12 27 Q12 31 20 32 Q28 31 28 27 Q28 23 24 22 Q26 16 20 8 Z"
-                    fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
-              <path d="M20 22 Q18 25 19 27 Q20 28 21 27 Q22 25 20 22 Z"
-                    fill="currentColor" fill-opacity=".7" stroke="none"/>
-            </svg>
-          </div>
-          <div class="soul-card-head">
-            <div class="soul-card-sin">Wrath</div>
-            <div class="soul-card-name">Boiler</div>
-            <div class="soul-card-tag">Redline</div>
-          </div>
-          <p class="soul-card-subtitle">Burns hot. Refuses to back down.</p>
-          <p class="soul-card-cosmic">Frame-bound, world-first, immediate. Frame-grade temperament that drives a soul to break limits.</p>
-          <div class="soul-card-mech">
-            <div class="scm-row"><span class="scm-key">Boost</span><span class="scm-val">STR +1, CON +1</span></div>
-            <div class="scm-row"><span class="scm-key">Imprint</span><span class="scm-val">Pry, Soul Grit</span></div>
-            <div class="scm-row"><span class="scm-key">Active</span><span class="scm-val">Overboil</span></div>
-            <div class="scm-row scm-warn"><span class="scm-key">Drawback</span><span class="scm-val">-1 OFS Riddlecraft</span></div>
-          </div>
-        </button>
-
-        <button type="button" class="soul-card" data-soul="crown" role="radio" aria-checked="false"
-                style="--soul-accent: #854F0B;">
-          <div class="soul-card-rune" aria-hidden="true">
-            <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="20" cy="20" r="14" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".55"/>
-              <path d="M9 26 L13 14 L17 22 L20 12 L23 22 L27 14 L31 26 Z"
-                    fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
-              <path d="M9 28 H31" stroke="currentColor" stroke-width="1.2"/>
-              <circle cx="13" cy="14" r="1.2" fill="currentColor"/>
-              <circle cx="20" cy="12" r="1.2" fill="currentColor"/>
-              <circle cx="27" cy="14" r="1.2" fill="currentColor"/>
-            </svg>
-          </div>
-          <div class="soul-card-head">
-            <div class="soul-card-sin">Pride</div>
-            <div class="soul-card-name">Crown</div>
-            <div class="soul-card-tag">Command</div>
-          </div>
-          <p class="soul-card-subtitle">Routes power through chains-of-command.</p>
-          <p class="soul-card-cosmic">Systematic, world-first, rhythmic. Hierarchy that imposes structure on the world.</p>
-          <div class="soul-card-mech">
-            <div class="scm-row"><span class="scm-key">Boost</span><span class="scm-val">CHA +2</span></div>
-            <div class="scm-row"><span class="scm-key">Imprint</span><span class="scm-val">Influence, Guile</span></div>
-            <div class="scm-row"><span class="scm-key">Active</span><span class="scm-val">Priority Target</span></div>
-            <div class="scm-row scm-warn"><span class="scm-key">Drawback</span><span class="scm-val">solo-multitasking penalty</span></div>
-          </div>
-        </button>
-
-        <button type="button" class="soul-card" data-soul="maw" role="radio" aria-checked="false"
-                style="--soul-accent: #3B6D11;">
-          <div class="soul-card-rune" aria-hidden="true">
-            <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="20" cy="20" r="14" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".55"/>
-              <path d="M10 18 Q20 8 30 18 Q26 24 20 24 Q14 24 10 18 Z"
-                    fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
-              <path d="M13 19 L15 22 L17 19 L19 22 L21 19 L23 22 L25 19 L27 22"
-                    fill="none" stroke="currentColor" stroke-width="1"/>
-              <circle cx="20" cy="14" r="1.4" fill="currentColor"/>
-            </svg>
-          </div>
-          <div class="soul-card-head">
-            <div class="soul-card-sin">Greed</div>
-            <div class="soul-card-name">Maw</div>
-            <div class="soul-card-tag">Hoarder</div>
-          </div>
-          <p class="soul-card-subtitle">Always slightly better at fiddling with things for value.</p>
-          <p class="soul-card-cosmic">Systematic, balanced, eventual. Acquisition that gathers power slowly.</p>
-          <div class="soul-card-mech">
-            <div class="scm-row"><span class="scm-key">Boost</span><span class="scm-val">DEX +1, WIS +1</span></div>
-            <div class="scm-row"><span class="scm-key">Imprint</span><span class="scm-val">Tinker, Riddlecraft</span></div>
-            <div class="scm-row"><span class="scm-key">Active</span><span class="scm-val">Jackpot Pull</span></div>
-            <div class="scm-row scm-warn"><span class="scm-key">Drawback</span><span class="scm-val">Loot Itch</span></div>
-          </div>
-        </button>
-
-        <button type="button" class="soul-card" data-soul="mirror" role="radio" aria-checked="false"
-                style="--soul-accent: #534AB7;">
-          <div class="soul-card-rune" aria-hidden="true">
-            <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="20" cy="20" r="14" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".55"/>
-              <path d="M20 8 Q26 14 26 20 Q26 26 20 32 Q14 26 14 20 Q14 14 20 8 Z"
-                    fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
-              <path d="M20 8 V32" stroke="currentColor" stroke-width="0.8" stroke-dasharray="2 2" opacity=".7"/>
-              <circle cx="20" cy="20" r="2.4" fill="currentColor" fill-opacity=".7"/>
-            </svg>
-          </div>
-          <div class="soul-card-head">
-            <div class="soul-card-sin">Envy</div>
-            <div class="soul-card-name">Mirror</div>
-            <div class="soul-card-tag">Adaptation</div>
-          </div>
-          <p class="soul-card-subtitle">Reads danger patterns; takes the form of what hurt them.</p>
-          <p class="soul-card-cosmic">Wild, self-first, rhythmic. Mimicry that adapts to threat.</p>
-          <div class="soul-card-mech">
-            <div class="scm-row"><span class="scm-key">Boost</span><span class="scm-val">INT +1, WIS +1</span></div>
-            <div class="scm-row"><span class="scm-key">Imprint</span><span class="scm-val">Stillsense, Godsight</span></div>
-            <div class="scm-row"><span class="scm-key">Active</span><span class="scm-val">Reflected Strike</span></div>
-            <div class="scm-row scm-warn"><span class="scm-key">Drawback</span><span class="scm-val">cold-task penalty</span></div>
-          </div>
-        </button>
-
-      </div>
-
-      <div class="soul-clear-row">
-        <button type="button" id="soulClearBtn" class="soul-clear-btn" aria-label="Clear Soul Index choice">
-          Clear choice
-        </button>
-        <span class="soul-current-tag" id="soulCurrentTag">No Soul Index picked. Mandala shows raw race baseline.</span>
+      <div class="race-dist-grid" id="raceDistGrid" role="list">
+        <!-- 5 cards rendered by renderRaceDistribution() -->
       </div>
     </section>
 
@@ -7067,6 +7102,122 @@ function refreshBodyLegacy() {
   `).join('');
 }
 
+// ═══ RACE DISTRIBUTION DATA (Soul tab — what each race gets) ═══
+// Read-only display matched to BODY_LEGACY canon.
+// Augmented = choice (feather OR skill points). Construct = pure skill points.
+
+const RACE_DISTRIBUTION = [
+  {
+    id: 'mortal',
+    name: 'Inheritor',
+    bodyTag: 'HUM',
+    accent: '#c99c5a',
+    bonuses: [
+      { type: 'feather', kind: 'harmony', label: '+1 Harmony', sub: 'Pure-soul reservoir' }
+    ],
+    note: 'No raw skill bumps &mdash; the unblemished returnee&#39;s value is moral-flexibility, not stat-floor.'
+  },
+  {
+    id: 'augmented',
+    name: 'Augmented',
+    bodyTag: 'CYB',
+    accent: '#52b8a8',
+    isChoice: true,
+    bonuses: [
+      { type: 'feather', kind: 'any', label: '+1 Feather', sub: 'choose Chaos or Harmony' },
+      { type: 'or' },
+      { type: 'skill', label: '+1 STR · +1 Systems', sub: 'two raw axis bumps' }
+    ],
+    note: 'You chose your grafts; you choose your bonus. Moral lever, or technical lift.'
+  },
+  {
+    id: 'construct',
+    name: 'Construct',
+    bodyTag: 'SYN',
+    accent: '#185fa5',
+    bonuses: [
+      { type: 'skill', label: '+2 Systems', sub: 'INT axis (the I.C.A.R.U.S. anchor)' },
+      { type: 'skill', label: '+1 STR', sub: 'STR axis (chassis-bulk)' }
+    ],
+    note: 'No soul, no Lucifer-leash, no feather. Pragmatic skill points instead &mdash; specialist over moral-axis.'
+  },
+  {
+    id: 'cindered',
+    name: 'Cindered',
+    bodyTag: 'HUM × HELL',
+    accent: '#A32D2D',
+    bonuses: [
+      { type: 'feather', kind: 'chaos', label: '+1 Chaos', sub: 'Black Feather Pin' }
+    ],
+    note: 'Sin-form pinned by Lucifer&#39;s feather. The Chaos counter starts one tick higher than baseline.'
+  },
+  {
+    id: 'hellforged',
+    name: 'Hellforged',
+    bodyTag: 'SYN × HELL',
+    accent: '#534AB7',
+    bonuses: [
+      { type: 'feather', kind: 'chaos', label: '+1 Chaos', sub: 'Black Feather Leash' }
+    ],
+    note: 'Soul-chassis sync held by Lucifer&#39;s feather. The Chaos counter starts one tick higher than baseline.'
+  }
+];
+
+// Mini icons (inline SVG strings) for the distribution cards
+const RD_ICON_HARMONY = `
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M16 3 C13 4 11 6 9 9 C7.5 11 7 14 7 17 L6 19 L7 19.5 L7.8 18 C9.8 17.8 11.5 17 13 15.5 C15.5 13 16.5 10 16.5 7 L16.5 3.5 Z"
+          fill="currentColor" fill-opacity=".25" stroke="currentColor" stroke-width="0.7" stroke-linejoin="round"/>
+    <path d="M16 3.5 L8 16.5" stroke="currentColor" stroke-width="0.5" opacity=".75"/>
+  </svg>`;
+const RD_ICON_CHAOS = RD_ICON_HARMONY; // Same feather glyph, different fill via --rd-bonus-color
+
+// Generic skill icon — small chevron-stack
+const RD_ICON_SKILL = `
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M5 13 L12 7 L19 13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M5 18 L12 12 L19 18" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity=".55"/>
+  </svg>`;
+
+// ── Render the all-races distribution grid.
+function renderRaceDistribution() {
+  const grid = document.getElementById('raceDistGrid');
+  if (!grid) return;
+  const active = currentRaceId;
+  grid.innerHTML = RACE_DISTRIBUTION.map(r => {
+    const isActive = (r.id === active);
+    const bonusesHtml = r.bonuses.map(b => {
+      if (b.type === 'or') {
+        return '<div class="rd-bonus-or">— or —</div>';
+      }
+      let icon = RD_ICON_SKILL;
+      let color = r.accent;
+      if (b.type === 'feather') {
+        icon = RD_ICON_HARMONY;
+        color = b.kind === 'chaos' ? '#9a7acc' : (b.kind === 'harmony' ? '#f5d68a' : '#d8b86a');
+      }
+      return `
+        <div class="rd-bonus" style="--rd-bonus-color: ${color};">
+          <div class="rd-bonus-icon">${icon}</div>
+          <div class="rd-bonus-text">${b.label}<small>${b.sub}</small></div>
+        </div>
+      `;
+    }).join('');
+    return `
+      <div class="rd-card${isActive ? ' is-active' : ''}" role="listitem"
+           data-race="${r.id}"
+           style="--rd-accent: ${r.accent};">
+        <div class="rd-card-header">
+          <div class="rd-card-name">${r.name}</div>
+          <div class="rd-card-bodytag">${r.bodyTag}</div>
+        </div>
+        <div class="rd-bonus-list">${bonusesHtml}</div>
+        <div class="rd-card-note">${r.note}</div>
+      </div>
+    `;
+  }).join('');
+}
+
 // ═══ HARMONY DATA (HL Ladder, Minor Tier Menu, HU Bands) ═══
 
 const HL_LADDER = [
@@ -7371,9 +7522,10 @@ if (document.readyState === 'loading') {
   initCadenceMeters();
 }
 
-// ── Top-level Layer-2 refresh: body-legacy + mandala + legend + context + dispatch.
+// ── Top-level Layer-2 refresh: body-legacy + race-distribution + mandala + legend + context + dispatch.
 function refreshSoulLayer() {
   refreshBodyLegacy();
+  renderRaceDistribution();
   const profile = getActiveProfile();
   const wrap = document.getElementById('mandalaSvgWrap');
   const legend = document.getElementById('mandalaLegend');
