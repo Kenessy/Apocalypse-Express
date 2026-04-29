@@ -707,6 +707,29 @@ body {
   line-height: 1.65;
 }
 
+/* Wide cinematic banner — used by legacy entries that opt in via iconImage
+   (currently Lucifer's Domain). Sits at the top of the legacy race-card
+   above the eyebrow. 16:9 aspect, full-width, gold-trimmed. */
+.race-banner {
+  width: 100%;
+  margin: 0 0 22px;
+  border-radius: var(--r-card);
+  overflow: hidden;
+  border: 0.5px solid color-mix(in srgb, var(--ember) 38%, rgba(201,156,90,.18));
+  box-shadow:
+    0 12px 36px rgba(0,0,0,.42),
+    0 0 28px color-mix(in srgb, var(--ember) 14%, transparent),
+    0 0 0 0.5px rgba(0,0,0,.30);
+  background: #07070a;
+}
+.race-banner img {
+  width: 100%;
+  height: auto;
+  display: block;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: high-quality;
+}
+
 /* ───────── RICH RACE-CARD LAYOUT (Inheritor-first, reusable for other races) ───────── */
 
 /* The icon library sits in a hidden SVG host at body root. Hide it visually but
@@ -4920,14 +4943,16 @@ const RACES = {
   },
 
   hell: {
-    eyebrow: 'Masked pole · NPC zone',
+    eyebrow: 'Pure hellfire pole · NPC only',
+    iconImage: 'img/races/hell/lucifer-domain-banner.png',
+    iconAlt:   "Lucifer's Domain — wide cinematic banner. Lucifer hooded on a hellfire-throne on the left, vertical column of pure hellfire splitting the canvas, mass of Dark Force horde-silhouettes erupting from the right. Four Hell-depth zone colors visible across the horizon: red Purgatory, green-rot Outer, cold-blue Deep, violet Pit.",
     title: "Lucifer's Domain",
-    subtitle: 'No man&#39;s land. Not a PC, not an ally. Only the Devil himself.',
-    body: 'This pole has <strong>no damned human soul</strong>. The beings who belong here are rift-spawned mindless demon hordes — what you&#39;ll meet on the rails as enemies. No character can be created here, because there&#39;s no soul-core for the game&#39;s emotional axes (Soul Index, Personality) to grip. <strong>You won&#39;t find allies here either:</strong> the Cindered and Hellforged races (both hellfire-touched) sit on the <em>edges</em>, not in the corner — Lucifer&#39;s black feather pulled them part of the way back toward humanity. The only <em>named</em> entity who belongs here is:',
-    role: '— · no PC can be placed here · enemy-encounter zone',
-    subs: 'Rift-spawned hordes (mindless, NPC) · the Wild Demon (occasional boss) · ' + '<strong style="color:#e6cfa1">Lucifer himself</strong> (otherworldly — your patron and unknowable backdrop).',
-    conflict: 'No internal conflict — pure Hell has no soul to wrestle with. That&#39;s why it can&#39;t be a PC.',
-    warning: '⚠ Information only — no character can be created here. The lone "someone" on this pole is Lucifer himself.'
+    subtitle: 'The pure hellfire pole. No life here. Two sources of darkness, one canvas.',
+    body: 'Hell sits below the world, and it has structure. <strong>Four depth zones</strong> burn at four different colors, deepening as the soul falls: <span style="color:#a32d2d">Purgatory red</span>, <span style="color:#3b6d11">Outer Hell green-rot</span>, <span style="color:#185fa5">Deep Hell cold-blue</span>, and <span style="color:#7c40b0">the Pit\'s violet hellfire</span> at the bottom. The deeper you fell, the more the flame at that depth could rewrite you. Inheritor souls returned marked. Cindered souls returned <em>remade</em>. Hellforged souls were torn back up and forced into chassis. Below the Pit there is nothing else. <strong>No life here.</strong> Only Lucifer and his unrestrained power, and the things that crawled up beside him during the apocalypse.<br><br>This pole carries <strong>two sources of darkness</strong>, and they are not the same. <strong style="color:#e6cfa1">Lucifer</strong> is the structured antagonist: the architect, the contract-holder, the deliberate weight on the scale. He owns every soul on his ledger, every black feather pinned into a Hellforged or Cindered, every contract printed in the Saloon and signed in the Sundown. He talks first, kills last. <strong style="color:#ff7b5c">The Dark Force</strong> is everything else: the wild demonic hordes that crawled up through the rifts during the divine apocalypse, are <em>not</em> on Lucifer\'s ledger, are <em>not</em> under his control, and serve only raw chaos. They are the bulk of the demonic enemies the party will meet on the train and at every station. They do not negotiate. Mistaking which is which is how you die wrong.',
+    role: 'NPC zone · no PC can be placed here · primary antagonist source for the campaign',
+    subs: '<strong style="color:#e6cfa1">Lucifer himself</strong> (the architect, contract-holder, the only being on his own ledger) · <strong style="color:#ff7b5c">The Dark Force</strong> (wild demonic hordes from the apocalypse rifts, no leash, no contract, pure chaos).',
+    conflict: 'No internal conflict to play with. Pure Hell has no soul to wrestle. That is why no character can live here, and why the pole is masked on the diagram.',
+    warning: '⚠ Information only. No character can be created here. The structured antagonist is Lucifer, the chaotic antagonist is The Dark Force. Both come from this pole. Neither serves the other.'
   }
 };
 
@@ -5044,7 +5069,13 @@ function renderRichRace(id, r) {
 // The legacy `Sub-types` meta row is dropped here because sub-types now render
 // in the dedicated third panel.
 function renderLegacyRace(r) {
+  // Optional wide banner above the title — used by Lucifer's Domain and
+  // any other legacy entry that opts in via iconImage.
+  const banner = r.iconImage
+    ? `<div class="race-banner"><img src="${r.iconImage}" alt="${r.iconAlt || (r.title + ' banner')}" loading="lazy" decoding="async"/></div>`
+    : '';
   let html = `
+    ${banner}
     <div class="race-eyebrow">${r.eyebrow}</div>
     <h2 class="race-title">${r.title}</h2>
     <p class="race-subtitle">${r.subtitle}</p>
@@ -5526,4 +5557,461 @@ document.querySelectorAll('.node-group').forEach(node => {
 
 // Pole-cards are click-proxies for the corresponding triangle node — clicking
 // the Mortal pole-card triggers the Mortal node, etc. Keyboard activation
-// mirrors the triangle nodes (Enter / Spa
+// mirrors the triangle nodes (Enter / Space).
+document.querySelectorAll('.pole-card[data-race-proxy]').forEach(card => {
+  const id = card.dataset.raceProxy;
+  card.addEventListener('click', () => selectRace(id));
+  card.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+      e.preventDefault();
+      selectRace(id);
+    }
+  });
+});
+
+// Initial state — auto-select Mortal/Inheritor so the page loads with content
+(function autoSelectInitial() {
+  const mortalNode = document.querySelector('.node-group[data-race="mortal"]');
+  if (!mortalNode) {
+    renderIntro();
+    return;
+  }
+  mortalNode.classList.add('selected');
+  if (bodyAxisSvg) bodyAxisSvg.classList.add('has-selection');
+  renderRace('mortal');
+})();
+
+// ═══════════════════════════════════════════════════════
+// LAYER 2 · SOUL + SKILL MANDALA
+// ═══════════════════════════════════════════════════════
+// Six collapsed mandala axes (one primary skill per ability). Order
+// matters: this drives the polygon point order (clockwise, starting
+// from top STR). Color values match the brief's c-* palette.
+const MANDALA_AXES = [
+  { key: 'STR', skill: 'Rigging',    code: 'RGG', color: '#993C1D', task: 'Heavy lift, salvage transport' },
+  { key: 'DEX', skill: 'Tinker',     code: 'TNK', color: '#0F6E56', task: 'Locks, fine repair, EOD' },
+  { key: 'CON', skill: 'Resilience', code: 'RES', color: '#3B6D11', task: 'Long watches, harsh-condition' },
+  { key: 'INT', skill: 'Systems',    code: 'SYS', color: '#534AB7', task: 'Hacking, machines, diagnostics' },
+  { key: 'WIS', skill: 'Riddlecraft',code: 'RDL', color: '#854F0B', task: 'Investigation, ciphers, contracts' },
+  { key: 'CHA', skill: 'Influence',  code: 'IFC', color: '#993556', task: 'Negotiation, command, persuasion' }
+];
+
+// ── Per-sub-type baselines (1..4) keyed by race id + sub-type name.
+// Mirrors the brief's table; cap-at-4 enforced visually by the renderer.
+const SUBTYPE_BASELINES = {
+  mortal: {
+    'Singed':       { STR: 2, DEX: 2, CON: 2, INT: 1, WIS: 2, CHA: 3 },
+    'Mossburned':   { STR: 2, DEX: 2, CON: 3, INT: 2, WIS: 3, CHA: 2 },
+    'Frostburned':  { STR: 1, DEX: 2, CON: 2, INT: 2, WIS: 4, CHA: 2 },
+    'Pit-Kissed':   { STR: 1, DEX: 2, CON: 2, INT: 2, WIS: 3, CHA: 3 }
+  },
+  hellforged: {
+    'Carnelian':    { STR: 4, DEX: 1, CON: 4, INT: 2, WIS: 2, CHA: 1 },
+    'Verdant':      { STR: 3, DEX: 2, CON: 4, INT: 2, WIS: 3, CHA: 1 },
+    'Azure':        { STR: 2, DEX: 2, CON: 2, INT: 4, WIS: 4, CHA: 1 },
+    'Amethyst':     { STR: 2, DEX: 3, CON: 2, INT: 3, WIS: 3, CHA: 1 }
+  },
+  augmented: {
+    'ATLAS':        { STR: 4, DEX: 1, CON: 4, INT: 2, WIS: 2, CHA: 2 },
+    'ARGUS':        { STR: 1, DEX: 2, CON: 4, INT: 4, WIS: 4, CHA: 2 },
+    'JANUS':        { STR: 1, DEX: 4, CON: 2, INT: 4, WIS: 2, CHA: 2 },
+    'WRAITH':       { STR: 1, DEX: 4, CON: 2, INT: 2, WIS: 4, CHA: 2 }
+  },
+  construct: {
+    'SABRE':        { STR: 4, DEX: 2, CON: 4, INT: 3, WIS: 2, CHA: 1 },
+    'MULE':         { STR: 4, DEX: 2, CON: 4, INT: 2, WIS: 2, CHA: 2 },
+    'PROBE':        { STR: 1, DEX: 3, CON: 3, INT: 4, WIS: 4, CHA: 1 },
+    'CIPHER':       { STR: 1, DEX: 3, CON: 2, INT: 4, WIS: 3, CHA: 1 }
+  },
+  cindered: {
+    'WRATH-FORGED': { STR: 4, DEX: 2, CON: 4, INT: 1, WIS: 2, CHA: 2 },
+    'PRIDE-BORN':   { STR: 3, DEX: 1, CON: 4, INT: 2, WIS: 3, CHA: 4 },
+    'MAW-BORN':     { STR: 2, DEX: 3, CON: 2, INT: 4, WIS: 3, CHA: 2 },
+    'MIRROR-BORN':  { STR: 2, DEX: 4, CON: 2, INT: 3, WIS: 4, CHA: 3 }
+  }
+};
+
+// ── Soul Index modifiers, mandala-axis form. Canon imprints map to
+// specific ability axes (Wrath: STR+CON, Pride: CHA+CHA stacks, Greed:
+// DEX+WIS, Envy: INT+WIS).
+const SOUL_INDEX_MODS = {
+  boiler: { STR: 1, CON: 1 },
+  crown:  { CHA: 2 },
+  maw:    { DEX: 1, WIS: 1 },
+  mirror: { INT: 1, WIS: 1 }
+};
+
+// ── Soul Index display copy (gem center + context line).
+const SOUL_INDEX_META = {
+  boiler: { name: 'Boiler',  sin: 'Wrath',  color: '#A32D2D' },
+  crown:  { name: 'Crown',   sin: 'Pride',  color: '#854F0B' },
+  maw:    { name: 'Maw',     sin: 'Greed',  color: '#3B6D11' },
+  mirror: { name: 'Mirror',  sin: 'Envy',   color: '#534AB7' }
+};
+
+// ── Race-keyed side-track defaults.
+const SIDETRACK_DEFAULTS = {
+  mortal:     { dark: 0, white: 0, atech: 0, hell: 0, oldworld: 3 },
+  hellforged: { dark: 1, white: 0, atech: 1, hell: 3, oldworld: 0 },
+  augmented:  { dark: 0, white: 0, atech: 2, hell: 0, oldworld: 1 },
+  construct:  { dark: 0, white: 0, atech: 3, hell: 0, oldworld: 0 },
+  cindered:   { dark: 1, white: 0, atech: 0, hell: 3, oldworld: 1 }
+};
+
+// ── Layer-2 mutable state.
+let currentSoulIndex = null;   // 'boiler' | 'crown' | 'maw' | 'mirror' | null
+let currentDisciplines = { MED: false, EOD: false, RCP: false };
+
+// ── Compute the active baseline from current Layer-1 selection.
+// Falls back to a flat 2/2/2/2/2/2 when no race + sub-type is picked.
+function getActiveBaseline() {
+  const flat = { STR: 2, DEX: 2, CON: 2, INT: 2, WIS: 2, CHA: 2 };
+  if (!currentRaceId || !currentSubs.length) return flat;
+  const sub = currentSubs[currentIndex];
+  if (!sub || !sub.name) return flat;
+  const raceMap = SUBTYPE_BASELINES[currentRaceId];
+  if (!raceMap) return flat;
+  return raceMap[sub.name] || flat;
+}
+
+// ── Compute final 6-axis profile = baseline + soul-index mod, capped at 4.
+function getActiveProfile() {
+  const base = getActiveBaseline();
+  const mod  = currentSoulIndex ? SOUL_INDEX_MODS[currentSoulIndex] : {};
+  const out  = {};
+  MANDALA_AXES.forEach(a => {
+    const k = a.key;
+    out[k] = Math.min(4, (base[k] || 0) + (mod[k] || 0));
+  });
+  return out;
+}
+
+// ── Render the mandala SVG. Center (340,240); level-4 radius 140.
+function renderSkillMandala(profile, soulIndex) {
+  const cx = 340, cy = 240;
+  const rMax = 140;            // radius for value 4
+  const rStep = rMax / 4;      // one ring per integer level
+  // Axis angles, top-clockwise: STR=top, DEX=top-right, CON=bottom-right,
+  // INT=bottom, WIS=bottom-left, CHA=top-left. -90deg = top.
+  const axisAngle = i => (-90 + i * 60) * Math.PI / 180;
+  const point = (i, r) => {
+    const a = axisAngle(i);
+    return [cx + Math.cos(a) * r, cy + Math.sin(a) * r];
+  };
+
+  // Concentric ring guides (4 levels). Hexagonal rings to match axis count.
+  let rings = '';
+  for (let lvl = 1; lvl <= 4; lvl++) {
+    const pts = MANDALA_AXES.map((_, i) => point(i, rStep * lvl).join(',')).join(' ');
+    const isMaxRing = lvl === 4;
+    rings += `<polygon points="${pts}"
+              fill="none"
+              stroke="${isMaxRing ? '#c99c5a' : 'rgba(201,156,90,.22)'}"
+              stroke-width="${isMaxRing ? 0.9 : 0.5}"
+              stroke-dasharray="${isMaxRing ? '' : '2 3'}" />`;
+  }
+
+  // Spokes from center to each level-4 vertex.
+  let spokes = '';
+  MANDALA_AXES.forEach((a, i) => {
+    const [x, y] = point(i, rMax + 6);
+    spokes += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}"
+                stroke="rgba(201,156,90,.30)" stroke-width="0.6"
+                stroke-dasharray="3 3" />`;
+  });
+
+  // Polygon fingerprint — single cathedral-amber stroke + 20% fill.
+  const profPts = MANDALA_AXES.map((a, i) => {
+    const v = Math.max(0, Math.min(4, profile[a.key] || 0));
+    const r = rStep * v;
+    return point(i, r).join(',');
+  }).join(' ');
+  const fingerprint = `
+    <polygon points="${profPts}"
+             fill="#BA7517" fill-opacity="0.20"
+             stroke="#854F0B" stroke-width="1.4" stroke-linejoin="round"
+             style="filter: drop-shadow(0 0 8px rgba(186,117,23,.35));" />`;
+
+  // Value dots at each axis vertex.
+  let valueDots = '';
+  MANDALA_AXES.forEach((a, i) => {
+    const v = Math.max(0, Math.min(4, profile[a.key] || 0));
+    if (v <= 0) return;
+    const [x, y] = point(i, rStep * v);
+    valueDots += `<circle cx="${x}" cy="${y}" r="3.6"
+                   fill="${a.color}" stroke="#e6cfa1" stroke-width="0.8"
+                   style="filter: drop-shadow(0 0 4px ${a.color}aa);"/>`;
+  });
+
+  // Axis labels (skill name, code, value pill) at level-4 + label offset.
+  let labels = '';
+  MANDALA_AXES.forEach((a, i) => {
+    const labelR = rMax + 50;
+    const [lx, ly] = point(i, labelR);
+    const v = profile[a.key] || 0;
+    const baseV = getActiveBaseline()[a.key] || 0;
+    const bonus = v - baseV;
+    // Anchor by angle: top -> middle, sides -> start/end.
+    const ang = -90 + i * 60;
+    let anchor = 'middle';
+    if (ang > -90 && ang < 90) anchor = 'start';
+    else if (ang > 90 || ang < -90) anchor = 'end';
+    // Adjust dy based on vertical position.
+    const dy = (i === 0) ? -10 : (i === 3) ? 18 : 4;
+    const bonusTspan = bonus > 0
+      ? ` <tspan fill="#ff7b5c">+${bonus}</tspan>`
+      : '';
+    labels += `
+      <g transform="translate(${lx}, ${ly + dy})">
+        <text text-anchor="${anchor}" font-family="'IBM Plex Mono', monospace"
+              font-size="12" font-weight="600" letter-spacing="0.10em"
+              fill="${a.color}">
+          ${a.skill.toUpperCase()}
+          <tspan fill="#b8b0c6" font-size="10" dx="4">${a.key}</tspan>
+        </text>
+        <text text-anchor="${anchor}" y="14"
+              font-family="'IBM Plex Mono', monospace"
+              font-size="11" fill="#e6cfa1" letter-spacing="0.04em">
+          ${a.code} · ${v}/4${bonusTspan}
+        </text>
+      </g>`;
+  });
+
+  // Center gem — glows the chosen Soul Index color, otherwise neutral gold.
+  const gemColor = soulIndex ? SOUL_INDEX_META[soulIndex].color : '#c99c5a';
+  const gemFillOpacity = soulIndex ? 0.85 : 0.35;
+  const gem = `
+    <g>
+      <circle cx="${cx}" cy="${cy}" r="22"
+              fill="none" stroke="#c99c5a" stroke-width="0.8" opacity="0.55"/>
+      <circle cx="${cx}" cy="${cy}" r="14"
+              fill="${gemColor}" fill-opacity="${gemFillOpacity}"
+              stroke="#e6cfa1" stroke-width="1.0"
+              style="filter: drop-shadow(0 0 12px ${gemColor}cc);"/>
+      <circle cx="${cx}" cy="${cy}" r="5"
+              fill="#fff5e0" fill-opacity="0.65"/>
+    </g>`;
+
+  // Corner saint-medallions (small busts via quatrefoil chrome).
+  const corners = `
+    <g opacity="0.55">
+      <use href="#orn-quatrefoil" x="20"  y="20"  width="28" height="28" color="#c99c5a"/>
+      <use href="#orn-quatrefoil" x="632" y="20"  width="28" height="28" color="#c99c5a"/>
+      <use href="#orn-quatrefoil" x="20"  y="482" width="28" height="28" color="#c99c5a"/>
+      <use href="#orn-quatrefoil" x="632" y="482" width="28" height="28" color="#c99c5a"/>
+    </g>`;
+
+  return `
+    <svg viewBox="0 0 680 530" xmlns="http://www.w3.org/2000/svg"
+         role="img" aria-label="Skill mandala — ${MANDALA_AXES.map(a => a.key + ' ' + (profile[a.key]||0)).join(', ')}">
+      <defs>
+        <radialGradient id="mandalaBg" cx="50%" cy="50%" r="60%">
+          <stop offset="0%" stop-color="rgba(201,156,90,.06)"/>
+          <stop offset="100%" stop-color="transparent"/>
+        </radialGradient>
+      </defs>
+      <rect x="0" y="0" width="680" height="530" fill="url(#mandalaBg)"/>
+      ${corners}
+      ${rings}
+      ${spokes}
+      ${fingerprint}
+      ${valueDots}
+      ${gem}
+      ${labels}
+    </svg>`;
+}
+
+// ── Render the per-axis legend column to the right of the mandala.
+function renderMandalaLegend(profile) {
+  const baseline = getActiveBaseline();
+  return MANDALA_AXES.map(a => {
+    const v = profile[a.key] || 0;
+    const baseV = baseline[a.key] || 0;
+    const bonus = v - baseV;
+    const bonusFrag = bonus > 0 ? `<span class="mleg-bonus">+${bonus}</span>` : '';
+    return `
+      <div class="mleg-row">
+        <span class="mleg-dot" style="background: ${a.color};"></span>
+        <span class="mleg-name">${a.skill} <small style="opacity:.6">(${a.key})</small>${bonusFrag}</span>
+        <span class="mleg-num">${v}/4</span>
+      </div>`;
+  }).join('');
+}
+
+// ── Update the soul-index-context line above the mandala.
+function renderMandalaContext() {
+  const raceLabel = (() => {
+    if (!currentRaceId || !currentSubs.length) return 'No race selected';
+    const r = RACES[currentRaceId];
+    const sub = currentSubs[currentIndex];
+    const raceName = r ? (r.title || currentRaceId) : currentRaceId;
+    const subName  = sub && sub.name ? sub.name : '';
+    return subName ? `${raceName} · ${subName}` : raceName;
+  })();
+  const soulLabel = currentSoulIndex
+    ? `${SOUL_INDEX_META[currentSoulIndex].name} (${SOUL_INDEX_META[currentSoulIndex].sin})`
+    : 'None picked';
+  const mctxRace = document.getElementById('mctxRace');
+  const mctxSoul = document.getElementById('mctxSoul');
+  if (mctxRace) mctxRace.textContent = raceLabel;
+  if (mctxSoul) mctxSoul.textContent = soulLabel;
+}
+
+// ── Render side-track pip strips. `track` keys: dark, white (5 pips),
+// atech, hell, oldworld (3 pips).
+function renderSideTrackPips() {
+  const defaults = currentRaceId
+    ? (SIDETRACK_DEFAULTS[currentRaceId] || { dark:0, white:0, atech:0, hell:0, oldworld:0 })
+    : { dark:0, white:0, atech:0, hell:0, oldworld:0 };
+
+  const tracks = [
+    { id: 'darkFeatherPips',     noteId: 'darkFeatherNote',     val: defaults.dark,     max: 5 },
+    { id: 'whiteFeatherPips',    noteId: 'whiteFeatherNote',    val: defaults.white,    max: 5 },
+    { id: 'atechBondPips',       noteId: 'atechBondNote',       val: defaults.atech,    max: 3 },
+    { id: 'hellBondPips',        noteId: 'hellBondNote',        val: defaults.hell,     max: 3 },
+    { id: 'oldworldBondPips',    noteId: 'oldworldBondNote',    val: defaults.oldworld, max: 3 }
+  ];
+
+  tracks.forEach(t => {
+    const el   = document.getElementById(t.id);
+    const note = document.getElementById(t.noteId);
+    if (!el) return;
+    let html = '';
+    for (let i = 0; i < t.max; i++) {
+      html += `<span class="pip${i < t.val ? ' is-on' : ''}"></span>`;
+    }
+    el.innerHTML = html;
+    if (note) note.textContent = `${t.val} / ${t.max}`;
+  });
+}
+
+// ── Compute dispatch summary (Send for / Avoid). 3+ → strong, 1 → weak.
+function renderDispatchSummary() {
+  const profile = getActiveProfile();
+  const sendEl  = document.getElementById('dispatchSendTags');
+  const avoidEl = document.getElementById('dispatchAvoidTags');
+  if (!sendEl || !avoidEl) return;
+
+  if (!currentRaceId) {
+    sendEl.innerHTML  = '<span class="db-empty">No race selected.</span>';
+    avoidEl.innerHTML = '<span class="db-empty">No race selected.</span>';
+    return;
+  }
+
+  const ranked = MANDALA_AXES.slice().sort((a, b) => (profile[b.key]||0) - (profile[a.key]||0));
+  const send  = ranked.filter(a => (profile[a.key]||0) >= 3).slice(0, 3);
+  const avoid = ranked.filter(a => (profile[a.key]||0) <= 1).slice(-2);
+
+  sendEl.innerHTML = send.length
+    ? send.map(a => `<span class="db-tag">${a.task}</span>`).join('')
+    : '<span class="db-empty">Balanced profile, no standout strengths.</span>';
+  avoidEl.innerHTML = avoid.length
+    ? avoid.map(a => `<span class="db-tag">${a.task}</span>`).join('')
+    : '<span class="db-empty">No clear weaknesses.</span>';
+}
+
+// ── Top-level Layer-2 refresh: mandala + legend + context + dispatch.
+function refreshSoulLayer() {
+  const profile = getActiveProfile();
+  const wrap = document.getElementById('mandalaSvgWrap');
+  const legend = document.getElementById('mandalaLegend');
+  if (wrap) wrap.innerHTML = renderSkillMandala(profile, currentSoulIndex);
+  if (legend) legend.innerHTML = renderMandalaLegend(profile);
+  renderMandalaContext();
+  renderDispatchSummary();
+  // Update "current soul" tag near the picker.
+  const tag = document.getElementById('soulCurrentTag');
+  if (tag) {
+    tag.textContent = currentSoulIndex
+      ? `Active: ${SOUL_INDEX_META[currentSoulIndex].name}, ${SOUL_INDEX_META[currentSoulIndex].sin}.`
+      : 'No Soul Index picked. Mandala shows raw race baseline.';
+  }
+  // Update card selected states.
+  document.querySelectorAll('.soul-card').forEach(card => {
+    const isSel = card.dataset.soul === currentSoulIndex;
+    card.classList.toggle('is-selected', isSel);
+    card.setAttribute('aria-checked', isSel ? 'true' : 'false');
+  });
+}
+
+// ── Soul card click/keyboard handlers.
+(function bindSoulCards() {
+  const grid = document.getElementById('soulCardGrid');
+  if (!grid) return;
+  grid.addEventListener('click', e => {
+    const card = e.target.closest('.soul-card');
+    if (!card) return;
+    const id = card.dataset.soul;
+    if (!id) return;
+    // Toggle: clicking the active card clears it.
+    currentSoulIndex = (currentSoulIndex === id) ? null : id;
+    refreshSoulLayer();
+  });
+  // Keyboard activation (Enter / Space) — buttons handle this natively, but
+  // ensure aria-checked syncing on change.
+})();
+
+// ── Clear button.
+(function bindSoulClear() {
+  const btn = document.getElementById('soulClearBtn');
+  if (!btn) return;
+  btn.addEventListener('click', () => {
+    currentSoulIndex = null;
+    refreshSoulLayer();
+  });
+})();
+
+// ── Discipline pill toggles.
+(function bindDisciplines() {
+  document.querySelectorAll('.discipline-pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      const code = pill.dataset.disc;
+      currentDisciplines[code] = !currentDisciplines[code];
+      pill.setAttribute('aria-pressed', currentDisciplines[code] ? 'true' : 'false');
+    });
+  });
+})();
+
+// ── Hook into Layer-1 state changes so the Soul tab stays in sync.
+// Wrap selectRace + setActiveSubraceIndex without breaking their existing
+// behavior (the new wrappers call the old functions, then ping Layer 2).
+(function hookLayer1Changes() {
+  const _selectRace = selectRace;
+  selectRace = function(id) {
+    _selectRace(id);
+    refreshSoulLayer();
+    renderSideTrackPips();
+  };
+  const _setActiveSubraceIndex = setActiveSubraceIndex;
+  setActiveSubraceIndex = function(nextIndex, animate) {
+    _setActiveSubraceIndex(nextIndex, animate);
+    refreshSoulLayer();
+    // Side-tracks depend on race only, not sub-type — skip that one here.
+  };
+})();
+
+// Initial paint of Layer 2 (using whichever race autoSelect picked).
+refreshSoulLayer();
+renderSideTrackPips();
+
+// ═══════════════════════════════════════════════════════
+// TAB SWITCHING
+// ═══════════════════════════════════════════════════════
+document.getElementById('tabNav').addEventListener('click', e => {
+  const t = e.target.closest('.tab');
+  if (!t || t.classList.contains('disabled')) return;
+  const tabId = t.dataset.tab;
+  document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+  t.classList.add('active');
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-' + tabId).classList.add('active');
+  // Re-paint Layer 2 when it becomes visible — it depends on Layer 1 state.
+  if (tabId === 'lelek') {
+    refreshSoulLayer();
+    renderSideTrackPips();
+  }
+});
+</script>
+
+</body>
+</html>
