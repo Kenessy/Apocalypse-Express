@@ -7954,6 +7954,118 @@ function renderFactionAffiliation() {
   hostile.innerHTML = `<div class="fa-hostile-grid">${hostileHtml}</div>`;
 }
 
+// ═══ SUB-TYPE ARCHETYPE BONUS DATA (RGBP → axis, purple → bespoke unique) ═══
+
+const ARCHETYPE_BONUS = {
+  offensive: { color: '#c46666', bonusLabel: '+1 Rigging',    bonusSub: 'STR axis &middot; heavy lift, salvage transport' },
+  defensive: { color: '#6abf8e', bonusLabel: '+1 Resilience', bonusSub: 'CON axis &middot; long watches, harsh-condition' },
+  science:   { color: '#5fa3d4', bonusLabel: '+1 Systems',    bonusSub: 'INT axis &middot; hacking, machines, diagnostics' },
+  unique:    { color: '#9a7acc', bonusLabel: 'Bespoke setup', bonusSub: 'tailored per race &mdash; see card detail' }
+};
+
+const PURPLE_UNIQUES = {
+  mortal: {
+    bonusLabel: '+1 Tinker OR +1 Influence',
+    bonusSub: 'DEX or CHA axis &middot; player choice',
+    flavor: 'The Pit&#39;s violet kiss left an unfixed shape &mdash; pick where the kiss landed: precise hands or persuasive voice.',
+    tbd: false,
+    isChoice: true
+  },
+  augmented: {
+    bonusLabel: '+1 Influence OR +1 Riddlecraft',
+    bonusSub: 'CHA or WIS axis &middot; player choice',
+    flavor: 'The frame T.A.L.O.S. will not admit it shipped &mdash; off-label intel-frame. Pick where the listening lands: silver-tongue or cipher-eye.',
+    tbd: false,
+    isChoice: true
+  },
+  construct: {
+    bonusLabel: '+1 Riddlecraft',
+    bonusSub: 'WIS axis &middot; locked, no choice',
+    flavor: 'Off-spec aSync-legacy heretic. The half-biotic chassis the digital void can reach when no other Construct hears.',
+    tbd: false,
+    isChoice: false
+  },
+  cindered: {
+    bonusLabel: '+1 Riddlecraft OR +1 Tinker',
+    bonusSub: 'WIS or DEX axis &middot; player choice',
+    flavor: 'Envy-poured in Pit violet hellfire. The body took the shape of what hurt last &mdash; either a head for the pattern, or hands for the lock.',
+    tbd: false,
+    isChoice: true
+  },
+  hellforged: {
+    bonusLabel: '+1 Tinker OR +1 Riddlecraft',
+    bonusSub: 'DEX or WIS axis &middot; player choice',
+    flavor: 'Rogue lab variant &mdash; the chassis that found its own current. Two-face self-damage signature is the lore mechanic; here you pick the working hand.',
+    tbd: false,
+    isChoice: true
+  }
+};
+
+const AB_ICON_SKILL = `
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M5 13 L12 7 L19 13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M5 18 L12 12 L19 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" opacity=".55"/>
+  </svg>`;
+
+const AB_ICON_UNIQUE = `
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1" opacity=".55"/>
+    <path d="M12 4 Q16 8 16 12 Q16 16 12 20 Q8 16 8 12 Q8 8 12 4 Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+    <circle cx="12" cy="12" r="2" fill="currentColor" fill-opacity=".7"/>
+  </svg>`;
+
+function renderArchetypeBonus() {
+  const grid = document.getElementById('archetypeBonusGrid');
+  if (!grid) return;
+  if (!currentRaceId) {
+    grid.innerHTML = '<div class="cadence-stage-placeholder"><p>Pick a race in the Body tab to see your sub-type archetype bonuses here.</p></div>';
+    return;
+  }
+  const race = RACES[currentRaceId];
+  if (!race || !Array.isArray(race.subTypeRich)) {
+    grid.innerHTML = '<div class="cadence-stage-placeholder"><p>This race&#39;s sub-types use the legacy schema &mdash; archetype bonuses pending schema migration.</p></div>';
+    return;
+  }
+  const activeIdx = (typeof currentSubraceIndex === 'number') ? currentSubraceIndex : 0;
+  grid.innerHTML = race.subTypeRich.map((s, i) => {
+    const archetype = s.archetype || 'offensive';
+    const meta = ARCHETYPE_BONUS[archetype] || ARCHETYPE_BONUS.offensive;
+    const isActive = (i === activeIdx);
+    const isPurple = archetype === 'unique';
+    let bonusBlock;
+    if (isPurple) {
+      const unique = PURPLE_UNIQUES[currentRaceId] || {};
+      const choiceClass = unique.isChoice ? ' is-choice' : '';
+      bonusBlock = `
+        <div class="ab-bonus is-bespoke${choiceClass}">
+          <div class="ab-bonus-icon">${AB_ICON_UNIQUE}</div>
+          <div class="ab-bonus-text">${unique.bonusLabel || 'Bespoke setup'}<small>${unique.bonusSub || 'tailored to this race'}</small></div>
+        </div>
+        ${unique.flavor ? `<div class="ab-card-flavor">${unique.flavor}</div>` : ''}
+        ${unique.tbd ? '<div class="ab-card-tbd">Draft &middot; refining per race</div>' : ''}
+      `;
+    } else {
+      bonusBlock = `
+        <div class="ab-bonus">
+          <div class="ab-bonus-icon">${AB_ICON_SKILL}</div>
+          <div class="ab-bonus-text">${meta.bonusLabel}<small>${meta.bonusSub}</small></div>
+        </div>
+      `;
+    }
+    return `
+      <div class="ab-card${isActive ? ' is-active' : ''}" role="listitem"
+           data-subtype="${s.name}" data-archetype="${archetype}"
+           style="--ab-accent: ${meta.color};">
+        <div class="ab-card-header">
+          <div class="ab-card-name">${s.name}</div>
+          <div class="ab-card-archetype">${archetype}</div>
+        </div>
+        ${bonusBlock}
+      </div>
+    `;
+  }).join('');
+}
+
 // ═══ HARMONY DATA (HL Ladder, Minor Tier Menu, HU Bands) ═══
 
 const HL_LADDER = [
