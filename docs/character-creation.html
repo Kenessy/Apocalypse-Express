@@ -2030,6 +2030,326 @@ body {
   .mt-pips { gap: 4px; }
 }
 
+/* ═══════════════════════════════════════════════════════
+   CHAOS & HARMONY (Cadence) tab — reference / mechanics primer
+   ═══════════════════════════════════════════════════════ */
+
+/* The reference-tab style — visually distinguish it from numbered chargen tabs */
+.tab.tab-reference .num {
+  font-size: 16px;
+  font-weight: 700;
+  font-family: 'Cinzel', serif;
+  color: var(--gold2);
+  opacity: .85;
+}
+
+/* Cadence altarpiece outer container (mirror of body/soul altarpiece) */
+.cadence-altarpiece {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 26px 32px 36px;
+  position: relative;
+  isolation: isolate;
+  background:
+    linear-gradient(180deg, rgba(14,12,24,.94), rgba(14,12,24,.97)),
+    radial-gradient(900px 380px at 50% 0%, rgba(201,156,90,.05), transparent 70%),
+    url('img/panel-bg-deep.png') center/cover no-repeat;
+  border: 0.5px solid rgba(201,156,90,.30);
+  border-radius: var(--r-card);
+  box-shadow:
+    inset 0 0 0 0.5px rgba(201,156,90,.12),
+    0 12px 36px rgba(0,0,0,.55);
+}
+
+.cadence-title {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 28px;
+  letter-spacing: 0.14em;
+  color: var(--gold2);
+  margin: 4px 0 8px;
+  line-height: 1.2;
+}
+.cadence-lede {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.65;
+  letter-spacing: 0.005em;
+  opacity: .92;
+  max-width: 920px;
+}
+.cadence-lede strong { color: var(--gold2); font-weight: 600; }
+.cadence-lede em { color: color-mix(in srgb, var(--gold2) 70%, #f5d68a); font-style: italic; }
+
+.cadence-section-header {
+  margin-bottom: 18px;
+  max-width: 980px;
+}
+.cadence-section-title {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: 0.10em;
+  color: var(--gold2);
+  line-height: 1.2;
+  margin: 4px 0 8px;
+}
+.cadence-section-sub {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: var(--fs-body);
+  color: var(--muted);
+  line-height: 1.65;
+  letter-spacing: 0.005em;
+  opacity: .92;
+}
+.cadence-section-sub strong { color: var(--gold2); }
+
+/* Hero panel (stained-glass plate, like soul-picker) */
+.cadence-hero {
+  background:
+    linear-gradient(180deg, rgba(14,12,24,.88), rgba(14,12,24,.94)),
+    radial-gradient(620px 220px at 12% 0%, rgba(201,156,90,.06), transparent 70%),
+    radial-gradient(540px 220px at 92% 100%, rgba(255,123,92,.04), transparent 70%);
+  border: 0.5px solid rgba(201,156,90,.30);
+  border-radius: var(--r-card);
+  padding: 26px 30px 28px;
+  box-shadow:
+    inset 0 0 0 0.5px rgba(201,156,90,.12),
+    0 8px 28px rgba(0,0,0,.45);
+}
+
+/* Two-scales side-by-side */
+.cadence-two-scales {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin: 8px 0 24px;
+}
+@media (max-width: 900px) {
+  .cadence-two-scales { grid-template-columns: 1fr; gap: 18px; }
+}
+
+.cadence-scale {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.012), rgba(0,0,0,.22));
+  border: 0.5px solid rgba(201,156,90,.20);
+  border-radius: 10px;
+  padding: 18px 20px 20px;
+}
+.cadence-scale-harmony {
+  border-left: 2px solid #d8b86a;
+}
+.cadence-scale-chaos {
+  border-left: 2px solid #4a3358;
+}
+
+.cadence-scale-head {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 14px;
+}
+.cadence-scale-eyebrow {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold2);
+}
+.cadence-scale-harmony .cadence-scale-eyebrow {
+  color: color-mix(in srgb, #f5d68a 75%, var(--gold2));
+}
+.cadence-scale-chaos .cadence-scale-eyebrow {
+  color: color-mix(in srgb, #c46666 75%, var(--gold2));
+}
+.cadence-scale-cap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--muted);
+  opacity: .82;
+}
+.cadence-scale-cap strong {
+  color: var(--gold2);
+  font-weight: 600;
+}
+
+/* The 10-pip meter */
+.cadence-scale-meter {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 4px;
+  margin-bottom: 16px;
+}
+.cadence-meter-pip {
+  height: 22px;
+  border-radius: 3px;
+  background: rgba(255,255,255,.04);
+  border: 0.5px solid rgba(201,156,90,.18);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--muted);
+  opacity: .35;
+  letter-spacing: 0;
+  transition: opacity .15s ease, background .15s ease;
+}
+.cadence-meter-pip.is-unlocked {
+  opacity: .92;
+}
+.cadence-scale-harmony .cadence-meter-pip.is-unlocked {
+  background: linear-gradient(180deg, rgba(216,184,106,.32), rgba(216,184,106,.10));
+  border-color: rgba(216,184,106,.55);
+  color: #f5d68a;
+  box-shadow: 0 0 8px rgba(216,184,106,.25);
+}
+.cadence-scale-chaos .cadence-meter-pip.is-unlocked {
+  background: linear-gradient(180deg, rgba(74,51,88,.55), rgba(74,51,88,.20));
+  border-color: rgba(83,74,183,.55);
+  color: #d4baff;
+  box-shadow: 0 0 8px rgba(83,74,183,.30);
+}
+.cadence-meter-pip.is-cap-edge {
+  outline: 1px dashed rgba(201,156,90,.55);
+  outline-offset: 1px;
+}
+
+.cadence-scale-foot {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.5;
+  letter-spacing: 0.005em;
+}
+.cadence-scale-extreme {
+  padding: 8px 10px;
+  border: 0.5px solid rgba(201,156,90,.15);
+  border-radius: 6px;
+  background: rgba(0,0,0,.18);
+  font-weight: 600;
+  color: var(--gold2);
+  font-size: 10px;
+  letter-spacing: 0.10em;
+}
+.cadence-scale-extreme span {
+  display: block;
+  margin-top: 4px;
+  font-weight: 400;
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 0.005em;
+  opacity: .82;
+}
+.cadence-scale-extreme-high {
+  text-align: right;
+}
+
+/* Canto cap progression strip */
+.cadence-canto-strip {
+  margin-top: 12px;
+  padding: 14px 16px 16px;
+  border: 0.5px solid rgba(201,156,90,.18);
+  border-radius: 8px;
+  background: rgba(0,0,0,.20);
+}
+.cadence-canto-strip-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold2);
+  opacity: .85;
+  margin-bottom: 10px;
+}
+.cadence-canto-row {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 4px;
+}
+@media (max-width: 900px) {
+  .cadence-canto-row { grid-template-columns: repeat(5, 1fr); gap: 6px; }
+}
+.cadence-canto-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 4px 9px;
+  background: rgba(255,255,255,.025);
+  border: 0.5px solid rgba(201,156,90,.15);
+  border-radius: 5px;
+  text-align: center;
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.3;
+  letter-spacing: 0.005em;
+  opacity: .65;
+  transition: opacity .15s ease, background .15s ease;
+}
+.cadence-canto-cell.is-current {
+  opacity: 1;
+  background: linear-gradient(180deg, rgba(201,156,90,.18), rgba(201,156,90,.05));
+  border-color: rgba(201,156,90,.55);
+  box-shadow: 0 0 10px rgba(201,156,90,.20);
+}
+.cadence-canto-cell-final {
+  border-color: rgba(83,74,183,.40);
+  background: linear-gradient(180deg, rgba(83,74,183,.10), rgba(83,74,183,.02));
+}
+.ccc-canto {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.10em;
+  color: var(--gold2);
+}
+.ccc-cap {
+  font-size: 18px;
+  font-weight: 700;
+  color: #f5d68a;
+}
+.ccc-name {
+  font-size: 9px;
+  letter-spacing: 0.005em;
+  color: var(--muted);
+  opacity: .85;
+}
+.cadence-canto-strip-note {
+  margin-top: 12px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.55;
+  opacity: .75;
+}
+.cadence-canto-strip-note em { color: var(--gold2); font-style: italic; }
+
+/* Stage placeholder (stages 2-5 incoming) */
+.cadence-stage-placeholder {
+  padding: 18px 24px;
+  border: 0.5px dashed rgba(201,156,90,.25);
+  border-radius: 8px;
+  background: rgba(255,255,255,.012);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+  opacity: .80;
+  text-align: center;
+}
+
 /* ── Soul picker section panel (stained-glass plate) ── */
 .soul-picker,
 .skill-mandala-panel,
@@ -3316,6 +3636,7 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
   <button class="tab" data-tab="lelek"><span class="num">2</span>Soul</button>
   <button class="tab disabled" data-tab="szem"><span class="num">3</span>Personality</button>
   <button class="tab disabled" data-tab="vagon"><span class="num">4</span>Carriages</button>
+  <button class="tab tab-reference" data-tab="cadence"><span class="num">∞</span>Chaos &amp; Harmony</button>
 </nav>
 
 <main>
@@ -3842,6 +4163,104 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
     <p>The compatibility matrix between the crew (Body × Soul × Personality) and the train carriages (Engine / Archive / Galley / Bastion / Workshop / +). A coloured, weighted rail-graph shows who works best where.</p>
     <p class="badge">Coming soon</p>
   </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     TAB ∞ — CHAOS & HARMONY (Reference / Mechanics primer)
+     ═══════════════════════════════════════════════════════
+     Not a chargen step — a reference page explaining the
+     two-scale Cadence system. Sourced from the canon:
+     Database/20_Rules/(Rule) Chaos and Harmony.md (v2.9 final).
+     Player-facing infographic: Two Scales hero, CL Ladder,
+     Master Chaos Table, HL milestones, Devil's Mercy, race
+     interactions, edge cases. Built in 6 stages. -->
+<section class="tab-panel" id="tab-cadence">
+
+  <div class="cadence-altarpiece">
+
+    <!-- Layer header -->
+    <div class="layer-header">
+      <div class="bi-eyebrow cath-eyebrow">
+        <span class="ce-orn" aria-hidden="true"><svg><use href="#orn-arch-small"/></svg></span>
+        Reference · the cosmic scales beneath every roll
+      </div>
+      <h2 class="cadence-title">Chaos &amp; Harmony</h2>
+      <p class="cadence-lede">
+        Two scales, both running 1&ndash;10. <strong>Harmony</strong> is what you build by walking the line. <strong>Chaos</strong> is your <em>Lucifer cadence</em> &mdash; the dice that bend every roll a few degrees off true. The two meet at <strong>Devil&#39;s Mercy</strong>, the one shared lever between them. <em>Both scales widen as the campaign moves; you only ever play with the slice unlocked by the chapter you&#39;re in.</em>
+      </p>
+    </div>
+
+    <!-- ═══ HERO: TWO SCALES (side-by-side dual meter) ═══ -->
+    <section class="cadence-hero" aria-labelledby="twoScalesHeader">
+      <div class="cadence-section-header">
+        <div class="cath-eyebrow">
+          <span class="ce-orn" aria-hidden="true"><svg><use href="#orn-quatrefoil"/></svg></span>
+          The two scales · the cap grows
+        </div>
+        <h3 class="cadence-section-title" id="twoScalesHeader">Cadence at a glance</h3>
+        <p class="cadence-section-sub">Linear cap progression locked: Canto I starts at <strong>cap 2</strong>, ramping to <strong>cap 10</strong> by Canto X. The full 1&ndash;10 ladder is shown; the slice currently active is highlighted, the rest waits for later chapters.</p>
+      </div>
+
+      <div class="cadence-two-scales">
+
+        <!-- Harmony meter -->
+        <div class="cadence-scale cadence-scale-harmony" aria-label="Harmony Level scale, 1 to 10">
+          <div class="cadence-scale-head">
+            <div class="cadence-scale-eyebrow">⚖ Harmony Level</div>
+            <div class="cadence-scale-cap">Canto I cap · <strong>2</strong></div>
+          </div>
+          <div class="cadence-scale-meter" id="harmonyScaleMeter" data-cap="2">
+            <!-- 10 pip slots, populated by renderCadenceMeter('harmony') -->
+          </div>
+          <div class="cadence-scale-foot">
+            <div class="cadence-scale-extreme cadence-scale-extreme-low">HL 1<br><span>+1 Seal · HU-1 Courtesies</span></div>
+            <div class="cadence-scale-extreme cadence-scale-extreme-high">HL 10<br><span>Capstone: <em>Keep the Sway</em> or <em>Sever the Sway</em></span></div>
+          </div>
+        </div>
+
+        <!-- Chaos meter -->
+        <div class="cadence-scale cadence-scale-chaos" aria-label="Chaos Level scale, 1 to 10">
+          <div class="cadence-scale-head">
+            <div class="cadence-scale-eyebrow">🌀 Chaos Level</div>
+            <div class="cadence-scale-cap">Canto I cap · <strong>2</strong></div>
+          </div>
+          <div class="cadence-scale-meter" id="chaosScaleMeter" data-cap="2">
+            <!-- 10 pip slots, populated by renderCadenceMeter('chaos') -->
+          </div>
+          <div class="cadence-scale-foot">
+            <div class="cadence-scale-extreme cadence-scale-extreme-low">CL 1<br><span>2d4 + 7 &mdash; rows 9&ndash;15 (gentle swing)</span></div>
+            <div class="cadence-scale-extreme cadence-scale-extreme-high">CL 10<br><span>d10 + d12 &mdash; rows 2&ndash;22 (full table, ±high swing)</span></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Canto cap progression strip -->
+      <div class="cadence-canto-strip" aria-label="Cap progression by Canto">
+        <div class="cadence-canto-strip-label">Cap unlock by Canto · linear with future jumps TBD</div>
+        <div class="cadence-canto-row">
+          <div class="cadence-canto-cell is-current"><span class="ccc-canto">I</span><span class="ccc-cap">2</span><span class="ccc-name">The Gauntlet</span></div>
+          <div class="cadence-canto-cell"><span class="ccc-canto">II</span><span class="ccc-cap">3</span><span class="ccc-name">As Above so Below</span></div>
+          <div class="cadence-canto-cell"><span class="ccc-canto">III</span><span class="ccc-cap">4</span><span class="ccc-name">Mutated Jungle</span></div>
+          <div class="cadence-canto-cell"><span class="ccc-canto">IV</span><span class="ccc-cap">5</span><span class="ccc-name">Burning Bridges</span></div>
+          <div class="cadence-canto-cell"><span class="ccc-canto">V</span><span class="ccc-cap">6</span><span class="ccc-name">&mdash;</span></div>
+          <div class="cadence-canto-cell"><span class="ccc-canto">VI</span><span class="ccc-cap">7</span><span class="ccc-name">Drifting Away</span></div>
+          <div class="cadence-canto-cell"><span class="ccc-canto">VII</span><span class="ccc-cap">8</span><span class="ccc-name">The World Anchor</span></div>
+          <div class="cadence-canto-cell"><span class="ccc-canto">VIII</span><span class="ccc-cap">9</span><span class="ccc-name">To Hell and Back</span></div>
+          <div class="cadence-canto-cell"><span class="ccc-canto">IX</span><span class="ccc-cap">10</span><span class="ccc-name">Siege of DarkHold</span></div>
+          <div class="cadence-canto-cell cadence-canto-cell-final"><span class="ccc-canto">X</span><span class="ccc-cap">10</span><span class="ccc-name">Gambit for the 9th rank</span></div>
+        </div>
+        <div class="cadence-canto-strip-note"><em>The cap grows; the scale waits.</em> Some Cantos may carry double-jumps or hold steady &mdash; locked linear for now.</div>
+      </div>
+    </section>
+
+    <!-- More sections coming in stages 2-5 -->
+    <div class="cadence-stage-placeholder">
+      <p>More sections incoming &mdash; CL Ladder &amp; Master Chaos Table, HL Milestones &amp; Minor Tier Menu, Harmony Unlocks, Devil&#39;s Mercy, Race interactions, Edge cases.</p>
+    </div>
+
+  </div><!-- /.cadence-altarpiece -->
+
 </section>
 
 </main>
@@ -5954,6 +6373,36 @@ function refreshBodyLegacy() {
       </div>
     </div>
   `).join('');
+}
+
+// ── Render cadence meters (10-pip Harmony + Chaos scales).
+// data-cap on the parent element controls how many pips are "unlocked".
+function renderCadenceMeter(scaleId) {
+  const el = document.getElementById(scaleId);
+  if (!el) return;
+  const cap = parseInt(el.dataset.cap, 10) || 2;
+  let html = '';
+  for (let i = 1; i <= 10; i++) {
+    const isUnlocked = i <= cap;
+    const isCapEdge = i === cap;
+    const cls = ['cadence-meter-pip'];
+    if (isUnlocked) cls.push('is-unlocked');
+    if (isCapEdge) cls.push('is-cap-edge');
+    html += `<span class="${cls.join(' ')}" aria-label="Level ${i}${isUnlocked ? ' (unlocked)' : ' (locked, future Canto)'}">${i}</span>`;
+  }
+  el.innerHTML = html;
+}
+
+// ── Initial paint of cadence meters (called on page load).
+function initCadenceMeters() {
+  renderCadenceMeter('harmonyScaleMeter');
+  renderCadenceMeter('chaosScaleMeter');
+}
+// Fire once when the DOM is parsed.
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initCadenceMeters);
+} else {
+  initCadenceMeters();
 }
 
 // ── Top-level Layer-2 refresh: body-legacy + mandala + legend + context + dispatch.
