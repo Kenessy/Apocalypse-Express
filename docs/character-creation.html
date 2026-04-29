@@ -2336,6 +2336,316 @@ body {
 }
 .cadence-canto-strip-note em { color: var(--gold2); font-style: italic; }
 
+/* ═══ Stage 3: HL Milestone Ladder ═══ */
+.cadence-hl-ladder {
+  background:
+    linear-gradient(180deg, rgba(14,12,24,.88), rgba(14,12,24,.94)),
+    radial-gradient(620px 220px at 12% 0%, rgba(216,184,106,.06), transparent 70%);
+  border: 0.5px solid rgba(201,156,90,.30);
+  border-left: 2px solid #d8b86a;
+  border-radius: var(--r-card);
+  padding: 26px 30px 28px;
+  box-shadow:
+    inset 0 0 0 0.5px rgba(201,156,90,.12),
+    0 8px 28px rgba(0,0,0,.45);
+}
+.hl-ladder-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+}
+.hl-row {
+  display: grid;
+  grid-template-columns: 60px 110px 1fr 60px;
+  gap: 14px;
+  align-items: center;
+  padding: 12px 16px;
+  border: 0.5px solid rgba(201,156,90,.18);
+  border-radius: 6px;
+  background: linear-gradient(180deg, rgba(255,255,255,.012), rgba(0,0,0,.18));
+  position: relative;
+}
+@media (max-width: 720px) {
+  .hl-row { grid-template-columns: 50px 1fr 50px; gap: 10px; }
+  .hl-row-tier { display: none; }
+  .hl-row-effect { grid-column: 2; }
+}
+.hl-row.is-major {
+  border-left: 2px solid #d8b86a;
+  background: linear-gradient(180deg, rgba(216,184,106,.10), rgba(0,0,0,.20));
+}
+.hl-row.is-minor {
+  border-left: 2px solid rgba(216,184,106,.30);
+}
+.hl-row.is-capstone {
+  border-color: rgba(216,184,106,.55);
+  border-left: 2px solid #f5d68a;
+  background: linear-gradient(180deg, rgba(216,184,106,.18), rgba(83,74,183,.05));
+  box-shadow: 0 0 14px rgba(216,184,106,.20);
+}
+.hl-row-num {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: 0.10em;
+  color: var(--gold2);
+  text-align: center;
+}
+.hl-row-tier {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  text-align: left;
+  padding: 2px 8px;
+  border-radius: 999px;
+  display: inline-block;
+  font-weight: 600;
+  width: max-content;
+}
+.hl-row-tier.is-major-tier {
+  color: #f5d68a;
+  background: rgba(216,184,106,.18);
+  border: 0.5px solid rgba(216,184,106,.40);
+}
+.hl-row-tier.is-minor-tier {
+  color: #d8b86a;
+  background: rgba(216,184,106,.08);
+  border: 0.5px solid rgba(216,184,106,.20);
+}
+.hl-row-tier.is-capstone-tier {
+  color: #f5d68a;
+  background: linear-gradient(90deg, rgba(216,184,106,.20), rgba(83,74,183,.20));
+  border: 0.5px solid rgba(216,184,106,.55);
+}
+.hl-row-effect {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.55;
+  letter-spacing: 0.005em;
+}
+.hl-row-effect strong { color: var(--gold2); font-weight: 600; }
+.hl-row-effect em { color: color-mix(in srgb, #f5d68a 70%, var(--gold2)); font-style: italic; }
+.hl-row-cap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
+}
+.hl-row-cap-label {
+  font-size: 9px;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  opacity: .75;
+}
+.hl-row-cap-val {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: #f5d68a;
+}
+
+/* ═══ Stage 3: Minor Tier Menu ═══ */
+.cadence-minor-tier {
+  background:
+    linear-gradient(180deg, rgba(14,12,24,.88), rgba(14,12,24,.94)),
+    radial-gradient(620px 220px at 88% 0%, rgba(216,184,106,.05), transparent 70%);
+  border: 0.5px solid rgba(201,156,90,.30);
+  border-left: 2px solid #d8b86a;
+  border-radius: var(--r-card);
+  padding: 26px 30px 28px;
+  box-shadow:
+    inset 0 0 0 0.5px rgba(201,156,90,.12),
+    0 8px 28px rgba(0,0,0,.45);
+}
+.minor-tier-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-top: 8px;
+}
+@media (max-width: 1100px) {
+  .minor-tier-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .minor-tier-grid { grid-template-columns: 1fr; }
+}
+.mt-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px 18px 18px;
+  border: 0.5px solid rgba(201,156,90,.20);
+  border-left: 2px solid var(--mt-accent, #d8b86a);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.014), rgba(0,0,0,.22)),
+    radial-gradient(140% 100% at 0% 50%,
+      color-mix(in srgb, var(--mt-accent, #d8b86a) 8%, transparent),
+      transparent 70%);
+  position: relative;
+}
+.mt-card-header {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+.mt-card-num {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 22px;
+  color: var(--mt-accent, #d8b86a);
+  letter-spacing: 0.05em;
+  line-height: 1;
+}
+.mt-card-name {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.06em;
+  color: var(--gold2);
+  line-height: 1.2;
+  flex: 1;
+}
+.mt-card-unlock {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  padding: 2px 8px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--gold2);
+  background: rgba(0,0,0,.30);
+  border: 0.5px solid rgba(201,156,90,.30);
+  border-radius: 999px;
+}
+.mt-card-text {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+  letter-spacing: 0.005em;
+  opacity: .92;
+}
+.mt-card-text strong { color: var(--gold2); font-weight: 600; }
+.mt-card-text em { color: color-mix(in srgb, #f5d68a 70%, var(--gold2)); font-style: italic; }
+.mt-card-limits {
+  margin-top: 4px;
+  padding-top: 10px;
+  border-top: 0.5px dashed rgba(201,156,90,.18);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.005em;
+  line-height: 1.55;
+  opacity: .80;
+}
+.mt-card-limits strong {
+  color: color-mix(in srgb, var(--mt-accent, #d8b86a) 75%, var(--gold2));
+  font-weight: 600;
+}
+
+/* ═══ Stage 3: HU Bands ═══ */
+.cadence-hu-bands {
+  background:
+    linear-gradient(180deg, rgba(14,12,24,.88), rgba(14,12,24,.94)),
+    radial-gradient(620px 220px at 50% 0%, rgba(216,184,106,.05), transparent 70%);
+  border: 0.5px solid rgba(201,156,90,.30);
+  border-left: 2px solid #d8b86a;
+  border-radius: var(--r-card);
+  padding: 26px 30px 28px;
+  box-shadow:
+    inset 0 0 0 0.5px rgba(201,156,90,.12),
+    0 8px 28px rgba(0,0,0,.45);
+}
+.hu-bands-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-top: 8px;
+}
+@media (max-width: 1100px) {
+  .hu-bands-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .hu-bands-grid { grid-template-columns: 1fr; }
+}
+.hu-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px 16px 18px;
+  border: 0.5px solid rgba(201,156,90,.20);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.014), rgba(0,0,0,.22)),
+    radial-gradient(140% 100% at 50% 0%,
+      color-mix(in srgb, var(--hu-accent, #d8b86a) 12%, transparent),
+      transparent 60%);
+  position: relative;
+  border-top: 2px solid var(--hu-accent, #d8b86a);
+}
+.hu-card-band {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 0.10em;
+  color: var(--hu-accent, #d8b86a);
+  text-align: center;
+  padding-bottom: 4px;
+  border-bottom: 0.5px dashed rgba(201,156,90,.20);
+  margin-bottom: 4px;
+}
+.hu-card-name {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  color: var(--gold2);
+  text-align: center;
+}
+.hu-card-tagline {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.005em;
+  color: color-mix(in srgb, var(--hu-accent, #d8b86a) 70%, var(--muted));
+  text-align: center;
+  font-style: italic;
+  opacity: .92;
+}
+.hu-card-desc {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.55;
+  letter-spacing: 0.005em;
+  opacity: .92;
+}
+.hu-card-desc strong { color: var(--gold2); font-weight: 600; }
+.hu-card-limit {
+  margin-top: 4px;
+  padding: 6px 10px;
+  background: rgba(0,0,0,.25);
+  border: 0.5px solid rgba(201,156,90,.18);
+  border-radius: 4px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--gold2);
+  letter-spacing: 0.05em;
+  text-align: center;
+  font-weight: 600;
+}
+
 /* ═══ Stage 2: CL Ladder ═══ */
 .cadence-cl-ladder {
   background:
@@ -4590,6 +4900,57 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
       </div>
     </section>
 
+    <!-- ═══ SECTION 4: HL MILESTONE LADDER ═══ -->
+    <section class="cadence-hl-ladder" aria-labelledby="hlLadderHeader">
+      <div class="cadence-section-header">
+        <div class="cath-eyebrow">
+          <span class="ce-orn" aria-hidden="true"><svg><use href="#orn-arch-small"/></svg></span>
+          Harmony · the climb
+        </div>
+        <h3 class="cadence-section-title" id="hlLadderHeader">Milestone ladder</h3>
+        <p class="cadence-section-sub">
+          Earned by <strong>story milestones</strong>, not grinding. <strong>Major spikes</strong> at HL 1 / 3 / 5 / 7 / 9 unlock <strong>HU bands</strong> and grant <strong>+1 Seal</strong>. <strong>Minor tiers</strong> at HL 2 / 4 / 6 / 8 let you <strong>pick one</strong> from a menu that grows with each tier. <strong>HL 10</strong> is the capstone &mdash; a permanent choice between <em>Keep the Sway</em> and <em>Sever the Sway</em>.
+        </p>
+      </div>
+      <div class="hl-ladder-grid" id="hlLadderGrid">
+        <!-- 10 rows rendered by renderHlLadder() -->
+      </div>
+    </section>
+
+    <!-- ═══ SECTION 5: MINOR TIER MENU ═══ -->
+    <section class="cadence-minor-tier" aria-labelledby="minorTierHeader">
+      <div class="cadence-section-header">
+        <div class="cath-eyebrow">
+          <span class="ce-orn" aria-hidden="true"><svg><use href="#orn-quatrefoil"/></svg></span>
+          Harmony · pick one each minor tier
+        </div>
+        <h3 class="cadence-section-title" id="minorTierHeader">The six options</h3>
+        <p class="cadence-section-sub">
+          At each minor tier (HL 2 / 4 / 6 / 8) you choose <strong>one</strong> option. The menu grows: <strong>HL2</strong> can pick from ①&ndash;③, <strong>HL4</strong> from ①&ndash;④, <strong>HL6</strong> from ①&ndash;⑤, <strong>HL8</strong> from ①&ndash;⑥. <em>Devil&#39;s Mercy</em> unlocks last (HL8) &mdash; the late-game lever that lets a holder reroll a Chaos row <em>after seeing it</em>.
+        </p>
+      </div>
+      <div class="minor-tier-grid" id="minorTierGrid">
+        <!-- 6 cards rendered by renderMinorTierMenu() -->
+      </div>
+    </section>
+
+    <!-- ═══ SECTION 6: HARMONY UNLOCKS (HU bands) ═══ -->
+    <section class="cadence-hu-bands" aria-labelledby="huBandsHeader">
+      <div class="cadence-section-header">
+        <div class="cath-eyebrow">
+          <span class="ce-orn" aria-hidden="true"><svg><use href="#orn-rose-petal"/></svg></span>
+          Harmony · the doors that open
+        </div>
+        <h3 class="cadence-section-title" id="huBandsHeader">Harmony Unlocks (HU)</h3>
+        <p class="cadence-section-sub">
+          Site-based benefits at <strong>Harmony-affined</strong> or <strong>Neutral</strong> facilities (<strong>Chaos-affined</strong> sites ignore HU). PCs must be <em>present on site</em>; if multiple are present, use the highest HL among them. <strong>Suspended</strong> while Under Threat / Alarm. Each band has a hard rate-limit per chapter.
+        </p>
+      </div>
+      <div class="hu-bands-grid" id="huBandsGrid">
+        <!-- 5 cards rendered by renderHuBands() -->
+      </div>
+    </section>
+
   </div><!-- /.cadence-altarpiece -->
 
 </section>
@@ -6704,6 +7065,128 @@ function refreshBodyLegacy() {
       </div>
     </div>
   `).join('');
+}
+
+// ═══ HARMONY DATA (HL Ladder, Minor Tier Menu, HU Bands) ═══
+
+const HL_LADDER = [
+  { hl:  1, tier: 'major',    tierLabel: 'Major',    cap: 1, effect: 'Reach <strong>HU-1 Courtesies</strong>; gain <strong>+1 Seal</strong>.' },
+  { hl:  2, tier: 'minor',    tierLabel: 'Minor',    cap: 1, effect: 'Pick one from <strong>Minor Tier ①&ndash;③</strong>.' },
+  { hl:  3, tier: 'major',    tierLabel: 'Major',    cap: 1, effect: 'Reach <strong>HU-3 Tokens</strong>; gain <strong>+1 Seal</strong>.' },
+  { hl:  4, tier: 'minor',    tierLabel: 'Minor',    cap: 1, effect: 'Pick one from <strong>Minor Tier ①&ndash;④</strong>.' },
+  { hl:  5, tier: 'major',    tierLabel: 'Major',    cap: 2, effect: 'Reach <strong>HU-5 Services</strong>; <strong>capacity becomes 2</strong>; gain <strong>+1 Seal</strong>.' },
+  { hl:  6, tier: 'minor',    tierLabel: 'Minor',    cap: 2, effect: 'Pick one from <strong>Minor Tier ①&ndash;⑤</strong>.' },
+  { hl:  7, tier: 'major',    tierLabel: 'Major',    cap: 2, effect: 'Reach <strong>HU-7 Patronage</strong>; gain <strong>+1 Seal</strong>.' },
+  { hl:  8, tier: 'minor',    tierLabel: 'Minor',    cap: 2, effect: 'Pick one from <strong>Minor Tier ①&ndash;⑥</strong> &mdash; <em>Devil&#39;s Mercy unlocks here</em>.' },
+  { hl:  9, tier: 'major',    tierLabel: 'Major',    cap: 3, effect: 'Reach <strong>HU-9 Sanctuary</strong>; <strong>capacity becomes 3</strong>; gain <strong>+1 Seal</strong>.' },
+  { hl: 10, tier: 'capstone', tierLabel: 'Capstone', cap: 3, effect: '<strong>Choice of Harmony</strong> &mdash; permanent: <em>Keep the Sway</em> (Harmony Dividend) <strong>or</strong> <em>Sever the Sway</em> (Still Soul, never rolls Chaos).' }
+];
+
+const MINOR_TIER_MENU = [
+  { num: '①', name: 'Harmonic Surge', unlock: 'HL2',
+    text: 'Gain <strong>+1 Seal that ignores capacity</strong>. Expires at end of your next scene (or chapter end if out of play). If you already hold a Seal and don&#39;t want another, take <strong>Harmonic Edge</strong> instead: <em>advantage on one</em> attack roll, ability check, or saving throw <em>this scene</em>.',
+    limits: '<strong>Per pick.</strong> Surge is short-lived; spend it.' },
+  { num: '②', name: 'Story-Driven Inspiration', unlock: 'HL2',
+    text: 'Gain <strong>Inspiration</strong>. If you already have it, <strong>immediately spend one</strong> (you or an ally) on one attack roll, ability check, or saving throw <em>this scene</em>.',
+    limits: '<strong>Per pick.</strong> Inspiration is the table&#39;s standard hold-and-spend currency.' },
+  { num: '③', name: 'Reserve Channel', unlock: 'HL2',
+    text: 'Your <strong>Seal capacity increases by 1</strong> for <strong>this chapter only</strong>. At chapter end, if the temp slot is still filled, the extra Seal <strong>converts to Inspiration</strong>; that Inspiration expires at end of next scene if unspent.',
+    limits: '<strong>Per pick.</strong> Temp Cap +1; chapter scope.' },
+  { num: '④', name: 'Harmony Attunement', unlock: 'HL4',
+    text: 'A license: you can now <strong>attune items</strong> that require Harmony Attunement. Does <em>not</em> increase your normal attunement limit.',
+    limits: '<strong>Per pick.</strong> Permanent license; doesn&#39;t expire.' },
+  { num: '⑤', name: 'Stillpoint', unlock: 'HL6',
+    text: 'A rare <strong>tempo / positioning</strong> shift usable <strong>between turns</strong> or <em>pre-initiative</em>.',
+    limits: '<strong>Per pick.</strong> Mid-tempo lever &mdash; rare, situational.' },
+  { num: '⑥', name: 'Devil&#39;s Mercy', unlock: 'HL8',
+    text: '<strong>Once per chapter, per holder.</strong> <strong>Also: party cap 1×/long rest.</strong> After seeing the Chaos-table row and <em>before resolving effects</em>, <strong>reroll</strong> the selection dice and <strong>keep the new result</strong>.',
+    limits: '<strong>1×/chapter per holder + 1×/LR per party.</strong> Replaces the row, not the d20. Doesn&#39;t cancel Hellstatic.' }
+];
+
+const HU_BANDS = [
+  { band: 'HU-1', name: 'Courtesies', accent: '#a8a085',
+    tagline: 'public access · fair terms · routine help',
+    desc: 'Access public areas, get directions and basic information, queue normally. <strong>No</strong> rests, freebies, discounts, restricted areas, or legal immunity.',
+    limit: 'Always-on at affined sites' },
+  { band: 'HU-3', name: 'Tokens', accent: '#c8a85f',
+    tagline: 'small one-shot benefits, on-premises',
+    desc: 'Site-themed <strong>one-shot</strong> benefits usable on-premises. <strong>Non-transferable</strong>, expire on departure or chapter end. <strong>No resale</strong> above paid value.',
+    limit: 'Up to <strong>2 tokens</strong> per chapter' },
+  { band: 'HU-5', name: 'Services', accent: '#d8b86a',
+    tagline: 'short rest tier',
+    desc: 'Once per chapter, take <strong>one short-rest-equivalent</strong> service at an eligible site (≥1 hour, safe). On completion, the site may grant a small Harmony-flavored kicker (e.g., 1 extra Hit Die per resting character).',
+    limit: '<strong>1 service</strong> per chapter · suspended Under Threat' },
+  { band: 'HU-7', name: 'Patronage', accent: '#e8c878',
+    tagline: 'credit / bundle for goods',
+    desc: 'Once per chapter, claim <strong>one credit/bundle</strong> for site-themed goods/services or reasonable priority. <strong>Non-transferable</strong>, expires at chapter end. <strong>No resale</strong> above paid value, <strong>no</strong> blanket % discounts.',
+    limit: '<strong>1 credit/bundle</strong> per chapter' },
+  { band: 'HU-9', name: 'Sanctuary', accent: '#f5d68a',
+    tagline: 'long rest tier',
+    desc: 'At a designated sanctuary, take <strong>one safe long rest</strong> per chapter. Requires full long-rest timing (≥8 hours) and a stable situation. Recent violence, pursuit, or Alarm <strong>suspend</strong> Sanctuary. <strong>No chain-resting</strong> across multiple sites in the same chapter.',
+    limit: '<strong>1 sanctuary</strong> per chapter · long rest only' }
+];
+
+// ── Render the HL Milestone Ladder (10 rows).
+function renderHlLadder() {
+  const grid = document.getElementById('hlLadderGrid');
+  if (!grid) return;
+  grid.innerHTML = HL_LADDER.map(hl => `
+    <div class="hl-row is-${hl.tier}" data-hl="${hl.hl}">
+      <div class="hl-row-num">HL ${hl.hl}</div>
+      <div class="hl-row-tier is-${hl.tier}-tier">${hl.tierLabel}</div>
+      <div class="hl-row-effect">${hl.effect}</div>
+      <div class="hl-row-cap">
+        <span class="hl-row-cap-label">Seal cap</span>
+        <span class="hl-row-cap-val">${hl.cap}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ── Render the Minor Tier Menu (6 cards).
+function renderMinorTierMenu() {
+  const grid = document.getElementById('minorTierGrid');
+  if (!grid) return;
+  // Color accent per option — different golds, escalating to violet for Devil's Mercy
+  const accents = ['#a8a085', '#c8a85f', '#d8b86a', '#e0c88a', '#f5d68a', '#9a7acc'];
+  grid.innerHTML = MINOR_TIER_MENU.map((mt, i) => `
+    <div class="mt-card" style="--mt-accent: ${accents[i]};">
+      <div class="mt-card-unlock">unlocks ${mt.unlock}</div>
+      <div class="mt-card-header">
+        <span class="mt-card-num">${mt.num}</span>
+        <span class="mt-card-name">${mt.name}</span>
+      </div>
+      <div class="mt-card-text">${mt.text}</div>
+      <div class="mt-card-limits">${mt.limits}</div>
+    </div>
+  `).join('');
+}
+
+// ── Render the HU Bands (5 site-tier cards).
+function renderHuBands() {
+  const grid = document.getElementById('huBandsGrid');
+  if (!grid) return;
+  grid.innerHTML = HU_BANDS.map(hu => `
+    <div class="hu-card" style="--hu-accent: ${hu.accent};">
+      <div class="hu-card-band">${hu.band}</div>
+      <div class="hu-card-name">${hu.name}</div>
+      <div class="hu-card-tagline">${hu.tagline}</div>
+      <div class="hu-card-desc">${hu.desc}</div>
+      <div class="hu-card-limit">${hu.limit}</div>
+    </div>
+  `).join('');
+}
+
+// Initial paint of HL Ladder, Minor Tier Menu, and HU Bands.
+function initCadenceHarmony() {
+  renderHlLadder();
+  renderMinorTierMenu();
+  renderHuBands();
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initCadenceHarmony);
+} else {
+  initCadenceHarmony();
 }
 
 // ═══ CHAOS & HARMONY DATA ═══
