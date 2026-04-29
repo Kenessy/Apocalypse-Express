@@ -7413,25 +7413,79 @@ let currentSoulIndex = null;   // 'boiler' | 'crown' | 'maw' | 'mirror' | null
 let currentDisciplines = { MED: false, EOD: false, RCP: false };
 
 // ── Compute the active baseline from current Layer-1 selection.
-// Falls back to a flat 2/2/2/2/2/2 when no race + sub-type is picked.
+// COMPUTED-FROM-RULES (replaces old static SUBTYPE_BASELINES):
+//   1. Universal +1 baseline per axis (everyone starts a hexagon, not a sliver)
+//   2. + Race body legacy (Daniel-locked per race; Cindered = sin-axis-bound α fix)
+//   3. + Sub-type archetype bonus (RGBP: red=STR, green=CON, blue=INT, purple=bespoke)
+// Returns the 6-axis baseline object. SOUL_INDEX_MODS apply on top in getActiveProfile().
+//
+// CINDERED α fix: body legacy is sin-axis-bound (auto-derived from sub-type name):
+//   Wrath-Forged → STR · Pride-Born → CHA · Maw-Born → INT · Mirror-Born → WIS
+// All other races: body legacy is uniform per the locked design.
 function getActiveBaseline() {
-  const flat = { STR: 2, DEX: 2, CON: 2, INT: 2, WIS: 2, CHA: 2 };
-  if (!currentRaceId || !currentSubs.length) return flat;
+  const flat = { STR: 1, DEX: 1, CON: 1, INT: 1, WIS: 1, CHA: 1 };
+  if (!currentRaceId || !currentSubs.length) return { STR: 2, DEX: 2, CON: 2, INT: 2, WIS: 2, CHA: 2 };
   const sub = currentSubs[currentIndex];
-  if (!sub || !sub.name) return flat;
-  const raceMap = SUBTYPE_BASELINES[currentRaceId];
-  if (!raceMap) return flat;
-  return raceMap[sub.name] || flat;
+  if (!sub || !sub.name) return { STR: 2, DEX: 2, CON: 2, INT: 2, WIS: 2, CHA: 2 };
+
+  const stats = Object.assign({}, flat);
+  const subName = sub.name;
+
+  // === RACE BODY LEGACY ===
+  // Race-level passive axis bumps (locked per Daniel's design).
+  if (currentRaceId === 'mortal') {
+    stats.WIS += 1;                           // Inheritor: +1 Riddlecraft
+  } else if (currentRaceId === 'augmented') {
+    // Player choice: +1 Tinker (DEX) OR +1 Systems (INT). Default to DEX
+    // here; the choice UI lives in the Body Legacy section. Future: read
+    // a user preference from localStorage or session state.
+    stats.DEX += 1;
+  } else if (currentRaceId === 'construct') {
+    stats.INT += 2;                           // Construct: +2 Systems
+    stats.STR += 1;                           // Construct: +1 STR (chassis-bulk)
+  } else if (currentRaceId === 'cindered') {
+    // α FIX: sin-axis-bound body legacy (auto-derived from sub-type)
+    if (subName === 'WRATH-FORGED')      stats.STR += 1;  // Wrath  → STR
+    else if (subName === 'PRIDE-BORN')   stats.CHA += 1;  // Pride  → CHA
+    else if (subName === 'MAW-BORN')     stats.INT += 1;  // Greed  → INT
+    else if (subName === 'MIRROR-BORN')  stats.WIS += 1;  // Envy   → WIS
+  } else if (currentRaceId === 'hellforged') {
+    stats.CON += 1;                           // Hellforged: +1 Resilience
+  }
+
+  // === SUB-TYPE ARCHETYPE BONUS (RGBP) ===
+  // Each sub-type carries an `archetype` field: offensive (red), defensive
+  // (green), science (blue), or unique (purple/bespoke per race).
+  const archetype = sub.archetype || 'offensive';
+  if (archetype === 'offensive') {
+    stats.STR += 1;                           // red → +1 Rigging
+  } else if (archetype === 'defensive') {
+    stats.CON += 1;                           // green → +1 Resilience
+  } else if (archetype === 'science') {
+    stats.INT += 1;                           // blue → +1 Systems
+  } else if (archetype === 'unique') {
+    // Purple bespoke per race. Defaults to the FIRST listed option
+    // (player choice UI not yet wired into the mandala compute).
+    if (currentRaceId === 'mortal')           stats.DEX += 1;  // Pit-Kissed: +1 Tinker (or +1 Influence)
+    else if (currentRaceId === 'augmented')   stats.CHA += 1;  // Wraith: +1 Influence (or +1 Riddlecraft)
+    else if (currentRaceId === 'construct')   stats.WIS += 1;  // Cipher: +1 Riddlecraft (locked)
+    else if (currentRaceId === 'cindered')    stats.WIS += 1;  // Mirror-Born: +1 Riddlecraft (or +1 Tinker)
+    else if (currentRaceId === 'hellforged')  stats.DEX += 1;  // Amethyst: +1 Tinker (or +1 Riddlecraft)
+  }
+
+  return stats;
 }
 
-// ── Compute final 6-axis profile = baseline + soul-index mod, capped at 4.
+// ── Compute final 6-axis profile = baseline + soul-index mod, capped at 5.
+// Cap raised from 4 to 5 to accommodate the new computed values (Construct
+// Probe reaches +4 INT before Soul Index, so 4-cap would clip).
 function getActiveProfile() {
   const base = getActiveBaseline();
   const mod  = currentSoulIndex ? SOUL_INDEX_MODS[currentSoulIndex] : {};
   const out  = {};
   MANDALA_AXES.forEach(a => {
     const k = a.key;
-    out[k] = Math.min(4, (base[k] || 0) + (mod[k] || 0));
+    out[k] = Math.min(5, (base[k] || 0) + (mod[k] || 0));
   });
   return out;
 }
@@ -7439,8 +7493,8 @@ function getActiveProfile() {
 // ── Render the mandala SVG. Center (340,240); level-4 radius 140.
 function renderSkillMandala(profile, soulIndex) {
   const cx = 340, cy = 240;
-  const rMax = 140;            // radius for value 4
-  const rStep = rMax / 4;      // one ring per integer level
+  const rMax = 140;            // radius for value 5 (max stat post-refactor)
+  const rStep = rMax / 5;      // one ring per integer (max value 5) level
   // Axis angles, top-clockwise: STR=top, DEX=top-right, CON=bottom-right,
   // INT=bottom, WIS=bottom-left, CHA=top-left. -90deg = top.
   const axisAngle = i => (-90 + i * 60) * Math.PI / 180;
@@ -7451,9 +7505,9 @@ function renderSkillMandala(profile, soulIndex) {
 
   // Concentric ring guides (4 levels). Hexagonal rings to match axis count.
   let rings = '';
-  for (let lvl = 1; lvl <= 4; lvl++) {
+  for (let lvl = 1; lvl <= 5; lvl++) {
     const pts = MANDALA_AXES.map((_, i) => point(i, rStep * lvl).join(',')).join(' ');
-    const isMaxRing = lvl === 4;
+    const isMaxRing = lvl === 5;
     rings += `<polygon points="${pts}"
               fill="none"
               stroke="${isMaxRing ? '#c99c5a' : 'rgba(201,156,90,.22)'}"
