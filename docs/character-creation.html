@@ -4281,8 +4281,8 @@ const RACES = {
         archetype: 'unique',
         accentColor: '#7c40b0',
         subtitle: 'Off-spec frame · aSync-legacy experimental, the heretic of the family',
-        image:      null,
-        thumbImage: null,
+        image:      'img/races/construct/construct-cipher.png',
+        thumbImage: 'img/races/construct/thumbs/construct-cipher-thumb.png',
         alt:  'Construct — CIPHER (asymmetric off-spec aSync-legacy experimental android with violet eye-glow and chronon-glitch)',
         desc: 'aSync-legacy experimental line, the family heretic. Asymmetric chassis, one side corporate-spec A-Tech and the other patched and modified, violet eye-glow instead of amber, time-fragment trails around the silhouette. Resonant with the AI Core. Off-spec by design.',
         traits: [
@@ -5773,12 +5773,4 @@ document.getElementById('tabNav').addEventListener('click', e => {
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
   document.getElementById('tab-' + tabId).classList.add('active');
   // Re-paint Layer 2 when it becomes visible — it depends on Layer 1 state.
-  if (tabId === 'lelek') {
-    refreshSoulLayer();
-    renderSideTrackPips();
-  }
-});
-</script>
-
-</body>
-</html>
+  if (tabId === 'lelek')
