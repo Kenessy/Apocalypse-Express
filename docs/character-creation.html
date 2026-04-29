@@ -2336,6 +2336,303 @@ body {
 }
 .cadence-canto-strip-note em { color: var(--gold2); font-style: italic; }
 
+/* ═══ Stage 2: CL Ladder ═══ */
+.cadence-cl-ladder {
+  background:
+    linear-gradient(180deg, rgba(14,12,24,.88), rgba(14,12,24,.94)),
+    radial-gradient(620px 220px at 12% 0%, rgba(83,74,183,.06), transparent 70%);
+  border: 0.5px solid rgba(201,156,90,.30);
+  border-left: 2px solid #4a3358;
+  border-radius: var(--r-card);
+  padding: 26px 30px 28px;
+  box-shadow:
+    inset 0 0 0 0.5px rgba(201,156,90,.12),
+    0 8px 28px rgba(0,0,0,.45);
+}
+.cl-ladder-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-top: 4px;
+}
+@media (max-width: 1100px) {
+  .cl-ladder-grid { grid-template-columns: repeat(4, 1fr); }
+}
+@media (max-width: 800px) {
+  .cl-ladder-grid { grid-template-columns: repeat(2, 1fr); }
+}
+.cl-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 14px 16px;
+  border: 0.5px solid rgba(201,156,90,.18);
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(255,255,255,.012), rgba(0,0,0,.22));
+  font-family: 'IBM Plex Mono', monospace;
+  position: relative;
+  transition: opacity .15s ease, border-color .15s ease;
+}
+.cl-card.is-canto1-cap {
+  border-color: rgba(216,184,106,.55);
+  box-shadow: 0 0 12px rgba(216,184,106,.18);
+}
+.cl-card.is-canto1-cap::before {
+  content: 'Canto I cap';
+  position: absolute;
+  top: -8px;
+  right: 10px;
+  padding: 2px 7px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: #f5d68a;
+  background: rgba(14,12,24,.95);
+  border: 0.5px solid rgba(216,184,106,.55);
+  border-radius: 999px;
+}
+.cl-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+.cl-card-level {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 0.10em;
+  color: var(--gold2);
+}
+.cl-card-rows {
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  opacity: .80;
+}
+.cl-card-dice {
+  font-size: 14px;
+  font-weight: 600;
+  color: #d4baff;
+  letter-spacing: 0.02em;
+  font-feature-settings: "tnum";
+}
+.cl-card-bar {
+  position: relative;
+  height: 8px;
+  background: rgba(255,255,255,.04);
+  border: 0.5px solid rgba(201,156,90,.15);
+  border-radius: 4px;
+  margin-top: 6px;
+  overflow: hidden;
+}
+/* Track marks at row 2 (left edge) and row 22 (right edge) */
+.cl-card-bar::before, .cl-card-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(201,156,90,.30);
+}
+.cl-card-bar::before { left: 0; }
+.cl-card-bar::after  { right: 0; }
+.cl-card-bar-fill {
+  position: absolute;
+  top: 1px;
+  bottom: 1px;
+  background: linear-gradient(90deg, #c46666, #d4baff 50%, #f5d68a);
+  border-radius: 3px;
+  opacity: .85;
+}
+.cl-card-modifiers {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.005em;
+  font-feature-settings: "tnum";
+  margin-top: 2px;
+  opacity: .80;
+}
+
+/* ═══ Stage 2: Master Chaos Table ═══ */
+.cadence-master-table {
+  background:
+    linear-gradient(180deg, rgba(14,12,24,.88), rgba(14,12,24,.94)),
+    radial-gradient(620px 220px at 88% 0%, rgba(255,123,92,.05), transparent 70%);
+  border: 0.5px solid rgba(201,156,90,.30);
+  border-radius: var(--r-card);
+  padding: 26px 30px 28px;
+  box-shadow:
+    inset 0 0 0 0.5px rgba(201,156,90,.12),
+    0 8px 28px rgba(0,0,0,.45);
+}
+.cadence-master-table-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+.cmt-filter-btn {
+  appearance: none;
+  background: rgba(255,255,255,.025);
+  border: 0.5px solid rgba(201,156,90,.20);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  cursor: pointer;
+  transition: opacity .12s ease, background .12s ease, border-color .12s ease, color .12s ease;
+  opacity: .80;
+}
+.cmt-filter-btn:hover {
+  opacity: 1;
+  border-color: rgba(201,156,90,.40);
+  color: var(--gold2);
+}
+.cmt-filter-btn.is-active {
+  background: rgba(201,156,90,.18);
+  border-color: rgba(201,156,90,.55);
+  color: var(--gold2);
+  opacity: 1;
+}
+.cmt-tag {
+  display: inline-block;
+  padding: 1px 6px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border-radius: 3px;
+}
+.cmt-tag-neg  { color: #ff9d8c; background: rgba(196,102,102,.15); }
+.cmt-tag-pos  { color: #a8e6c7; background: rgba(80,180,140,.15); }
+.cmt-tag-zero { color: #f5d68a; background: rgba(216,184,106,.13); }
+
+.cmt-table {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 16px;
+}
+.cmt-row {
+  display: grid;
+  grid-template-columns: 38px 60px 1fr 60px;
+  gap: 12px;
+  align-items: stretch;
+  padding: 10px 14px;
+  border: 0.5px solid rgba(201,156,90,.15);
+  border-radius: 6px;
+  background: linear-gradient(180deg, rgba(255,255,255,.012), rgba(0,0,0,.18));
+  transition: opacity .15s ease, border-color .15s ease;
+  position: relative;
+}
+@media (max-width: 720px) {
+  .cmt-row { grid-template-columns: 32px 1fr; gap: 8px; }
+  .cmt-mod, .cmt-effect-name { grid-column: 2; }
+  .cmt-text { grid-column: 1 / -1; }
+}
+.cmt-row[data-hidden="true"] {
+  display: none;
+}
+.cmt-row[data-canto1-reach="false"][data-current-filter="canto1"] {
+  display: none;
+}
+.cmt-row.is-row-2,
+.cmt-row.is-row-22 {
+  border-color: rgba(201,156,90,.45);
+  font-weight: 500;
+}
+
+/* Color-coding by modifier polarity */
+.cmt-row.is-mod-neg {
+  border-left: 2px solid #c46666;
+}
+.cmt-row.is-mod-zero {
+  border-left: 2px solid #d8b86a;
+}
+.cmt-row.is-mod-pos {
+  border-left: 2px solid #6abf8e;
+}
+
+.cmt-row-num {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.05em;
+  color: var(--gold2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-feature-settings: "tnum";
+}
+.cmt-mod {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-feature-settings: "tnum";
+  letter-spacing: 0.005em;
+}
+.cmt-mod.cmt-mod-neg { color: #ff9d8c; }
+.cmt-mod.cmt-mod-zero { color: #f5d68a; }
+.cmt-mod.cmt-mod-pos { color: #a8e6c7; }
+
+.cmt-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.cmt-effect-name {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--gold2);
+}
+.cmt-effect-desc {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.55;
+  letter-spacing: 0.005em;
+  opacity: .85;
+}
+.cmt-effect-desc em {
+  color: var(--gold2);
+  font-style: italic;
+}
+
+.cmt-flags {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  align-items: flex-end;
+  justify-content: center;
+}
+.cmt-flag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  padding: 1px 6px;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+.cmt-flag-iaz   { color: #d4baff; background: rgba(83,74,183,.15); border: 0.5px solid rgba(83,74,183,.30); }
+.cmt-flag-cdr   { color: #a8e6c7; background: rgba(80,180,140,.10); border: 0.5px solid rgba(80,180,140,.30); }
+.cmt-flag-ash   { color: #ff9d8c; background: rgba(196,102,102,.10); border: 0.5px solid rgba(196,102,102,.30); }
+.cmt-flag-roller { color: #f5d68a; background: rgba(216,184,106,.10); border: 0.5px solid rgba(216,184,106,.30); }
+
 /* Stage placeholder (stages 2-5 incoming) */
 .cadence-stage-placeholder {
   padding: 18px 24px;
@@ -4254,10 +4551,44 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
       </div>
     </section>
 
-    <!-- More sections coming in stages 2-5 -->
-    <div class="cadence-stage-placeholder">
-      <p>More sections incoming &mdash; CL Ladder &amp; Master Chaos Table, HL Milestones &amp; Minor Tier Menu, Harmony Unlocks, Devil&#39;s Mercy, Race interactions, Edge cases.</p>
-    </div>
+    <!-- ═══ SECTION 2: CL LADDER ═══ -->
+    <section class="cadence-cl-ladder" aria-labelledby="clLadderHeader">
+      <div class="cadence-section-header">
+        <div class="cath-eyebrow">
+          <span class="ce-orn" aria-hidden="true"><svg><use href="#orn-arch-small"/></svg></span>
+          Chaos · the dice ladder
+        </div>
+        <h3 class="cadence-section-title" id="clLadderHeader">Your Chaos dice by level</h3>
+        <p class="cadence-section-sub">
+          The offset centres each pair on row <strong>12</strong> so everyone uses the same 2&ndash;22 table. <strong>Higher CL = wider swing</strong>: more positive ceilings <em>and</em> more negative floors. Canto I starts narrow; later Cantos open the table&#39;s extremes.
+        </p>
+      </div>
+      <div class="cl-ladder-grid" id="clLadderGrid">
+        <!-- 10 cards rendered by renderClLadder() -->
+      </div>
+    </section>
+
+    <!-- ═══ SECTION 3: MASTER CHAOS TABLE ═══ -->
+    <section class="cadence-master-table" aria-labelledby="masterTableHeader">
+      <div class="cadence-section-header">
+        <div class="cath-eyebrow">
+          <span class="ce-orn" aria-hidden="true"><svg><use href="#orn-quatrefoil"/></svg></span>
+          Chaos · the master table
+        </div>
+        <h3 class="cadence-section-title" id="masterTableHeader">21 rows, every roll lands on one</h3>
+        <p class="cadence-section-sub">
+          The <strong>Modifier</strong> column applies to your check as <strong>OFS (Roll)</strong> &mdash; or equivalently as a DC shift on the GM side. Negative modifiers are <span class="cmt-tag cmt-tag-neg">costs</span>; positive modifiers are <span class="cmt-tag cmt-tag-pos">gifts</span>; neutral rows (Modifier 0) are <span class="cmt-tag cmt-tag-zero">narrative</span>. Some entries are <em>IAZ&nbsp;only</em> (the table&#39;s Immediate Action Zone) or apply <strong>ASH</strong> (Apocalyptic Shift). <em>Devil&#39;s Mercy</em> can re-roll a row <strong>after</strong> seeing it &mdash; one shot per holder per chapter.
+        </p>
+        <div class="cadence-master-table-toolbar">
+          <button type="button" class="cmt-filter-btn is-active" data-filter="all">All rows (2&ndash;22)</button>
+          <button type="button" class="cmt-filter-btn" data-filter="canto1">Canto I reachable only (rows 8&ndash;16)</button>
+          <button type="button" class="cmt-filter-btn" data-filter="extremes">Extremes only (CL 9&ndash;10 unlocks)</button>
+        </div>
+      </div>
+      <div class="cmt-table" id="masterTableGrid" role="table" aria-label="Master Chaos Table — rows 2 to 22">
+        <!-- 21 rows rendered by renderMasterChaosTable() -->
+      </div>
+    </section>
 
   </div><!-- /.cadence-altarpiece -->
 
@@ -6373,6 +6704,158 @@ function refreshBodyLegacy() {
       </div>
     </div>
   `).join('');
+}
+
+// ═══ CHAOS & HARMONY DATA ═══
+// Sourced verbatim from Database/20_Rules/(Rule) Chaos and Harmony.md (T1 v2.9).
+// Do not edit without updating the source rule document first.
+
+const CL_LADDER = [
+  { lvl:  1, dice: '2d4 + 7',     low:  9, high: 15, modLow: -2, modHigh: 2 },
+  { lvl:  2, dice: 'd4+d6 + 6',   low:  8, high: 16, modLow: -3, modHigh: 3 },
+  { lvl:  3, dice: '2d6 + 5',     low:  7, high: 17, modLow: -4, modHigh: 4 },
+  { lvl:  4, dice: 'd4+d8 + 5',   low:  7, high: 17, modLow: -4, modHigh: 4 },
+  { lvl:  5, dice: 'd6+d8 + 4',   low:  6, high: 18, modLow: -5, modHigh: 5 },
+  { lvl:  6, dice: 'd4+d10 + 4',  low:  6, high: 18, modLow: -5, modHigh: 5 },
+  { lvl:  7, dice: '2d8 + 3',     low:  5, high: 19, modLow: -5, modHigh: 6 },
+  { lvl:  8, dice: 'd6+d10 + 3',  low:  5, high: 19, modLow: -5, modHigh: 6 },
+  { lvl:  9, dice: 'd8+d12 + 1',  low:  3, high: 21, modLow: -6, modHigh: 8 },
+  { lvl: 10, dice: 'd10+d12 + 0', low:  2, high: 22, modLow: -6, modHigh: 8 }
+];
+
+// Master Chaos Table — all 21 rows (Row 2 to Row 22).
+// `mod` is the Modifier as Offset (Roll). Negative = cost, positive = gift, 0 = narrative.
+// `flags` mark IAZ-only / CDR-affecting / ASH-triggering / roller-only entries.
+const MASTER_CHAOS_TABLE = [
+  { row:  2, name: 'Chaos Burn',           mod: -6, desc: 'You gain <em>one Major Injury</em>. Lane = the triggering check&#39;s lane (or DM offers two; locks on declaration). At 3-Major cap, shifts one row toward neutral instead.', flags: [] },
+  { row:  3, name: 'Exhaustive Shock',     mod: -6, desc: 'Roll 2d4 (d1, d2). CON save DC 9+d1+d2. On fail, gain <em>min(d1, d2)</em> levels of exhaustion.', flags: [] },
+  { row:  4, name: 'World Quake',          mod: -5, desc: 'Focus Zone CDR <strong>+12</strong> (bank if not yet entered, ceiling 100). Crosses thresholds → update band + raise Floor. If Zone fixed, resolve <em>#10 ASH d4</em> instead.', flags: ['cdr', 'ash-fallback'] },
+  { row:  5, name: 'Convergence Front',    mod: -5, desc: 'Omen now. Fix the Region of Roll. Place a 4-segment clock; tick +1 every ~5min meaningful action, +1 at combat-end or major noise. When full, Surgefront hits.', flags: ['region'] },
+  { row:  6, name: 'Unhealthy Pulse',      mod: -5, desc: 'Focus Zone CDR <strong>+6</strong> (bank if not yet entered, ceiling 100). Crosses thresholds → update + raise Floor. If Zone fixed, resolve <em>#10 ASH d4</em> instead.', flags: ['cdr', 'ash-fallback'] },
+  { row:  7, name: 'Take the Scar',        mod: -4, desc: 'Gain 1 <em>Minor Injury</em> (lane = the triggering lane; or DM offers two). Reroll duplicates. On 3rd Minor in a lane, merges into 1 Major.', flags: [] },
+  { row:  8, name: 'Soul Twinge',          mod: -3, desc: 'Lose 1 Hit Die immediately (don&#39;t roll, no healing). Take from your largest pool. If 0 HD, take 1d4 psychic damage.', flags: [] },
+  { row:  9, name: 'Winded Steps',         mod: -2, desc: 'CON save DC 11+PB. On fail, all your speeds <strong>-10ft</strong> (min 5) for 1 hour or until short rest. Doesn&#39;t stack; refreshes duration on new fail.', flags: ['roller'] },
+  { row: 10, name: 'Apocalyptic Shift',    mod: -1, desc: '<em>IAZ only.</em> Roll ASH d4: 1 <strong>Grayout</strong> (lightly obscured, -5 passive Awareness, sight-disadvantage), 2 <strong>Gridlock</strong> (difficult terrain), 3 <strong>Starklight</strong> (bright light, +5 passive Awareness, hide-disadvantage), 4 <strong>Dissonance Field</strong> (CON save concentration disadvantage). Persists while any PC inside cluster IAZ; clears 6s after empty.', flags: ['iaz', 'ash'] },
+  { row: 11, name: 'Spark of Inspiration', mod:  0, desc: 'Gain 1 <strong>Inspiration</strong>. If you have it, give 1 to an IAZ ally without it. If neither and rolled with a check, soft advantage on that check (declare before roll). Otherwise resolve <em>#10 ASH d4</em>.', flags: [] },
+  { row: 12, name: 'Quest Whisper',        mod:  0, desc: '<em>IAZ only.</em> A nearby mirror flickers. Roller asks <strong>≤10-word</strong> question about current objective; answer is <strong>≤10 words</strong> giving one immediate next step. Perceived by all party in IAZ. Once per scene.', flags: ['iaz'] },
+  { row: 13, name: 'Glass Favor',          mod: +1, desc: 'Choose one named NPC you&#39;ve met or who knows of you. Their attitude toward roller shifts <strong>one step warmer</strong> (Hostile→Indifferent→Friendly; cap Friendly). Persists. Doesn&#39;t end combat or break oaths.', flags: [] },
+  { row: 14, name: 'Silver Postcard',      mod: +2, desc: 'Name one already-known location. A mirror-sheen still appears: one silent frame, DM-framed. No labels, motion, sound, x-ray, or small-text reading. If warded, show nearest unwarded threshold instead.', flags: [] },
+  { row: 15, name: 'Soul Stitch',          mod: +2, desc: 'Choose one: regain 1 expended Hit Die OR regain one expended 1st-level spell slot. If neither, gain 1d6+PB temporary HP (don&#39;t stack; keep higher; lasts until depleted or long rest).', flags: [] },
+  { row: 16, name: 'Salve',                mod: +3, desc: 'Clear <strong>1 Minor Injury</strong> (any lane). Doesn&#39;t affect Majors. No Minors? Regain 2d4+PB HP; overflow → temp HP up to PB.', flags: [] },
+  { row: 17, name: 'Soul Reprieve',        mod: +4, desc: 'Reduce your <strong>Soul Debt</strong> by 1 (min 0; personal). At 0 SD, gain resistance to necrotic damage until next short or long rest.', flags: [] },
+  { row: 18, name: 'Lull in the Haze',     mod: +5, desc: 'Focus Zone CDR <strong>-3</strong> (bank if not yet entered, floor 0). Floor rules apply (decreases can&#39;t drop below current Floor). If Zone fixed, resolve <em>#10 ASH d4</em>.', flags: ['cdr', 'ash-fallback'] },
+  { row: 19, name: 'Instant short rest',   mod: +6, desc: '<em>Roller only.</em> Immediately finish a short rest — <strong>no time passes</strong>; durations don&#39;t advance, concentration unbroken. Spend Hit Dice now, regain short-rest resources. Doesn&#39;t allow attuning, crafting, etc.', flags: ['roller'] },
+  { row: 20, name: 'Slackening',           mod: +8, desc: 'Focus Zone CDR <strong>-5</strong> (bank if not yet entered, floor 0). Floor rules apply. If Zone fixed, resolve <em>#10 ASH d4</em>.', flags: ['cdr', 'ash-fallback'] },
+  { row: 21, name: 'Benediction',          mod: +8, desc: 'End <strong>one Major Injury</strong> affecting you (any lane). Doesn&#39;t restore HP, conditions, curses, or diseases. No Majors? End up to 2 Minors. No Minors? Gain 2d8+PB temp HP.', flags: [] },
+  { row: 22, name: 'Instant long rest',    mod: +8, desc: '<em>Roller only.</em> Immediately finish a long rest — <strong>no time passes</strong>; concentration unbroken. Regain HP, long-rest resources, half HD (min 1), reduce exhaustion by 1. Ignores 1-per-24h rule. Doesn&#39;t refresh Devil&#39;s Mercy party cap.', flags: ['roller'] }
+];
+
+// ── Render the CL Ladder grid (10 cards, one per Chaos Level).
+function renderClLadder() {
+  const grid = document.getElementById('clLadderGrid');
+  if (!grid) return;
+  grid.innerHTML = CL_LADDER.map(cl => {
+    // Bar position: range maps onto the 2-22 axis.
+    // bar-fill left = (low - 2) / (22 - 2) * 100%, width = (high - low) / 20 * 100%
+    const left = ((cl.low - 2) / 20 * 100).toFixed(1);
+    const width = ((cl.high - cl.low) / 20 * 100).toFixed(1);
+    const isCanto1Cap = cl.lvl === 2;
+    return `
+      <div class="cl-card${isCanto1Cap ? ' is-canto1-cap' : ''}" data-cl="${cl.lvl}">
+        <div class="cl-card-header">
+          <span class="cl-card-level">CL ${cl.lvl}</span>
+          <span class="cl-card-rows">rows ${cl.low}&ndash;${cl.high}</span>
+        </div>
+        <div class="cl-card-dice">${cl.dice}</div>
+        <div class="cl-card-bar" aria-hidden="true">
+          <div class="cl-card-bar-fill" style="left: ${left}%; width: ${width}%;"></div>
+        </div>
+        <div class="cl-card-modifiers">
+          <span>${cl.modLow >= 0 ? '+' : ''}${cl.modLow} floor</span>
+          <span>+${cl.modHigh} ceiling</span>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// ── Render the Master Chaos Table (21 rows).
+function renderMasterChaosTable() {
+  const grid = document.getElementById('masterTableGrid');
+  if (!grid) return;
+  grid.innerHTML = MASTER_CHAOS_TABLE.map(r => {
+    const polarity = r.mod < 0 ? 'neg' : (r.mod > 0 ? 'pos' : 'zero');
+    const modText = r.mod >= 0 ? `+${r.mod}` : `${r.mod}`;
+    // Canto I cap = CL2 → reachable rows 8–16
+    const canto1Reach = (r.row >= 8 && r.row <= 16);
+    // Extremes = CL 9–10 only-reachable rows (2–4, 17–22 minus 16)
+    const extremesOnly = (r.row <= 4 || r.row >= 17);
+    const flagsHtml = (r.flags || []).map(f => {
+      const label = {
+        'iaz': 'IAZ',
+        'cdr': 'CDR ±',
+        'ash': 'ASH',
+        'ash-fallback': 'ASH if fixed',
+        'region': 'Region',
+        'roller': 'Roller'
+      }[f] || f.toUpperCase();
+      const cls = {
+        'iaz': 'cmt-flag-iaz',
+        'cdr': 'cmt-flag-cdr',
+        'ash': 'cmt-flag-ash',
+        'ash-fallback': 'cmt-flag-ash',
+        'region': 'cmt-flag-iaz',
+        'roller': 'cmt-flag-roller'
+      }[f] || '';
+      return `<span class="cmt-flag ${cls}">${label}</span>`;
+    }).join('');
+    return `
+      <div class="cmt-row is-mod-${polarity} is-row-${r.row}"
+           role="row"
+           data-row="${r.row}"
+           data-mod="${r.mod}"
+           data-canto1-reach="${canto1Reach}"
+           data-extremes="${extremesOnly}">
+        <div class="cmt-row-num" role="cell">${r.row}</div>
+        <div class="cmt-mod cmt-mod-${polarity}" role="cell">${modText}</div>
+        <div class="cmt-text" role="cell">
+          <div class="cmt-effect-name">${r.name}</div>
+          <div class="cmt-effect-desc">${r.desc}</div>
+        </div>
+        <div class="cmt-flags" role="cell">${flagsHtml}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+// ── Master Table filter buttons.
+(function bindMasterTableFilter() {
+  document.addEventListener('click', e => {
+    const btn = e.target.closest('.cmt-filter-btn');
+    if (!btn) return;
+    document.querySelectorAll('.cmt-filter-btn').forEach(b => b.classList.toggle('is-active', b === btn));
+    const filter = btn.dataset.filter;
+    document.querySelectorAll('.cmt-row').forEach(row => {
+      let show = true;
+      if (filter === 'canto1') {
+        show = row.dataset.canto1Reach === 'true';
+      } else if (filter === 'extremes') {
+        show = row.dataset.extremes === 'true';
+      }
+      row.dataset.hidden = show ? 'false' : 'true';
+    });
+  });
+})();
+
+// Initial paint of CL Ladder and Master Table.
+function initCadenceTables() {
+  renderClLadder();
+  renderMasterChaosTable();
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initCadenceTables);
+} else {
+  initCadenceTables();
 }
 
 // ── Render cadence meters (10-pip Harmony + Chaos scales).
