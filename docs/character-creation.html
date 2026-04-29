@@ -2372,6 +2372,198 @@ body {
   text-align: center;
 }
 
+/* ═══ Faction Affiliation (Soul tab) ═══
+   3-row layout: primary (1 large card) + secondary (small cards in row)
+   + universal hostile (always-on bottom strip). Race-driven content. */
+.fa-primary-row, .fa-secondary-row, .fa-hostile-row {
+  margin-top: 12px;
+}
+.fa-primary-card {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  gap: 16px;
+  padding: 18px 20px 20px;
+  border: 0.5px solid rgba(201,156,90,.20);
+  border-left: 3px solid var(--fa-accent, #c99c5a);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.014), rgba(0,0,0,.22)),
+    radial-gradient(140% 100% at 0% 50%,
+      color-mix(in srgb, var(--fa-accent, #c99c5a) 14%, transparent),
+      transparent 70%);
+  align-items: center;
+  position: relative;
+}
+.fa-primary-card::before {
+  content: 'PRIMARY';
+  position: absolute;
+  top: -8px;
+  left: 14px;
+  padding: 2px 8px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.10em;
+  color: var(--fa-accent, #c99c5a);
+  background: rgba(14,12,24,.96);
+  border: 0.5px solid var(--fa-accent, #c99c5a);
+  border-radius: 999px;
+  font-weight: 700;
+}
+.fa-primary-symbol {
+  font-size: 36px;
+  line-height: 1;
+  color: var(--fa-accent, #c99c5a);
+  text-align: center;
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--fa-accent, #c99c5a) 40%, transparent));
+}
+.fa-primary-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.fa-primary-name {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 0.08em;
+  color: var(--gold2);
+}
+.fa-primary-tie {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--fa-accent, #c99c5a);
+  font-weight: 600;
+}
+.fa-primary-desc {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.55;
+  letter-spacing: 0.005em;
+  opacity: .92;
+  margin-top: 2px;
+}
+
+.fa-secondary-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+@media (max-width: 700px) { .fa-secondary-row { grid-template-columns: 1fr; } }
+.fa-secondary-card {
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 0.5px solid rgba(201,156,90,.15);
+  border-left: 2px solid var(--fa-accent, #a89070);
+  border-radius: 6px;
+  background: linear-gradient(180deg, rgba(255,255,255,.012), rgba(0,0,0,.18));
+  align-items: start;
+}
+.fa-sec-symbol {
+  font-size: 22px;
+  line-height: 1;
+  color: var(--fa-accent, #a89070);
+  text-align: center;
+}
+.fa-sec-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.fa-sec-name {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: var(--gold2);
+}
+.fa-sec-tie {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--fa-accent, #a89070);
+  font-weight: 600;
+}
+.fa-sec-desc {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.5;
+  letter-spacing: 0.005em;
+  opacity: .88;
+  margin-top: 2px;
+}
+
+.fa-hostile-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  padding: 14px 16px 16px;
+  border: 0.5px solid rgba(196,102,102,.30);
+  border-left: 3px solid #c46666;
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(40,8,8,.20), rgba(0,0,0,.30));
+}
+.fa-hostile-row::before {
+  content: '⚠ UNILATERAL HOSTILE — applies to every PC after A5';
+  display: block;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: #ff9d8c;
+  font-weight: 600;
+  padding-bottom: 4px;
+  border-bottom: 0.5px dashed rgba(196,102,102,.30);
+}
+.fa-hostile-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 6px;
+}
+@media (max-width: 700px) { .fa-hostile-grid { grid-template-columns: 1fr; } }
+.fa-hostile-card {
+  display: grid;
+  grid-template-columns: 26px 1fr;
+  gap: 8px;
+  padding: 8px 10px;
+  align-items: center;
+  background: rgba(0,0,0,.20);
+  border-radius: 5px;
+}
+.fa-host-symbol {
+  font-size: 18px;
+  line-height: 1;
+  color: #ff9d8c;
+  text-align: center;
+}
+.fa-host-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.fa-host-name {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: #ff9d8c;
+}
+.fa-host-desc {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.005em;
+  opacity: .88;
+}
+
 /* ═══════════════════════════════════════════════════════
    CHAOS & HARMONY (Cadence) tab — reference / mechanics primer
    ═══════════════════════════════════════════════════════ */
@@ -3303,6 +3495,7 @@ body {
 .soul-picker,
 .race-distribution,
 .archetype-bonus,
+.faction-affiliation,
 .skill-mandala-panel,
 .side-tracks,
 .dispatch-summary,
@@ -5068,6 +5261,25 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
       <div class="archetype-bonus-grid" id="archetypeBonusGrid" role="list">
         <!-- 4 cards rendered by renderArchetypeBonus() -->
       </div>
+    </section>
+
+    <!-- ═══ FACTION AFFILIATION — race-level faction ties + universal hostiles ═══
+         Shows the current race's primary + secondary faction relationships.
+         The §Factions tab has the full faction roster; this is the per-character
+         affiliation slice. Universal hostiles (Celestials, Dark Force) are
+         always shown as the bottom strip. -->
+    <section class="faction-affiliation" aria-labelledby="factionAffilHeader">
+      <div class="soul-picker-header">
+        <div class="soul-picker-eyebrow cath-eyebrow">
+          <span class="ce-orn" aria-hidden="true"><svg><use href="#orn-rose-petal"/></svg></span>
+          Faction affiliation &middot; who walks beside you, who walks against
+        </div>
+        <h3 class="soul-picker-title" id="factionAffilHeader">Your faction ties</h3>
+        <p class="soul-picker-sub">Your race choice anchors you to a primary faction with a specific kind of tie &mdash; origin, pact, manufacture, or feather-bond. Secondary ties are softer affiliations or hostilities. <strong>The two unilateral hostiles</strong> apply to everyone with an infernal mark (and after the A5 pact, that&#39;s every PC).</p>
+      </div>
+      <div class="fa-primary-row" id="factionAffilPrimary"></div>
+      <div class="fa-secondary-row" id="factionAffilSecondary"></div>
+      <div class="fa-hostile-row" id="factionAffilHostile"></div>
     </section>
 
     <!-- ═══ SKILL MANDALA ═══ -->
@@ -7680,6 +7892,146 @@ function renderRaceDistribution() {
   }).join('');
 }
 
+// ═══ FACTION AFFILIATION DATA (per-race ties to §Factions) ═══
+
+const FACTION_AFFILIATION = {
+  mortal: {
+    primary: {
+      id: 'unhalted', symbol: '👥', name: 'The Un-Halted',
+      tie: 'civilian origin', accent: '#d8b86a',
+      desc: 'Pre-Pause civilian who survived the freeze. The HALT did not stop you.'
+    },
+    secondary: [
+      { id: 'lucifer-cult', symbol: '🪶', name: 'Lucifer&#39;s Pact-Network',
+        tie: 'A5 pact', accent: '#a32d2d',
+        desc: 'Post-A5 you signed Lucifer&#39;s ledger like every other train passenger.' },
+      { id: 'drifters', symbol: '🌫', name: 'Drifters',
+        tie: 'possible', accent: '#52b8a8',
+        desc: 'Some Inheritors become Drifters &mdash; risk-takers who venture into HALT-zones.' }
+    ]
+  },
+  augmented: {
+    primary: {
+      id: 'lucifer-cult', symbol: '🪶', name: 'Lucifer&#39;s Pact-Network',
+      tie: 'A5 pact', accent: '#a32d2d',
+      desc: 'You signed the train&#39;s ledger like every other passenger. Your grafts came from somewhere; your soul still sits in the seat.'
+    },
+    secondary: [
+      { id: 'a-tech', symbol: '🏢', name: 'A-Tech / SABRE / αSync',
+        tie: 'graft origin', accent: '#5fa3d4',
+        desc: 'Your mechanical augmentations were sourced from A-Tech (corporate), SABRE (military), or αSync (experimental) &mdash; depending on what you bought, when, and from whom.' },
+      { id: 'unhalted', symbol: '👥', name: 'The Un-Halted',
+        tie: 'pre-Pause life', accent: '#d8b86a',
+        desc: 'Before the Pause you were a working human cyborg &mdash; clinic, military, or street-grade. The civilian you used to be still has friends in those settlements.' }
+    ]
+  },
+  construct: {
+    primary: {
+      id: 'a-tech', symbol: '🏢', name: 'A-Tech',
+      tie: 'manufacturer', accent: '#5fa3d4',
+      desc: 'You came off the A-Tech assembly line; the corporate-property tag never washes off. Sabre/Mule/Probe lineages all trace here.'
+    },
+    secondary: [
+      { id: 'async', symbol: '🧪', name: 'αSync',
+        tie: 'experimental (Cipher)', accent: '#9a7acc',
+        desc: 'CIPHER-class chassis is aSync-legacy experimental &mdash; not mass-line. The half-biotic, AI-Core-resonant variant.' },
+      { id: 'lucifer-cult', symbol: '🪶', name: 'Lucifer&#39;s Pact-Network',
+        tie: 'no pact (no soul)', accent: '#a32d2d',
+        desc: 'You cannot sign Lucifer&#39;s ledger &mdash; he does not deal with non-souled entities. The AI Core sparked you instead.' }
+    ]
+  },
+  cindered: {
+    primary: {
+      id: 'lucifer-cult', symbol: '🪶', name: 'Lucifer&#39;s Pact-Network',
+      tie: 'feather-pinned', accent: '#a32d2d',
+      desc: 'The black feather pins your human will inside the sin-form. You serve to stay yourself.'
+    },
+    secondary: [
+      { id: 'unhalted', symbol: '👥', name: 'The Un-Halted',
+        tie: 'former life', accent: '#d8b86a',
+        desc: 'Before Hell you were a human civilian. Some memories survive &mdash; some old contacts may still recognise the soul in the sin-form.' }
+    ]
+  },
+  hellforged: {
+    primary: {
+      id: 'lucifer-cult', symbol: '🪶', name: 'Lucifer&#39;s Pact-Network',
+      tie: 'feather-bound', accent: '#a32d2d',
+      desc: 'The black feather is Lucifer&#39;s leash; you serve to stay synced. Without it, the soul-chassis war ends you.'
+    },
+    secondary: [
+      { id: 'async', symbol: '🧪', name: 'αSync',
+        tie: 'V.E.S.S.E.L. origin', accent: '#9a7acc',
+        desc: 'The aSync-legacy V.E.S.S.E.L. lab built your chassis. You are walking failed alchemy &mdash; their unfinished experiment.' },
+      { id: 'a-tech', symbol: '🏢', name: 'A-Tech',
+        tie: 'hostile (escaped property)', accent: '#5fa3d4',
+        desc: 'Officially A-Tech property, escaped or repurposed by Lucifer. The parent corp wants you back, repaired, or destroyed.' }
+    ]
+  }
+};
+
+const FACTION_AFFILIATION_HOSTILE = [
+  {
+    id: 'celestials', symbol: '✨', name: 'Celestials / Heaven',
+    desc: 'Purge Protocol Order 7/Delta &mdash; terminate all infernal-marked entities on sight. No parley.'
+  },
+  {
+    id: 'dark-force', symbol: '🌑', name: 'The Dark Force',
+    desc: 'Mindless demonic hordes. No leash, no contract, no parley. Primary recurring combat enemy.'
+  }
+];
+
+function renderFactionAffiliation() {
+  const primaryEl   = document.getElementById('factionAffilPrimary');
+  const secondaryEl = document.getElementById('factionAffilSecondary');
+  const hostileEl   = document.getElementById('factionAffilHostile');
+  if (!primaryEl || !secondaryEl || !hostileEl) return;
+
+  const data = FACTION_AFFILIATION[currentRaceId];
+  if (!data) {
+    primaryEl.innerHTML = '';
+    secondaryEl.innerHTML = '';
+    hostileEl.innerHTML = '';
+    return;
+  }
+
+  // Primary card
+  const p = data.primary;
+  primaryEl.innerHTML = `
+    <div class="fa-primary-card" style="--fa-accent: ${p.accent};">
+      <div class="fa-primary-symbol" aria-hidden="true">${p.symbol}</div>
+      <div class="fa-primary-text">
+        <div class="fa-primary-name">${p.name}</div>
+        <div class="fa-primary-tie">${p.tie}</div>
+        <div class="fa-primary-desc">${p.desc}</div>
+      </div>
+    </div>
+  `;
+
+  // Secondary cards (1-2)
+  secondaryEl.innerHTML = (data.secondary || []).map(s => `
+    <div class="fa-secondary-card" style="--fa-accent: ${s.accent};">
+      <div class="fa-sec-symbol" aria-hidden="true">${s.symbol}</div>
+      <div class="fa-sec-text">
+        <div class="fa-sec-name">${s.name}</div>
+        <div class="fa-sec-tie">${s.tie}</div>
+        <div class="fa-sec-desc">${s.desc}</div>
+      </div>
+    </div>
+  `).join('');
+
+  // Universal hostile bar (always rendered the same)
+  const hostileHtml = FACTION_AFFILIATION_HOSTILE.map(h => `
+    <div class="fa-hostile-card">
+      <div class="fa-host-symbol" aria-hidden="true">${h.symbol}</div>
+      <div class="fa-host-text">
+        <div class="fa-host-name">${h.name}</div>
+        <div class="fa-host-desc">${h.desc}</div>
+      </div>
+    </div>
+  `).join('');
+  hostileEl.innerHTML = `<div class="fa-hostile-grid">${hostileHtml}</div>`;
+}
+
 // ═══ SUB-TYPE ARCHETYPE BONUS DATA (RGBP → axis, purple → bespoke unique) ═══
 
 const ARCHETYPE_BONUS = {
@@ -8286,11 +8638,12 @@ if (document.readyState === 'loading') {
   initCadenceMeters();
 }
 
-// ── Top-level Layer-2 refresh: body-legacy + race-distribution + archetype-bonus + mandala + legend + context + dispatch.
+// ── Top-level Layer-2 refresh: body-legacy + race-distribution + archetype-bonus + faction-affiliation + mandala + legend + context + dispatch.
 function refreshSoulLayer() {
   refreshBodyLegacy();
   renderRaceDistribution();
   renderArchetypeBonus();
+  renderFactionAffiliation();
   const profile = getActiveProfile();
   const wrap = document.getElementById('mandalaSvgWrap');
   const legend = document.getElementById('mandalaLegend');
