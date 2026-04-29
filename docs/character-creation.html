@@ -2311,6 +2311,25 @@ body {
   opacity: .82;
   margin-top: 1px;
 }
+.ab-bonus.is-choice {
+  position: relative;
+}
+.ab-bonus.is-choice::after {
+  content: 'CHOOSE';
+  position: absolute;
+  top: -7px;
+  right: 8px;
+  padding: 1px 6px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.10em;
+  color: #b89adc;
+  background: rgba(14,12,24,.96);
+  border: 0.5px solid rgba(154,122,204,.55);
+  border-radius: 999px;
+  font-weight: 700;
+}
+
 .ab-bonus.is-bespoke {
   border-color: rgba(154,122,204,.30);
   background: rgba(154,122,204,.06);
@@ -7421,10 +7440,11 @@ const ARCHETYPE_BONUS = {
 
 const PURPLE_UNIQUES = {
   mortal: {
-    bonusLabel: '+1 to a player-chosen axis',
-    bonusSub: 'Mirror-temperament adapts to current threat',
-    flavor: 'The Pit&#39;s violet kiss left an unfixed shape &mdash; pick where the kiss landed.',
-    tbd: true
+    bonusLabel: '+1 Tinker OR +1 Influence',
+    bonusSub: 'DEX or CHA axis &middot; player choice',
+    flavor: 'The Pit&#39;s violet kiss left an unfixed shape &mdash; pick where the kiss landed: precise hands or persuasive voice.',
+    tbd: false,
+    isChoice: true
   },
   augmented: {
     bonusLabel: '+1 Stillsense + reroll-once',
@@ -7486,8 +7506,9 @@ function renderArchetypeBonus() {
     let bonusBlock;
     if (isPurple) {
       const unique = PURPLE_UNIQUES[currentRaceId] || {};
+      const choiceClass = unique.isChoice ? ' is-choice' : '';
       bonusBlock = `
-        <div class="ab-bonus is-bespoke">
+        <div class="ab-bonus is-bespoke${choiceClass}">
           <div class="ab-bonus-icon">${AB_ICON_UNIQUE}</div>
           <div class="ab-bonus-text">${unique.bonusLabel || 'Bespoke setup'}<small>${unique.bonusSub || 'tailored to this race'}</small></div>
         </div>
