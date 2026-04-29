@@ -1951,7 +1951,8 @@ body {
 .soul-picker,
 .skill-mandala-panel,
 .side-tracks,
-.dispatch-summary {
+.dispatch-summary,
+.body-legacy {
   background:
     linear-gradient(180deg, rgba(14,12,24,.88), rgba(14,12,24,.94)),
     radial-gradient(620px 220px at 12% 0%, rgba(201,156,90,.06), transparent 70%),
@@ -1963,6 +1964,114 @@ body {
     inset 0 0 0 0.5px rgba(201,156,90,.12),
     0 8px 28px rgba(0,0,0,.45);
   position: relative;
+}
+
+/* ── Body Legacy section (top of Soul tab) ──
+   Conditionally visible — hidden when currentRaceId has no body-derived
+   passives (Inheritor / Augmented / Construct currently). Shows for
+   Hellforged + Cindered with their +1 Black Feather entries. */
+.body-legacy {
+  margin-bottom: 22px;
+  padding: 22px 30px 24px;
+  border-color: rgba(201,156,90,.22);
+}
+.body-legacy[hidden] { display: none; }
+.body-legacy-header { margin-bottom: 14px; max-width: 980px; }
+.body-legacy-eyebrow { margin-bottom: 8px; }
+.body-legacy-title {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: 0.10em;
+  color: var(--gold2);
+  line-height: 1.2;
+  margin: 4px 0 6px;
+}
+.body-legacy-sub {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: var(--fs-body);
+  color: var(--muted);
+  line-height: 1.65;
+  letter-spacing: 0.005em;
+  opacity: .92;
+}
+.body-legacy-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+}
+.body-legacy-item {
+  display: grid;
+  grid-template-columns: 38px 1fr;
+  gap: 14px;
+  align-items: start;
+  padding: 14px 16px;
+  border: 0.5px solid rgba(201,156,90,.18);
+  border-left: 2px solid var(--accent, var(--gold));
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.012), rgba(0,0,0,.20)),
+    radial-gradient(140% 100% at 0% 50%,
+      color-mix(in srgb, var(--accent, var(--gold)) 10%, transparent),
+      transparent 70%);
+}
+.body-legacy-icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent, var(--gold));
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--accent, var(--gold)) 50%, transparent));
+}
+.body-legacy-icon svg { width: 100%; height: 100%; }
+.body-legacy-name {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  color: var(--gold2);
+  margin-bottom: 4px;
+}
+.body-legacy-name .body-legacy-tag {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 8px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--accent, var(--gold)) 80%, var(--gold2));
+  background: color-mix(in srgb, var(--accent, var(--gold)) 12%, transparent);
+  border: 0.5px solid color-mix(in srgb, var(--accent, var(--gold)) 35%, transparent);
+  border-radius: 999px;
+  vertical-align: 1px;
+}
+.body-legacy-desc {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+  letter-spacing: 0.005em;
+  margin-bottom: 6px;
+}
+.body-legacy-desc em { color: var(--gold2); font-style: italic; }
+.body-legacy-timing {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  color: color-mix(in srgb, var(--accent, var(--gold)) 60%, var(--muted));
+  line-height: 1.55;
+  letter-spacing: 0.005em;
+}
+.body-legacy-timing strong {
+  color: color-mix(in srgb, var(--accent, var(--gold)) 75%, var(--gold2));
+  font-weight: 600;
+}
+@media (max-width: 720px) {
+  .body-legacy { padding: 20px 18px 22px; }
+  .body-legacy-item { grid-template-columns: 28px 1fr; gap: 12px; padding: 12px 14px; }
+  .body-legacy-icon { width: 24px; height: 24px; }
 }
 
 /* ── 4-card grid for Soul Index picker ── */
@@ -3353,6 +3462,26 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
       </p>
     </div>
 
+    <!-- ═══ SECTION 0: BODY LEGACY ═══
+         What the body has already done to the player. Conditionally rendered
+         based on currentRaceId — only shows up when the chosen race carries
+         baked-in passives (currently: Hellforged + Cindered = +1 black feather).
+         Sits ABOVE the Soul Index picker so the player sees their existing
+         carryover before adding the soul layer on top. -->
+    <section class="body-legacy" id="bodyLegacySection" aria-labelledby="bodyLegacyHeader" hidden>
+      <div class="body-legacy-header">
+        <div class="body-legacy-eyebrow cath-eyebrow">
+          <span class="ce-orn" aria-hidden="true"><svg><use href="#orn-arch-small"/></svg></span>
+          Body legacy · what the chassis brought with it
+        </div>
+        <h3 class="body-legacy-title" id="bodyLegacyHeader">Already pinned</h3>
+        <p class="body-legacy-sub">Your race choice baked passives into the body. They sit beneath every Soul Index decision &mdash; already counting.</p>
+      </div>
+      <div class="body-legacy-list" id="bodyLegacyList" role="list">
+        <!-- populated by refreshBodyLegacy() -->
+      </div>
+    </section>
+
     <!-- ═══ SOUL INDEX PICKER — 4 CARDS ═══ -->
     <section class="soul-picker" aria-labelledby="soulPickerHeader">
       <div class="soul-picker-header">
@@ -4449,7 +4578,7 @@ const RACES = {
       }
     ],
     conflictHook: 'Atonement against the sin-form, while the leash that holds you human can break.',
-    conflictBody: 'The sin-form&#39;s natural pull is back to the rift-horde: mindless feral, the sin&#39;s raw expression, no human-aware purpose. <strong>Lucifer&#39;s black feather</strong> pins the human-will into the sin-form and keeps the horde-fall-back at bay, but every use of sin-power tugs the leash. <em>Atonement</em> means staying human-aware, every help-act a step out of the horde. <em>Deeper-immersion</em> means the sin-form&#39;s expression dominates, every magma-burst or tower-command or hoard-grab or mirror-mimic washing the human-will&#39;s edges thinner. The horde-memory never erases. Every decision is shadowed by the question: <em>did I do this with human-intent, or did the sin-form decide?</em><br><br><strong>The Cindered question:</strong> not <em>who am I</em>, but <em>how long does the feather still hold the human-will against the sin-form&#39;s pull</em>.<br><br><strong>Mechanically:</strong> a Cindered carries a <em>feather-strain</em> track separate from chaos-level. Every use of sin-power adds strain; high strain risks Lucifer revoking the feather. If the feather is revoked or snaps, the Cindered falls back into the mindless rift-horde, instant and total. The trade-off is full demonic-form privileges (rift-walk, infernal-form physical, contract-read, fear-presence) at a leash that can be cut whenever Lucifer decides you are no longer useful.'
+    conflictBody: 'The sin-form&#39;s natural pull is back to the rift-horde: mindless feral, the sin&#39;s raw expression, no human-aware purpose. <strong>Lucifer&#39;s black feather</strong> pins the human-will into the sin-form and keeps the horde-fall-back at bay, but every use of sin-power tugs the leash. <em>Atonement</em> means staying human-aware, every help-act a step out of the horde. <em>Deeper-immersion</em> means the sin-form&#39;s expression dominates, every magma-burst or tower-command or hoard-grab or mirror-mimic washing the human-will&#39;s edges thinner. The horde-memory never erases. Every decision is shadowed by the question: <em>did I do this with human-intent, or did the sin-form decide?</em><br><br><strong>The Cindered question:</strong> not <em>who am I</em>, but <em>how long does the feather still hold the human-will against the sin-form&#39;s pull</em>.<br><br><strong>Mechanically:</strong> a Cindered carries a <em>feather-strain</em> track separate from chaos-level. Every use of sin-power adds strain; high strain risks Lucifer revoking the feather. If the feather is revoked or snaps, the Cindered falls back into the mindless rift-horde, instant and total. The trade-off is full demonic-form privileges (rift-walk, infernal-form physical, contract-read, fear-presence) at a leash that can be cut whenever Lucifer decides you are no longer useful.<br><br><strong>Cindered Cost - Black Feather Pin:</strong> every Cindered begins with <strong>one black feather already pinned</strong>. When the Chaos system unlocks in Canto I, this translates to <strong>+1 Chaos Level</strong> compared to a normal body of their tier. This affects future Chaos Rolls only. It does not alter Harmony, Devil&#39;s Mercy, Soul Index, or Lucifer&#39;s Mark. <em>(Canon flavor locked, exact D&amp;D math TBD.)</em>'
   },
 
   hellforged: {
@@ -4638,7 +4767,7 @@ const RACES = {
       }
     ],
     conflictHook: 'Synchronicity vs. rejection, and one Chaos Level closer than the rest, every step of the way.',
-    conflictBody: 'Every action is a negotiation between two halves that should never have been joined. <strong>Synchronicity</strong> is the moment of perfect alignment: thoughts firing as fast as the chassis can move, decisions delivered like blade-strikes. <strong>Rejection</strong> is the cost: the chassis trying to purge the soul as a virus, the soul ejecting the chassis as an implant. Your name on Lucifer&#39;s ledger is the only thing keeping the war from finishing. <em>The black feather can be revoked. You spend every day not finding out what that feels like.</em><br><br><strong>Hellforged Cost - Black Feather Leash:</strong> every Hellforged begins at <strong>+1 Chaos Level</strong> compared to a normal body of their tier. This affects future Chaos Rolls only. It does not alter Harmony, Devil&#39;s Mercy, Soul Index, or Lucifer&#39;s Mark. <em>(Canon flavor locked, exact D&amp;D math TBD.)</em>'
+    conflictBody: 'Every action is a negotiation between two halves that should never have been joined. <strong>Synchronicity</strong> is the moment of perfect alignment: thoughts firing as fast as the chassis can move, decisions delivered like blade-strikes. <strong>Rejection</strong> is the cost: the chassis trying to purge the soul as a virus, the soul ejecting the chassis as an implant. Your name on Lucifer&#39;s ledger is the only thing keeping the war from finishing. <em>The black feather can be revoked. You spend every day not finding out what that feels like.</em><br><br><strong>Hellforged Cost - Black Feather Leash:</strong> every Hellforged begins with <strong>one black feather already pinned</strong>. When the Chaos system unlocks in Canto I, this translates to <strong>+1 Chaos Level</strong> compared to a normal body of their tier. This affects future Chaos Rolls only. It does not alter Harmony, Devil&#39;s Mercy, Soul Index, or Lucifer&#39;s Mark. <em>(Canon flavor locked, exact D&amp;D math TBD.)</em>'
   },
 
   hell: {
@@ -5667,8 +5796,66 @@ function renderDispatchSummary() {
     : '<span class="db-empty">No clear weaknesses.</span>';
 }
 
-// ── Top-level Layer-2 refresh: mandala + legend + context + dispatch.
+// ── Body Legacy: passives baked in by the race choice (Layer 1).
+// Currently only Hellforged + Cindered carry a body-derived passive
+// (one black feather already pinned, translates to +1 Chaos Level when
+// the Chaos system unlocks in Canto I). Other races render an empty
+// section that hides itself.
+const BODY_LEGACY = {
+  hellforged: [{
+    name: '+1 Black Feather',
+    tag: 'Black Feather Leash',
+    desc: 'Lucifer pinned a feather to keep the soul-chassis sync from breaking. It came with the chassis &mdash; you did not consent, but you wear it.',
+    timing: 'Activates when the Chaos system unlocks in Canto I &mdash; translates to <strong>+1 Chaos Level</strong> compared to a normal body of your tier.',
+    accent: '#534AB7'
+  }],
+  cindered: [{
+    name: '+1 Black Feather',
+    tag: 'Black Feather Pin',
+    desc: 'Lucifer pinned a feather to keep the soul-will inside the sin-form against the horde-pull. It came with the rebirth &mdash; without it, the sin-form takes over.',
+    timing: 'Activates when the Chaos system unlocks in Canto I &mdash; translates to <strong>+1 Chaos Level</strong> compared to a normal body of your tier.',
+    accent: '#A32D2D'
+  }]
+  // Inheritor / Augmented / Construct: no body-derived passives baked in (yet).
+};
+
+// SVG glyph for a black feather &mdash; shared icon for the Lucifer-pinned
+// canon-mark across Hellforged + Cindered passives.
+const BLACK_FEATHER_SVG = `
+  <svg viewBox="0 0 32 32" aria-hidden="true">
+    <path d="M22.5 4.2 C18 5.5 14 8.6 11.4 12.7 C9.4 15.9 8.6 19.6 8.8 23.4 L7.4 27.0 L8.6 27.6 L10.6 24.2 C13.7 23.9 16.6 22.5 18.9 20.3 C22.1 17.2 23.7 12.9 23.5 8.6 L23.5 5.0 Z"
+          fill="currentColor" fill-opacity=".22"
+          stroke="currentColor" stroke-width="0.9" stroke-linejoin="round"/>
+    <path d="M22.5 5 L11 22" stroke="currentColor" stroke-width="0.7" opacity=".8"/>
+    <path d="M21 8.5 L13.5 18.5 M22 11.5 L15.5 20 M22.5 14.5 L17.5 21.5 M22 17.5 L19.5 22" stroke="currentColor" stroke-width="0.5" opacity=".6"/>
+  </svg>`;
+
+function refreshBodyLegacy() {
+  const section = document.getElementById('bodyLegacySection');
+  const list    = document.getElementById('bodyLegacyList');
+  if (!section || !list) return;
+  const passives = BODY_LEGACY[currentRaceId] || [];
+  if (!passives.length) {
+    section.hidden = true;
+    list.innerHTML = '';
+    return;
+  }
+  section.hidden = false;
+  list.innerHTML = passives.map(p => `
+    <div class="body-legacy-item" role="listitem" style="--accent: ${p.accent};">
+      <div class="body-legacy-icon">${BLACK_FEATHER_SVG}</div>
+      <div class="body-legacy-text">
+        <div class="body-legacy-name">${p.name}<span class="body-legacy-tag">${p.tag}</span></div>
+        <div class="body-legacy-desc">${p.desc}</div>
+        <div class="body-legacy-timing">${p.timing}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ── Top-level Layer-2 refresh: body-legacy + mandala + legend + context + dispatch.
 function refreshSoulLayer() {
+  refreshBodyLegacy();
   const profile = getActiveProfile();
   const wrap = document.getElementById('mandalaSvgWrap');
   const legend = document.getElementById('mandalaLegend');
@@ -5772,4 +5959,3 @@ document.getElementById('tabNav').addEventListener('click', e => {
 
 </body>
 </html>
-       
