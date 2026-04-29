@@ -4526,7 +4526,9 @@ const RACES = {
   },
 
   cindered: {
-    eyebrow: 'Mortal × Hell · sin-shaped form, human soul base',
+    eyebrow: 'Mortal × Hell · sin-shaped form',
+    iconImage: 'img/races/cindered/cindered-overall.png',
+    iconAlt:   'Cindered — race umbrella icon (stained-glass sin-shaped saint mandala, split-body magma+mirror demonic-form, white soul-spark on chest, black feather visible, 4-corner RGBP corona: red Wrath-Forged / green Pride-Born / blue Maw-Born / purple Mirror-Born)',
     title: 'Cindered',
     subtitle: 'Your form: a sin-statue. Your soul: damned human. A black feather holds the two together.',
     body: 'Your sin ran deep enough that Hell itself rewrote your form — <em>wrath&#39;s</em> magma veins, <em>pride&#39;s</em> ember eyes, <em>deceit&#39;s</em> shadow tendrils. You poured through the rifts as a mindless horde across the frozen earth — until <strong>Lucifer saw your potential and pressed a black feather into you</strong>: will and purpose returned. You are now a directed demon, kept on a leash. The pure Hell pole below would be unbroken hellfire — but <strong>you sit on the edge, not the corner</strong>, because a damned human soul still beats underneath.',
@@ -5768,9 +5770,4 @@ document.getElementById('tabNav').addEventListener('click', e => {
   const t = e.target.closest('.tab');
   if (!t || t.classList.contains('disabled')) return;
   const tabId = t.dataset.tab;
-  document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
-  t.classList.add('active');
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-  document.getElementById('tab-' + tabId).classList.add('active');
-  // Re-paint Layer 2 when it becomes visible — it depends on Layer 1 state.
-  if (tabId === 'lelek')
+  document.querySelectorAll('.tab').forEach(x => 
