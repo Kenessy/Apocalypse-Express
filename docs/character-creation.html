@@ -2176,6 +2176,151 @@ body {
   border-top: 0.5px dashed rgba(201,156,90,.10);
 }
 
+/* ═══ Sub-type Archetype Bonus (Soul tab — second layer beneath Race Distribution) ═══
+   4-card grid showing the current race's 4 sub-types with their RGBP axis bonus.
+   Active sub-type gets the highlighted treatment. */
+.archetype-bonus-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 4px;
+}
+@media (max-width: 1100px) {
+  .archetype-bonus-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+  .archetype-bonus-grid { grid-template-columns: 1fr; }
+}
+
+.ab-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 14px 16px;
+  border: 0.5px solid rgba(201,156,90,.18);
+  border-top: 2px solid var(--ab-accent, #c99c5a);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.012), rgba(0,0,0,.22)),
+    radial-gradient(140% 100% at 50% 0%,
+      color-mix(in srgb, var(--ab-accent, #c99c5a) 10%, transparent),
+      transparent 70%);
+  position: relative;
+  transition: border-color .15s ease, box-shadow .15s ease, opacity .15s ease;
+  opacity: .80;
+}
+.ab-card.is-active {
+  border-color: var(--ab-accent, #f5d68a);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--ab-accent, #f5d68a) 28%, transparent);
+  opacity: 1;
+}
+.ab-card.is-active::before {
+  content: 'YOUR PICK';
+  position: absolute;
+  top: -9px;
+  right: 10px;
+  padding: 2px 8px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.10em;
+  color: var(--ab-accent, #f5d68a);
+  background: rgba(14,12,24,.96);
+  border: 0.5px solid var(--ab-accent, #f5d68a);
+  border-radius: 999px;
+  font-weight: 700;
+}
+.ab-card-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px;
+  padding-bottom: 6px;
+  border-bottom: 0.5px dashed rgba(201,156,90,.18);
+}
+.ab-card-name {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--gold2);
+  flex: 1;
+}
+.ab-card-archetype {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ab-accent, #c99c5a);
+  font-weight: 600;
+}
+.ab-bonus {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: 8px;
+  align-items: center;
+  padding: 6px 8px;
+  background: rgba(255,255,255,.014);
+  border: 0.5px solid rgba(201,156,90,.10);
+  border-radius: 5px;
+}
+.ab-bonus-icon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ab-accent, #c99c5a);
+  filter: drop-shadow(0 0 5px color-mix(in srgb, var(--ab-accent, #c99c5a) 50%, transparent));
+}
+.ab-bonus-icon svg { width: 100%; height: 100%; }
+.ab-bonus-text {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--gold2);
+  letter-spacing: 0.005em;
+  line-height: 1.3;
+}
+.ab-bonus-text small {
+  display: block;
+  font-weight: 400;
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.005em;
+  opacity: .82;
+  margin-top: 1px;
+}
+.ab-bonus.is-bespoke {
+  border-color: rgba(154,122,204,.30);
+  background: rgba(154,122,204,.06);
+}
+.ab-bonus.is-bespoke .ab-bonus-text {
+  color: #d4baff;
+}
+.ab-card-flavor {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  line-height: 1.5;
+  letter-spacing: 0.005em;
+  opacity: .82;
+  font-style: italic;
+  padding-top: 2px;
+}
+.ab-card-tbd {
+  margin-top: 4px;
+  padding: 6px 8px;
+  background: rgba(154,122,204,.08);
+  border: 0.5px dashed rgba(154,122,204,.30);
+  border-radius: 4px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  color: #b89adc;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
 /* ═══════════════════════════════════════════════════════
    CHAOS & HARMONY (Cadence) tab — reference / mechanics primer
    ═══════════════════════════════════════════════════════ */
@@ -3106,6 +3251,7 @@ body {
 /* ── Soul picker section panel (stained-glass plate) ── */
 .soul-picker,
 .race-distribution,
+.archetype-bonus,
 .skill-mandala-panel,
 .side-tracks,
 .dispatch-summary,
@@ -4651,10 +4797,30 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
           What each race gets · the threshold leosztás
         </div>
         <h3 class="soul-picker-title" id="raceDistributionHeader">Distribution at the Body / Soul threshold</h3>
-        <p class="soul-picker-sub">Your race choice baked passives into the body before the soul layer was added. Some races get a <strong>feather</strong> (moral-axis lever — Chaos or Harmony); some get raw <strong>attribute points</strong>; one race gets to <em>choose</em>. Below: every race&#39;s threshold gift, with your current pick highlighted.</p>
+        <p class="soul-picker-sub">Your race choice baked passives into the body before the soul layer was added. Some races start with a <strong>feather</strong> &mdash; either <em>Chaos</em> (a head start along the same path everyone walks) or <em>Harmony</em>; some get raw <strong>attribute points</strong>; one race gets to <em>choose</em>. Below: every race&#39;s threshold gift, with your current pick highlighted.</p>
       </div>
       <div class="race-dist-grid" id="raceDistGrid" role="list">
         <!-- 5 cards rendered by renderRaceDistribution() -->
+      </div>
+    </section>
+
+    <!-- ═══ SUB-TYPE ARCHETYPE BONUS — the second-layer +1 ═══
+         Sits BELOW Race Distribution. Shows the 4 sub-types of the currently
+         picked race with their archetype color (RGBP) and corresponding bonus.
+         Red/Green/Blue → +1 in matching axis (Rigging/Resilience/Systems).
+         Purple → bespoke unique setup tailored to that specific (race, purple-subType) combo.
+         Active sub-type is highlighted. -->
+    <section class="archetype-bonus" aria-labelledby="archetypeBonusHeader">
+      <div class="soul-picker-header">
+        <div class="soul-picker-eyebrow cath-eyebrow">
+          <span class="ce-orn" aria-hidden="true"><svg><use href="#orn-arch-small"/></svg></span>
+          Sub-type bonus &middot; the archetype layer
+        </div>
+        <h3 class="soul-picker-title" id="archetypeBonusHeader">Your sub-type&#39;s +1</h3>
+        <p class="soul-picker-sub">Each sub-type leans into one of four archetypes &mdash; <strong style="color:#c46666">offensive (red)</strong>, <strong style="color:#6abf8e">defensive (green)</strong>, <strong style="color:#5fa3d4">science (blue)</strong>, or <strong style="color:#9a7acc">unique (purple)</strong>. The first three grant a clean axis bump (<em>Rigging / Resilience / Systems</em>); purple gets a <strong>bespoke setup</strong> tailored to that race&#39;s specific purple frame. Below: every sub-type of your current race, with your pick highlighted.</p>
+      </div>
+      <div class="archetype-bonus-grid" id="archetypeBonusGrid" role="list">
+        <!-- 4 cards rendered by renderArchetypeBonus() -->
       </div>
     </section>
 
@@ -7218,6 +7384,112 @@ function renderRaceDistribution() {
   }).join('');
 }
 
+// ═══ SUB-TYPE ARCHETYPE BONUS DATA (RGBP → axis, purple → bespoke unique) ═══
+
+const ARCHETYPE_BONUS = {
+  offensive: { color: '#c46666', bonusLabel: '+1 Rigging',    bonusSub: 'STR axis &middot; heavy lift, salvage transport' },
+  defensive: { color: '#6abf8e', bonusLabel: '+1 Resilience', bonusSub: 'CON axis &middot; long watches, harsh-condition' },
+  science:   { color: '#5fa3d4', bonusLabel: '+1 Systems',    bonusSub: 'INT axis &middot; hacking, machines, diagnostics' },
+  unique:    { color: '#9a7acc', bonusLabel: 'Bespoke setup', bonusSub: 'tailored per race &mdash; see card detail' }
+};
+
+const PURPLE_UNIQUES = {
+  mortal: {
+    bonusLabel: '+1 to a player-chosen axis',
+    bonusSub: 'Mirror-temperament adapts to current threat',
+    flavor: 'The Pit&#39;s violet kiss left an unfixed shape &mdash; pick where the kiss landed.',
+    tbd: true
+  },
+  augmented: {
+    bonusLabel: '+1 Stillsense + reroll-once',
+    bonusSub: 'Off-label intel-frame; the trigger runs without authorisation',
+    flavor: 'The frame T.A.L.O.S. will not admit it shipped. Boots into stealth-listen.',
+    tbd: true
+  },
+  construct: {
+    bonusLabel: '+1 to any axis (AI-Core resonance)',
+    bonusSub: 'aSync-legacy experimental &mdash; the heretic of the family',
+    flavor: 'Off-spec frame. Closer in silicon-spirit to the AI Core than to its siblings.',
+    tbd: true
+  },
+  cindered: {
+    bonusLabel: '+1 reactive Stillsense (after damage)',
+    bonusSub: 'The body that took the shape of what hurt last',
+    flavor: 'Envy-poured in Pit violet hellfire. Its lessons are written in the surface.',
+    tbd: true
+  },
+  hellforged: {
+    bonusLabel: 'Two-face self-damage trade',
+    bonusSub: 'Rogue lab variant &mdash; the chassis that found its own current',
+    flavor: 'Canon-locked: paired-face self-damage mechanic. Specific math TBD.',
+    tbd: false
+  }
+};
+
+const AB_ICON_SKILL = `
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M5 13 L12 7 L19 13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M5 18 L12 12 L19 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" opacity=".55"/>
+  </svg>`;
+
+const AB_ICON_UNIQUE = `
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1" opacity=".55"/>
+    <path d="M12 4 Q16 8 16 12 Q16 16 12 20 Q8 16 8 12 Q8 8 12 4 Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+    <circle cx="12" cy="12" r="2" fill="currentColor" fill-opacity=".7"/>
+  </svg>`;
+
+function renderArchetypeBonus() {
+  const grid = document.getElementById('archetypeBonusGrid');
+  if (!grid) return;
+  if (!currentRaceId) {
+    grid.innerHTML = '<div class="cadence-stage-placeholder"><p>Pick a race in the Body tab to see your sub-type archetype bonuses here.</p></div>';
+    return;
+  }
+  const race = RACES[currentRaceId];
+  if (!race || !Array.isArray(race.subTypeRich)) {
+    grid.innerHTML = '<div class="cadence-stage-placeholder"><p>This race&#39;s sub-types use the legacy schema &mdash; archetype bonuses pending schema migration.</p></div>';
+    return;
+  }
+  const activeIdx = (typeof currentSubraceIndex === 'number') ? currentSubraceIndex : 0;
+  grid.innerHTML = race.subTypeRich.map((s, i) => {
+    const archetype = s.archetype || 'offensive';
+    const meta = ARCHETYPE_BONUS[archetype] || ARCHETYPE_BONUS.offensive;
+    const isActive = (i === activeIdx);
+    const isPurple = archetype === 'unique';
+    let bonusBlock;
+    if (isPurple) {
+      const unique = PURPLE_UNIQUES[currentRaceId] || {};
+      bonusBlock = `
+        <div class="ab-bonus is-bespoke">
+          <div class="ab-bonus-icon">${AB_ICON_UNIQUE}</div>
+          <div class="ab-bonus-text">${unique.bonusLabel || 'Bespoke setup'}<small>${unique.bonusSub || 'tailored to this race'}</small></div>
+        </div>
+        ${unique.flavor ? `<div class="ab-card-flavor">${unique.flavor}</div>` : ''}
+        ${unique.tbd ? '<div class="ab-card-tbd">Draft &middot; refining per race</div>' : ''}
+      `;
+    } else {
+      bonusBlock = `
+        <div class="ab-bonus">
+          <div class="ab-bonus-icon">${AB_ICON_SKILL}</div>
+          <div class="ab-bonus-text">${meta.bonusLabel}<small>${meta.bonusSub}</small></div>
+        </div>
+      `;
+    }
+    return `
+      <div class="ab-card${isActive ? ' is-active' : ''}" role="listitem"
+           data-subtype="${s.name}" data-archetype="${archetype}"
+           style="--ab-accent: ${meta.color};">
+        <div class="ab-card-header">
+          <div class="ab-card-name">${s.name}</div>
+          <div class="ab-card-archetype">${archetype}</div>
+        </div>
+        ${bonusBlock}
+      </div>
+    `;
+  }).join('');
+}
+
 // ═══ HARMONY DATA (HL Ladder, Minor Tier Menu, HU Bands) ═══
 
 const HL_LADDER = [
@@ -7522,10 +7794,11 @@ if (document.readyState === 'loading') {
   initCadenceMeters();
 }
 
-// ── Top-level Layer-2 refresh: body-legacy + race-distribution + mandala + legend + context + dispatch.
+// ── Top-level Layer-2 refresh: body-legacy + race-distribution + archetype-bonus + mandala + legend + context + dispatch.
 function refreshSoulLayer() {
   refreshBodyLegacy();
   renderRaceDistribution();
+  renderArchetypeBonus();
   const profile = getActiveProfile();
   const wrap = document.getElementById('mandalaSvgWrap');
   const legend = document.getElementById('mandalaLegend');
