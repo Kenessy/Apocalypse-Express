@@ -4650,8 +4650,8 @@ const RACES = {
         archetype: 'science',
         accentColor: '#185fa5',
         subtitle: 'Greed-cut in Deep Hell&#39;s cold-blue, the hands that would not stop counting',
-        image:      null,
-        thumbImage: null,
+        image:      'img/races/cindered/cindered-maw-born.png',
+        thumbImage: 'img/races/cindered/thumbs/cindered-maw-born-thumb.png',
         alt:  'Cindered — MAW-BORN (slate-stone body with frost-blue cracks, multiple grasping hands, hidden hoard-cavities, Deep-cold-blue Hell-depth)',
         desc: 'Greed / Maw · Deep Hell cold-blue flame. A soul whose hoarder-hunger transformed it into a many-handed, many-mouthed cold-stone creature. Slate-stone skin with frost-blue cracks, three to four grasping hands, hidden hoard-cavities along the torso.',
         traits: [
@@ -5528,6 +5528,4 @@ document.querySelectorAll('.node-group').forEach(node => {
 // the Mortal pole-card triggers the Mortal node, etc. Keyboard activation
 // mirrors the triangle nodes (Enter / Space).
 document.querySelectorAll('.pole-card[data-race-proxy]').forEach(card => {
-  const id = card.dataset.raceProxy;
-  card.addEventListener('click', () => selectRace(id));
-  card.addE
+  const id = ca
