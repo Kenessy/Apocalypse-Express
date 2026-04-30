@@ -6095,7 +6095,7 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
           <span class="ce-orn" aria-hidden="true"><svg><use href="#orn-quatrefoil"/></svg></span>
           Locked traits · master tabel grows as we add
         </div>
-        <h3 class="cadence-section-title" id="personalityTraitsHeader">5 of ~28 wired</h3>
+        <h3 class="cadence-section-title" id="personalityTraitsHeader">6 of ~28 wired</h3>
         <p class="cadence-section-sub">Trade-off design: each trait has a positive phase and a negative phase that fire on different triggers. The picking model (1 from each tier in chargen) comes after we&#39;ve reviewed the full master tabel.</p>
         <div class="pers-system-notes" aria-label="Personality system notes">
           <div class="psn-row"><span class="psn-key">Scope</span><span class="psn-val">Effects apply only to <strong>authored dispatch tasks</strong> &mdash; not dialogue choice, story choice, or passive scenes.</span></div>
@@ -9774,6 +9774,57 @@ const PERSONALITY_TRAITS = [
           { text: 'Only authored, meaningful assignments grant chips' },
           { text: 'Training / filler / zero-risk chores do NOT count' },
           { text: 'Group fail counts only if Maximalist was slotted' }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'machine-unease',
+    name: 'Machine Unease',
+    emoji: '⚡',
+    accent: '#7e6cb8',
+    flavor: 'Machines do not breathe, do not blink, and do not mean what humans mean. Working beside one makes every second louder.',
+    axisTag: 'Synthetic-contact trade-off · same-assignment trigger',
+    phases: [
+      {
+        label: 'Human-only crew',
+        trigger: 'Assigned with no SYN / robot / drone teammate, AND no required machine cooperation',
+        effects: [
+          { kind: 'pos', text: '+1 Outcome' },
+          { text: 'Comfortable working beside other organics' }
+        ]
+      },
+      {
+        label: 'Synthetic contact',
+        trigger: 'Assigned with a SYN / robot / drone teammate, OR assigned to a task requiring direct cooperation with robots, androids, AI systems, autonomous machinery',
+        effects: [
+          { kind: 'neg',  text: '-1 Outcome' },
+          { kind: 'time', text: '×1.25 Duration' }
+        ]
+      },
+      {
+        label: 'Panic loop (trigger)',
+        trigger: 'Failed assignment under Synthetic Contact',
+        effects: [
+          { kind: 'neg', text: 'Gain Shaken by Machines' }
+        ]
+      },
+      {
+        label: 'Shaken by machines (next Synthetic Contact only)',
+        trigger: 'Next assignment with Synthetic Contact after Panic Loop',
+        effects: [
+          { kind: 'neg', text: 'Additional -1 Outcome' },
+          { text: 'Then Shaken by Machines clears' }
+        ]
+      },
+      {
+        label: 'Does NOT trigger (anti-spam guardrails)',
+        trigger: 'Always',
+        effects: [
+          { text: 'A SYN PC merely existing in the party does NOT trigger' },
+          { text: 'PAVNN aboard the train does NOT trigger unless directly cooperating' },
+          { text: 'Passive machine infrastructure does NOT trigger' },
+          { text: 'Tools / weapons / doors / lamps / non-autonomous devices do NOT trigger' }
         ]
       }
     ]
