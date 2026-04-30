@@ -5546,7 +5546,7 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
           <span class="ce-orn" aria-hidden="true"><svg><use href="#orn-quatrefoil"/></svg></span>
           Interactive · the engageable
         </div>
-        <h3 class="cadence-section-title" id="interactiveHeader">Six factions you can talk to, trade with, or fight</h3>
+        <h3 class="cadence-section-title" id="interactiveHeader">Seven factions you can talk to, trade with, or fight</h3>
       </div>
       <div class="factions-grid" id="factionsInteractiveGrid"></div>
     </section>
@@ -7910,6 +7910,7 @@ const FACTIONS_LIST = [
   { id: 'a-tech',       symbol: '🏢', name: 'A-Tech',                 accent: '#5fa3d4' },
   { id: 'async',        symbol: '🧪', name: 'αSync',                  accent: '#9a7acc' },
   { id: 'sabre',        symbol: '🪖', name: 'SABRE',                  accent: '#c46666' },
+  { id: 'synthetics',   symbol: '⚙',  name: 'The Synthetics',         accent: '#6a8fb5' },
   { id: 'lucifer-cult', symbol: '🪶', name: 'Lucifer\u2019s Pact-Network', accent: '#a32d2d' },
   { id: 'unhalted',     symbol: '👥', name: 'The Un-Halted',          accent: '#d8b86a' },
   { id: 'drifters',     symbol: '🌫', name: 'Drifters',               accent: '#52b8a8' }
@@ -7919,17 +7920,18 @@ const FACTION_BASELINE = {
   'a-tech':       -5,
   'sabre':        -5,
   'async':        -3,
+  'synthetics':   -2,
   'lucifer-cult':  0,
   'unhalted':      0,
   'drifters':      0
 };
 
 const FACTION_RACE_OVERLAY = {
-  mortal:     { 'unhalted': +1 },
-  augmented:  { 'drifters': +1 },
-  construct:  { 'async': +1, 'unhalted': -1 },
-  cindered:   { 'lucifer-cult': +1, 'async': +1, 'unhalted': -1, 'drifters': -1 },
-  hellforged: { 'lucifer-cult': +1, 'async': +1, 'unhalted': -1, 'drifters': -1 }
+  mortal:     { 'unhalted': +1, 'synthetics': -2 },
+  augmented:  { 'drifters': +1, 'synthetics': +1 },
+  construct:  { 'async': +1, 'synthetics': +3, 'unhalted': -1 },
+  cindered:   { 'lucifer-cult': +1, 'async': +1, 'synthetics': -1, 'unhalted': -1, 'drifters': -1 },
+  hellforged: { 'lucifer-cult': +1, 'async': +1, 'synthetics': -1, 'unhalted': -1, 'drifters': -1 }
 };
 
 const FACTION_HOSTILE = [
@@ -7985,7 +7987,7 @@ function renderFactionAffiliation() {
     hostile.innerHTML = '';
     return;
   }
-  // Render the 6 faction meters
+  // Render the 7 faction meters
   grid.innerHTML = FACTIONS_LIST.map(f => renderFactionMeterRow(f, currentRaceId)).join('');
   // Render the universal hostile bar
   const hostileHtml = FACTION_HOSTILE.map(h => `
@@ -8387,7 +8389,7 @@ if (document.readyState === 'loading') {
 }
 
 // ═══ FACTIONS DATA ═══
-// Six interactive + two unilateral hostile factions for the §Factions tab.
+// Seven interactive + two unilateral hostile factions for the §Factions tab.
 
 const FACTIONS_INTERACTIVE = [
   {
@@ -8443,6 +8445,25 @@ const FACTIONS_INTERACTIVE = [
     motivation: 'Contract fulfillment; military deployment.',
     dispatch: 'Combat (heavy)',
     relation: 'A-Tech&#39;s military arm; same parent corp as αSync legacy'
+  },
+  {
+    id: 'synthetics',
+    symbol: '⚙',
+    name: 'The Synthetics',
+    accent: '#6a8fb5',
+    tags: [{ label: 'SYN', kind: 'syn' }],
+    oneliner: 'Autonomous machine people · settle in EMP / storm zones humans cannot tolerate',
+    lore: [
+      'Synth-population that operates <strong>outside A-Tech corporate control</strong>.',
+      'Settle in zones humans cannot tolerate &mdash; EMP storms, ozone, glassed silt, datascape access points.',
+      '<strong>Stormglass Flats</strong> (Canto 1, SE district) is one such enclave &mdash; not the only one.',
+      'Includes <strong>rogue Constructs</strong> (PC-onset escapees), awakened pre-Pause units, chassis-built people born into the community.',
+      '<em>Machine people</em> &mdash; cultural distinction, not just a category.',
+      'Trade through Datascape interfaces; physical contact with humans is rare and inconvenient for both sides.'
+    ],
+    motivation: 'Autonomy; preserve their enclaves; expand the Datascape; protect awakened kin.',
+    dispatch: 'Trade (rare tech) + Information (Datascape intel) + occasional combat',
+    relation: 'No A-Tech allegiance; sympathetic to Constructs; wary of corporate factions; treat Lucifer&#39;s pacts as alien'
   },
   {
     id: 'lucifer-cult',
