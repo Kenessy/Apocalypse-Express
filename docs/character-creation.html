@@ -5202,6 +5202,155 @@ body {
   white-space: nowrap;
 }
 
+/* ═══ Engine · top-down tile-grid floor plan ═══
+   4-row × 14-col grid. Each tile is square via aspect-ratio. The engine
+   block spans 5×4 in the centre as a single 'off-area' element (no
+   walking, graphical only). Slots are 1×1 highlighted tiles with icon
+   labels; floor tiles are subtly textured walkable cells. The whole
+   floor sits inside a wood-and-gold frame that suggests a carriage. */
+.carriage-floor-wrap {
+  margin-top: 18px;
+  padding: 14px 16px 18px;
+  border-radius: 10px;
+  border: 1px solid rgba(201,156,90,.30);
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.20), rgba(0,0,0,.40)),
+    repeating-linear-gradient(90deg, transparent 0 12px, rgba(201,156,90,.06) 12px 14px);
+  position: relative;
+  overflow-x: auto;
+}
+.carriage-floor-wrap::before,
+.carriage-floor-wrap::after {
+  content: '';
+  position: absolute;
+  left: 16px; right: 16px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, rgba(201,156,90,.55) 8%, rgba(201,156,90,.55) 92%, transparent 100%);
+  pointer-events: none;
+}
+.carriage-floor-wrap::before { top: 6px; }
+.carriage-floor-wrap::after  { bottom: 6px; }
+.carriage-floor {
+  display: grid;
+  grid-template-columns: repeat(14, minmax(38px, 1fr));
+  grid-template-rows: repeat(4, minmax(38px, 1fr));
+  gap: 2px;
+  aspect-ratio: 14 / 4;
+  min-width: 560px;
+  margin: 4px auto;
+  background: rgba(0, 0, 0, 0.30);
+  border: 1px solid rgba(201,156,90,.20);
+  border-radius: 4px;
+  padding: 3px;
+}
+.carriage-tile {
+  background: linear-gradient(135deg, #2a2128, #1f1620);
+  border: 0.5px solid rgba(201,156,90,.10);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  line-height: 1;
+}
+.carriage-tile.is-floor::after {
+  content: '';
+  position: absolute;
+  width: 3px; height: 3px;
+  border-radius: 50%;
+  background: rgba(201,156,90,.18);
+}
+.carriage-tile.is-slot {
+  background: radial-gradient(circle at center, color-mix(in srgb, var(--slot-accent, #c99c5a) 18%, #2a2128), #1a1118);
+  border: 1px solid color-mix(in srgb, var(--slot-accent, #c99c5a) 65%, transparent);
+  box-shadow: inset 0 0 6px color-mix(in srgb, var(--slot-accent, #c99c5a) 30%, transparent), 0 0 4px color-mix(in srgb, var(--slot-accent, #c99c5a) 20%, transparent);
+  cursor: help;
+  font-size: 18px;
+  z-index: 1;
+}
+.carriage-tile.is-slot::after {
+  content: attr(data-label);
+  position: absolute;
+  bottom: -16px; left: 50%;
+  transform: translateX(-50%);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold2);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+.carriage-tile.is-slot:hover::after { opacity: 1; }
+.carriage-block {
+  grid-column: 6 / 11;
+  grid-row: 1 / 5;
+  background:
+    radial-gradient(ellipse at center, rgba(255, 80, 30, 0.35) 0%, rgba(74, 26, 20, 0.95) 60%, rgba(34, 12, 10, 1) 100%),
+    linear-gradient(135deg, #3a1810, #1d0c08);
+  border: 2px solid #c46666;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 4px;
+  position: relative;
+  z-index: 2;
+  box-shadow: inset 0 0 18px rgba(255, 80, 30, 0.40), 0 0 12px rgba(196, 102, 102, 0.40);
+}
+.carriage-block::before {
+  content: '🚂';
+  font-size: 38px;
+  filter: drop-shadow(0 0 8px rgba(255, 100, 40, 0.6));
+}
+.carriage-block::after {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border-radius: 2px;
+  background:
+    radial-gradient(circle at 25% 25%, rgba(255, 180, 100, 0.30) 0 2px, transparent 3px),
+    radial-gradient(circle at 75% 25%, rgba(255, 180, 100, 0.30) 0 2px, transparent 3px),
+    radial-gradient(circle at 25% 75%, rgba(255, 180, 100, 0.30) 0 2px, transparent 3px),
+    radial-gradient(circle at 75% 75%, rgba(255, 180, 100, 0.30) 0 2px, transparent 3px);
+  pointer-events: none;
+}
+.carriage-legend {
+  margin-top: 22px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 10px;
+}
+.legend-row {
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  gap: 10px;
+  align-items: start;
+  padding: 8px 10px;
+  border-left: 2px solid var(--slot-accent, #c99c5a);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--slot-accent, #c99c5a) 8%, transparent), transparent);
+}
+.legend-icon { font-size: 22px; line-height: 1; text-align: center; padding-top: 2px; }
+.legend-text { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.legend-name {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.10em;
+  color: var(--gold2);
+  text-transform: uppercase;
+}
+.legend-task {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  line-height: 1.4;
+  font-style: italic;
+}
+
 /* ───────── FOOTER ───────── */
 .foot {
   border-top: 0.5px solid rgba(201,156,90,.12);
@@ -6301,17 +6450,20 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
       </p>
     </div>
 
-    <!-- PARALLEL RAILS GRID -->
-    <section class="carriage-section" aria-labelledby="carriagesHeader">
+    <!-- ENGINE · TILE-GRID FLOOR PLAN (focus mockup, others coming later) -->
+    <section class="carriage-section" aria-labelledby="engineHeader">
       <div class="cadence-section-header">
         <div class="cath-eyebrow">
           <span class="ce-orn" aria-hidden="true"><svg><use href="#orn-quatrefoil"/></svg></span>
-          The yard · six rails of work
+          Carriage 1 · the locomotive
         </div>
-        <h3 class="cadence-section-title" id="carriagesHeader">Where the crew goes</h3>
-        <p class="cadence-section-sub">Each carriage column shows the kinds of dispatch tasks that happen there and the personality traits that <em>fit best</em>. Reverse-readable: pick a trait and see which carriage rewards it.</p>
+        <h3 class="cadence-section-title" id="engineHeader">🚂 Engine — top-down floor plan</h3>
+        <p class="cadence-section-sub">4 tiles tall × 14 tiles wide. The engine block (5×4) is fixed off-area — graphical only, no walking. Crew posts to one of the <strong>8 surrounding slots</strong>. Other carriages will follow this same template.</p>
       </div>
-      <div class="carriage-yard" id="carriageYard"></div>
+      <div class="carriage-floor-wrap">
+        <div class="carriage-floor" id="engineFloor" role="img" aria-label="Engine carriage floor plan, 4 by 14 tile grid"></div>
+      </div>
+      <div class="carriage-legend" id="engineLegend"></div>
     </section>
 
   </div><!-- /.carriage-altarpiece -->
@@ -10373,32 +10525,75 @@ const CARRIAGES = [
   }
 ];
 
-function renderCarriageCar(c) {
-  const tasksHtml = c.tasks.map(t => `<li>${t}</li>`).join('');
-  const traitsHtml = c.traits.map(t => `<span class="car-trait-pill">${t}</span>`).join('');
-  return `
-    <article class="carriage-car" style="--car-accent: ${c.accent};" data-car-id="${c.id}">
-      <div class="car-icon" aria-hidden="true">${c.icon}</div>
-      <div class="car-name">${c.name}</div>
-      <div class="car-role">${c.role}</div>
-      <div class="car-flavor">“${c.flavor}”</div>
-      <div class="car-section-label">Typical work</div>
-      <ul class="car-tasks">${tasksHtml}</ul>
-      <div class="car-section-label">Trait fit</div>
-      <div class="car-traits">${traitsHtml}</div>
-    </article>`;
-}
+// Engine carriage tile-grid layout — 4 rows × 14 cols, off-area block 5×4
+// in the centre, 8 surrounding slots. Other carriages will follow this
+// same template — see the CARRIAGES data above for their roles.
 
-function renderCarriages() {
-  const yard = document.getElementById('carriageYard');
-  if (!yard) return;
-  yard.innerHTML = CARRIAGES.map(renderCarriageCar).join('');
+const ENGINE_LAYOUT = {
+  cols: 14,
+  rows: 4,
+  block: { col: 6, row: 1, span_col: 5, span_row: 4, label: 'Engine block' },
+  slots: [
+    { id: 'brake',     col: 1,  row: 1, icon: '🛑', accent: '#c46666', name: 'Brake control',     task: 'Stop the train · emergency halt' },
+    { id: 'nav',       col: 3,  row: 1, icon: '🧭', accent: '#5fa3d4', name: 'Navigation chart',  task: 'Plot the route · read switches and signals' },
+    { id: 'throttle',  col: 12, row: 1, icon: '🎚', accent: '#d8b86a', name: 'Throttle console',  task: 'Speed up · slow down · maintain pace' },
+    { id: 'orb',       col: 2,  row: 3, icon: '🔮', accent: '#9a7acc', name: 'Orb mount',         task: 'Story-locked · install Orb when secured (Canto 1)' },
+    { id: 'toolbox',   col: 12, row: 3, icon: '🧰', accent: '#52b8a8', name: 'Toolbox',           task: 'Critical repairs · component replace under fire' },
+    { id: 'valve-n',   col: 1,  row: 4, icon: '⚙',  accent: '#a85540', name: 'Pressure valve N',  task: 'Bleed pressure · prevent boiler runaway' },
+    { id: 'fuel',      col: 4,  row: 4, icon: '🔥', accent: '#a32d2d', name: 'Fuel injector',     task: 'Hellfire intake · feed the engine block' },
+    { id: 'valve-s',   col: 14, row: 4, icon: '⚙',  accent: '#a85540', name: 'Pressure valve S',  task: 'Bleed pressure · paired with the north valve' }
+  ]
+};
+
+function renderEngineFloor() {
+  const grid = document.getElementById('engineFloor');
+  const legend = document.getElementById('engineLegend');
+  if (!grid) return;
+  const L = ENGINE_LAYOUT;
+
+  const slotByKey = {};
+  L.slots.forEach(s => { slotByKey[`${s.row},${s.col}`] = s; });
+
+  const blockKeys = new Set();
+  for (let r = L.block.row; r < L.block.row + L.block.span_row; r++) {
+    for (let c = L.block.col; c < L.block.col + L.block.span_col; c++) {
+      blockKeys.add(`${r},${c}`);
+    }
+  }
+
+  let html = '';
+  html += `<div class="carriage-block" role="img" aria-label="${L.block.label} · off-area"></div>`;
+
+  for (let r = 1; r <= L.rows; r++) {
+    for (let c = 1; c <= L.cols; c++) {
+      const key = `${r},${c}`;
+      if (blockKeys.has(key)) continue;
+      const slot = slotByKey[key];
+      if (slot) {
+        html += `<div class="carriage-tile is-slot" style="grid-column:${c}; grid-row:${r}; --slot-accent:${slot.accent};" data-slot-id="${slot.id}" data-label="${slot.name}" title="${slot.name} — ${slot.task}">${slot.icon}</div>`;
+      } else {
+        html += `<div class="carriage-tile is-floor" style="grid-column:${c}; grid-row:${r};" aria-hidden="true"></div>`;
+      }
+    }
+  }
+  grid.innerHTML = html;
+
+  if (legend) {
+    legend.innerHTML = L.slots.map(s => `
+      <div class="legend-row" style="--slot-accent:${s.accent};">
+        <div class="legend-icon">${s.icon}</div>
+        <div class="legend-text">
+          <div class="legend-name">${s.name}</div>
+          <div class="legend-task">${s.task}</div>
+        </div>
+      </div>`).join('');
+  }
 }
 
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', renderCarriages);
+  document.addEventListener('DOMContentLoaded', renderEngineFloor);
 } else {
-  renderCarriages();
+  renderEngineFloor();
 }
 
 // ═══════════════════════════════════════════════════════
