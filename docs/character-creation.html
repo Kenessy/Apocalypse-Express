@@ -5038,6 +5038,170 @@ body {
 }
 .pers-system-notes .psn-val strong { color: var(--gold2); }
 
+/* ═══ Carriages tab — parallel rails marshalling-yard layout ═══
+   Each carriage is a tall vertical column on its own rail. All 6 sit
+   side-by-side as if the train were broken into parts and laid out for
+   inspection. Rail decorations top + bottom, gold leading throughout.
+   On narrow viewports the yard scrolls horizontally — keeps the
+   parallel-rail metaphor instead of wrapping. */
+.carriage-altarpiece {
+  padding: 24px 40px 40px;
+  max-width: 1400px;
+}
+.carriage-section { margin-top: 24px; }
+.carriage-yard {
+  margin-top: 24px;
+  padding: 28px 4px 36px;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(160px, 1fr));
+  gap: 14px;
+  position: relative;
+  background:
+    linear-gradient(180deg, transparent 0%, rgba(0,0,0,.18) 100%);
+  overflow-x: auto;
+}
+@media (max-width: 1100px) {
+  .carriage-yard {
+    grid-template-columns: repeat(6, minmax(180px, 1fr));
+    overflow-x: auto;
+  }
+}
+/* Rail lines top + bottom — gold leading dashes mimicking train tracks */
+.carriage-yard::before,
+.carriage-yard::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 0;
+  border-top: 0.7px dashed rgba(201,156,90,.45);
+  pointer-events: none;
+}
+.carriage-yard::before { top: 14px; }
+.carriage-yard::after  { bottom: 18px; border-top-style: solid; opacity: .6; }
+
+/* Each carriage column */
+.carriage-car {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  border: 0.5px solid rgba(201,156,90,.20);
+  border-top: 3px solid var(--car-accent, #c99c5a);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.014), rgba(0,0,0,.28)),
+    radial-gradient(140% 100% at 50% 0%, color-mix(in srgb, var(--car-accent, #c99c5a) 12%, transparent), transparent 70%);
+  padding: 14px 12px 16px;
+  position: relative;
+  min-width: 0;
+}
+/* Wheels under each carriage — small gold dots */
+.carriage-car::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 18%;
+  right: 18%;
+  height: 8px;
+  background:
+    radial-gradient(circle at 25% 50%, color-mix(in srgb, var(--car-accent, #c99c5a) 80%, var(--gold2)) 0 3px, transparent 3.5px),
+    radial-gradient(circle at 75% 50%, color-mix(in srgb, var(--car-accent, #c99c5a) 80%, var(--gold2)) 0 3px, transparent 3.5px);
+  pointer-events: none;
+}
+.car-icon {
+  font-size: 38px;
+  text-align: center;
+  line-height: 1;
+  margin-bottom: 8px;
+  filter: drop-shadow(0 0 10px color-mix(in srgb, var(--car-accent, #c99c5a) 50%, transparent));
+}
+.car-name {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.10em;
+  color: var(--gold2);
+  text-align: center;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.car-role {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: color-mix(in srgb, var(--car-accent, #c99c5a) 70%, var(--gold2));
+  text-align: center;
+  letter-spacing: 0.04em;
+  margin-bottom: 10px;
+  font-style: italic;
+  line-height: 1.4;
+}
+.car-flavor {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  text-align: center;
+  font-style: italic;
+  line-height: 1.45;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 0.5px dashed rgba(201,156,90,.18);
+  opacity: .85;
+}
+.car-section-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--car-accent, #c99c5a) 65%, var(--gold2));
+  opacity: .75;
+  margin-bottom: 4px;
+  margin-top: 8px;
+}
+.car-tasks {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.car-tasks li {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  padding-left: 9px;
+  position: relative;
+  line-height: 1.4;
+}
+.car-tasks li::before {
+  content: '›';
+  position: absolute;
+  left: 0;
+  color: var(--car-accent, #c99c5a);
+  font-weight: 700;
+}
+.car-traits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 4px;
+}
+.car-trait-pill {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  padding: 3px 7px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--car-accent, #c99c5a) 14%, rgba(0,0,0,.30));
+  border: 0.5px solid color-mix(in srgb, var(--car-accent, #c99c5a) 40%, transparent);
+  color: var(--gold2);
+  white-space: nowrap;
+}
+
 /* ───────── FOOTER ───────── */
 .foot {
   border-top: 0.5px solid rgba(201,156,90,.12);
@@ -5682,7 +5846,7 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
   <button class="tab active" data-tab="test"><span class="num">1</span>Body</button>
   <button class="tab" data-tab="lelek"><span class="num">2</span>Soul</button>
   <button class="tab" data-tab="szem"><span class="num">3</span>Personality</button>
-  <button class="tab disabled" data-tab="vagon"><span class="num">4</span>Carriages</button>
+  <button class="tab" data-tab="vagon"><span class="num">4</span>Carriages</button>
   <button class="tab tab-reference" data-tab="cadence"><span class="num">∞</span>Chaos &amp; Harmony</button>
   <button class="tab tab-reference" data-tab="factions"><span class="num">§</span>Factions</button>
 </nav>
@@ -6124,11 +6288,33 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
 </section>
 
 <section class="tab-panel" id="tab-vagon">
-  <div class="coming-soon">
-    <h2>LAYER 4 · CARRIAGE POSTING</h2>
-    <p>The compatibility matrix between the crew (Body × Soul × Personality) and the train carriages (Engine / Archive / Galley / Bastion / Workshop / +). A coloured, weighted rail-graph shows who works best where.</p>
-    <p class="badge">Coming soon</p>
-  </div>
+  <div class="carriage-altarpiece">
+    <!-- Layer header -->
+    <div class="layer-header">
+      <div class="bi-eyebrow cath-eyebrow">
+        <span class="ce-orn" aria-hidden="true"><svg><use href="#orn-arch-small"/></svg></span>
+        Reference · the crew at their posts
+      </div>
+      <h2>LAYER 4 · Carriage Posting</h2>
+      <p>
+        The Apocalypse Express is a <strong>marshalling yard</strong>, not a single train. Each carriage runs its own rail with its own purpose. Every dispatch task happens <strong>in</strong> a carriage, and each carriage <em>asks for</em> different work — so each carriage <em>fits</em> different traits. Read the rails, find your post.
+      </p>
+    </div>
+
+    <!-- PARALLEL RAILS GRID -->
+    <section class="carriage-section" aria-labelledby="carriagesHeader">
+      <div class="cadence-section-header">
+        <div class="cath-eyebrow">
+          <span class="ce-orn" aria-hidden="true"><svg><use href="#orn-quatrefoil"/></svg></span>
+          The yard · six rails of work
+        </div>
+        <h3 class="cadence-section-title" id="carriagesHeader">Where the crew goes</h3>
+        <p class="cadence-section-sub">Each carriage column shows the kinds of dispatch tasks that happen there and the personality traits that <em>fit best</em>. Reverse-readable: pick a trait and see which carriage rewards it.</p>
+      </div>
+      <div class="carriage-yard" id="carriageYard"></div>
+    </section>
+
+  </div><!-- /.carriage-altarpiece -->
 </section>
 
 <!-- ═══════════════════════════════════════════════════════
@@ -10117,6 +10303,103 @@ function refreshSoulLayer() {
 // Initial paint of Layer 2 (using whichever race autoSelect picked).
 refreshSoulLayer();
 renderSideTrackPips();
+
+// ═══ CARRIAGES · the train as a marshalling yard ═══════════
+// Each carriage runs its own rail with its own purpose. Tasks happen
+// IN a carriage; each carriage rewards different traits. Reverse-readable
+// for personality picks. Render is keyed off this array — append a new
+// carriage = appears on the yard.
+
+const CARRIAGES = [
+  {
+    id: 'engine',
+    name: 'Engine',
+    icon: '🚂',
+    accent: '#c46666',
+    role: 'Locomotion · fuel · throttle',
+    flavor: 'Hellfire converted to motion. The Orb sits here once installed.',
+    tasks: ['Fuel management', 'Throttle control', 'Route navigation', 'Critical repairs'],
+    traits: ['Hyperfocus', 'Methodical', 'Service Int.']
+  },
+  {
+    id: 'archive',
+    name: 'Archive',
+    icon: '📚',
+    accent: '#9a7acc',
+    role: 'Knowledge · records · ciphers',
+    flavor: 'Cicero’s domain. Manuscripts, blueprints, witnessing logs.',
+    tasks: ['Research blueprint', 'Decrypt records', 'Witness statement', 'Study anomaly'],
+    traits: ['Hyperfocus', 'Maximalist', 'Methodical']
+  },
+  {
+    id: 'galley',
+    name: 'Galley',
+    icon: '🍲',
+    accent: '#d8b86a',
+    role: 'Sustenance · stores · morale',
+    flavor: 'Where bodies are fed and crews are knit. The salt holds.',
+    tasks: ['Cook ration', 'Stock supplies', 'Trade with Un-Halted', 'Mend a wound'],
+    traits: ['Mentor', 'Silver Tongue', 'Pack Rat']
+  },
+  {
+    id: 'bastion',
+    name: 'Bastion',
+    icon: '🛡',
+    accent: '#5fa3d4',
+    role: 'Defense · weapons · breach response',
+    flavor: 'Armored car. The shield against Dark Force boarders.',
+    tasks: ['Mount weapons', 'Train arms', 'Combat drill', 'Repel boarders'],
+    traits: ['Adrenaline-J.', 'Impulsive', 'Lone Wolf']
+  },
+  {
+    id: 'workshop',
+    name: 'Workshop',
+    icon: '🔧',
+    accent: '#52b8a8',
+    role: 'Repair · craft · modification',
+    flavor: 'PAVNN’s second home. Lathes, forges, blueprints.',
+    tasks: ['Repair component', 'Build new gear', 'Modify equipment', 'Calibrate systems'],
+    traits: ['Service Int.', 'Methodical', 'Pack Rat']
+  },
+  {
+    id: 'saloon',
+    name: 'Sundown Saloon',
+    icon: '🍷',
+    accent: '#a32d2d',
+    role: 'Lucifer’s parlour · meetings · long rest',
+    flavor: 'Hell-adjacent. Where Lucifer manifests and pacts get signed.',
+    tasks: ['Sign pact', 'Meet Lucifer', 'Negotiate bargain', 'Long rest'],
+    traits: ['Silver Tongue', 'Maximalist', 'Mentor']
+  }
+];
+
+function renderCarriageCar(c) {
+  const tasksHtml = c.tasks.map(t => `<li>${t}</li>`).join('');
+  const traitsHtml = c.traits.map(t => `<span class="car-trait-pill">${t}</span>`).join('');
+  return `
+    <article class="carriage-car" style="--car-accent: ${c.accent};" data-car-id="${c.id}">
+      <div class="car-icon" aria-hidden="true">${c.icon}</div>
+      <div class="car-name">${c.name}</div>
+      <div class="car-role">${c.role}</div>
+      <div class="car-flavor">“${c.flavor}”</div>
+      <div class="car-section-label">Typical work</div>
+      <ul class="car-tasks">${tasksHtml}</ul>
+      <div class="car-section-label">Trait fit</div>
+      <div class="car-traits">${traitsHtml}</div>
+    </article>`;
+}
+
+function renderCarriages() {
+  const yard = document.getElementById('carriageYard');
+  if (!yard) return;
+  yard.innerHTML = CARRIAGES.map(renderCarriageCar).join('');
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', renderCarriages);
+} else {
+  renderCarriages();
+}
 
 // ═══════════════════════════════════════════════════════
 // TAB SWITCHING
