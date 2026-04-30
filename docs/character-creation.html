@@ -6107,6 +6107,19 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
       <div class="personality-grid" id="personalityTraitsGrid"></div>
     </section>
 
+    <!-- NAMED NPC TRAITS -->
+    <section class="personality-section" aria-labelledby="namedNpcTraitsHeader">
+      <div class="cadence-section-header">
+        <div class="cath-eyebrow">
+          <span class="ce-orn" aria-hidden="true"><svg><use href="#orn-arch-small"/></svg></span>
+          Named NPC traits · canon-bound to specific characters
+        </div>
+        <h3 class="cadence-section-title" id="namedNpcTraitsHeader">Bound to a name</h3>
+        <p class="cadence-section-sub">These traits are <strong>not in the player pool</strong>. They are baked into specific named NPCs by canon — character-defining quirks that shape how the GM dispatches them. Same schema as the player traits (phase-based, dispatch-scope, long-rest reset), but the binding makes them part of the character.</p>
+      </div>
+      <div class="personality-grid" id="namedNpcTraitsGrid"></div>
+    </section>
+
   </div><!-- /.personality-altarpiece -->
 </section>
 
@@ -9713,6 +9726,54 @@ const PERSONALITY_TRAITS = [
     ]
   }
 ];
+
+// ═══ Named NPC traits — canon-bound to specific characters ═══════════
+// These traits are NOT in the player pool. They define how the GM
+// dispatches the named NPC. Same phase-based schema as player traits.
+
+const NAMED_NPC_TRAITS = [
+  {
+    id: 'simple-machine-intelligence',
+    name: 'Simple Machine Intelligence',
+    emoji: '🤖',
+    accent: '#5fa3d4',
+    boundTo: 'PAVNN',
+    flavor: 'A feedforward RNN, barely more than a chatbot. Long-term memory, tool-calling, slow adaptation to the work environment.',
+    axisTag: 'Bound to PAVNN · Task-complexity trade-off',
+    phases: [
+      {
+        label: 'Simple task',
+        trigger: 'Mechanical, single-step work — haul, repair a known component, run a procedure',
+        effects: [
+          { kind: 'pos',  text: '+1 Outcome' },
+          { kind: 'time', text: '×0.5 Duration (50% faster)' },
+          { text: 'Mechanical work goes like clockwork' }
+        ]
+      },
+      {
+        label: 'Complex task',
+        trigger: 'Multi-step decision tree, novel problem, social or improvisational work',
+        effects: [
+          { kind: 'neg',  text: '-1 Outcome' },
+          { kind: 'time', text: '×1.5 Duration (50% slower)' },
+          { text: 'Iterates until it finds a solution · or fails' }
+        ]
+      }
+    ]
+  }
+];
+
+function renderNamedNpcTraits() {
+  const grid = document.getElementById('namedNpcTraitsGrid');
+  if (!grid) return;
+  grid.innerHTML = NAMED_NPC_TRAITS.map(renderPersonalityCard).join('');
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', renderNamedNpcTraits);
+} else {
+  renderNamedNpcTraits();
+}
 
 function renderPersonalityCard(t) {
   const phasesHtml = t.phases.map(ph => {
