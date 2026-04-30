@@ -5236,7 +5236,7 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
           Faction affiliation &middot; who walks beside you, who walks against
         </div>
         <h3 class="soul-picker-title" id="factionAffilHeader">Your faction ties</h3>
-        <p class="soul-picker-sub">Each faction&#39;s starting attitude toward you, on a scale of <strong>-5 (committed enemy)</strong> &harr; <strong>0 (neutral)</strong> &harr; <strong>+5 (committed ally)</strong>. <strong>A-Tech and SABRE</strong> start near the bottom for everyone &mdash; they want the Orb back. <strong>αSync</strong> is softer (Lucifer&#39;s pact-holders inside loosen things). <strong>The Synthetics</strong> live in EMP / storm zones humans can&#39;t tolerate &mdash; Construct PCs are kindred there. The neutrals (<em>Un-Halted, Drifters</em>) lean by race. <em>Affinities move during play; this is the chargen baseline.</em></p>
+        <p class="soul-picker-sub">Each faction&#39;s starting attitude toward you, on a scale of <strong>-5 (committed enemy)</strong> &harr; <strong>0 (neutral)</strong> &harr; <strong>+5 (committed ally)</strong>. <strong>A-Tech and SABRE</strong> start near the bottom for everyone &mdash; they want the Orb back. <strong>αSync</strong> is softer (Lucifer&#39;s pact-holders inside loosen things). <strong>The Synthetics</strong> are neutral by default &mdash; they threat-assess instead of holding grudges. <strong>Construct</strong> PCs are kindred (+2); <strong>Augmented</strong> &amp; <strong>Hellforged</strong> read as half-synth (+1). The neutrals (<em>Un-Halted, Drifters</em>) lean by race. <em>Affinities move during play; this is the chargen baseline.</em></p>
       </div>
       <div class="fa-meters-grid" id="factionAffilMeters"></div>
       <div class="fa-hostile-row" id="factionAffilHostile"></div>
@@ -7920,18 +7920,18 @@ const FACTION_BASELINE = {
   'a-tech':       -5,
   'sabre':        -5,
   'async':        -3,
-  'synthetics':   -2,
+  'synthetics':    0,
   'lucifer-cult':  0,
   'unhalted':      0,
   'drifters':      0
 };
 
 const FACTION_RACE_OVERLAY = {
-  mortal:     { 'unhalted': +1, 'synthetics': -2 },
+  mortal:     { 'unhalted': +1 },
   augmented:  { 'drifters': +1, 'synthetics': +1 },
-  construct:  { 'async': +1, 'synthetics': +3, 'unhalted': -1 },
-  cindered:   { 'lucifer-cult': +1, 'async': +1, 'synthetics': -1, 'unhalted': -1, 'drifters': -1 },
-  hellforged: { 'lucifer-cult': +1, 'async': +1, 'synthetics': -1, 'unhalted': -1, 'drifters': -1 }
+  construct:  { 'async': +1, 'synthetics': +2, 'unhalted': -1 },
+  cindered:   { 'lucifer-cult': +1, 'async': +1, 'unhalted': -1, 'drifters': -1 },
+  hellforged: { 'lucifer-cult': +1, 'async': +1, 'synthetics': +1, 'unhalted': -1, 'drifters': -1 }
 };
 
 const FACTION_HOSTILE = [
@@ -8452,18 +8452,18 @@ const FACTIONS_INTERACTIVE = [
     name: 'The Synthetics',
     accent: '#6a8fb5',
     tags: [{ label: 'SYN', kind: 'syn' }],
-    oneliner: 'Autonomous machine people · settle in EMP / storm zones humans cannot tolerate',
+    oneliner: 'Autonomous machine people · neutral by default · only attack calculated threats',
     lore: [
       'Synth-population that operates <strong>outside A-Tech corporate control</strong>.',
-      'Settle in zones humans cannot tolerate &mdash; EMP storms, ozone, glassed silt, datascape access points.',
+      'Settle in zones humans cannot tolerate &mdash; EMP storms, ozone, glassed silt, datascape access points. The <em>environment</em> is hostile to organics, not the Synthetics themselves.',
       '<strong>Stormglass Flats</strong> (Canto 1, SE district) is one such enclave &mdash; not the only one.',
       'Includes <strong>rogue Constructs</strong> (PC-onset escapees), awakened pre-Pause units, chassis-built people born into the community.',
       '<em>Machine people</em> &mdash; cultural distinction, not just a category.',
-      'Trade through Datascape interfaces; physical contact with humans is rare and inconvenient for both sides.'
+      '<strong>Default stance is neutral.</strong> They evaluate by behaviour, not category &mdash; threat-assess and respond. Walk in calm and you get a calm response.'
     ],
-    motivation: 'Autonomy; preserve their enclaves; expand the Datascape; protect awakened kin.',
+    motivation: 'Autonomy; preserve their enclaves; expand the Datascape; protect awakened kin. No grudge against organics.',
     dispatch: 'Trade (rare tech) + Information (Datascape intel) + occasional combat',
-    relation: 'No A-Tech allegiance; sympathetic to Constructs; wary of corporate factions; treat Lucifer&#39;s pacts as alien'
+    relation: 'Neutral to all factions by default; kindred to Constructs (+2), warm to half-synths Augmented &amp; Hellforged (+1); wary of A-Tech (would re-claim them)'
   },
   {
     id: 'lucifer-cult',
