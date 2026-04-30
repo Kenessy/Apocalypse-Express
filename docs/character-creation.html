@@ -9784,48 +9784,38 @@ const PERSONALITY_TRAITS = [
     emoji: '⚡',
     iconImage: 'img/personality/machine-unease-icon.png',
     accent: '#7e6cb8',
-    flavor: 'Machines do not breathe, do not blink, and do not mean what humans mean. Working beside one makes every second louder.',
-    axisTag: 'Synthetic-contact trade-off · same-assignment trigger',
+    flavor: 'Robots can be shut down. Trusting one with the plan is the part that makes the chest tight.',
+    axisTag: 'Synthetic-cooperation trade-off',
     phases: [
       {
-        label: 'Human-only crew',
-        trigger: 'Assigned with no SYN / robot / drone teammate, AND no required machine cooperation',
+        label: 'Clear enemy',
+        trigger: 'Synthetic entity is the TARGET — hunt, fight, track, expose, sabotage, escape from, or destroy',
         effects: [
-          { kind: 'pos', text: '+1 Outcome' },
-          { text: 'Comfortable working beside other organics' }
+          { text: 'No trait penalty · combat against synthetics is fine' }
         ]
       },
       {
-        label: 'Synthetic contact',
-        trigger: 'Assigned with a SYN / robot / drone teammate, OR assigned to a task requiring direct cooperation with robots, androids, AI systems, autonomous machinery',
+        label: 'Forced alliance',
+        trigger: 'Required non-hostile cooperation with a synthetic OUTSIDER — temporary alliance, joint op, escort, shared plan, negotiation, trusted machine intel',
         effects: [
           { kind: 'neg',  text: '-1 Outcome' },
           { kind: 'time', text: '×1.25 Duration' }
         ]
       },
       {
-        label: 'Panic loop (trigger)',
-        trigger: 'Failed assignment under Synthetic Contact',
+        label: 'Algorithm at the table',
+        trigger: 'The synthetic contact is the key decision-maker, guide, negotiator, OR must be trusted with critical information',
         effects: [
-          { kind: 'neg', text: 'Gain Shaken by Machines' }
+          { kind: 'neg', text: '+1 Complication Risk' }
         ]
       },
       {
-        label: 'Shaken by machines (next Synthetic Contact only)',
-        trigger: 'Next assignment with Synthetic Contact after Panic Loop',
-        effects: [
-          { kind: 'neg', text: 'Additional -1 Outcome' },
-          { text: 'Then Shaken by Machines clears' }
-        ]
-      },
-      {
-        label: 'Does NOT trigger (anti-spam guardrails)',
+        label: 'Crew exception (established party)',
         trigger: 'Always',
         effects: [
-          { text: 'A SYN PC merely existing in the party does NOT trigger' },
-          { text: 'PAVNN aboard the train does NOT trigger unless directly cooperating' },
-          { text: 'Passive machine infrastructure does NOT trigger' },
-          { text: 'Tools / weapons / doors / lamps / non-autonomous devices do NOT trigger' }
+          { text: 'Established party members do NOT trigger by merely being SYN-tagged, Construct, drone, or AI-aboard' },
+          { text: 'PAVNN as a known crewmate does NOT trigger this trait' },
+          { text: 'Trait fires only when assignment is tagged Synthetic Cooperation, OR the SYN character is an untrusted outsider / enemy asset' }
         ]
       }
     ]
@@ -9835,49 +9825,39 @@ const PERSONALITY_TRAITS = [
     name: 'Infernal Unease',
     emoji: '🔥',
     accent: '#a85540',
-    flavor: 'Hellforged smell of brimstone. Cindered burn against the eye. The pact mark you carry is bad enough — you do not need to see it walking next to you.',
-    axisTag: 'Hellish-contact trade-off · same-assignment trigger',
+    flavor: 'Demons can be killed. Bargaining with them is the part that makes the hands shake.',
+    axisTag: 'Hell-cooperation trade-off',
     phases: [
       {
-        label: 'Mortal-only crew',
-        trigger: 'Assigned with no HELLISH teammate (no Hellforged, no Cindered), AND no required sin-form / hellfire / black-feather cooperation',
+        label: 'Clear enemy',
+        trigger: 'Infernal entity is the TARGET — hunt, fight, track, expose, purge, interrogate, sabotage, escape from, or kill',
         effects: [
-          { kind: 'pos', text: '+1 Outcome' },
-          { text: 'Comfortable working among the unmarked' }
+          { text: 'No trait penalty · combat against infernals is fine' }
         ]
       },
       {
-        label: 'Infernal contact',
-        trigger: 'Assigned with a HELLISH teammate (Hellforged or Cindered race), OR assigned to a task requiring direct cooperation with sin-form work, hellfire mechanics, V.E.S.S.E.L. tech, or black-feather rituals',
+        label: 'Forced alliance',
+        trigger: 'Required non-hostile cooperation with an infernal / hell-marked OUTSIDER — temporary alliance, joint op, escort, shared plan, negotiation, pact-contact, prisoner-guided route, trusted infernal intel',
         effects: [
           { kind: 'neg',  text: '-1 Outcome' },
           { kind: 'time', text: '×1.25 Duration' }
         ]
       },
       {
-        label: 'Panic loop (trigger)',
-        trigger: 'Failed assignment under Infernal Contact',
+        label: 'Devil at the table',
+        trigger: 'The infernal contact is the key decision-maker, guide, negotiator, OR must be trusted with critical information',
         effects: [
-          { kind: 'neg', text: 'Gain Shaken by Hell' }
+          { kind: 'neg', text: '+1 Complication Risk' }
         ]
       },
       {
-        label: 'Shaken by hell (next Infernal Contact only)',
-        trigger: 'Next assignment with Infernal Contact after Panic Loop',
-        effects: [
-          { kind: 'neg', text: 'Additional -1 Outcome' },
-          { text: 'Then Shaken by Hell clears' }
-        ]
-      },
-      {
-        label: 'Does NOT trigger (anti-spam guardrails)',
+        label: 'Crew exception (established party)',
         trigger: 'Always',
         effects: [
+          { text: 'Established party members do NOT trigger by merely being Hellforged, Cindered, pact-marked, or hell-adjacent' },
           { text: 'The Lucifer pact-mark on every PC after A5 does NOT trigger this trait' },
           { text: 'Train hellfire fuel (passive infrastructure) does NOT trigger' },
-          { text: 'Reading / studying / lore-research does NOT trigger' },
-          { text: 'Fighting Dark Force enemies does NOT trigger (combat ≠ cooperation)' },
-          { text: 'A Hellforged or Cindered PC merely existing in the party does NOT trigger' }
+          { text: 'Trait fires only when assignment is tagged Infernal Cooperation, OR the hellish character is an untrusted outsider / enemy asset' }
         ]
       }
     ]
