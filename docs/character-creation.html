@@ -4974,6 +4974,44 @@ body {
   color: #f5d68a;
 }
 
+/* ═══ Personality system-notes — stacking / rounding / scope rules
+   Compact 4-row info panel sitting under the section subtitle. Keys
+   are uppercase IBM Plex Mono in muted gold; values are normal prose
+   colour. Border + dim background sets it apart as a 'rules box'. */
+.pers-system-notes {
+  margin-top: 14px;
+  padding: 14px 18px;
+  border: 0.5px solid rgba(201,156,90,.18);
+  border-radius: 6px;
+  background: linear-gradient(180deg, rgba(255,255,255,.012), rgba(0,0,0,.18));
+  display: grid;
+  gap: 8px;
+  max-width: 920px;
+}
+.pers-system-notes .psn-row {
+  display: grid;
+  grid-template-columns: 92px 1fr;
+  gap: 10px;
+  align-items: baseline;
+}
+.pers-system-notes .psn-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold2);
+  opacity: .75;
+}
+.pers-system-notes .psn-val {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  line-height: 1.55;
+  color: var(--muted);
+  letter-spacing: 0.005em;
+}
+.pers-system-notes .psn-val strong { color: var(--gold2); }
+
 /* ───────── FOOTER ───────── */
 .foot {
   border-top: 0.5px solid rgba(201,156,90,.12);
@@ -6033,6 +6071,12 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
         </div>
         <h3 class="cadence-section-title" id="personalityTraitsHeader">3 of ~28 wired</h3>
         <p class="cadence-section-sub">Trade-off design: each trait has a positive phase and a negative phase that fire on different triggers. The picking model (1 from each tier in chargen) comes after we&#39;ve reviewed the full master tabel.</p>
+        <div class="pers-system-notes" aria-label="Personality system notes">
+          <div class="psn-row"><span class="psn-key">Scope</span><span class="psn-val">Effects apply only to <strong>authored dispatch tasks</strong> &mdash; not dialogue choice, story choice, or passive scenes.</span></div>
+          <div class="psn-row"><span class="psn-key">Stacking</span><span class="psn-val">Flat <strong>±N</strong> modifiers sum first; multiplicative <strong>×M</strong> modifiers apply last; round once at the end.</span></div>
+          <div class="psn-row"><span class="psn-key">Rounding</span><span class="psn-val"><strong>Round half up</strong> (10 × 1.5 = 15; 9 × 1.5 = 13.5 → 14).</span></div>
+          <div class="psn-row"><span class="psn-key">Reset</span><span class="psn-val">All trait phases reset at <strong>Long Rest / day end</strong>.</span></div>
+        </div>
       </div>
       <div class="personality-grid" id="personalityTraitsGrid"></div>
     </section>
@@ -9544,22 +9588,22 @@ const PERSONALITY_TRAITS = [
     name: 'Lone Wolf',
     emoji: '🐺',
     accent: '#7a6cb8',
-    flavor: 'Works like two people on their own. In a team they trip over the others.',
+    flavor: 'Left alone, they overperform. Put them in a team, and coordination becomes friction.',
     axisTag: 'Team-comp trade-off',
     phases: [
       {
         label: 'Solo deployment',
-        trigger: 'Alone on the assignment',
+        trigger: 'Assigned alone — no other PCs on the same task',
         effects: [
-          { kind: 'pos', text: 'Phantom companion · ×1.5 Outcome' },
-          { kind: 'pos', text: 'e.g. 10 → 15, 8 → 12' }
+          { kind: 'pos', text: 'Final Outcome × 1.5' },
+          { kind: 'pos', text: 'Round half up · e.g. 10 → 15, 9 → 14' }
         ]
       },
       {
         label: 'Team deployment',
-        trigger: '1+ teammate on the same assignment',
+        trigger: 'Assigned with 1+ teammate on the same task',
         effects: [
-          { kind: 'neg', text: '-1 Outcome' }
+          { kind: 'neg', text: '-1 Final Outcome' }
         ]
       }
     ]
