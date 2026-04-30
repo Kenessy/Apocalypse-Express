@@ -6095,7 +6095,7 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
           <span class="ce-orn" aria-hidden="true"><svg><use href="#orn-quatrefoil"/></svg></span>
           Locked traits · master tabel grows as we add
         </div>
-        <h3 class="cadence-section-title" id="personalityTraitsHeader">6 of ~28 wired</h3>
+        <h3 class="cadence-section-title" id="personalityTraitsHeader">7 of ~28 wired</h3>
         <p class="cadence-section-sub">Trade-off design: each trait has a positive phase and a negative phase that fire on different triggers. The picking model (1 from each tier in chargen) comes after we&#39;ve reviewed the full master tabel.</p>
         <div class="pers-system-notes" aria-label="Personality system notes">
           <div class="psn-row"><span class="psn-key">Scope</span><span class="psn-val">Effects apply only to <strong>authored dispatch tasks</strong> &mdash; not dialogue choice, story choice, or passive scenes.</span></div>
@@ -9826,6 +9826,58 @@ const PERSONALITY_TRAITS = [
           { text: 'PAVNN aboard the train does NOT trigger unless directly cooperating' },
           { text: 'Passive machine infrastructure does NOT trigger' },
           { text: 'Tools / weapons / doors / lamps / non-autonomous devices do NOT trigger' }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'infernal-unease',
+    name: 'Infernal Unease',
+    emoji: '🔥',
+    accent: '#a85540',
+    flavor: 'Hellforged smell of brimstone. Cindered burn against the eye. The pact mark you carry is bad enough — you do not need to see it walking next to you.',
+    axisTag: 'Hellish-contact trade-off · same-assignment trigger',
+    phases: [
+      {
+        label: 'Mortal-only crew',
+        trigger: 'Assigned with no HELLISH teammate (no Hellforged, no Cindered), AND no required sin-form / hellfire / black-feather cooperation',
+        effects: [
+          { kind: 'pos', text: '+1 Outcome' },
+          { text: 'Comfortable working among the unmarked' }
+        ]
+      },
+      {
+        label: 'Infernal contact',
+        trigger: 'Assigned with a HELLISH teammate (Hellforged or Cindered race), OR assigned to a task requiring direct cooperation with sin-form work, hellfire mechanics, V.E.S.S.E.L. tech, or black-feather rituals',
+        effects: [
+          { kind: 'neg',  text: '-1 Outcome' },
+          { kind: 'time', text: '×1.25 Duration' }
+        ]
+      },
+      {
+        label: 'Panic loop (trigger)',
+        trigger: 'Failed assignment under Infernal Contact',
+        effects: [
+          { kind: 'neg', text: 'Gain Shaken by Hell' }
+        ]
+      },
+      {
+        label: 'Shaken by hell (next Infernal Contact only)',
+        trigger: 'Next assignment with Infernal Contact after Panic Loop',
+        effects: [
+          { kind: 'neg', text: 'Additional -1 Outcome' },
+          { text: 'Then Shaken by Hell clears' }
+        ]
+      },
+      {
+        label: 'Does NOT trigger (anti-spam guardrails)',
+        trigger: 'Always',
+        effects: [
+          { text: 'The Lucifer pact-mark on every PC after A5 does NOT trigger this trait' },
+          { text: 'Train hellfire fuel (passive infrastructure) does NOT trigger' },
+          { text: 'Reading / studying / lore-research does NOT trigger' },
+          { text: 'Fighting Dark Force enemies does NOT trigger (combat ≠ cooperation)' },
+          { text: 'A Hellforged or Cindered PC merely existing in the party does NOT trigger' }
         ]
       }
     ]
