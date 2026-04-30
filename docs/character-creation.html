@@ -9733,30 +9733,38 @@ const PERSONALITY_TRAITS = [
 
 const NAMED_NPC_TRAITS = [
   {
-    id: 'simple-machine-intelligence',
-    name: 'Simple Machine Intelligence',
+    id: 'service-intelligence',
+    name: 'Service Intelligence',
     emoji: '🤖',
     accent: '#5fa3d4',
     boundTo: 'PAVNN',
-    flavor: 'A feedforward RNN, barely more than a chatbot. Long-term memory, tool-calling, slow adaptation to the work environment.',
-    axisTag: 'Bound to PAVNN · Task-complexity trade-off',
+    flavor: 'Built to execute, not to wonder. Give it a clean procedure and it becomes terrifyingly efficient. Give it ambiguity, and the loop begins to grind.',
+    axisTag: 'Bound to PAVNN · Machine-cognition trade-off',
     phases: [
       {
-        label: 'Simple task',
-        trigger: 'Mechanical, single-step work — haul, repair a known component, run a procedure',
+        label: 'Routine procedure',
+        trigger: 'Simple, repeatable, mechanical, or clearly documented assignments — haul, scan, diagnose, follow a known protocol',
         effects: [
           { kind: 'pos',  text: '+1 Outcome' },
-          { kind: 'time', text: '×0.5 Duration (50% faster)' },
-          { text: 'Mechanical work goes like clockwork' }
+          { kind: 'time', text: '×0.5 Duration (twice as fast)' },
+          { text: 'Terrifyingly efficient on clean inputs' }
         ]
       },
       {
-        label: 'Complex task',
-        trigger: 'Multi-step decision tree, novel problem, social or improvisational work',
+        label: 'Complex reasoning',
+        trigger: 'Ambiguous, creative, social, tactical, or novel multi-step assignments',
         effects: [
           { kind: 'neg',  text: '-1 Outcome' },
           { kind: 'time', text: '×1.5 Duration (50% slower)' },
-          { text: 'Iterates until it finds a solution · or fails' }
+          { text: 'Iterates and branches · solution-or-fail' }
+        ]
+      },
+      {
+        label: 'Known procedure (re-classifier)',
+        trigger: 'Complex assignment with a blueprint / checklist / saved routine / operator protocol / prior successful PAVNN log',
+        effects: [
+          { kind: 'pos', text: 'Counts as Routine procedure' },
+          { text: 'A player-made checklist does NOT auto-reclassify · only authored protocols / unlocked logs / GM-granted blueprints qualify' }
         ]
       }
     ]
