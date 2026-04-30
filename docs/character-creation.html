@@ -2414,6 +2414,28 @@ body {
   color: var(--fa-accent, #c99c5a);
   filter: drop-shadow(0 0 4px color-mix(in srgb, var(--fa-accent, #c99c5a) 35%, transparent));
 }
+/* Icon-image variant for the Soul-tab affinity-row symbol slot. Sized to
+   the emoji baseline so meter rows stay vertically aligned. */
+.fa-meter-symbol-img {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--fa-accent, #c99c5a) 45%, transparent);
+  background: rgba(0, 0, 0, 0.30);
+  filter: none;
+}
+.fa-meter-symbol-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  image-rendering: -webkit-optimize-contrast;
+}
 .fa-meter-name {
   font-family: 'Cinzel', serif;
   font-weight: 700;
@@ -4194,6 +4216,29 @@ body {
 .fac-card-symbol {
   font-size: 22px;
   line-height: 1;
+}
+/* Icon-image variant for the faction card symbol slot. Used when the
+   faction has a stained-glass icon asset (e.g. A-Tech). The slot is sized
+   to match the emoji baseline so cards stay aligned. */
+.fac-card-symbol-img {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--fac-accent, #c99c5a) 45%, transparent);
+  background: rgba(0, 0, 0, 0.35);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--fac-accent, #c99c5a) 25%, transparent);
+}
+.fac-card-symbol-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  image-rendering: -webkit-optimize-contrast;
 }
 .fac-card-name {
   font-family: 'Cinzel', serif;
@@ -7907,7 +7952,7 @@ function renderRaceDistribution() {
 // shows starting position only.
 
 const FACTIONS_LIST = [
-  { id: 'a-tech',       symbol: '🏢', name: 'A-Tech',                 accent: '#5fa3d4' },
+  { id: 'a-tech',       symbol: '🏢', name: 'A-Tech',                 accent: '#5fa3d4', thumbImage: 'img/factions/thumbs/atech-icon-thumb.png' },
   { id: 'async',        symbol: '🧪', name: 'αSync',                  accent: '#9a7acc' },
   { id: 'sabre',        symbol: '🪖', name: 'SABRE',                  accent: '#c46666' },
   { id: 'synthetics',   symbol: '⚙',  name: 'The Synthetics',         accent: '#6a8fb5' },
@@ -7968,9 +8013,12 @@ function renderFactionMeterRow(faction, raceId) {
   }
   const valueLabel = value > 0 ? `+${value}` : (value < 0 ? `${value}` : '0');
   const valueClass = value > 0 ? 'is-pos' : (value < 0 ? 'is-neg' : 'is-zero');
+  const symbolHtml = faction.thumbImage
+    ? `<span class="fa-meter-symbol fa-meter-symbol-img" aria-hidden="true"><img src="${faction.thumbImage}" alt="" loading="lazy"></span>`
+    : `<span class="fa-meter-symbol" aria-hidden="true">${faction.symbol}</span>`;
   return `
     <div class="fa-meter-row" style="--fa-accent: ${faction.accent};">
-      <span class="fa-meter-symbol" aria-hidden="true">${faction.symbol}</span>
+      ${symbolHtml}
       <span class="fa-meter-name">${faction.name}</span>
       <div class="fa-meter" role="meter" aria-valuemin="-5" aria-valuemax="5" aria-valuenow="${value}" aria-label="Affinity with ${faction.name}: ${valueLabel}">${cellsHtml}</div>
       <span class="fa-meter-value ${valueClass}">${valueLabel}</span>
@@ -8397,6 +8445,7 @@ const FACTIONS_INTERACTIVE = [
     symbol: '🏢',
     name: 'A-Tech',
     accent: '#5fa3d4',
+    iconImage: 'img/factions/atech-icon.png',
     tags: [{ label: 'SYN', kind: 'syn' }],
     oneliner: 'Pre-Pause megacorp · planetary mass robotics + military hardware',
     lore: [
@@ -8566,10 +8615,13 @@ const FACTIONS_HOSTILE = [
 function renderFactionCard(f, isHostile) {
   const tagsHtml = (f.tags || []).map(t => `<span class="fac-tag is-${t.kind}">${t.label}</span>`).join('');
   const loreHtml = f.lore.map(line => `<li>${line}</li>`).join('');
+  const symbolHtml = f.iconImage
+    ? `<span class="fac-card-symbol fac-card-symbol-img" aria-hidden="true"><img src="${f.iconImage}" alt="" loading="lazy"></span>`
+    : `<span class="fac-card-symbol" aria-hidden="true">${f.symbol}</span>`;
   return `
     <div class="fac-card${isHostile ? ' is-hostile' : ''}" style="--fac-accent: ${f.accent};" data-fac-id="${f.id}">
       <div class="fac-card-header">
-        <span class="fac-card-symbol" aria-hidden="true">${f.symbol}</span>
+        ${symbolHtml}
         <span class="fac-card-name">${f.name}</span>
         <div class="fac-card-tags">${tagsHtml}</div>
       </div>
