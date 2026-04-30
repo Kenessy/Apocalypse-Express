@@ -4392,6 +4392,180 @@ body {
   border-right-color: rgba(196,102,102,.30);
 }
 
+/* ═══ Personality tab — master trait tabel (Layer 3) ═══
+   Two-column shrine|panel cards (parallel to faction cards), phase-based
+   effects shown as colored chips: green = positive, red = negative,
+   amber = duration / time-related. Each trait has a flavor quote and an
+   axis-tag so PCs and NPCs alike can be described by the same shorthand. */
+.personality-altarpiece {
+  padding: 24px 40px 40px;
+  max-width: 1200px;
+}
+.personality-section {
+  margin-top: 24px;
+}
+.personality-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 14px;
+}
+@media (max-width: 900px) { .personality-grid { grid-template-columns: 1fr; } }
+
+.pers-card {
+  display: grid;
+  grid-template-columns: 168px 1fr;
+  border: 0.5px solid rgba(201,156,90,.20);
+  border-left: 3px solid var(--pers-accent, #c99c5a);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.014), rgba(0,0,0,.22)),
+    radial-gradient(140% 100% at 0% 50%, color-mix(in srgb, var(--pers-accent, #c99c5a) 10%, transparent), transparent 70%);
+  overflow: hidden;
+  position: relative;
+}
+.pers-card-shrine {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 20px 14px 18px;
+  text-align: center;
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--pers-accent, #c99c5a) 22%, rgba(0,0,0,.30)) 0%,
+      color-mix(in srgb, var(--pers-accent, #c99c5a) 8%, rgba(0,0,0,.50)) 100%);
+  border-right: 0.5px solid color-mix(in srgb, var(--pers-accent, #c99c5a) 30%, transparent);
+  position: relative;
+}
+.pers-card-shrine::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 12px; right: 12px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--pers-accent, #c99c5a) 60%, transparent), transparent);
+}
+.pers-card-emoji {
+  font-size: 56px;
+  line-height: 1;
+  margin-bottom: 10px;
+  filter: drop-shadow(0 0 14px color-mix(in srgb, var(--pers-accent, #c99c5a) 45%, transparent));
+}
+.pers-card-name {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.12em;
+  color: var(--gold2);
+  margin-bottom: 2px;
+  text-transform: uppercase;
+}
+.pers-card-name-en {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  opacity: .80;
+}
+.pers-card-axis {
+  margin-top: 12px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.10em;
+  color: color-mix(in srgb, var(--pers-accent, #c99c5a) 55%, var(--gold2));
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border: 0.5px solid color-mix(in srgb, var(--pers-accent, #c99c5a) 35%, transparent);
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.pers-card-panel {
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+.pers-card-flavor {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  font-style: italic;
+  color: color-mix(in srgb, var(--pers-accent, #c99c5a) 75%, var(--gold2));
+  line-height: 1.45;
+  padding-bottom: 10px;
+  border-bottom: 0.5px dashed rgba(201,156,90,.18);
+  letter-spacing: 0.005em;
+}
+.pers-card-phases {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.pers-card-phase {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.pers-card-phase-label {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--gold2);
+  text-transform: uppercase;
+}
+.pers-card-phase-trigger {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  font-style: italic;
+  padding-left: 12px;
+  position: relative;
+  line-height: 1.45;
+}
+.pers-card-phase-trigger::before {
+  content: '›';
+  position: absolute;
+  left: 2px;
+  color: var(--pers-accent, #c99c5a);
+  font-weight: 700;
+  font-style: normal;
+}
+.pers-card-phase-effects {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-left: 12px;
+  margin-top: 2px;
+}
+.pers-effect-chip {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 4px 9px;
+  border-radius: 4px;
+  border: 0.5px solid rgba(201,156,90,.30);
+  background: rgba(201,156,90,.08);
+  color: var(--gold2);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+.pers-effect-chip.is-pos {
+  border-color: rgba(99,153,34,.45);
+  background: rgba(99,153,34,.16);
+  color: #b9e093;
+}
+.pers-effect-chip.is-neg {
+  border-color: rgba(196,102,102,.45);
+  background: rgba(196,102,102,.16);
+  color: #ffa897;
+}
+.pers-effect-chip.is-time {
+  border-color: rgba(216,184,106,.45);
+  background: rgba(216,184,106,.16);
+  color: #f5d68a;
+}
+
 /* ───────── FOOTER ───────── */
 .foot {
   border-top: 0.5px solid rgba(201,156,90,.12);
@@ -5035,7 +5209,7 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
 <nav class="tab-nav" id="tabNav">
   <button class="tab active" data-tab="test"><span class="num">1</span>Body</button>
   <button class="tab" data-tab="lelek"><span class="num">2</span>Soul</button>
-  <button class="tab disabled" data-tab="szem"><span class="num">3</span>Personality</button>
+  <button class="tab" data-tab="szem"><span class="num">3</span>Personality</button>
   <button class="tab disabled" data-tab="vagon"><span class="num">4</span>Carriages</button>
   <button class="tab tab-reference" data-tab="cadence"><span class="num">∞</span>Chaos &amp; Harmony</button>
   <button class="tab tab-reference" data-tab="factions"><span class="num">§</span>Factions</button>
@@ -5429,11 +5603,33 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
 </section>
 
 <section class="tab-panel" id="tab-szem">
-  <div class="coming-soon">
-    <h2>LAYER 3 · PERSONALITY</h2>
-    <p>12–15 traits (lazy, proud, curious, paranoid, fanatic, loyal, servile, cynical, reckless, reliable, vain, martyr…) — the fine-tuning layer above Soul Index that makes every character distinct.</p>
-    <p class="badge">Coming soon</p>
-  </div>
+  <div class="personality-altarpiece">
+    <!-- Layer header -->
+    <div class="layer-header">
+      <div class="bi-eyebrow cath-eyebrow">
+        <span class="ce-orn" aria-hidden="true"><svg><use href="#orn-arch-small"/></svg></span>
+        Reference · the fine-tuning layer above body and soul
+      </div>
+      <h2>LAYER 3 · Personality</h2>
+      <p>
+        Master trait table &mdash; buffs, debuffs and trade-offs that distinguish characters who&#39;d otherwise share the same body and soul. Every trait has phase-based effects that <strong>reset at long rest (end of day)</strong>. Used in chargen for PCs and as DM shorthand for NPCs.
+      </p>
+    </div>
+
+    <!-- LOCKED TRAITS GRID -->
+    <section class="personality-section" aria-labelledby="personalityTraitsHeader">
+      <div class="cadence-section-header">
+        <div class="cath-eyebrow">
+          <span class="ce-orn" aria-hidden="true"><svg><use href="#orn-quatrefoil"/></svg></span>
+          Locked traits · master tabel grows as we add
+        </div>
+        <h3 class="cadence-section-title" id="personalityTraitsHeader">2 of ~28 wired</h3>
+        <p class="cadence-section-sub">Trade-off design: each trait has a positive phase and a negative phase that fire on different triggers. The picking model (1 from each tier in chargen) comes after we&#39;ve reviewed the full master tabel.</p>
+      </div>
+      <div class="personality-grid" id="personalityTraitsGrid"></div>
+    </section>
+
+  </div><!-- /.personality-altarpiece -->
 </section>
 
 <section class="tab-panel" id="tab-vagon">
@@ -8696,6 +8892,107 @@ function renderFactionCard(f, isHostile) {
       </div>
     </div>
   `;
+}
+
+// ═══ PERSONALITY · master trait tabel (Layer 3) ═══════════
+// Phase-based traits with mixed positive/negative effects. The reset
+// boundary is long rest (end of day). Two locked entries so far —
+// will grow to ~28 across debuff / mid / buff tiers. Render is keyed
+// off the data array, so adding a trait = appending to PERSONALITY_TRAITS.
+
+const PERSONALITY_TRAITS = [
+  {
+    id: 'lazy',
+    name: 'Lusta',
+    nameEn: 'Lazy',
+    emoji: '🦥',
+    accent: '#9a8466',
+    flavor: 'Az első dolgot belead mindent, mert kipihent. Aztán már nem érdekli.',
+    axisTag: 'Time-axis trade-off',
+    phases: [
+      {
+        label: 'Fresh start',
+        trigger: 'A nap első task-ja',
+        effects: [
+          { kind: 'pos',  text: '+1 minden roll-ra' },
+          { kind: 'time', text: '+50% task duration' }
+        ]
+      },
+      {
+        label: 'Run-down',
+        trigger: 'Minden további task amíg long rest (nap vége)',
+        effects: [
+          { kind: 'neg',  text: '-1 minden roll-ra' },
+          { kind: 'time', text: '+25% task duration' }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'lone-wolf',
+    name: 'Magányos farkas',
+    nameEn: 'Lone Wolf',
+    emoji: '🐺',
+    accent: '#7a6cb8',
+    flavor: 'Egyedül két emberként dolgozik. Csapatban félre rúgják.',
+    axisTag: 'Team-comp trade-off',
+    phases: [
+      {
+        label: 'Solo deployment',
+        trigger: 'A scene-ben/missionben egyedül van',
+        effects: [
+          { kind: 'pos', text: 'Phantom-companion · roll × 1.5' },
+          { kind: 'pos', text: 'pl. 10 → 15, 8 → 12' }
+        ]
+      },
+      {
+        label: 'Team deployment',
+        trigger: '1+ teammate ugyanabba a missionbe',
+        effects: [
+          { kind: 'neg', text: '-1 minden roll-ra' }
+        ]
+      }
+    ]
+  }
+];
+
+function renderPersonalityCard(t) {
+  const phasesHtml = t.phases.map(ph => {
+    const chipsHtml = ph.effects.map(e =>
+      `<span class="pers-effect-chip is-${e.kind}">${e.text}</span>`
+    ).join('');
+    return `
+      <div class="pers-card-phase">
+        <div class="pers-card-phase-label">${ph.label}</div>
+        <div class="pers-card-phase-trigger">${ph.trigger}</div>
+        <div class="pers-card-phase-effects">${chipsHtml}</div>
+      </div>`;
+  }).join('');
+  return `
+    <article class="pers-card" style="--pers-accent: ${t.accent};" data-pers-id="${t.id}">
+      <div class="pers-card-shrine">
+        <div class="pers-card-emoji" aria-hidden="true">${t.emoji}</div>
+        <div class="pers-card-name">${t.name}</div>
+        <div class="pers-card-name-en">${t.nameEn}</div>
+        <div class="pers-card-axis">${t.axisTag}</div>
+      </div>
+      <div class="pers-card-panel">
+        <div class="pers-card-flavor">“${t.flavor}”</div>
+        <div class="pers-card-phases">${phasesHtml}</div>
+      </div>
+    </article>`;
+}
+
+function renderPersonalityTraits() {
+  const grid = document.getElementById('personalityTraitsGrid');
+  if (!grid) return;
+  grid.innerHTML = PERSONALITY_TRAITS.map(renderPersonalityCard).join('');
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', renderPersonalityTraits);
+} else {
+  renderPersonalityTraits();
 }
 
 function renderFactions() {
