@@ -5232,11 +5232,11 @@ body {
 .carriage-floor-wrap::after  { bottom: 6px; }
 .carriage-floor {
   display: grid;
-  grid-template-columns: repeat(14, minmax(38px, 1fr));
-  grid-template-rows: repeat(4, minmax(38px, 1fr));
+  grid-template-columns: repeat(16, minmax(36px, 1fr));
+  grid-template-rows: repeat(5, minmax(36px, 1fr));
   gap: 2px;
-  aspect-ratio: 14 / 4;
-  min-width: 560px;
+  aspect-ratio: 16 / 5;
+  min-width: 640px;
   margin: 4px auto;
   background: rgba(0, 0, 0, 0.30);
   border: 1px solid rgba(201,156,90,.20);
@@ -5268,6 +5268,32 @@ body {
   font-size: 18px;
   z-index: 1;
 }
+/* Work slot — required post (driver). Solid look, brighter glow.
+   Visually says: 'someone must stand here for the train to run.' */
+.carriage-tile.is-slot.is-work {
+  background:
+    radial-gradient(circle at center, color-mix(in srgb, var(--slot-accent, #d8b86a) 35%, #2a2128), #1a1118);
+  border: 2px solid color-mix(in srgb, var(--slot-accent, #d8b86a) 85%, transparent);
+  box-shadow:
+    inset 0 0 10px color-mix(in srgb, var(--slot-accent, #d8b86a) 45%, transparent),
+    0 0 10px color-mix(in srgb, var(--slot-accent, #d8b86a) 35%, transparent);
+  font-size: 20px;
+}
+/* Install slots — empty fittings. Dashed border, lighter feel.
+   Visually says: 'put something here.' */
+.carriage-tile.is-slot.is-install-small,
+.carriage-tile.is-slot.is-install-big {
+  background:
+    repeating-linear-gradient(45deg,
+      color-mix(in srgb, var(--slot-accent, #5fa3d4) 12%, rgba(0,0,0,.40)) 0 5px,
+      rgba(0,0,0,.40) 5px 10px);
+  border: 1.5px dashed color-mix(in srgb, var(--slot-accent, #5fa3d4) 70%, transparent);
+  box-shadow: inset 0 0 4px color-mix(in srgb, var(--slot-accent, #5fa3d4) 25%, transparent);
+  opacity: .80;
+}
+.carriage-tile.is-slot.is-install-big {
+  font-size: 28px;
+}
 .carriage-tile.is-slot::after {
   content: attr(data-label);
   position: absolute;
@@ -5285,12 +5311,6 @@ body {
 }
 .carriage-tile.is-slot:hover::after { opacity: 1; }
 .carriage-block {
-  grid-column: 6 / 11;
-  grid-row: 1 / 5;
-  background:
-    radial-gradient(ellipse at center, rgba(255, 80, 30, 0.35) 0%, rgba(74, 26, 20, 0.95) 60%, rgba(34, 12, 10, 1) 100%),
-    linear-gradient(135deg, #3a1810, #1d0c08);
-  border: 2px solid #c46666;
   border-radius: 4px;
   display: flex;
   align-items: center;
@@ -5299,25 +5319,47 @@ body {
   gap: 4px;
   position: relative;
   z-index: 2;
-  box-shadow: inset 0 0 18px rgba(255, 80, 30, 0.40), 0 0 12px rgba(196, 102, 102, 0.40);
 }
 .carriage-block::before {
-  content: '🚂';
-  font-size: 38px;
-  filter: drop-shadow(0 0 8px rgba(255, 100, 40, 0.6));
+  content: attr(data-icon);
+  filter: drop-shadow(0 0 8px rgba(255, 100, 40, 0.5));
 }
-.carriage-block::after {
-  content: '';
-  position: absolute;
-  inset: 6px;
-  border-radius: 2px;
+.carriage-block .block-label {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 200, 150, 0.85);
+  text-shadow: 0 0 4px rgba(255, 100, 40, 0.6);
+}
+/* Engine — big red-glowing centerpiece */
+.carriage-block.is-engine {
   background:
-    radial-gradient(circle at 25% 25%, rgba(255, 180, 100, 0.30) 0 2px, transparent 3px),
-    radial-gradient(circle at 75% 25%, rgba(255, 180, 100, 0.30) 0 2px, transparent 3px),
-    radial-gradient(circle at 25% 75%, rgba(255, 180, 100, 0.30) 0 2px, transparent 3px),
-    radial-gradient(circle at 75% 75%, rgba(255, 180, 100, 0.30) 0 2px, transparent 3px);
+    radial-gradient(ellipse at center, rgba(255, 80, 30, 0.40) 0%, rgba(74, 26, 20, 0.95) 60%, rgba(34, 12, 10, 1) 100%),
+    linear-gradient(135deg, #3a1810, #1d0c08);
+  border: 2px solid #c46666;
+  box-shadow: inset 0 0 22px rgba(255, 80, 30, 0.45), 0 0 14px rgba(196, 102, 102, 0.45);
+}
+.carriage-block.is-engine::before { font-size: 48px; }
+.carriage-block.is-engine::after {
+  content: '';
+  position: absolute; inset: 8px; border-radius: 2px;
+  background:
+    radial-gradient(circle at 15% 15%, rgba(255, 180, 100, 0.30) 0 2px, transparent 3px),
+    radial-gradient(circle at 85% 15%, rgba(255, 180, 100, 0.30) 0 2px, transparent 3px),
+    radial-gradient(circle at 15% 85%, rgba(255, 180, 100, 0.30) 0 2px, transparent 3px),
+    radial-gradient(circle at 85% 85%, rgba(255, 180, 100, 0.30) 0 2px, transparent 3px);
   pointer-events: none;
 }
+/* Tender — small dark coal-storage hut */
+.carriage-block.is-tender {
+  background: linear-gradient(135deg, #2a2018, #14100c);
+  border: 1.5px solid #5a4530;
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.7);
+}
+.carriage-block.is-tender::before { font-size: 22px; opacity: .55; }
+.carriage-block.is-tender .block-label { font-size: 8px; opacity: .75; }
 .carriage-legend {
   margin-top: 22px;
   display: grid;
@@ -6458,7 +6500,7 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
           Carriage 1 · the locomotive
         </div>
         <h3 class="cadence-section-title" id="engineHeader">🚂 Engine — top-down floor plan</h3>
-        <p class="cadence-section-sub">4 tiles tall × 14 tiles wide. The engine block (5×4) is fixed off-area — graphical only, no walking. Crew posts to one of the <strong>8 surrounding slots</strong>. Other carriages will follow this same template.</p>
+        <p class="cadence-section-sub">5 tiles tall × 16 tiles wide. A small coal-fired origin train: the <strong>engine block</strong> (7×5) and <strong>coal tender hut</strong> (2×2) take the front-left ~40% as off-area. The right-side living area is cramped — only <strong>1 driver post</strong> (required) and <strong>3 install slots</strong> (2 small + 1 big) where players fit gear they recover and unlock.</p>
       </div>
       <div class="carriage-floor-wrap">
         <div class="carriage-floor" id="engineFloor" role="img" aria-label="Engine carriage floor plan, 4 by 14 tile grid"></div>
@@ -10530,18 +10572,35 @@ const CARRIAGES = [
 // same template — see the CARRIAGES data above for their roles.
 
 const ENGINE_LAYOUT = {
-  cols: 14,
-  rows: 4,
-  block: { col: 6, row: 1, span_col: 5, span_row: 4, label: 'Engine block' },
+  cols: 16,
+  rows: 5,
+  // Off-area blocks. The carriage is a small coal-fired origin train: a
+  // big engine taking ~40% of the front-left, a smaller coal tender hut
+  // tucked right behind it, then a cramped living area on the right.
+  blocks: [
+    { id: 'engine',  col: 1, row: 1, span_col: 7, span_row: 5, kind: 'engine',  icon: '🚂', label: 'Engine block' },
+    { id: 'tender',  col: 8, row: 1, span_col: 2, span_row: 2, kind: 'tender',  icon: '⬛', label: 'Coal tender' }
+  ],
+  // Two slot kinds, visually distinct:
+  //   • work    → required post (driver). Someone MUST be here for the train to run.
+  //   • install → empty fitting. Players slot recovered gear here (bed, shelf, bunk, etc).
   slots: [
-    { id: 'brake',     col: 1,  row: 1, icon: '🛑', accent: '#c46666', name: 'Brake control',     task: 'Stop the train · emergency halt' },
-    { id: 'nav',       col: 3,  row: 1, icon: '🧭', accent: '#5fa3d4', name: 'Navigation chart',  task: 'Plot the route · read switches and signals' },
-    { id: 'throttle',  col: 12, row: 1, icon: '🎚', accent: '#d8b86a', name: 'Throttle console',  task: 'Speed up · slow down · maintain pace' },
-    { id: 'orb',       col: 2,  row: 3, icon: '🔮', accent: '#9a7acc', name: 'Orb mount',         task: 'Story-locked · install Orb when secured (Canto 1)' },
-    { id: 'toolbox',   col: 12, row: 3, icon: '🧰', accent: '#52b8a8', name: 'Toolbox',           task: 'Critical repairs · component replace under fire' },
-    { id: 'valve-n',   col: 1,  row: 4, icon: '⚙',  accent: '#a85540', name: 'Pressure valve N',  task: 'Bleed pressure · prevent boiler runaway' },
-    { id: 'fuel',      col: 4,  row: 4, icon: '🔥', accent: '#a32d2d', name: 'Fuel injector',     task: 'Hellfire intake · feed the engine block' },
-    { id: 'valve-s',   col: 14, row: 4, icon: '⚙',  accent: '#a85540', name: 'Pressure valve S',  task: 'Bleed pressure · paired with the north valve' }
+    { id: 'driver',          col: 11, row: 2, span_col: 1, span_row: 1, kind: 'work',
+      icon: '🎚', accent: '#d8b86a',
+      name: 'Driver post',
+      task: 'REQUIRED · fuel · throttle · brake · steer. Can be a PC or PAVNN.' },
+    { id: 'install-small-a', col: 14, row: 2, span_col: 1, span_row: 1, kind: 'install-small',
+      icon: '◻', accent: '#5fa3d4',
+      name: 'Small install slot',
+      task: 'Fits 1×1 gear (bed, shelf, locker, console). Found and unlocked.' },
+    { id: 'install-small-b', col: 11, row: 5, span_col: 1, span_row: 1, kind: 'install-small',
+      icon: '◻', accent: '#5fa3d4',
+      name: 'Small install slot',
+      task: 'Fits 1×1 gear (bed, shelf, locker, console). Found and unlocked.' },
+    { id: 'install-big',     col: 13, row: 4, span_col: 2, span_row: 2, kind: 'install-big',
+      icon: '◼', accent: '#9a7acc',
+      name: 'Big install slot',
+      task: 'Fits 2×2 gear (bunk, workbench, weapons rack). Found and unlocked.' }
   ]
 };
 
@@ -10551,36 +10610,52 @@ function renderEngineFloor() {
   if (!grid) return;
   const L = ENGINE_LAYOUT;
 
-  const slotByKey = {};
-  L.slots.forEach(s => { slotByKey[`${s.row},${s.col}`] = s; });
-
-  const blockKeys = new Set();
-  for (let r = L.block.row; r < L.block.row + L.block.span_row; r++) {
-    for (let c = L.block.col; c < L.block.col + L.block.span_col; c++) {
-      blockKeys.add(`${r},${c}`);
+  // Mark every cell covered by a multi-tile element so we don't render
+  // a duplicate floor / slot cell underneath.
+  const covered = new Set();
+  const markSpan = (row, col, span_row, span_col) => {
+    for (let r = row; r < row + span_row; r++) {
+      for (let c = col; c < col + span_col; c++) {
+        covered.add(`${r},${c}`);
+      }
     }
-  }
+  };
+  L.blocks.forEach(b => markSpan(b.row, b.col, b.span_row, b.span_col));
+  L.slots.forEach(s => markSpan(s.row, s.col, s.span_row, s.span_col));
+
+  // Single-cell anchor: which slot starts at this (row,col)?
+  const slotAnchor = {};
+  L.slots.forEach(s => { slotAnchor[`${s.row},${s.col}`] = s; });
 
   let html = '';
-  html += `<div class="carriage-block" role="img" aria-label="${L.block.label} · off-area"></div>`;
 
+  // Render each off-area block as one spanning element.
+  L.blocks.forEach(b => {
+    const colEnd = b.col + b.span_col;
+    const rowEnd = b.row + b.span_row;
+    html += `<div class="carriage-block is-${b.kind}" style="grid-column:${b.col} / ${colEnd}; grid-row:${b.row} / ${rowEnd};" data-icon="${b.icon}" role="img" aria-label="${b.label} · off-area"><span class="block-label">${b.label}</span></div>`;
+  });
+
+  // Render each slot as one spanning element at its anchor cell.
+  L.slots.forEach(s => {
+    const colEnd = s.col + s.span_col;
+    const rowEnd = s.row + s.span_row;
+    html += `<div class="carriage-tile is-slot is-${s.kind}" style="grid-column:${s.col} / ${colEnd}; grid-row:${s.row} / ${rowEnd}; --slot-accent:${s.accent};" data-slot-id="${s.id}" data-label="${s.name}" title="${s.name} — ${s.task}">${s.icon}</div>`;
+  });
+
+  // Render walkable floor on every uncovered cell.
   for (let r = 1; r <= L.rows; r++) {
     for (let c = 1; c <= L.cols; c++) {
       const key = `${r},${c}`;
-      if (blockKeys.has(key)) continue;
-      const slot = slotByKey[key];
-      if (slot) {
-        html += `<div class="carriage-tile is-slot" style="grid-column:${c}; grid-row:${r}; --slot-accent:${slot.accent};" data-slot-id="${slot.id}" data-label="${slot.name}" title="${slot.name} — ${slot.task}">${slot.icon}</div>`;
-      } else {
-        html += `<div class="carriage-tile is-floor" style="grid-column:${c}; grid-row:${r};" aria-hidden="true"></div>`;
-      }
+      if (covered.has(key)) continue;
+      html += `<div class="carriage-tile is-floor" style="grid-column:${c}; grid-row:${r};" aria-hidden="true"></div>`;
     }
   }
   grid.innerHTML = html;
 
   if (legend) {
     legend.innerHTML = L.slots.map(s => `
-      <div class="legend-row" style="--slot-accent:${s.accent};">
+      <div class="legend-row is-${s.kind}" style="--slot-accent:${s.accent};">
         <div class="legend-icon">${s.icon}</div>
         <div class="legend-text">
           <div class="legend-name">${s.name}</div>
