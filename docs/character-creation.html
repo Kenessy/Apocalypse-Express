@@ -8895,7 +8895,7 @@ function renderFactionCard(f, isHostile) {
 }
 
 // ═══ PERSONALITY · master trait tabel (Layer 3) ═══════════
-// Phase-based traits with mixed positive/negative effects. The reset
+// Phase-based traits with mixed positive and negative effects. The reset
 // boundary is long rest (end of day). Two locked entries so far —
 // will grow to ~28 across debuff / mid / buff tiers. Render is keyed
 // off the data array, so adding a trait = appending to PERSONALITY_TRAITS.
@@ -8903,26 +8903,25 @@ function renderFactionCard(f, isHostile) {
 const PERSONALITY_TRAITS = [
   {
     id: 'lazy',
-    name: 'Lusta',
-    nameEn: 'Lazy',
+    name: 'Lazy',
     emoji: '🦥',
     accent: '#9a8466',
-    flavor: 'Az első dolgot belead mindent, mert kipihent. Aztán már nem érdekli.',
+    flavor: 'Pours everything into the first task because they are well rested. After that, the spark is gone.',
     axisTag: 'Time-axis trade-off',
     phases: [
       {
         label: 'Fresh start',
-        trigger: 'A nap első task-ja',
+        trigger: 'First task of the day',
         effects: [
-          { kind: 'pos',  text: '+1 minden roll-ra' },
+          { kind: 'pos',  text: '+1 to all rolls' },
           { kind: 'time', text: '+50% task duration' }
         ]
       },
       {
         label: 'Run-down',
-        trigger: 'Minden további task amíg long rest (nap vége)',
+        trigger: 'Every later task until long rest (end of day)',
         effects: [
-          { kind: 'neg',  text: '-1 minden roll-ra' },
+          { kind: 'neg',  text: '-1 to all rolls' },
           { kind: 'time', text: '+25% task duration' }
         ]
       }
@@ -8930,26 +8929,25 @@ const PERSONALITY_TRAITS = [
   },
   {
     id: 'lone-wolf',
-    name: 'Magányos farkas',
-    nameEn: 'Lone Wolf',
+    name: 'Lone Wolf',
     emoji: '🐺',
     accent: '#7a6cb8',
-    flavor: 'Egyedül két emberként dolgozik. Csapatban félre rúgják.',
+    flavor: 'Works like two people on their own. In a team they trip over the others.',
     axisTag: 'Team-comp trade-off',
     phases: [
       {
         label: 'Solo deployment',
-        trigger: 'A scene-ben/missionben egyedül van',
+        trigger: 'Alone in the scene or mission',
         effects: [
-          { kind: 'pos', text: 'Phantom-companion · roll × 1.5' },
-          { kind: 'pos', text: 'pl. 10 → 15, 8 → 12' }
+          { kind: 'pos', text: 'Phantom companion · roll × 1.5' },
+          { kind: 'pos', text: 'e.g. 10 → 15, 8 → 12' }
         ]
       },
       {
         label: 'Team deployment',
-        trigger: '1+ teammate ugyanabba a missionbe',
+        trigger: '1+ teammate on the same mission',
         effects: [
-          { kind: 'neg', text: '-1 minden roll-ra' }
+          { kind: 'neg', text: '-1 to all rolls' }
         ]
       }
     ]
@@ -8973,7 +8971,6 @@ function renderPersonalityCard(t) {
       <div class="pers-card-shrine">
         <div class="pers-card-emoji" aria-hidden="true">${t.emoji}</div>
         <div class="pers-card-name">${t.name}</div>
-        <div class="pers-card-name-en">${t.nameEn}</div>
         <div class="pers-card-axis">${t.axisTag}</div>
       </div>
       <div class="pers-card-panel">
