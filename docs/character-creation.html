@@ -6095,7 +6095,7 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
           <span class="ce-orn" aria-hidden="true"><svg><use href="#orn-quatrefoil"/></svg></span>
           Locked traits · master tabel grows as we add
         </div>
-        <h3 class="cadence-section-title" id="personalityTraitsHeader">4 of ~28 wired</h3>
+        <h3 class="cadence-section-title" id="personalityTraitsHeader">5 of ~28 wired</h3>
         <p class="cadence-section-sub">Trade-off design: each trait has a positive phase and a negative phase that fire on different triggers. The picking model (1 from each tier in chargen) comes after we&#39;ve reviewed the full master tabel.</p>
         <div class="pers-system-notes" aria-label="Personality system notes">
           <div class="psn-row"><span class="psn-key">Scope</span><span class="psn-val">Effects apply only to <strong>authored dispatch tasks</strong> &mdash; not dialogue choice, story choice, or passive scenes.</span></div>
@@ -9721,6 +9721,58 @@ const PERSONALITY_TRAITS = [
         effects: [
           { kind: 'neg', text: '-1 Outcome' },
           { text: 'No time to lock on' }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'maximalist',
+    name: 'Maximalist',
+    emoji: '⭐',
+    accent: '#d4a449',
+    flavor: 'Every success raises the standard. Every failure proves it was not enough.',
+    axisTag: 'Streak trade-off · state-persistent (max 3 Excellence chips)',
+    phases: [
+      {
+        label: 'Perfect streak',
+        trigger: 'Complete a meaningful assignment with Success or Critical Success',
+        effects: [
+          { kind: 'pos', text: 'Gain 1 random Excellence chip · max 3 total' },
+          { text: 'Chip table: Labor · Systems · Social · Scout · Hazard · Care' },
+          { kind: 'pos', text: 'Each chip · +1 Outcome on matching tag' }
+        ]
+      },
+      {
+        label: 'High standard',
+        trigger: 'Critical Success on the streak roll',
+        effects: [
+          { kind: 'pos', text: 'Draw 2 chips, keep 1 (better choice)' }
+        ]
+      },
+      {
+        label: 'Streak break',
+        trigger: 'Failure / Critical Failure · or participate in failed group assignment',
+        effects: [
+          { kind: 'neg', text: 'Lose ALL Excellence chips' },
+          { kind: 'neg', text: 'Gain Discouraged status' }
+        ]
+      },
+      {
+        label: 'Discouraged (carries to next task)',
+        trigger: 'Next assigned task after streak break',
+        effects: [
+          { kind: 'neg',  text: '-1 Outcome' },
+          { kind: 'time', text: '×1.25 Duration' },
+          { text: 'Then Discouraged clears' }
+        ]
+      },
+      {
+        label: 'Anti-farm guardrails',
+        trigger: 'Always',
+        effects: [
+          { text: 'Only authored, meaningful assignments grant chips' },
+          { text: 'Training / filler / zero-risk chores do NOT count' },
+          { text: 'Group fail counts only if Maximalist was slotted' }
         ]
       }
     ]
