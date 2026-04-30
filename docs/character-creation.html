@@ -6095,7 +6095,7 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
           <span class="ce-orn" aria-hidden="true"><svg><use href="#orn-quatrefoil"/></svg></span>
           Locked traits · master tabel grows as we add
         </div>
-        <h3 class="cadence-section-title" id="personalityTraitsHeader">3 of ~28 wired</h3>
+        <h3 class="cadence-section-title" id="personalityTraitsHeader">4 of ~28 wired</h3>
         <p class="cadence-section-sub">Trade-off design: each trait has a positive phase and a negative phase that fire on different triggers. The picking model (1 from each tier in chargen) comes after we&#39;ve reviewed the full master tabel.</p>
         <div class="pers-system-notes" aria-label="Personality system notes">
           <div class="psn-row"><span class="psn-key">Scope</span><span class="psn-val">Effects apply only to <strong>authored dispatch tasks</strong> &mdash; not dialogue choice, story choice, or passive scenes.</span></div>
@@ -9673,6 +9673,40 @@ const PERSONALITY_TRAITS = [
         trigger: 'Multiple Mentors on the same assignment',
         effects: [
           { text: 'Only one Mentor bonus applies · choose one active' }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'hyperfocus',
+    name: 'Hyperfocus',
+    emoji: '🎯',
+    accent: '#4a7ab8',
+    flavor: 'When they lock on, the world disappears. Brilliant on deep work, brittle on switches.',
+    axisTag: 'Task-shape trade-off',
+    phases: [
+      {
+        label: 'Deep task',
+        trigger: 'Long-duration assignment, completed without re-assignment',
+        effects: [
+          { kind: 'pos', text: '+2 Outcome' },
+          { text: 'Full lock-on achieved' }
+        ]
+      },
+      {
+        label: 'Interrupted',
+        trigger: 'Re-assigned or pulled before completion',
+        effects: [
+          { kind: 'neg', text: '-1 Outcome' },
+          { text: 'Focus broken — must rebuild' }
+        ]
+      },
+      {
+        label: 'Short task',
+        trigger: 'Short-duration assignment',
+        effects: [
+          { kind: 'neg', text: '-1 Outcome' },
+          { text: 'No time to lock on' }
         ]
       }
     ]
