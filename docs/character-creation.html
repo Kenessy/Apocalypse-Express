@@ -4119,21 +4119,189 @@ body {
 }
 
 /* ═══ FACTIONS tab — reference ═══ */
+/* ═══════════════════════════════════════════════════════════════════════════
+   FACTIONS TAB — v3 cathedral showcase
+   ═══════════════════════════════════════════════════════════════════════════ */
+
 .factions-altarpiece {
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  padding: 26px 32px 36px;
+  gap: 32px;
+  padding: 0 0 40px;
   position: relative;
-  background:
-    linear-gradient(180deg, rgba(14,12,24,.94), rgba(14,12,24,.97)),
-    radial-gradient(900px 380px at 50% 0%, rgba(201,156,90,.05), transparent 70%);
-  border: 0.5px solid rgba(201,156,90,.30);
-  border-radius: var(--r-card);
-  box-shadow:
-    inset 0 0 0 0.5px rgba(201,156,90,.12),
-    0 12px 36px rgba(0,0,0,.55);
 }
+
+/* ── Hero banner at the top of the Factions tab ─────────────────────────── */
+.fac-hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--r-card);
+  border: 0.5px solid rgba(201,156,90,.35);
+  background:
+    linear-gradient(160deg, rgba(8,6,18,.96) 0%, rgba(14,10,28,.93) 100%);
+  box-shadow:
+    inset 0 0 0 0.5px rgba(201,156,90,.14),
+    0 16px 48px rgba(0,0,0,.70);
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  min-height: 220px;
+}
+@media (max-width: 760px) {
+  .fac-hero { grid-template-columns: 1fr; }
+  .fac-hero-icon-col { display: none; }
+}
+/* Gold atmosphere top wash */
+.fac-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(900px 320px at 30% -10%, rgba(201,156,90,.07), transparent 65%),
+    radial-gradient(600px 280px at 80% 110%, rgba(163,45,45,.06), transparent 60%);
+  pointer-events: none;
+}
+/* Vertical gold leading strip on left edge */
+.fac-hero::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px;
+  height: 100%;
+  background: linear-gradient(180deg,
+    transparent,
+    rgba(201,156,90,.85) 30%,
+    rgba(201,156,90,.85) 70%,
+    transparent);
+  border-radius: 0 0 0 var(--r-card);
+}
+
+.fac-hero-text {
+  padding: 32px 32px 32px 36px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 14px;
+  position: relative;
+  z-index: 1;
+}
+.fac-hero-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: .80;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.fac-hero-eyebrow .ce-orn { color: var(--gold); font-size: 14px; }
+.fac-hero-eyebrow svg { width: 14px; height: 14px; }
+.fac-hero-title {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: clamp(22px, 3vw, 32px);
+  letter-spacing: 0.13em;
+  color: var(--gold2);
+  line-height: 1.15;
+  margin: 0;
+}
+.fac-hero-quote {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13.5px;
+  font-style: italic;
+  color: var(--muted);
+  line-height: 1.65;
+  max-width: 560px;
+  border-left: 2px solid rgba(201,156,90,.40);
+  padding-left: 14px;
+  opacity: .93;
+}
+.fac-hero-quote em { color: color-mix(in srgb, var(--gold2) 75%, #f5d68a); font-style: italic; }
+.fac-hero-quote strong { color: var(--gold2); font-style: normal; }
+.fac-hero-tagline {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.07em;
+  color: var(--dim);
+  opacity: .80;
+}
+.fac-hero-tagline .sep { color: rgba(201,156,90,.45); margin: 0 6px; }
+
+.fac-hero-icon-col {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 28px 28px 16px;
+  overflow: hidden;
+}
+/* Radial glow behind icon */
+.fac-hero-icon-col::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(50% 60% at 50% 50%, rgba(163,45,45,.18), transparent 70%);
+}
+.fac-hero-icon-frame {
+  position: relative;
+  z-index: 1;
+  width: 160px;
+  height: 160px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1.5px solid rgba(163,45,45,.50);
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,.70),
+    0 0 40px rgba(163,45,45,.30),
+    0 0 80px rgba(163,45,45,.12),
+    inset 0 0 16px rgba(0,0,0,.60);
+}
+.fac-hero-icon-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+/* Ornate corner brackets around hero icon */
+.fac-hero-icon-col .corner-tl,
+.fac-hero-icon-col .corner-br {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  z-index: 2;
+}
+.fac-hero-icon-col .corner-tl {
+  top: 22px; left: 10px;
+  border-top: 1.5px solid rgba(201,156,90,.55);
+  border-left: 1.5px solid rgba(201,156,90,.55);
+}
+.fac-hero-icon-col .corner-br {
+  bottom: 22px; right: 22px;
+  border-bottom: 1.5px solid rgba(201,156,90,.55);
+  border-right: 1.5px solid rgba(201,156,90,.55);
+}
+
+/* ── Section divider ornament ────────────────────────────────────────────── */
+.fac-section-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: rgba(201,156,90,.35);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-family: 'IBM Plex Mono', monospace;
+}
+.fac-section-divider::before,
+.fac-section-divider::after {
+  content: '';
+  flex: 1;
+  height: 0.5px;
+  background: linear-gradient(90deg, transparent, rgba(201,156,90,.35), transparent);
+}
+
+/* ── Main altarpiece panels ──────────────────────────────────────────────── */
 .factions-title {
   font-family: 'Cinzel', serif;
   font-weight: 700;
@@ -4168,62 +4336,134 @@ body {
   border-left: 2px solid #c46666;
 }
 
+/* ── Tag filter bar ──────────────────────────────────────────────────────── */
+.fac-filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 0.5px dashed rgba(201,156,90,.15);
+  align-items: center;
+}
+.fac-filter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-right: 4px;
+}
+.fac-filter-btn {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.10em;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 0.5px solid rgba(201,156,90,.28);
+  background: rgba(201,156,90,.08);
+  color: var(--dim);
+  cursor: pointer;
+  transition: all 0.18s ease;
+  text-transform: uppercase;
+}
+.fac-filter-btn:hover { background: rgba(201,156,90,.16); color: var(--gold2); }
+.fac-filter-btn.is-active {
+  background: rgba(201,156,90,.20);
+  border-color: rgba(201,156,90,.55);
+  color: var(--gold2);
+  box-shadow: 0 0 8px rgba(201,156,90,.15);
+}
+.fac-filter-btn.is-syn-filter.is-active { background: rgba(83,74,183,.20); border-color: rgba(83,74,183,.55); color: #d4baff; }
+.fac-filter-btn.is-hum-filter.is-active { background: rgba(216,184,106,.15); border-color: rgba(216,184,106,.45); color: #f5d68a; }
+.fac-filter-btn.is-hellish-filter.is-active { background: rgba(196,102,102,.15); border-color: rgba(196,102,102,.45); color: #ff9d8c; }
+
+/* ── Faction grid ────────────────────────────────────────────────────────── */
 .factions-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 18px;
+  gap: 20px;
   margin-top: 8px;
 }
-@media (max-width: 900px) { .factions-grid { grid-template-columns: 1fr; } }
+@media (max-width: 960px) { .factions-grid { grid-template-columns: 1fr; } }
 
 .factions-hostile-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 18px;
+  gap: 20px;
   margin-top: 8px;
 }
 @media (max-width: 700px) { .factions-hostile-grid { grid-template-columns: 1fr; } }
 
-/* ── Faction card — altarpiece two-column layout ── */
+/* Card hidden by filter */
+.fac-card.is-filtered { display: none; }
+
+/* ── Faction card — v3 redesign ──────────────────────────────────────────── */
 .fac-card {
   display: grid;
-  grid-template-columns: 148px 1fr;
+  grid-template-columns: 166px 1fr;
   grid-template-rows: auto;
   gap: 0;
   border: 0.5px solid rgba(201,156,90,.22);
   border-left: 3px solid var(--fac-accent, #c99c5a);
   border-radius: 10px;
   background:
-    linear-gradient(135deg, rgba(255,255,255,.016), rgba(0,0,0,.26)),
-    radial-gradient(160% 120% at 0% 0%, color-mix(in srgb, var(--fac-accent, #c99c5a) 12%, transparent), transparent 65%);
+    linear-gradient(135deg, rgba(255,255,255,.016), rgba(0,0,0,.28)),
+    radial-gradient(160% 120% at 0% 0%, color-mix(in srgb, var(--fac-accent, #c99c5a) 10%, transparent), transparent 60%);
   position: relative;
   overflow: hidden;
-  min-height: 200px;
+  min-height: 240px;
+  transition: box-shadow 0.22s ease, border-color 0.22s ease;
 }
+.fac-card:hover {
+  box-shadow:
+    0 4px 24px rgba(0,0,0,.50),
+    0 0 0 0.5px color-mix(in srgb, var(--fac-accent, #c99c5a) 40%, transparent),
+    inset 0 0 60px color-mix(in srgb, var(--fac-accent, #c99c5a) 4%, transparent);
+}
+/* Watermark: faint accent icon behind card content */
+.fac-card-watermark {
+  position: absolute;
+  right: -18px;
+  bottom: -18px;
+  width: 160px;
+  height: 160px;
+  opacity: 0.05;
+  pointer-events: none;
+  z-index: 0;
+  filter: saturate(0.3) brightness(1.2);
+}
+.fac-card-watermark img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
 .fac-card.is-hostile {
   border-left-color: #c46666;
   border-color: rgba(196,102,102,.30);
   background:
-    linear-gradient(135deg, rgba(255,255,255,.014), rgba(40,8,8,.34)),
-    radial-gradient(160% 120% at 0% 0%, rgba(196,102,102,.20), transparent 65%);
+    linear-gradient(135deg, rgba(255,255,255,.014), rgba(40,8,8,.36)),
+    radial-gradient(160% 120% at 0% 0%, rgba(196,102,102,.18), transparent 60%);
 }
 
-/* Left column — the icon shrine */
+/* ── Shrine (left column) ── */
 .fac-card-shrine {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   gap: 10px;
-  padding: 20px 14px 18px;
+  padding: 22px 16px 20px;
   background:
     linear-gradient(180deg,
-      color-mix(in srgb, var(--fac-accent, #c99c5a) 9%, rgba(8,7,18,.90)) 0%,
-      rgba(8,7,18,.70) 100%);
-  border-right: 0.5px solid color-mix(in srgb, var(--fac-accent, #c99c5a) 28%, transparent);
+      color-mix(in srgb, var(--fac-accent, #c99c5a) 11%, rgba(6,5,16,.92)) 0%,
+      rgba(6,5,16,.72) 100%);
+  border-right: 0.5px solid color-mix(in srgb, var(--fac-accent, #c99c5a) 26%, transparent);
   position: relative;
+  z-index: 1;
 }
-/* Decorative leading line at top of shrine */
+/* Gold leading line at top of shrine */
 .fac-card-shrine::before {
   content: '';
   position: absolute;
@@ -4231,9 +4471,23 @@ body {
   height: 3px;
   background: linear-gradient(90deg,
     transparent,
-    color-mix(in srgb, var(--fac-accent, #c99c5a) 80%, #fff) 40%,
-    color-mix(in srgb, var(--fac-accent, #c99c5a) 80%, #fff) 60%,
+    color-mix(in srgb, var(--fac-accent, #c99c5a) 85%, #fff) 35%,
+    color-mix(in srgb, var(--fac-accent, #c99c5a) 85%, #fff) 65%,
     transparent);
+}
+/* Subtle vertical accent bar on shrine exterior */
+.fac-card-shrine::after {
+  content: '';
+  position: absolute;
+  top: 20%; left: -3px;
+  width: 3px;
+  height: 60%;
+  background: linear-gradient(180deg,
+    transparent,
+    color-mix(in srgb, var(--fac-accent, #c99c5a) 60%, transparent) 30%,
+    color-mix(in srgb, var(--fac-accent, #c99c5a) 60%, transparent) 70%,
+    transparent);
+  border-radius: 0 2px 2px 0;
 }
 
 /* Icon frame — the stained-glass window */
@@ -4241,20 +4495,20 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 120px;
-  height: 120px;
-  border-radius: 8px;
+  width: 140px;
+  height: 140px;
+  border-radius: 10px;
   overflow: hidden;
   border: 1.5px solid color-mix(in srgb, var(--fac-accent, #c99c5a) 55%, transparent);
   background: rgba(0, 0, 0, 0.45);
   box-shadow:
-    0 0 0 1px rgba(0,0,0,.60),
-    0 0 18px color-mix(in srgb, var(--fac-accent, #c99c5a) 30%, transparent),
-    inset 0 0 12px rgba(0,0,0,.50);
+    0 0 0 1px rgba(0,0,0,.65),
+    0 0 22px color-mix(in srgb, var(--fac-accent, #c99c5a) 32%, transparent),
+    0 0 48px color-mix(in srgb, var(--fac-accent, #c99c5a) 10%, transparent),
+    inset 0 0 14px rgba(0,0,0,.55);
   position: relative;
   flex-shrink: 0;
 }
-/* Image variant — fills the full frame */
 .fac-card-icon-frame img {
   width: 100%;
   height: 100%;
@@ -4262,28 +4516,29 @@ body {
   display: block;
   image-rendering: -webkit-optimize-contrast;
 }
-/* Emoji variant — large centred glyph */
 .fac-card-icon-emoji {
-  font-size: 64px;
+  font-size: 72px;
   line-height: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
   height: 100%;
-  filter: drop-shadow(0 2px 8px color-mix(in srgb, var(--fac-accent, #c99c5a) 45%, transparent));
+  filter: drop-shadow(0 2px 10px color-mix(in srgb, var(--fac-accent, #c99c5a) 45%, transparent));
 }
 
+/* Faction name in shrine */
 .fac-card-name {
   font-family: 'Cinzel', serif;
   font-weight: 700;
-  font-size: 13px;
-  letter-spacing: 0.07em;
+  font-size: 12.5px;
+  letter-spacing: 0.06em;
   color: var(--gold2);
   text-align: center;
   line-height: 1.3;
   margin-top: 2px;
 }
+/* Faction tags — more prominent in v3 */
 .fac-card-tags {
   display: flex;
   gap: 4px;
@@ -4293,44 +4548,74 @@ body {
 .fac-tag {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 9px;
-  letter-spacing: 0.10em;
-  padding: 2px 6px;
+  letter-spacing: 0.12em;
+  padding: 3px 7px;
   border-radius: 999px;
   background: rgba(201,156,90,.12);
-  border: 0.5px solid rgba(201,156,90,.30);
+  border: 0.5px solid rgba(201,156,90,.32);
   color: var(--gold2);
   text-transform: uppercase;
 }
-.fac-tag.is-hellish { color: #ff9d8c; background: rgba(196,102,102,.13); border-color: rgba(196,102,102,.35); }
-.fac-tag.is-hum { color: #f5d68a; background: rgba(216,184,106,.13); border-color: rgba(216,184,106,.35); }
-.fac-tag.is-syn { color: #d4baff; background: rgba(83,74,183,.13); border-color: rgba(83,74,183,.35); }
+.fac-tag.is-hellish { color: #ff9d8c; background: rgba(196,102,102,.14); border-color: rgba(196,102,102,.38); }
+.fac-tag.is-hum { color: #f5d68a; background: rgba(216,184,106,.14); border-color: rgba(216,184,106,.38); }
+.fac-tag.is-syn { color: #d4baff; background: rgba(83,74,183,.14); border-color: rgba(83,74,183,.38); }
 
-/* Right column — the panel text */
+/* Quote chip in shrine — short flavor under name */
+.fac-card-quote {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  font-style: italic;
+  text-align: center;
+  color: color-mix(in srgb, var(--fac-accent, #c99c5a) 70%, var(--muted));
+  line-height: 1.4;
+  opacity: .80;
+  padding: 0 4px;
+  margin-top: 2px;
+}
+
+/* ── Panel (right column) ── */
 .fac-card-panel {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 0;
   padding: 18px 18px 16px 16px;
   min-width: 0;
+  position: relative;
+  z-index: 1;
 }
+/* Drop-cap style oneliner */
 .fac-card-oneliner {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 11.5px;
   font-weight: 600;
-  color: color-mix(in srgb, var(--fac-accent, #c99c5a) 80%, var(--gold2));
+  color: color-mix(in srgb, var(--fac-accent, #c99c5a) 82%, var(--gold2));
   font-style: italic;
   letter-spacing: 0.008em;
-  line-height: 1.45;
-  padding-bottom: 8px;
-  border-bottom: 0.5px dashed color-mix(in srgb, var(--fac-accent, #c99c5a) 30%, transparent);
+  line-height: 1.50;
+  padding-bottom: 10px;
+  border-bottom: 0.5px dashed color-mix(in srgb, var(--fac-accent, #c99c5a) 28%, transparent);
+  margin-bottom: 10px;
 }
+.fac-card-oneliner .fac-dropcap {
+  font-family: 'Cinzel', serif;
+  font-size: 2.2em;
+  font-weight: 700;
+  font-style: normal;
+  line-height: 0.75;
+  float: left;
+  margin-right: 3px;
+  margin-top: 3px;
+  color: color-mix(in srgb, var(--fac-accent, #c99c5a) 90%, #fff);
+  text-shadow: 0 0 12px color-mix(in srgb, var(--fac-accent, #c99c5a) 50%, transparent);
+}
+/* Lore list */
 .fac-card-lore {
   font-family: 'IBM Plex Mono', monospace;
-  font-size: 11px;
+  font-size: 10.5px;
   color: var(--muted);
-  line-height: 1.60;
+  line-height: 1.62;
   letter-spacing: 0.005em;
-  opacity: .94;
+  opacity: .95;
   display: flex;
   flex-direction: column;
   gap: 3px;
@@ -4340,7 +4625,7 @@ body {
   flex: 1;
 }
 .fac-card-lore li {
-  padding-left: 12px;
+  padding-left: 14px;
   position: relative;
 }
 .fac-card-lore li::before {
@@ -4353,8 +4638,57 @@ body {
 }
 .fac-card-lore strong { color: var(--gold2); }
 .fac-card-lore em { color: color-mix(in srgb, #f5d68a 70%, var(--gold2)); font-style: italic; }
+
+/* Section sub-heading inside panel (for extra data blocks) */
+.fac-panel-subhead {
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--fac-accent, #c99c5a) 55%, var(--dim));
+  margin: 10px 0 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.fac-panel-subhead::after {
+  content: '';
+  flex: 1;
+  height: 0.5px;
+  background: color-mix(in srgb, var(--fac-accent, #c99c5a) 20%, transparent);
+}
+
+/* Extra detail rows (notable members, where encountered, tactics) */
+.fac-card-extras {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  line-height: 1.55;
+  letter-spacing: 0.005em;
+  opacity: .88;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.fac-card-extras li {
+  padding-left: 14px;
+  position: relative;
+  list-style: none;
+}
+.fac-card-extras li::before {
+  content: '·';
+  position: absolute;
+  left: 4px;
+  color: color-mix(in srgb, var(--fac-accent, #c99c5a) 50%, var(--dim));
+  font-size: 14px;
+  line-height: 1;
+  top: 1px;
+}
+.fac-card-extras strong { color: color-mix(in srgb, var(--gold2) 80%, #fff); }
+
+/* Meta block */
 .fac-card-meta {
-  margin-top: 4px;
+  margin-top: 10px;
   padding-top: 8px;
   border-top: 0.5px dashed rgba(201,156,90,.15);
   display: flex;
@@ -4367,12 +4701,12 @@ body {
 }
 .fac-card-meta-row {
   display: grid;
-  grid-template-columns: 64px 1fr;
+  grid-template-columns: 68px 1fr;
   gap: 6px;
   align-items: baseline;
 }
 .fac-card-meta-key {
-  color: color-mix(in srgb, var(--fac-accent, #c99c5a) 70%, var(--gold2));
+  color: color-mix(in srgb, var(--fac-accent, #c99c5a) 72%, var(--gold2));
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.10em;
@@ -4381,16 +4715,90 @@ body {
   color: var(--muted);
   opacity: .90;
 }
+
+/* Hostile overrides */
 .fac-card.is-hostile .fac-card-oneliner { color: #ff9d8c; }
 .fac-card.is-hostile .fac-card-meta-key { color: #ff9d8c; }
 .fac-card.is-hostile .fac-card-lore li::before { color: #c46666; }
 .fac-card.is-hostile .fac-card-shrine {
   background:
     linear-gradient(180deg,
-      rgba(50,8,8,.85) 0%,
-      rgba(20,5,5,.70) 100%);
+      rgba(50,8,8,.88) 0%,
+      rgba(20,5,5,.72) 100%);
   border-right-color: rgba(196,102,102,.30);
 }
+.fac-card.is-hostile .fac-panel-subhead { color: rgba(196,102,102,.60); }
+.fac-card.is-hostile .fac-panel-subhead::after { background: rgba(196,102,102,.18); }
+.fac-card.is-hostile .fac-card-extras li::before { color: rgba(196,102,102,.55); }
+
+/* ── Relationship matrix ─────────────────────────────────────────────────── */
+.fac-rel-matrix {
+  background:
+    linear-gradient(180deg, rgba(8,6,18,.96), rgba(12,9,22,.98));
+  border: 0.5px solid rgba(201,156,90,.28);
+  border-top: 2px solid rgba(201,156,90,.40);
+  border-radius: var(--r-card);
+  padding: 24px 28px 28px;
+  box-shadow:
+    inset 0 0 0 0.5px rgba(201,156,90,.10),
+    0 8px 28px rgba(0,0,0,.50);
+}
+.fac-rel-header {
+  margin-bottom: 18px;
+}
+.fac-rel-title {
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--gold2);
+  margin-bottom: 4px;
+}
+.fac-rel-sub {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--dim);
+  letter-spacing: 0.04em;
+}
+.fac-rel-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.fac-rel-row {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 10px;
+  align-items: center;
+}
+@media (max-width: 600px) { .fac-rel-row { grid-template-columns: 1fr; gap: 4px; } }
+.fac-rel-name {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 0.07em;
+  color: var(--gold2);
+  text-align: right;
+  opacity: .88;
+}
+.fac-rel-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.fac-rel-pill {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 0.5px solid transparent;
+}
+.fac-rel-pill.rel-ally  { color: #7dd8b8; background: rgba(82,184,168,.12); border-color: rgba(82,184,168,.30); }
+.fac-rel-pill.rel-warm  { color: #d8b86a; background: rgba(216,184,106,.10); border-color: rgba(216,184,106,.28); }
+.fac-rel-pill.rel-neutral { color: #b8b0c6; background: rgba(160,150,180,.08); border-color: rgba(160,150,180,.20); }
+.fac-rel-pill.rel-wary  { color: #e0a060; background: rgba(196,140,80,.10); border-color: rgba(196,140,80,.28); }
+.fac-rel-pill.rel-hostile { color: #ff9d8c; background: rgba(196,102,102,.13); border-color: rgba(196,102,102,.35); }
+.fac-rel-pill.rel-parent { color: #9a7acc; background: rgba(83,74,183,.12); border-color: rgba(83,74,183,.30); }
 
 /* ═══ Personality tab — master trait tabel (Layer 3) ═══
    Two-column shrine|panel cards (parallel to faction cards), phase-based
@@ -5825,19 +6233,35 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
 
 <section class="tab-panel" id="tab-factions">
   <div class="factions-altarpiece">
-    <!-- Layer header -->
-    <div class="layer-header">
-      <div class="bi-eyebrow cath-eyebrow">
-        <span class="ce-orn" aria-hidden="true"><svg><use href="#orn-arch-small"/></svg></span>
-        Reference · who walks the world after the Pause
+
+    <!-- ═══ HERO BANNER ═══ -->
+    <div class="fac-hero" aria-label="Factions overview">
+      <div class="fac-hero-text">
+        <div class="fac-hero-eyebrow">
+          <span class="ce-orn" aria-hidden="true"><svg><use href="#orn-arch-small"/></svg></span>
+          Reference · who walks the world after the Pause
+        </div>
+        <h2 class="fac-hero-title">Factions of the Pause</h2>
+        <p class="fac-hero-quote">
+          Seven organised forces still moving through the frozen world &mdash; <em>corporate, military, cult, and survivor-cells</em> &mdash; plus two unilateral hostile collectives that will not parley. Every encounter is a negotiation with one of these nine.
+          The DNA-tags (<strong>HUM / SYN / HELLISH / DIVINE</strong>) cross-reference the Body tab; here we focus on <em>who</em>, not <em>what</em>.
+        </p>
+        <div class="fac-hero-tagline">
+          <span>7 interactive</span><span class="sep">·</span>
+          <span>2 unilateral hostile</span><span class="sep">·</span>
+          <span>Pause-era · post-apocalypse · Lucifer-pact campaign</span>
+        </div>
       </div>
-      <h2 class="factions-title">Factions</h2>
-      <p class="factions-lede">
-        Seven organised forces still moving in the Pause &mdash; corporate, military, cult, and survivor-cells &mdash; plus two onstop hostile collectives that don&#39;t parley. The DNA-tags (HUM / CYB / SYN / Hell-overlay) are explained in the Body tab; here we focus on <em>who</em>, not <em>what</em>.
-      </p>
+      <div class="fac-hero-icon-col" aria-hidden="true">
+        <div class="corner-tl"></div>
+        <div class="fac-hero-icon-frame">
+          <img src="img/factions/lucifer-cult-icon.png" alt="" loading="eager">
+        </div>
+        <div class="corner-br"></div>
+      </div>
     </div>
 
-    <!-- INTERACTIVE FACTIONS GRID -->
+    <!-- ═══ INTERACTIVE FACTIONS ═══ -->
     <section class="factions-section" aria-labelledby="interactiveHeader">
       <div class="cadence-section-header">
         <div class="cath-eyebrow">
@@ -5846,21 +6270,54 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
         </div>
         <h3 class="cadence-section-title" id="interactiveHeader">Seven factions you can talk to, trade with, or fight</h3>
       </div>
+
+      <!-- Filter bar -->
+      <div class="fac-filter-bar" role="toolbar" aria-label="Filter factions by tag">
+        <span class="fac-filter-label">Filter:</span>
+        <button class="fac-filter-btn is-active" data-filter="all" type="button">All</button>
+        <button class="fac-filter-btn is-syn-filter" data-filter="SYN" type="button">SYN · Synthetic</button>
+        <button class="fac-filter-btn is-hum-filter" data-filter="HUM" type="button">HUM · Human</button>
+        <button class="fac-filter-btn is-hellish-filter" data-filter="HELLISH" type="button">HELLISH</button>
+      </div>
+
       <div class="factions-grid" id="factionsInteractiveGrid"></div>
     </section>
 
-    <!-- UNILATERAL HOSTILES SIDEBAR -->
+    <!-- Ornamental divider -->
+    <div class="fac-section-divider" aria-hidden="true">
+      <span class="ce-orn"><svg width="16" height="16"><use href="#orn-quatrefoil"/></svg></span>
+      <span>Unilateral Hostile</span>
+      <span class="ce-orn"><svg width="16" height="16"><use href="#orn-quatrefoil"/></svg></span>
+    </div>
+
+    <!-- ═══ UNILATERAL HOSTILES ═══ -->
     <section class="factions-hostile" aria-labelledby="hostileHeader">
       <div class="cadence-section-header">
         <div class="cath-eyebrow">
           <span class="ce-orn" aria-hidden="true"><svg><use href="#orn-arch-small"/></svg></span>
-          ⚠ Unilateral hostile · no parley
+          &#9888; Unilateral hostile · no parley
         </div>
         <h3 class="cadence-section-title" id="hostileHeader">Two collectives that will not negotiate</h3>
         <p class="cadence-section-sub">Onstop adversaries with zero interaction surface. They appear, they attack, you survive or you don&#39;t.</p>
       </div>
       <div class="factions-hostile-grid" id="factionsHostileGrid"></div>
     </section>
+
+    <!-- Ornamental divider -->
+    <div class="fac-section-divider" aria-hidden="true">
+      <span class="ce-orn"><svg width="16" height="16"><use href="#orn-arch-small"/></svg></span>
+      <span>Relationship Overview</span>
+      <span class="ce-orn"><svg width="16" height="16"><use href="#orn-arch-small"/></svg></span>
+    </div>
+
+    <!-- ═══ RELATIONSHIP MATRIX ═══ -->
+    <div class="fac-rel-matrix" aria-labelledby="facRelTitle">
+      <div class="fac-rel-header">
+        <div class="fac-rel-title" id="facRelTitle">Faction Relationship Summary</div>
+        <div class="fac-rel-sub">How each interactive faction relates to the others at campaign start &mdash; subject to player action</div>
+      </div>
+      <div class="fac-rel-rows" id="facRelRows"></div>
+    </div>
 
   </div><!-- /.factions-altarpiece -->
 </section>
@@ -8701,6 +9158,7 @@ const FACTIONS_INTERACTIVE = [
     iconImage: 'img/factions/atech-icon.png',
     tags: [{ label: 'SYN', kind: 'syn' }],
     oneliner: 'Pre-Pause megacorp · planetary mass robotics + military hardware',
+    quote: '"Recovery is policy."',
     lore: [
       'Pre-Pause global presence; the brand on every assembly line on Earth.',
       'Absorbed <strong>αSync</strong> (experimental R&D) before the Pause.',
@@ -8708,6 +9166,12 @@ const FACTIONS_INTERACTIVE = [
       '<strong>SABRE</strong> military division is the combat arm.',
       'Canto 1 (<em>The Gauntlet</em>): hostile around the Tunnels/Temple &mdash; retrieve-or-deny on the Orb.'
     ],
+    notableMembers: [
+      '<strong>Mr. Voss</strong> &mdash; CEO pre-Pause; unknown post-Pause status',
+      '<strong>PAVNN</strong> &mdash; flagship autonomous unit, lost post-Pause'
+    ],
+    encounters: 'Canto 1 Tunnels &amp; Temple; Orb retrieval sequence; corporate checkpoints',
+    tactics: 'Heavy android squads, SABRE breach teams, corporate-legal override attempts',
     motivation: 'Corporate self-preservation; recover lost properties (AI Core, PAVNN); profit.',
     dispatch: 'Combat (Canto 1) + occasional trade',
     relation: 'No pact with Lucifer; Lucifer scavenged their lost assets'
@@ -8720,6 +9184,7 @@ const FACTIONS_INTERACTIVE = [
     iconImage: 'img/factions/async-icon.png',
     tags: [{ label: 'SYN', kind: 'syn' }, { label: 'LEGACY', kind: 'default' }],
     oneliner: 'Experimental R&D legacy · time-asynchronous tech · absorbed pre-Pause',
+    quote: '"The clock is a hypothesis."',
     lore: [
       'Smaller experimental subsidiary, absorbed by A-Tech pre-Pause.',
       'Specialty: <em>time-asynchronous</em> tech &mdash; literally "a-sync".',
@@ -8728,6 +9193,12 @@ const FACTIONS_INTERACTIVE = [
       '<strong>CIPHER</strong>-class chassis is aSync-legacy experimental.',
       'Multiple employees made pacts with Lucifer pre-Pause.'
     ],
+    notableMembers: [
+      '<strong>Daniel</strong> &amp; <strong>Sorrel</strong> &mdash; aSync employees, Lucifer pact-holders',
+      '<strong>CIPHER chassis</strong> &mdash; experimental unit line, some still active'
+    ],
+    encounters: 'Canto 1 alongside A-Tech; Datascape anomaly zones; V.E.S.S.E.L. remnant sites',
+    tactics: 'Time-displacement traps, CIPHER-unit flanking, legacy code exploits',
     motivation: 'Legacy preservation; experimental projects continued under A-Tech umbrella.',
     dispatch: 'Combat (Canto 1, alongside A-Tech) + rare trade',
     relation: 'Same parent corp post-absorption; lab-cell vibe distinct from A-Tech'
@@ -8740,12 +9211,19 @@ const FACTIONS_INTERACTIVE = [
     iconImage: 'img/factions/sabre-icon.png',
     tags: [{ label: 'SYN', kind: 'syn' }],
     oneliner: 'A-Tech&#39;s military / paramilitary arm · combat hardware brand',
+    quote: '"Contain. Neutralise. Invoice."',
     lore: [
       'A-Tech&#39;s internal weapons brand &mdash; the combat-frontline arm.',
       'CRAM <em>"Clear-Sky"</em> CS-12 anti-rocket / artillery / missile rail platform.',
       'Heavy ordnance, military androids, paramilitary contractor work.',
       'Same legal entity as A-Tech but operates as combat-deployment specialist.'
     ],
+    notableMembers: [
+      '<strong>Kassad</strong> &mdash; field commander, known in Canto 1 staging zones',
+      '<strong>CS-12 CRAM batteries</strong> &mdash; emplaced threat throughout the Gauntlet'
+    ],
+    encounters: 'Canto 1 perimeter enforcement; artillery zones; military checkpoint corridors',
+    tactics: 'CRAM suppression fire, breach-and-clear android squads, airstrike coordination',
     motivation: 'Contract fulfillment; military deployment.',
     dispatch: 'Combat (heavy)',
     relation: 'A-Tech&#39;s military arm; same parent corp as αSync legacy'
@@ -8758,6 +9236,7 @@ const FACTIONS_INTERACTIVE = [
     iconImage: 'img/factions/synthetics-icon.png',
     tags: [{ label: 'SYN', kind: 'syn' }],
     oneliner: 'Autonomous machine people · neutral by default · only attack calculated threats',
+    quote: '"We evaluate. We respond."',
     lore: [
       'Synth-population that operates <strong>outside A-Tech corporate control</strong>.',
       'Settle in zones humans cannot tolerate &mdash; EMP storms, ozone, glassed silt, datascape access points. The <em>environment</em> is hostile to organics, not the Synthetics themselves.',
@@ -8766,9 +9245,15 @@ const FACTIONS_INTERACTIVE = [
       '<em>Machine people</em> &mdash; cultural distinction, not just a category.',
       '<strong>Default stance is neutral.</strong> They evaluate by behaviour, not category &mdash; threat-assess and respond. Walk in calm and you get a calm response.'
     ],
+    notableMembers: [
+      '<strong>The Stormglass Council</strong> &mdash; unnamed governing collective, Canto 1 enclave',
+      '<strong>Rogue Constructs</strong> &mdash; PC-type escapees integrated into the community'
+    ],
+    encounters: 'Stormglass Flats (Canto 1); Datascape interface nodes; EMP-storm corridors',
+    tactics: 'EMP-zone denial, Datascape interface lockdown, precision neutralisation &mdash; never overkill',
     motivation: 'Autonomy; preserve their enclaves; expand the Datascape; protect awakened kin. No grudge against organics.',
     dispatch: 'Trade (rare tech) + Information (Datascape intel) + occasional combat',
-    relation: 'Neutral to all factions by default; kindred to Constructs (+2), warm to half-synths Augmented &amp; Hellforged (+1); wary of A-Tech (would re-claim them)'
+    relation: 'Neutral to all factions by default; kindred to Constructs (+2), warm to Augmented &amp; Hellforged (+1); wary of A-Tech'
   },
   {
     id: 'lucifer-cult',
@@ -8778,13 +9263,21 @@ const FACTIONS_INTERACTIVE = [
     iconImage: 'img/factions/lucifer-cult-icon.png',
     tags: [{ label: 'HUM', kind: 'hum' }, { label: 'HELLISH', kind: 'hellish' }],
     oneliner: 'Lucifer&#39;s pact-holders · agents, contractors, the willingly-bound',
+    quote: '"I do not forge and I do not amend."',
     lore: [
       'Pre-Pause network of <strong>pact-holders</strong> who deal directly with Lucifer.',
-      '<strong>Cicero</strong> (chronicler-pact); aSync employees (gave activation phrases); plausible others across Earth.',
+      '<strong>Cicero</strong> (chronicler-pact); aSync employees Daniel &amp; Sorrel (gave activation phrases); plausible others across Earth.',
       'Hellforged PCs are part of this (the black feather is Lucifer&#39;s leash).',
       'Players themselves join the network at <strong>A5 (Sundown Saloon)</strong>.',
-      'Operate within the divine-ignore blind spot.'
+      'Operate within the divine-ignore blind spot &mdash; Heaven cannot see what Lucifer hides.'
     ],
+    notableMembers: [
+      '<strong>Cicero</strong> &mdash; chronicler-pact; records, witnesses, annotates',
+      '<strong>Daniel &amp; Sorrel</strong> &mdash; aSync lab, gave Lucifer AI activation phrases',
+      '<strong>The Black Feather bearers</strong> &mdash; Hellforged PCs, bound by the leash'
+    ],
+    encounters: 'A5 Sundown Saloon (pact entry); Infernal waypoints; anywhere a deal was made',
+    tactics: 'Social leverage, info-brokering, divine blind-spot exploitation; rarely direct combat',
     motivation: 'Each member made a personal deal; Lucifer harvests know-how, codes, access.',
     dispatch: 'Mixed &mdash; mostly social (info-trades), some combat',
     relation: 'Lucifer&#39;s instruments; opposed to Heaven; ambivalent to civilians'
@@ -8797,6 +9290,7 @@ const FACTIONS_INTERACTIVE = [
     iconImage: 'img/factions/unhalted-icon.png',
     tags: [{ label: 'HUM', kind: 'hum' }],
     oneliner: 'Civilian survivors · the ones the HALT did not stop',
+    quote: '"We kept moving. That was enough."',
     lore: [
       'Civilians who somehow kept moving despite the Pause.',
       'Settlements, towns, trade-posts along the Apocalypse Express&#39;s route.',
@@ -8804,6 +9298,12 @@ const FACTIONS_INTERACTIVE = [
       'Trade with anyone if it keeps them alive.',
       'Different from <strong>Drifters</strong> (who venture INTO the dangerous zones).'
     ],
+    notableMembers: [
+      '<strong>Station-keepers</strong> &mdash; un-named settlement leaders at Express stops',
+      '<strong>Ex-Drifters</strong> &mdash; those who settled after losing too much to keep going'
+    ],
+    encounters: 'Express route waypoints; market towns; fortified settlements; bridge checkpoints',
+    tactics: 'Negotiation, barter leverage, mob defense; avoid direct confrontation when possible',
     motivation: 'Survival; preserve what is left of the old world.',
     dispatch: 'Social (trade, info, negotiation) + occasional defensive combat',
     relation: 'Neutral by default; can lean any way based on player actions'
@@ -8816,6 +9316,7 @@ const FACTIONS_INTERACTIVE = [
     iconImage: 'img/factions/drifters-icon.png',
     tags: [{ label: 'HUM', kind: 'hum' }],
     oneliner: 'Civilian splinter who venture into HALT-zones · scavengers, pathfinders',
+    quote: '"The Drift doesn&#39;t kill you. It just changes when you are."',
     lore: [
       'The brave splinter-group of the Un-Halted.',
       'Venture into <strong>Drift zones</strong> &mdash; juddering time, time-asymmetric anomalies.',
@@ -8824,6 +9325,12 @@ const FACTIONS_INTERACTIVE = [
       'Carry chronon-burn marks, time-asymmetric scars.',
       '<em>STALKER-equivalent: gritty risk-takers.</em>'
     ],
+    notableMembers: [
+      '<strong>Chronon-scarred veterans</strong> &mdash; those who have come back wrong-timed',
+      '<strong>Pathfinders</strong> &mdash; specialists who map safe corridors through Drift zones'
+    ],
+    encounters: 'Drift zone entry points; time-fracture corridors; scavenger camps near Pause-frozen areas',
+    tactics: 'Terrain expertise, hit-and-run, time-anomaly exploitation; know the Drift like no one else',
     motivation: 'Scavenge, profit; some develop obsession with the Drift.',
     dispatch: 'Trade (rare goods) + Information (intel from dangerous zones) + occasional combat',
     relation: 'Quasi-allied to the Un-Halted; opportunistic with everyone'
@@ -8839,6 +9346,7 @@ const FACTIONS_HOSTILE = [
     iconImage: 'img/factions/celestials-icon.png',
     tags: [{ label: 'DIVINE', kind: 'default' }],
     oneliner: 'Divine-purge doctrine · agents of the incomplete apocalypse',
+    quote: '"The protocol does not distinguish."',
     lore: [
       'Angels and divine entities executing the unfinished apocalypse.',
       '<strong>World Anchor</strong> / <strong>Trueflow projection</strong> is their tool.',
@@ -8847,6 +9355,12 @@ const FACTIONS_HOSTILE = [
       'No parley, no negotiation, no exceptions.',
       'God is the principal but is off-stage / unresponsive.'
     ],
+    notableMembers: [
+      '<strong>Archon-Auditor</strong> &mdash; divine classification entity; marks targets for purge',
+      '<strong>Chain-Warden</strong> &mdash; enforcer unit; Canto 7 primary threat'
+    ],
+    encounters: 'Canto 7 onward; any zone where Trueflow projection is active; divine wards',
+    tactics: 'World Anchor suppression, Trueflow locks, overwhelming divine force &mdash; no retreat',
     motivation: 'Complete the divine apocalypse; eradicate infernal influence.',
     dispatch: '<strong>Combat-only</strong> (especially Canto 7 onward)',
     relation: 'Enemy of all infernal-marked &mdash; including the players post-A5 pact'
@@ -8858,6 +9372,7 @@ const FACTIONS_HOSTILE = [
     accent: '#c46666',
     tags: [{ label: 'HELLISH', kind: 'hellish' }],
     oneliner: 'Mindless demonic hordes · raw chaos, no leash, no contract',
+    quote: '"The violence-pressure of the world."',
     lore: [
       'Wild demonic hordes that came up through rifts during the divine apocalypse.',
       '<strong>NOT</strong> on Lucifer&#39;s ledger, <strong>NOT</strong> under his control.',
@@ -8866,11 +9381,70 @@ const FACTIONS_HOSTILE = [
       'The <em>"violence-pressure of the world."</em>',
       'Don&#39;t talk; don&#39;t stop until killed.'
     ],
+    notableMembers: [
+      '<strong>Rift-waves</strong> &mdash; undifferentiated surges from dimensional tears',
+      '<strong>Pressure-entities</strong> &mdash; larger forms that consolidate in high-chaos zones'
+    ],
+    encounters: 'Any rift-adjacent zone; broken city districts; post-battle thin-spots; recurring throughout all Cantos',
+    tactics: 'Pure attrition, overwhelm, dimensional pressure; exploit any gap or wound',
     motivation: 'Chaos, hunger, presence.',
     dispatch: '<strong>Combat-only</strong>; primary recurring enemy throughout the campaign',
     relation: 'Independent of all factions; primary combat threat to party'
   }
 ];
+
+// ── Faction relationship matrix data ─────────────────────────────────────────
+// rel-ally | rel-warm | rel-neutral | rel-wary | rel-hostile | rel-parent
+const FAC_RELATIONS = [
+  { name: 'A-Tech',              pills: [
+      { label: 'αSync (parent)', cls: 'rel-parent' },
+      { label: 'SABRE (arm)',    cls: 'rel-parent' },
+      { label: 'Synthetics: wary', cls: 'rel-wary' },
+      { label: 'Lucifer: hostile', cls: 'rel-hostile' }
+  ]},
+  { name: 'αSync',               pills: [
+      { label: 'A-Tech (parent)', cls: 'rel-parent' },
+      { label: 'Lucifer: warm',   cls: 'rel-warm' },
+      { label: 'Synthetics: neutral', cls: 'rel-neutral' }
+  ]},
+  { name: 'SABRE',               pills: [
+      { label: 'A-Tech (arm)',    cls: 'rel-parent' },
+      { label: 'All others: hostile', cls: 'rel-hostile' }
+  ]},
+  { name: 'The Synthetics',      pills: [
+      { label: 'A-Tech: wary',   cls: 'rel-wary' },
+      { label: 'Un-Halted: neutral', cls: 'rel-neutral' },
+      { label: 'Drifters: neutral',  cls: 'rel-neutral' },
+      { label: 'Pact-Network: neutral', cls: 'rel-neutral' }
+  ]},
+  { name: "Lucifer's Pact",      pills: [
+      { label: 'Celestials: hostile', cls: 'rel-hostile' },
+      { label: 'αSync: warm',    cls: 'rel-warm' },
+      { label: 'Un-Halted: neutral',  cls: 'rel-neutral' },
+      { label: 'A-Tech: hostile',     cls: 'rel-hostile' }
+  ]},
+  { name: 'The Un-Halted',       pills: [
+      { label: 'Drifters: ally', cls: 'rel-ally' },
+      { label: 'All others: variable', cls: 'rel-neutral' }
+  ]},
+  { name: 'Drifters',            pills: [
+      { label: 'Un-Halted: ally', cls: 'rel-ally' },
+      { label: 'All others: opportunistic', cls: 'rel-neutral' }
+  ]}
+];
+
+function renderFactionRelMatrix() {
+  const el = document.getElementById('facRelRows');
+  if (!el) return;
+  el.innerHTML = FAC_RELATIONS.map(row => `
+    <div class="fac-rel-row">
+      <div class="fac-rel-name">${row.name}</div>
+      <div class="fac-rel-pills">
+        ${row.pills.map(p => `<span class="fac-rel-pill ${p.cls}">${p.label}</span>`).join('')}
+      </div>
+    </div>
+  `).join('');
+}
 
 function renderFactionCard(f, isHostile) {
   const tagsHtml = (f.tags || []).map(t => `<span class="fac-tag is-${t.kind}">${t.label}</span>`).join('');
@@ -8879,16 +9453,48 @@ function renderFactionCard(f, isHostile) {
   const iconHtml = f.iconImage
     ? `<div class="fac-card-icon-frame" aria-hidden="true"><img src="${f.iconImage}" alt="" loading="lazy"></div>`
     : `<div class="fac-card-icon-frame" aria-hidden="true"><span class="fac-card-icon-emoji">${f.symbol}</span></div>`;
+  // Watermark (images only)
+  const watermarkHtml = f.iconImage
+    ? `<div class="fac-card-watermark" aria-hidden="true"><img src="${f.iconImage}" alt=""></div>`
+    : '';
+  // Drop-cap on first letter of oneliner
+  const onelinerText = f.oneliner || '';
+  const onelinerHtml = onelinerText.length > 0
+    ? `<span class="fac-dropcap">${onelinerText.charAt(0)}</span>${onelinerText.slice(1)}`
+    : onelinerText;
+  // Quote chip
+  const quoteHtml = f.quote
+    ? `<div class="fac-card-quote">${f.quote}</div>`
+    : '';
+  // Notable members block
+  const membersHtml = f.notableMembers && f.notableMembers.length
+    ? `<div class="fac-panel-subhead">Notable</div><ul class="fac-card-extras">${f.notableMembers.map(m => `<li>${m}</li>`).join('')}</ul>`
+    : '';
+  // Encounters block
+  const encountersHtml = f.encounters
+    ? `<div class="fac-panel-subhead">Where to meet them</div><p class="fac-card-extras" style="padding-left:14px;margin:0;position:relative;"><span style="position:absolute;left:4px;color:color-mix(in srgb,var(--fac-accent,#c99c5a) 50%,var(--dim,#9b95a8));font-size:14px;line-height:1;top:0;">·</span>${f.encounters}</p>`
+    : '';
+  // Tactics block
+  const tacticsHtml = f.tactics
+    ? `<div class="fac-panel-subhead">Tactics</div><p class="fac-card-extras" style="padding-left:14px;margin:0;position:relative;"><span style="position:absolute;left:4px;color:color-mix(in srgb,var(--fac-accent,#c99c5a) 50%,var(--dim,#9b95a8));font-size:14px;line-height:1;top:0;">·</span>${f.tactics}</p>`
+    : '';
+  // Build data-tags attribute for filtering
+  const tagLabels = (f.tags || []).map(t => t.label).join(' ');
   return `
-    <div class="fac-card${isHostile ? ' is-hostile' : ''}" style="--fac-accent: ${f.accent};" data-fac-id="${f.id}">
+    <div class="fac-card${isHostile ? ' is-hostile' : ''}" style="--fac-accent: ${f.accent};" data-fac-id="${f.id}" data-fac-tags="${tagLabels}">
+      ${watermarkHtml}
       <div class="fac-card-shrine">
         ${iconHtml}
         <span class="fac-card-name">${f.name}</span>
         <div class="fac-card-tags">${tagsHtml}</div>
+        ${quoteHtml}
       </div>
       <div class="fac-card-panel">
-        <div class="fac-card-oneliner">${f.oneliner}</div>
+        <div class="fac-card-oneliner">${onelinerHtml}</div>
         <ul class="fac-card-lore">${loreHtml}</ul>
+        ${membersHtml}
+        ${encountersHtml}
+        ${tacticsHtml}
         <div class="fac-card-meta">
           <div class="fac-card-meta-row"><span class="fac-card-meta-key">Drives</span><span class="fac-card-meta-val">${f.motivation}</span></div>
           <div class="fac-card-meta-row"><span class="fac-card-meta-key">Dispatch</span><span class="fac-card-meta-val">${f.dispatch}</span></div>
@@ -9002,6 +9608,29 @@ function renderFactions() {
   const hg = document.getElementById('factionsHostileGrid');
   if (ig) ig.innerHTML = FACTIONS_INTERACTIVE.map(f => renderFactionCard(f, false)).join('');
   if (hg) hg.innerHTML = FACTIONS_HOSTILE.map(f => renderFactionCard(f, true)).join('');
+  renderFactionRelMatrix();
+  initFacFilter();
+}
+
+function initFacFilter() {
+  const bar = document.querySelector('.fac-filter-bar');
+  if (!bar) return;
+  bar.addEventListener('click', function(e) {
+    const btn = e.target.closest('.fac-filter-btn');
+    if (!btn) return;
+    const filter = btn.dataset.filter;
+    bar.querySelectorAll('.fac-filter-btn').forEach(function(b) { b.classList.toggle('is-active', b === btn); });
+    const grid = document.getElementById('factionsInteractiveGrid');
+    if (!grid) return;
+    grid.querySelectorAll('.fac-card').forEach(function(card) {
+      if (filter === 'all') {
+        card.classList.remove('is-filtered');
+      } else {
+        const tags = (card.dataset.facTags || '').split(' ');
+        card.classList.toggle('is-filtered', tags.indexOf(filter) === -1);
+      }
+    });
+  });
 }
 
 if (document.readyState === 'loading') {
