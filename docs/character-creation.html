@@ -7490,83 +7490,92 @@ function getActiveProfile() {
   return out;
 }
 
-// ── Render the mandala SVG. Center (340,240); level-4 radius 140.
+// ── Render the mandala SVG as petal-stained-glass: 6 wedges × 5 stacked
+//    trapezoidal cells. Each cell is opaque-tinted up to the axis value;
+//    unfilled cells are faint outlines. Center (340,240); outer radius 140.
 function renderSkillMandala(profile, soulIndex) {
   const cx = 340, cy = 240;
-  const rMax = 140;            // radius for value 5 (max stat post-refactor)
-  const rStep = rMax / 5;      // one ring per integer (max value 5) level
-  // Axis angles, top-clockwise: STR=top, DEX=top-right, CON=bottom-right,
-  // INT=bottom, WIS=bottom-left, CHA=top-left. -90deg = top.
-  const axisAngle = i => (-90 + i * 60) * Math.PI / 180;
-  const point = (i, r) => {
-    const a = axisAngle(i);
+  const rMax = 140;            // outer radius (value = 5)
+  const MAX = 5;
+  const wedgeHalfDeg = 28;     // 28° each side leaves a 4° gold seam between wedges
+  const wedgeHalf = wedgeHalfDeg * Math.PI / 180;
+  const baseline = getActiveBaseline();
+
+  const axisCenterAngle = i => (-90 + i * 60) * Math.PI / 180;
+  const wedgePoint = (i, lvl, side) => {
+    const a = axisCenterAngle(i) + side * wedgeHalf;
+    const r = (lvl / MAX) * rMax;
     return [cx + Math.cos(a) * r, cy + Math.sin(a) * r];
   };
+  const fmt = n => n.toFixed(2);
 
-  // Concentric ring guides (4 levels). Hexagonal rings to match axis count.
-  let rings = '';
-  for (let lvl = 1; lvl <= 5; lvl++) {
-    const pts = MANDALA_AXES.map((_, i) => point(i, rStep * lvl).join(',')).join(' ');
-    const isMaxRing = lvl === 5;
-    rings += `<polygon points="${pts}"
-              fill="none"
-              stroke="${isMaxRing ? '#c99c5a' : 'rgba(201,156,90,.22)'}"
-              stroke-width="${isMaxRing ? 0.9 : 0.5}"
-              stroke-dasharray="${isMaxRing ? '' : '2 3'}" />`;
-  }
-
-  // Spokes from center to each level-4 vertex.
-  let spokes = '';
-  MANDALA_AXES.forEach((a, i) => {
-    const [x, y] = point(i, rMax + 6);
-    spokes += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}"
-                stroke="rgba(201,156,90,.30)" stroke-width="0.6"
-                stroke-dasharray="3 3" />`;
+  // Build 30 stained-glass cells (6 axes × 5 levels).
+  let petals = '';
+  MANDALA_AXES.forEach((axis, i) => {
+    const v = Math.max(0, Math.min(MAX, profile[axis.key] || 0));
+    for (let lvl = 1; lvl <= MAX; lvl++) {
+      const filled = lvl <= v;
+      const [x1, y1] = wedgePoint(i, lvl - 1, -1);
+      const [x2, y2] = wedgePoint(i, lvl - 1, +1);
+      const [x3, y3] = wedgePoint(i, lvl, +1);
+      const [x4, y4] = wedgePoint(i, lvl, -1);
+      // Inner cell (lvl=1) collapses to a triangle from the center.
+      const path = lvl === 1
+        ? `M ${cx},${cy} L ${fmt(x3)},${fmt(y3)} L ${fmt(x4)},${fmt(y4)} Z`
+        : `M ${fmt(x1)},${fmt(y1)} L ${fmt(x2)},${fmt(y2)} L ${fmt(x3)},${fmt(y3)} L ${fmt(x4)},${fmt(y4)} Z`;
+      if (filled) {
+        // Outer cells brighter than inner, so stained glass reads as a "well".
+        const tint = (0.55 + lvl * 0.07).toFixed(2); // 0.62 → 0.90
+        petals += `<path d="${path}" fill="${axis.color}" fill-opacity="${tint}" stroke="#e6cfa1" stroke-width="0.6" stroke-opacity="0.55" stroke-linejoin="round" />`;
+      } else {
+        petals += `<path d="${path}" fill="${axis.color}" fill-opacity="0.06" stroke="${axis.color}" stroke-width="0.5" stroke-opacity="0.30" stroke-dasharray="2 3" stroke-linejoin="round" />`;
+      }
+    }
   });
 
-  // Polygon fingerprint — single cathedral-amber stroke + 20% fill.
-  const profPts = MANDALA_AXES.map((a, i) => {
-    const v = Math.max(0, Math.min(4, profile[a.key] || 0));
-    const r = rStep * v;
-    return point(i, r).join(',');
+  // Outer hexagonal ring at MAX (dashed gold) — contains the bouquet.
+  const outerPts = MANDALA_AXES.map((_, i) => {
+    const a = axisCenterAngle(i);
+    return `${fmt(cx + Math.cos(a) * rMax)},${fmt(cy + Math.sin(a) * rMax)}`;
   }).join(' ');
-  const fingerprint = `
-    <polygon points="${profPts}"
-             fill="#BA7517" fill-opacity="0.20"
-             stroke="#854F0B" stroke-width="1.4" stroke-linejoin="round"
-             style="filter: drop-shadow(0 0 8px rgba(186,117,23,.35));" />`;
+  const outerRing = `<polygon points="${outerPts}" fill="none" stroke="#c99c5a" stroke-width="0.9" stroke-dasharray="3 4" opacity="0.65" />`;
 
-  // Value dots at each axis vertex.
-  let valueDots = '';
-  MANDALA_AXES.forEach((a, i) => {
-    const v = Math.max(0, Math.min(4, profile[a.key] || 0));
-    if (v <= 0) return;
-    const [x, y] = point(i, rStep * v);
-    valueDots += `<circle cx="${x}" cy="${y}" r="3.6"
-                   fill="${a.color}" stroke="#e6cfa1" stroke-width="0.8"
-                   style="filter: drop-shadow(0 0 4px ${a.color}aa);"/>`;
-  });
+  // Subtle paper-grain overlay only over the petal area — keeps the glass mat.
+  const paperTex = `
+    <defs>
+      <pattern id="mandalaPaper" x="0" y="0" width="5" height="5" patternUnits="userSpaceOnUse">
+        <rect width="5" height="5" fill="transparent"/>
+        <circle cx="1" cy="1" r="0.35" fill="rgba(0,0,0,0.10)"/>
+        <circle cx="3.5" cy="2.5" r="0.30" fill="rgba(255,245,224,0.07)"/>
+        <circle cx="2" cy="4" r="0.25" fill="rgba(0,0,0,0.07)"/>
+      </pattern>
+      <radialGradient id="mandalaWell" cx="50%" cy="50%" r="55%">
+        <stop offset="0%"  stop-color="rgba(0,0,0,0.35)"/>
+        <stop offset="60%" stop-color="rgba(0,0,0,0.10)"/>
+        <stop offset="100%" stop-color="transparent"/>
+      </radialGradient>
+    </defs>`;
 
-  // Axis labels (skill name, code, value pill) at level-4 + label offset.
+  // Axis labels (skill name + value/5 + bonus over baseline).
   let labels = '';
   MANDALA_AXES.forEach((a, i) => {
     const labelR = rMax + 50;
-    const [lx, ly] = point(i, labelR);
-    const v = profile[a.key] || 0;
-    const baseV = getActiveBaseline()[a.key] || 0;
-    const bonus = v - baseV;
-    // Anchor by angle: top -> middle, sides -> start/end.
     const ang = -90 + i * 60;
+    const angRad = ang * Math.PI / 180;
+    const lx = cx + Math.cos(angRad) * labelR;
+    const ly = cy + Math.sin(angRad) * labelR;
+    const v = profile[a.key] || 0;
+    const baseV = baseline[a.key] || 0;
+    const bonus = v - baseV;
     let anchor = 'middle';
     if (ang > -90 && ang < 90) anchor = 'start';
     else if (ang > 90 || ang < -90) anchor = 'end';
-    // Adjust dy based on vertical position.
     const dy = (i === 0) ? -10 : (i === 3) ? 18 : 4;
     const bonusTspan = bonus > 0
       ? ` <tspan fill="#ff7b5c">+${bonus}</tspan>`
-      : '';
+      : (bonus < 0 ? ` <tspan fill="#7b8ca6">${bonus}</tspan>` : '');
     labels += `
-      <g transform="translate(${lx}, ${ly + dy})">
+      <g transform="translate(${fmt(lx)}, ${fmt(ly + dy)})">
         <text text-anchor="${anchor}" font-family="'IBM Plex Mono', monospace"
               font-size="12" font-weight="600" letter-spacing="0.10em"
               fill="${a.color}">
@@ -7576,18 +7585,18 @@ function renderSkillMandala(profile, soulIndex) {
         <text text-anchor="${anchor}" y="14"
               font-family="'IBM Plex Mono', monospace"
               font-size="11" fill="#e6cfa1" letter-spacing="0.04em">
-          ${a.code} · ${v}/4${bonusTspan}
+          ${a.code} · ${v}/${MAX}${bonusTspan}
         </text>
       </g>`;
   });
 
-  // Center gem — glows the chosen Soul Index color, otherwise neutral gold.
+  // Center gem — sits ON TOP of petals, glows the Soul Index color.
   const gemColor = soulIndex ? SOUL_INDEX_META[soulIndex].color : '#c99c5a';
   const gemFillOpacity = soulIndex ? 0.85 : 0.35;
   const gem = `
     <g>
-      <circle cx="${cx}" cy="${cy}" r="22"
-              fill="none" stroke="#c99c5a" stroke-width="0.8" opacity="0.55"/>
+      <circle cx="${cx}" cy="${cy}" r="24"
+              fill="#1a1018" stroke="#c99c5a" stroke-width="0.9" opacity="0.92"/>
       <circle cx="${cx}" cy="${cy}" r="14"
               fill="${gemColor}" fill-opacity="${gemFillOpacity}"
               stroke="#e6cfa1" stroke-width="1.0"
@@ -7596,7 +7605,7 @@ function renderSkillMandala(profile, soulIndex) {
               fill="#fff5e0" fill-opacity="0.65"/>
     </g>`;
 
-  // Corner saint-medallions (small busts via quatrefoil chrome).
+  // Corner saint-medallions (quatrefoil chrome).
   const corners = `
     <g opacity="0.55">
       <use href="#orn-quatrefoil" x="20"  y="20"  width="28" height="28" color="#c99c5a"/>
@@ -7608,18 +7617,13 @@ function renderSkillMandala(profile, soulIndex) {
   return `
     <svg viewBox="0 0 680 530" xmlns="http://www.w3.org/2000/svg"
          role="img" aria-label="Skill mandala — ${MANDALA_AXES.map(a => a.key + ' ' + (profile[a.key]||0)).join(', ')}">
-      <defs>
-        <radialGradient id="mandalaBg" cx="50%" cy="50%" r="60%">
-          <stop offset="0%" stop-color="rgba(201,156,90,.06)"/>
-          <stop offset="100%" stop-color="transparent"/>
-        </radialGradient>
-      </defs>
-      <rect x="0" y="0" width="680" height="530" fill="url(#mandalaBg)"/>
+      ${paperTex}
+      <rect x="0" y="0" width="680" height="530" fill="rgba(201,156,90,.04)"/>
       ${corners}
-      ${rings}
-      ${spokes}
-      ${fingerprint}
-      ${valueDots}
+      ${petals}
+      <polygon points="${outerPts}" fill="url(#mandalaPaper)" opacity="0.55" pointer-events="none" />
+      <polygon points="${outerPts}" fill="url(#mandalaWell)" pointer-events="none" />
+      ${outerRing}
       ${gem}
       ${labels}
     </svg>`;
@@ -8701,7 +8705,6 @@ function refreshSoulLayer() {
 // Initial paint of Layer 2 (using whichever race autoSelect picked).
 refreshSoulLayer();
 renderSideTrackPips();
-
 // ═══════════════════════════════════════════════════════
 // TAB SWITCHING
 // ═══════════════════════════════════════════════════════
