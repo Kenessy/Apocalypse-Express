@@ -7491,69 +7491,106 @@ function getActiveProfile() {
 }
 
 // ── Render the mandala SVG as petal-stained-glass: 6 wedges × 5 stacked
-//    trapezoidal cells. Each cell is opaque-tinted up to the axis value;
-//    unfilled cells are faint outlines. Center (340,240); outer radius 140.
+//    trapezoidal cells. Wedges start at rInner (just outside the gem) so
+//    even level-1 cells are clearly visible. All level rings + spokes drawn.
+//    Center (340,240); outer radius 140.
 function renderSkillMandala(profile, soulIndex) {
   const cx = 340, cy = 240;
+  const rInner = 22;           // inner buffer so level-1 cells aren't hidden by the gem
   const rMax = 140;            // outer radius (value = 5)
   const MAX = 5;
-  const wedgeHalfDeg = 28;     // 28° each side leaves a 4° gold seam between wedges
+  const wedgeHalfDeg = 29;     // 29° each side leaves a 2° seam — petals barely separated
   const wedgeHalf = wedgeHalfDeg * Math.PI / 180;
   const baseline = getActiveBaseline();
 
   const axisCenterAngle = i => (-90 + i * 60) * Math.PI / 180;
+  // r(level): 0→rInner, 1..MAX→linear up to rMax.
+  const lvlR = lvl => rInner + (lvl / MAX) * (rMax - rInner);
   const wedgePoint = (i, lvl, side) => {
     const a = axisCenterAngle(i) + side * wedgeHalf;
-    const r = (lvl / MAX) * rMax;
+    const r = lvlR(lvl);
     return [cx + Math.cos(a) * r, cy + Math.sin(a) * r];
   };
   const fmt = n => n.toFixed(2);
 
-  // Build 30 stained-glass cells (6 axes × 5 levels).
+  // Hex level rings — every level visible. Inner ring (level 0) and outer (5).
+  let levelRings = '';
+  for (let lvl = 0; lvl <= MAX; lvl++) {
+    const pts = MANDALA_AXES.map((_, i) => {
+      const a = axisCenterAngle(i);
+      const r = lvlR(lvl);
+      return `${fmt(cx + Math.cos(a) * r)},${fmt(cy + Math.sin(a) * r)}`;
+    }).join(' ');
+    const isMax = lvl === MAX;
+    const isInner = lvl === 0;
+    const stroke = isMax ? '#c99c5a' : 'rgba(201,156,90,.42)';
+    const sw = isMax ? 1.0 : (isInner ? 0.7 : 0.55);
+    const dash = isMax ? '3 4' : '';
+    levelRings += `<polygon points="${pts}" fill="none"
+      stroke="${stroke}" stroke-width="${sw}"
+      stroke-dasharray="${dash}" />`;
+  }
+
+  // Wedge-boundary spokes (12 lines: 2 sides × 6 axes), from rInner to rMax.
+  let spokes = '';
+  MANDALA_AXES.forEach((_, i) => {
+    [-1, +1].forEach(side => {
+      const a = axisCenterAngle(i) + side * wedgeHalf;
+      const x1 = cx + Math.cos(a) * rInner, y1 = cy + Math.sin(a) * rInner;
+      const x2 = cx + Math.cos(a) * rMax,   y2 = cy + Math.sin(a) * rMax;
+      spokes += `<line x1="${fmt(x1)}" y1="${fmt(y1)}" x2="${fmt(x2)}" y2="${fmt(y2)}"
+        stroke="rgba(201,156,90,.30)" stroke-width="0.5" />`;
+    });
+  });
+
+  // Filled wedge per axis (one fan from rInner → value-radius), with white
+  // tick rules across the wedge at each integer level so 3/5 etc. is legible.
   let petals = '';
   MANDALA_AXES.forEach((axis, i) => {
     const v = Math.max(0, Math.min(MAX, profile[axis.key] || 0));
-    for (let lvl = 1; lvl <= MAX; lvl++) {
-      const filled = lvl <= v;
-      const [x1, y1] = wedgePoint(i, lvl - 1, -1);
-      const [x2, y2] = wedgePoint(i, lvl - 1, +1);
-      const [x3, y3] = wedgePoint(i, lvl, +1);
-      const [x4, y4] = wedgePoint(i, lvl, -1);
-      // Inner cell (lvl=1) collapses to a triangle from the center.
-      const path = lvl === 1
-        ? `M ${cx},${cy} L ${fmt(x3)},${fmt(y3)} L ${fmt(x4)},${fmt(y4)} Z`
-        : `M ${fmt(x1)},${fmt(y1)} L ${fmt(x2)},${fmt(y2)} L ${fmt(x3)},${fmt(y3)} L ${fmt(x4)},${fmt(y4)} Z`;
-      if (filled) {
-        // Outer cells brighter than inner, so stained glass reads as a "well".
-        const tint = (0.55 + lvl * 0.07).toFixed(2); // 0.62 → 0.90
-        petals += `<path d="${path}" fill="${axis.color}" fill-opacity="${tint}" stroke="#e6cfa1" stroke-width="0.6" stroke-opacity="0.55" stroke-linejoin="round" />`;
-      } else {
-        petals += `<path d="${path}" fill="${axis.color}" fill-opacity="0.06" stroke="${axis.color}" stroke-width="0.5" stroke-opacity="0.30" stroke-dasharray="2 3" stroke-linejoin="round" />`;
-      }
+    if (v <= 0) return;
+    const [t0x, t0y] = wedgePoint(i, 0, -1);
+    const [b0x, b0y] = wedgePoint(i, 0, +1);
+    const [tx, ty]   = wedgePoint(i, v, -1);
+    const [bx, by]   = wedgePoint(i, v, +1);
+    // Trapezoidal wedge — inner edge at rInner, outer edge at level v.
+    const wedgePath = `M ${fmt(t0x)},${fmt(t0y)} L ${fmt(b0x)},${fmt(b0y)} L ${fmt(bx)},${fmt(by)} L ${fmt(tx)},${fmt(ty)} Z`;
+    const gradId = `wedgeGrad_${axis.key}`;
+    petals += `
+      <defs>
+        <radialGradient id="${gradId}" cx="${cx}" cy="${cy}" r="${rMax}" gradientUnits="userSpaceOnUse">
+          <stop offset="${(rInner/rMax*100).toFixed(0)}%" stop-color="${axis.color}" stop-opacity="0.65"/>
+          <stop offset="100%" stop-color="${axis.color}" stop-opacity="0.95"/>
+        </radialGradient>
+      </defs>
+      <path d="${wedgePath}" fill="url(#${gradId})"
+            stroke="#e6cfa1" stroke-width="0.8" stroke-opacity="0.65"
+            stroke-linejoin="round"
+            style="filter: drop-shadow(0 0 6px ${axis.color}66);"/>`;
+    // Cream tick lines across the petal at every integer level inside (1..v-1).
+    for (let tickLvl = 1; tickLvl < v; tickLvl++) {
+      const [a1, b1] = wedgePoint(i, tickLvl, -1);
+      const [a2, b2] = wedgePoint(i, tickLvl, +1);
+      petals += `<line x1="${fmt(a1)}" y1="${fmt(b1)}" x2="${fmt(a2)}" y2="${fmt(b2)}"
+        stroke="#fff5e0" stroke-width="0.7" stroke-opacity="0.55" />`;
     }
   });
 
-  // Outer hexagonal ring at MAX (dashed gold) — contains the bouquet.
+  // outerPts for paper overlay.
   const outerPts = MANDALA_AXES.map((_, i) => {
     const a = axisCenterAngle(i);
     return `${fmt(cx + Math.cos(a) * rMax)},${fmt(cy + Math.sin(a) * rMax)}`;
   }).join(' ');
-  const outerRing = `<polygon points="${outerPts}" fill="none" stroke="#c99c5a" stroke-width="0.9" stroke-dasharray="3 4" opacity="0.65" />`;
 
-  // Subtle paper-grain overlay only over the petal area — keeps the glass mat.
+  // Subtle paper-grain overlay across the hex area.
   const paperTex = `
     <defs>
       <pattern id="mandalaPaper" x="0" y="0" width="5" height="5" patternUnits="userSpaceOnUse">
         <rect width="5" height="5" fill="transparent"/>
-        <circle cx="1" cy="1" r="0.35" fill="rgba(0,0,0,0.10)"/>
-        <circle cx="3.5" cy="2.5" r="0.30" fill="rgba(255,245,224,0.07)"/>
-        <circle cx="2" cy="4" r="0.25" fill="rgba(0,0,0,0.07)"/>
+        <circle cx="1" cy="1" r="0.30" fill="rgba(0,0,0,0.10)"/>
+        <circle cx="3.5" cy="2.5" r="0.25" fill="rgba(255,245,224,0.06)"/>
+        <circle cx="2" cy="4" r="0.20" fill="rgba(0,0,0,0.06)"/>
       </pattern>
-      <radialGradient id="mandalaWell" cx="50%" cy="50%" r="55%">
-        <stop offset="0%"  stop-color="rgba(0,0,0,0.35)"/>
-        <stop offset="60%" stop-color="rgba(0,0,0,0.10)"/>
-        <stop offset="100%" stop-color="transparent"/>
-      </radialGradient>
     </defs>`;
 
   // Axis labels (skill name + value/5 + bonus over baseline).
@@ -7590,18 +7627,18 @@ function renderSkillMandala(profile, soulIndex) {
       </g>`;
   });
 
-  // Center gem — sits ON TOP of petals, glows the Soul Index color.
+  // Center gem — small (r ≤ rInner), so it never covers the level-1 wedges.
   const gemColor = soulIndex ? SOUL_INDEX_META[soulIndex].color : '#c99c5a';
   const gemFillOpacity = soulIndex ? 0.85 : 0.35;
   const gem = `
     <g>
-      <circle cx="${cx}" cy="${cy}" r="24"
-              fill="#1a1018" stroke="#c99c5a" stroke-width="0.9" opacity="0.92"/>
-      <circle cx="${cx}" cy="${cy}" r="14"
+      <circle cx="${cx}" cy="${cy}" r="${rInner - 2}"
+              fill="#1a1018" stroke="#c99c5a" stroke-width="0.9" opacity="0.95"/>
+      <circle cx="${cx}" cy="${cy}" r="${rInner - 8}"
               fill="${gemColor}" fill-opacity="${gemFillOpacity}"
               stroke="#e6cfa1" stroke-width="1.0"
               style="filter: drop-shadow(0 0 12px ${gemColor}cc);"/>
-      <circle cx="${cx}" cy="${cy}" r="5"
+      <circle cx="${cx}" cy="${cy}" r="4"
               fill="#fff5e0" fill-opacity="0.65"/>
     </g>`;
 
@@ -7620,10 +7657,10 @@ function renderSkillMandala(profile, soulIndex) {
       ${paperTex}
       <rect x="0" y="0" width="680" height="530" fill="rgba(201,156,90,.04)"/>
       ${corners}
+      ${spokes}
+      ${levelRings}
       ${petals}
-      <polygon points="${outerPts}" fill="url(#mandalaPaper)" opacity="0.55" pointer-events="none" />
-      <polygon points="${outerPts}" fill="url(#mandalaWell)" pointer-events="none" />
-      ${outerRing}
+      <polygon points="${outerPts}" fill="url(#mandalaPaper)" opacity="0.45" pointer-events="none" />
       ${gem}
       ${labels}
     </svg>`;
@@ -8705,6 +8742,7 @@ function refreshSoulLayer() {
 // Initial paint of Layer 2 (using whichever race autoSelect picked).
 refreshSoulLayer();
 renderSideTrackPips();
+
 // ═══════════════════════════════════════════════════════
 // TAB SWITCHING
 // ═══════════════════════════════════════════════════════
