@@ -4974,6 +4974,32 @@ body {
   color: #f5d68a;
 }
 
+/* Icon-image variant for the Personality card shrine — used when a trait
+   has a stained-glass iconImage asset. 120×120 framed slot with the same
+   accent-color hairline + glow as the faction cards. Replaces the 56px
+   emoji slot when iconImage is present. */
+.pers-card-icon-frame {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 120px;
+  height: 120px;
+  padding: 0;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--pers-accent, #c99c5a) 50%, transparent);
+  background: rgba(0, 0, 0, 0.30);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--pers-accent, #c99c5a) 30%, transparent);
+}
+.pers-card-icon-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  image-rendering: -webkit-optimize-contrast;
+}
+
 /* ═══ Personality system-notes — stacking / rounding / scope rules
    Compact 4-row info panel sitting under the section subtitle. Keys
    are uppercase IBM Plex Mono in muted gold; values are normal prose
@@ -9561,6 +9587,7 @@ const PERSONALITY_TRAITS = [
     id: 'lazy',
     name: 'Lazy',
     emoji: '🦥',
+    iconImage: 'img/personality/lazy-icon.png',
     accent: '#9a8466',
     flavor: 'Pours everything into the first assignment of the day. After that, the spark is gone.',
     axisTag: 'Time-axis trade-off',
@@ -9654,10 +9681,13 @@ function renderPersonalityCard(t) {
         <div class="pers-card-phase-effects">${chipsHtml}</div>
       </div>`;
   }).join('');
+  const iconHtml = t.iconImage
+    ? `<div class="pers-card-icon-frame" aria-hidden="true"><img src="${t.iconImage}" alt="" loading="lazy"></div>`
+    : `<div class="pers-card-emoji" aria-hidden="true">${t.emoji}</div>`;
   return `
     <article class="pers-card" style="--pers-accent: ${t.accent};" data-pers-id="${t.id}">
       <div class="pers-card-shrine">
-        <div class="pers-card-emoji" aria-hidden="true">${t.emoji}</div>
+        ${iconHtml}
         <div class="pers-card-name">${t.name}</div>
         <div class="pers-card-axis">${t.axisTag}</div>
       </div>
