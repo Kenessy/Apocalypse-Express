@@ -9641,28 +9641,37 @@ const PERSONALITY_TRAITS = [
     name: 'Mentor',
     emoji: '❤️‍🔥',
     accent: '#c46680',
-    flavor: 'Lifts everyone they are with. Alone, they are just present.',
+    flavor: 'Lifts the people assigned beside them. Alone, they are just another worker.',
     axisTag: 'Team-buff (positive only)',
     phases: [
       {
         label: 'Solo',
-        trigger: 'Alone on the assignment',
+        trigger: 'Assigned alone',
         effects: [
-          { text: 'No effect' }
+          { text: 'No trait effect' }
         ]
       },
       {
         label: 'Small squad',
-        trigger: '1 or 2 teammates on the same assignment',
+        trigger: 'Assigned with 1-2 other characters',
         effects: [
-          { kind: 'pos', text: 'Each teammate · +1 Outcome' }
+          { kind: 'pos', text: 'The other characters · +1 Outcome each' },
+          { text: 'Mentor self · no buff' }
         ]
       },
       {
         label: 'Large squad',
-        trigger: '3+ teammates on the same assignment',
+        trigger: 'Assigned with 3+ other characters',
         effects: [
-          { kind: 'pos', text: 'Each teammate · +2 Outcome' }
+          { kind: 'pos', text: 'The other characters · +2 Outcome each' },
+          { text: 'Mentor self · no buff' }
+        ]
+      },
+      {
+        label: 'Stacking guardrail',
+        trigger: 'Multiple Mentors on the same assignment',
+        effects: [
+          { text: 'Only one Mentor bonus applies · choose one active' }
         ]
       }
     ]
