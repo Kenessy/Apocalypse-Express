@@ -6031,7 +6031,7 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
           <span class="ce-orn" aria-hidden="true"><svg><use href="#orn-quatrefoil"/></svg></span>
           Locked traits · master tabel grows as we add
         </div>
-        <h3 class="cadence-section-title" id="personalityTraitsHeader">2 of ~28 wired</h3>
+        <h3 class="cadence-section-title" id="personalityTraitsHeader">3 of ~28 wired</h3>
         <p class="cadence-section-sub">Trade-off design: each trait has a positive phase and a negative phase that fire on different triggers. The picking model (1 from each tier in chargen) comes after we&#39;ve reviewed the full master tabel.</p>
       </div>
       <div class="personality-grid" id="personalityTraitsGrid"></div>
@@ -9518,23 +9518,23 @@ const PERSONALITY_TRAITS = [
     name: 'Lazy',
     emoji: '🦥',
     accent: '#9a8466',
-    flavor: 'Pours everything into the first task because they are well rested. After that, the spark is gone.',
+    flavor: 'Pours everything into the first assignment of the day. After that, the spark is gone.',
     axisTag: 'Time-axis trade-off',
     phases: [
       {
         label: 'Fresh start',
-        trigger: 'First task of the day',
+        trigger: 'First assigned task after a Long Rest / day reset',
         effects: [
-          { kind: 'pos',  text: '+1 to all rolls' },
-          { kind: 'time', text: '+50% task duration' }
+          { kind: 'pos',  text: '+1 Outcome' },
+          { kind: 'time', text: '×1.5 Duration' }
         ]
       },
       {
         label: 'Run-down',
-        trigger: 'Every later task until long rest (end of day)',
+        trigger: 'Every later assignment until next Long Rest',
         effects: [
-          { kind: 'neg',  text: '-1 to all rolls' },
-          { kind: 'time', text: '+25% task duration' }
+          { kind: 'neg',  text: '-1 Outcome' },
+          { kind: 'time', text: '×1.25 Duration' }
         ]
       }
     ]
@@ -9549,17 +9549,48 @@ const PERSONALITY_TRAITS = [
     phases: [
       {
         label: 'Solo deployment',
-        trigger: 'Alone in the scene or mission',
+        trigger: 'Alone on the assignment',
         effects: [
-          { kind: 'pos', text: 'Phantom companion · roll × 1.5' },
+          { kind: 'pos', text: 'Phantom companion · ×1.5 Outcome' },
           { kind: 'pos', text: 'e.g. 10 → 15, 8 → 12' }
         ]
       },
       {
         label: 'Team deployment',
-        trigger: '1+ teammate on the same mission',
+        trigger: '1+ teammate on the same assignment',
         effects: [
-          { kind: 'neg', text: '-1 to all rolls' }
+          { kind: 'neg', text: '-1 Outcome' }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'mentor',
+    name: 'Mentor',
+    emoji: '❤️‍🔥',
+    accent: '#c46680',
+    flavor: 'Lifts everyone they are with. Alone, they are just present.',
+    axisTag: 'Team-buff (positive only)',
+    phases: [
+      {
+        label: 'Solo',
+        trigger: 'Alone on the assignment',
+        effects: [
+          { text: 'No effect' }
+        ]
+      },
+      {
+        label: 'Small squad',
+        trigger: '1 or 2 teammates on the same assignment',
+        effects: [
+          { kind: 'pos', text: 'Each teammate · +1 Outcome' }
+        ]
+      },
+      {
+        label: 'Large squad',
+        trigger: '3+ teammates on the same assignment',
+        effects: [
+          { kind: 'pos', text: 'Each teammate · +2 Outcome' }
         ]
       }
     ]
@@ -9568,9 +9599,10 @@ const PERSONALITY_TRAITS = [
 
 function renderPersonalityCard(t) {
   const phasesHtml = t.phases.map(ph => {
-    const chipsHtml = ph.effects.map(e =>
-      `<span class="pers-effect-chip is-${e.kind}">${e.text}</span>`
-    ).join('');
+    const chipsHtml = ph.effects.map(e => {
+      const cls = e.kind ? `pers-effect-chip is-${e.kind}` : 'pers-effect-chip';
+      return `<span class="${cls}">${e.text}</span>`;
+    }).join('');
     return `
       <div class="pers-card-phase">
         <div class="pers-card-phase-label">${ph.label}</div>
