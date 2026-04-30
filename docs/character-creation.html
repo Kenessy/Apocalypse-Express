@@ -5352,14 +5352,71 @@ body {
     radial-gradient(circle at 85% 85%, rgba(255, 180, 100, 0.30) 0 2px, transparent 3px);
   pointer-events: none;
 }
-/* Tender — small dark coal-storage hut */
+/* Sparkplug tender — small dark hut storing PLUG canisters.
+   Uses the canonical Sparkplug icon (semi-translucent cylinder with
+   trapped lightning) as the visual content. Dark-grey alloy frame
+   suggests the heavy electromagnet caging the canon describes. */
 .carriage-block.is-tender {
-  background: linear-gradient(135deg, #2a2018, #14100c);
-  border: 1.5px solid #5a4530;
-  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.7);
+  background:
+    radial-gradient(circle at center, rgba(60, 130, 200, 0.20) 0 40%, transparent 70%),
+    linear-gradient(135deg, #2a2530, #14111a);
+  border: 1.5px solid #5a4f60;
+  box-shadow: inset 0 0 10px rgba(60, 130, 200, 0.20), inset 0 0 6px rgba(0,0,0,0.7);
 }
-.carriage-block.is-tender::before { font-size: 22px; opacity: .55; }
-.carriage-block.is-tender .block-label { font-size: 8px; opacity: .75; }
+.carriage-block.is-tender::before {
+  content: '';
+  background-image: url('img/items/sparkplug.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 70%;
+  height: 65%;
+  filter: drop-shadow(0 0 6px rgba(80, 150, 220, 0.55));
+}
+.carriage-block.is-tender .block-label {
+  font-size: 8px;
+  letter-spacing: 0.18em;
+  color: rgba(180, 200, 230, 0.85);
+  text-shadow: 0 0 4px rgba(80, 150, 220, 0.6);
+}
+
+/* Engine fuel rules — info panel beneath the section subtitle. Compact
+   key-value list explaining cost / driver-fit / capacity / empty / job. */
+.engine-fuel-rules {
+  margin-top: 14px;
+  padding: 14px 18px;
+  border: 0.5px solid rgba(201,156,90,.22);
+  border-radius: 6px;
+  background:
+    linear-gradient(90deg, rgba(60, 130, 200, 0.05), transparent),
+    linear-gradient(180deg, rgba(255,255,255,.012), rgba(0,0,0,.20));
+  display: grid;
+  gap: 8px;
+  max-width: 1000px;
+}
+.engine-fuel-rules .efr-row {
+  display: grid;
+  grid-template-columns: 130px 1fr;
+  gap: 12px;
+  align-items: baseline;
+}
+.engine-fuel-rules .efr-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(140, 180, 220, 0.85);
+  opacity: .85;
+}
+.engine-fuel-rules .efr-val {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+.engine-fuel-rules .efr-val strong { color: var(--gold2); }
+.engine-fuel-rules .efr-val em { color: rgba(140, 200, 240, 0.95); font-style: italic; }
 .carriage-legend {
   margin-top: 22px;
   display: grid;
@@ -6500,7 +6557,14 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
           Carriage 1 · the locomotive
         </div>
         <h3 class="cadence-section-title" id="engineHeader">🚂 Engine — top-down floor plan</h3>
-        <p class="cadence-section-sub">5 tiles tall × 16 tiles wide. A small coal-fired origin train: the <strong>engine block</strong> (7×5) and <strong>coal tender hut</strong> (2×2) take the front-left ~40% as off-area. The right-side living area is cramped — only <strong>1 driver post</strong> (required) and <strong>3 install slots</strong> (2 small + 1 big) where players fit gear they recover and unlock.</p>
+        <p class="cadence-section-sub">5 tiles tall × 16 tiles wide. A small origin steam train Lucifer rebuilt to burn <strong>Sparkplugs (PLUG)</strong> &mdash; soul-canisters that wake a Hellfire boiler. The <strong>engine block</strong> (7×5) and <strong>Sparkplug tender</strong> (2×2) take the front-left ~40% as off-area. Cramped right-side living quarters: <strong>1 Driver post</strong> (required) + <strong>3 install slots</strong> (2 small + 1 big) for gear players recover and unlock.</p>
+        <div class="engine-fuel-rules">
+          <div class="efr-row"><span class="efr-key">Cost / journey</span><span class="efr-val"><strong>1 PLUG</strong> short hop · <strong>2 PLUG</strong> medium · <strong>3 PLUG</strong> long haul</span></div>
+          <div class="efr-row"><span class="efr-key">Driver fit</span><span class="efr-val">Methodical / Service Intelligence / Hyperfocus → <strong>−1 PLUG</strong> · Lazy / Impulsive / Adrenaline-junkie → <strong>+1 PLUG</strong></span></div>
+          <div class="efr-row"><span class="efr-key">Tender capacity</span><span class="efr-val"><strong>5 PLUG</strong> in the origin 2×2 hut · upgrades grow the off-area block</span></div>
+          <div class="efr-row"><span class="efr-key">Empty</span><span class="efr-val">Train cannot move · triggers a <strong>refuel mission</strong> (Drift-zone soul-salvage / αSync trade / Lucifer bargain)</span></div>
+          <div class="efr-row"><span class="efr-key">Driver job</span><span class="efr-val">Pull a PLUG from tender, walk it to the firebox, <em>time the burn</em>, do not drop the canister</span></div>
+        </div>
       </div>
       <div class="carriage-floor-wrap">
         <div class="carriage-floor" id="engineFloor" role="img" aria-label="Engine carriage floor plan, 4 by 14 tile grid"></div>
@@ -10579,7 +10643,7 @@ const ENGINE_LAYOUT = {
   // tucked right behind it, then a cramped living area on the right.
   blocks: [
     { id: 'engine',  col: 1, row: 1, span_col: 7, span_row: 5, kind: 'engine',  icon: '🚂', label: 'Engine block' },
-    { id: 'tender',  col: 8, row: 1, span_col: 2, span_row: 2, kind: 'tender',  icon: '⬛', label: 'Coal tender' }
+    { id: 'tender',  col: 8, row: 1, span_col: 2, span_row: 2, kind: 'tender',  icon: '', label: 'Sparkplug tender' }
   ],
   // Two slot kinds, visually distinct:
   //   • work    → required post (driver). Someone MUST be here for the train to run.
