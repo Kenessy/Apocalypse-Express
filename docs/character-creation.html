@@ -4170,89 +4170,125 @@ body {
 
 .factions-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
   margin-top: 8px;
 }
-@media (max-width: 1100px) { .factions-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 700px) { .factions-grid { grid-template-columns: 1fr; } }
+@media (max-width: 900px) { .factions-grid { grid-template-columns: 1fr; } }
 
 .factions-hostile-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 14px;
+  gap: 18px;
   margin-top: 8px;
 }
 @media (max-width: 700px) { .factions-hostile-grid { grid-template-columns: 1fr; } }
 
+/* ── Faction card — altarpiece two-column layout ── */
 .fac-card {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 18px 20px 20px;
-  border: 0.5px solid rgba(201,156,90,.20);
-  border-top: 2px solid var(--fac-accent, #c99c5a);
-  border-radius: 8px;
+  display: grid;
+  grid-template-columns: 148px 1fr;
+  grid-template-rows: auto;
+  gap: 0;
+  border: 0.5px solid rgba(201,156,90,.22);
+  border-left: 3px solid var(--fac-accent, #c99c5a);
+  border-radius: 10px;
   background:
-    linear-gradient(180deg, rgba(255,255,255,.014), rgba(0,0,0,.22)),
-    radial-gradient(140% 100% at 50% 0%, color-mix(in srgb, var(--fac-accent, #c99c5a) 10%, transparent), transparent 70%);
+    linear-gradient(135deg, rgba(255,255,255,.016), rgba(0,0,0,.26)),
+    radial-gradient(160% 120% at 0% 0%, color-mix(in srgb, var(--fac-accent, #c99c5a) 12%, transparent), transparent 65%);
   position: relative;
+  overflow: hidden;
+  min-height: 200px;
 }
 .fac-card.is-hostile {
-  border-top-color: #c46666;
+  border-left-color: #c46666;
   border-color: rgba(196,102,102,.30);
   background:
-    linear-gradient(180deg, rgba(255,255,255,.014), rgba(40,8,8,.30)),
-    radial-gradient(140% 100% at 50% 0%, rgba(196,102,102,.18), transparent 70%);
+    linear-gradient(135deg, rgba(255,255,255,.014), rgba(40,8,8,.34)),
+    radial-gradient(160% 120% at 0% 0%, rgba(196,102,102,.20), transparent 65%);
 }
-.fac-card-header {
+
+/* Left column — the icon shrine */
+.fac-card-shrine {
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
   gap: 10px;
-  padding-bottom: 8px;
-  border-bottom: 0.5px dashed rgba(201,156,90,.18);
+  padding: 20px 14px 18px;
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--fac-accent, #c99c5a) 9%, rgba(8,7,18,.90)) 0%,
+      rgba(8,7,18,.70) 100%);
+  border-right: 0.5px solid color-mix(in srgb, var(--fac-accent, #c99c5a) 28%, transparent);
+  position: relative;
 }
-.fac-card-symbol {
-  font-size: 22px;
-  line-height: 1;
+/* Decorative leading line at top of shrine */
+.fac-card-shrine::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg,
+    transparent,
+    color-mix(in srgb, var(--fac-accent, #c99c5a) 80%, #fff) 40%,
+    color-mix(in srgb, var(--fac-accent, #c99c5a) 80%, #fff) 60%,
+    transparent);
 }
-/* Icon-image variant for the faction card symbol slot. Used when the
-   faction has a stained-glass icon asset (e.g. A-Tech). The slot is sized
-   to match the emoji baseline so cards stay aligned. */
-.fac-card-symbol-img {
-  display: inline-flex;
+
+/* Icon frame — the stained-glass window */
+.fac-card-icon-frame {
+  display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
-  padding: 0;
-  border-radius: 6px;
+  width: 120px;
+  height: 120px;
+  border-radius: 8px;
   overflow: hidden;
-  border: 1px solid color-mix(in srgb, var(--fac-accent, #c99c5a) 45%, transparent);
-  background: rgba(0, 0, 0, 0.35);
-  box-shadow: 0 0 8px color-mix(in srgb, var(--fac-accent, #c99c5a) 25%, transparent);
+  border: 1.5px solid color-mix(in srgb, var(--fac-accent, #c99c5a) 55%, transparent);
+  background: rgba(0, 0, 0, 0.45);
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,.60),
+    0 0 18px color-mix(in srgb, var(--fac-accent, #c99c5a) 30%, transparent),
+    inset 0 0 12px rgba(0,0,0,.50);
+  position: relative;
+  flex-shrink: 0;
 }
-.fac-card-symbol-img img {
+/* Image variant — fills the full frame */
+.fac-card-icon-frame img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
   image-rendering: -webkit-optimize-contrast;
 }
+/* Emoji variant — large centred glyph */
+.fac-card-icon-emoji {
+  font-size: 64px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 2px 8px color-mix(in srgb, var(--fac-accent, #c99c5a) 45%, transparent));
+}
+
 .fac-card-name {
   font-family: 'Cinzel', serif;
   font-weight: 700;
-  font-size: 16px;
-  letter-spacing: 0.08em;
+  font-size: 13px;
+  letter-spacing: 0.07em;
   color: var(--gold2);
-  flex: 1;
-  margin-left: 10px;
+  text-align: center;
+  line-height: 1.3;
+  margin-top: 2px;
 }
 .fac-card-tags {
   display: flex;
   gap: 4px;
   flex-wrap: wrap;
+  justify-content: center;
 }
 .fac-tag {
   font-family: 'IBM Plex Mono', monospace;
@@ -4268,39 +4304,52 @@ body {
 .fac-tag.is-hellish { color: #ff9d8c; background: rgba(196,102,102,.13); border-color: rgba(196,102,102,.35); }
 .fac-tag.is-hum { color: #f5d68a; background: rgba(216,184,106,.13); border-color: rgba(216,184,106,.35); }
 .fac-tag.is-syn { color: #d4baff; background: rgba(83,74,183,.13); border-color: rgba(83,74,183,.35); }
+
+/* Right column — the panel text */
+.fac-card-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 18px 18px 16px 16px;
+  min-width: 0;
+}
 .fac-card-oneliner {
   font-family: 'IBM Plex Mono', monospace;
-  font-size: 12px;
-  font-weight: 500;
-  color: color-mix(in srgb, var(--fac-accent, #c99c5a) 75%, var(--gold2));
+  font-size: 11.5px;
+  font-weight: 600;
+  color: color-mix(in srgb, var(--fac-accent, #c99c5a) 80%, var(--gold2));
   font-style: italic;
-  letter-spacing: 0.005em;
-  line-height: 1.4;
+  letter-spacing: 0.008em;
+  line-height: 1.45;
+  padding-bottom: 8px;
+  border-bottom: 0.5px dashed color-mix(in srgb, var(--fac-accent, #c99c5a) 30%, transparent);
 }
 .fac-card-lore {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 11px;
   color: var(--muted);
-  line-height: 1.55;
+  line-height: 1.60;
   letter-spacing: 0.005em;
-  opacity: .92;
+  opacity: .94;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
   list-style: none;
   padding: 0;
   margin: 0;
+  flex: 1;
 }
 .fac-card-lore li {
-  padding-left: 10px;
+  padding-left: 12px;
   position: relative;
 }
 .fac-card-lore li::before {
-  content: '·';
+  content: '›';
   position: absolute;
   left: 2px;
   color: var(--fac-accent, #c99c5a);
   font-weight: 700;
+  font-size: 12px;
 }
 .fac-card-lore strong { color: var(--gold2); }
 .fac-card-lore em { color: color-mix(in srgb, #f5d68a 70%, var(--gold2)); font-style: italic; }
@@ -4310,7 +4359,7 @@ body {
   border-top: 0.5px dashed rgba(201,156,90,.15);
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
   font-family: 'IBM Plex Mono', monospace;
   font-size: 10px;
   color: var(--muted);
@@ -4318,8 +4367,9 @@ body {
 }
 .fac-card-meta-row {
   display: grid;
-  grid-template-columns: 70px 1fr;
+  grid-template-columns: 64px 1fr;
   gap: 6px;
+  align-items: baseline;
 }
 .fac-card-meta-key {
   color: color-mix(in srgb, var(--fac-accent, #c99c5a) 70%, var(--gold2));
@@ -4334,6 +4384,13 @@ body {
 .fac-card.is-hostile .fac-card-oneliner { color: #ff9d8c; }
 .fac-card.is-hostile .fac-card-meta-key { color: #ff9d8c; }
 .fac-card.is-hostile .fac-card-lore li::before { color: #c46666; }
+.fac-card.is-hostile .fac-card-shrine {
+  background:
+    linear-gradient(180deg,
+      rgba(50,8,8,.85) 0%,
+      rgba(20,5,5,.70) 100%);
+  border-right-color: rgba(196,102,102,.30);
+}
 
 /* ───────── FOOTER ───────── */
 .foot {
@@ -5580,7 +5637,7 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
       </div>
       <h2 class="factions-title">Factions</h2>
       <p class="factions-lede">
-        Six organised forces still moving in the Pause &mdash; corporate, military, cult, and survivor-cells &mdash; plus two onstop hostile collectives that don&#39;t parley. The DNA-tags (HUM / CYB / SYN / Hell-overlay) are explained in the Body tab; here we focus on <em>who</em>, not <em>what</em>.
+        Seven organised forces still moving in the Pause &mdash; corporate, military, cult, and survivor-cells &mdash; plus two onstop hostile collectives that don&#39;t parley. The DNA-tags (HUM / CYB / SYN / Hell-overlay) are explained in the Body tab; here we focus on <em>who</em>, not <em>what</em>.
       </p>
     </div>
 
@@ -8616,22 +8673,25 @@ const FACTIONS_HOSTILE = [
 function renderFactionCard(f, isHostile) {
   const tagsHtml = (f.tags || []).map(t => `<span class="fac-tag is-${t.kind}">${t.label}</span>`).join('');
   const loreHtml = f.lore.map(line => `<li>${line}</li>`).join('');
-  const symbolHtml = f.iconImage
-    ? `<span class="fac-card-symbol fac-card-symbol-img" aria-hidden="true"><img src="${f.iconImage}" alt="" loading="lazy"></span>`
-    : `<span class="fac-card-symbol" aria-hidden="true">${f.symbol}</span>`;
+  // Icon shrine: image if available, otherwise large emoji
+  const iconHtml = f.iconImage
+    ? `<div class="fac-card-icon-frame" aria-hidden="true"><img src="${f.iconImage}" alt="" loading="lazy"></div>`
+    : `<div class="fac-card-icon-frame" aria-hidden="true"><span class="fac-card-icon-emoji">${f.symbol}</span></div>`;
   return `
     <div class="fac-card${isHostile ? ' is-hostile' : ''}" style="--fac-accent: ${f.accent};" data-fac-id="${f.id}">
-      <div class="fac-card-header">
-        ${symbolHtml}
+      <div class="fac-card-shrine">
+        ${iconHtml}
         <span class="fac-card-name">${f.name}</span>
         <div class="fac-card-tags">${tagsHtml}</div>
       </div>
-      <div class="fac-card-oneliner">${f.oneliner}</div>
-      <ul class="fac-card-lore">${loreHtml}</ul>
-      <div class="fac-card-meta">
-        <div class="fac-card-meta-row"><span class="fac-card-meta-key">Drives</span><span class="fac-card-meta-val">${f.motivation}</span></div>
-        <div class="fac-card-meta-row"><span class="fac-card-meta-key">Dispatch</span><span class="fac-card-meta-val">${f.dispatch}</span></div>
-        <div class="fac-card-meta-row"><span class="fac-card-meta-key">Relation</span><span class="fac-card-meta-val">${f.relation}</span></div>
+      <div class="fac-card-panel">
+        <div class="fac-card-oneliner">${f.oneliner}</div>
+        <ul class="fac-card-lore">${loreHtml}</ul>
+        <div class="fac-card-meta">
+          <div class="fac-card-meta-row"><span class="fac-card-meta-key">Drives</span><span class="fac-card-meta-val">${f.motivation}</span></div>
+          <div class="fac-card-meta-row"><span class="fac-card-meta-key">Dispatch</span><span class="fac-card-meta-val">${f.dispatch}</span></div>
+          <div class="fac-card-meta-row"><span class="fac-card-meta-key">Relation</span><span class="fac-card-meta-val">${f.relation}</span></div>
+        </div>
       </div>
     </div>
   `;
