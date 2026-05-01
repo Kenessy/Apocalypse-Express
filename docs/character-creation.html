@@ -5269,16 +5269,23 @@ body {
   display: block;
   z-index: 0;
 }
-/* Glass gloss — subtle top highlight + bottom shadow for slight 3D sheen */
+/* Obsidian glass gloss — strong top-left specular highlight (like polished
+   black stone or obsidian glass catching overhead light) + subtle bottom
+   shadow for depth. Color-neutral, professional, lets purple slots + the
+   engine image dominate the visual hierarchy. */
 .carriage-tile.is-floor::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom,
-    rgba(255,255,255,0.08) 0%,
-    rgba(255,255,255,0.02) 35%,
-    rgba(0,0,0,0.10) 75%,
-    rgba(0,0,0,0.18) 100%);
+  background:
+    radial-gradient(ellipse 65% 55% at 28% 18%,
+      rgba(255,255,255,0.24) 0%,
+      rgba(255,255,255,0.06) 35%,
+      transparent 55%),
+    linear-gradient(to bottom,
+      rgba(255,255,255,0.04) 0%,
+      transparent 30%,
+      rgba(0,0,0,0.32) 100%);
   pointer-events: none;
   z-index: 1;
 }
@@ -11880,13 +11887,13 @@ function buildBlockedStainedGlassSvg(span_col, span_row) {
 }
 
 function buildStainedGlassSvg(r, c) {
-  // Simplified single-color glass tile with seed-based minor variance.
-  // No shards, no leading lines — clean monochrome blue-grey base, gloss
-  // overlay applied via CSS ::before for slight 3D glass effect.
+  // Black obsidian glass — color-neutral high-gloss base.
+  // Tiny seed-based hue/lightness variance keeps tiles from looking digitally
+  // uniform; the gloss + specular highlight come from CSS ::before overlays.
   const seed = r * 31 + c * 17;
-  const hueShift = ((seed % 5) - 2) * 5;            // ±10 deg
-  const lightShift = ((seed % 7) - 3) * 1.6;        // ±4.8%
-  const fill = 'hsl(' + (215 + hueShift) + ', 28%, ' + (19 + lightShift) + '%)';
+  const lightShift = ((seed % 5) - 2) * 0.6;     // +/- 1.2%
+  const hueShift   = ((seed % 3) - 1) * 8;       // +/- 8 deg
+  const fill = 'hsl(' + (235 + hueShift) + ', 12%, ' + (5 + lightShift) + '%)';
   return '<svg class="floor-glass" viewBox="0 0 100 100" preserveAspectRatio="none" ' +
     'xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
     '<rect width="100" height="100" fill="' + fill + '"/>' +
