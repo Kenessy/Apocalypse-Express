@@ -10906,14 +10906,50 @@ function renderEngineFloor() {
   L.blocks.forEach(b => {
     const colEnd = b.col + b.span_col;
     const rowEnd = b.row + b.span_row;
-    html += `<div class="carriage-block is-${b.kind}" style="grid-column:${b.col} / ${colEnd}; grid-row:${b.row} / ${rowEnd};" data-icon="${b.icon}" role="img" aria-label="${b.label} · off-area"><span class="block-label">${b.label}</span></div>`;
+    const subLabel = b.subStructure
+      ? `<span class="reliquary-sub">${b.subStructure.active} active + ${b.subStructure.storage} storage</span>`
+      : '';
+    html += `<div class="carriage-block is-${b.kind}" style="grid-column:${b.col} / ${colEnd}; grid-row:${b.row} / ${rowEnd};" data-icon="${b.icon}" role="img" aria-label="${b.label} · off-area"><span class="block-label">${b.label}</span>${subLabel}</div>`;
   });
 
   // Render each slot as one spanning element at its anchor cell.
   L.slots.forEach(s => {
     const colEnd = s.col + s.span_col;
     const rowEnd = s.row + s.span_row;
-    html += `<div class="carriage-tile is-slot is-${s.kind}" style="grid-column:${s.col} / ${colEnd}; grid-row:${s.row} / ${rowEnd}; --slot-accent:${s.accent};" data-slot-id="${s.id}" data-label="${s.name}" title="${s.name} — ${s.task}">${s.icon}</div>`;
+    let inner = '';
+    if (s.shape === 'hex') {
+      // Pulpit — outline hexagon with alphanumeric code inside
+      inner = `<svg class="pulpit-hex" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">` +
+        `<polygon class="frame" points="50,2 95,26 95,74 50,98 5,74 5,26"/>` +
+        `<text class="code" x="50" y="57" text-anchor="middle" dominant-baseline="middle">${s.code}</text>` +
+        `</svg>`;
+    } else if (s.options) {
+      // A/B install slot — axis label + two option sub-cards
+      const selKey = s.selected || 'a';
+      const unselKey = selKey === 'a' ? 'b' : 'a';
+      const optA = s.options.a;
+      const optB = s.options.b;
+      const cardA = `<div class="engine-slot-option ${selKey==='a'?'is-selected':'is-unselected'}">` +
+        `<span class="badge">A</span>` +
+        `<span class="slot-opt-icon">${optA.icon}</span>` +
+        `<span class="slot-opt-name">${optA.name}</span>` +
+        `<span class="slot-opt-effect">${optA.effect}</span>` +
+        `</div>`;
+      const cardB = `<div class="engine-slot-option ${selKey==='b'?'is-selected':'is-unselected'}">` +
+        `<span class="badge">B</span>` +
+        `<span class="slot-opt-icon">${optB.icon}</span>` +
+        `<span class="slot-opt-name">${optB.name}</span>` +
+        `<span class="slot-opt-effect">${optB.effect}</span>` +
+        `</div>`;
+      inner = `<div class="engine-axis-label">${s.axis}<span class="engine-slot-name">${s.name}</span></div>` +
+        `<div class="engine-slot-ab">${cardA}${cardB}</div>`;
+    } else {
+      // Standard slot — icon + name label
+      inner = `${s.icon}<span class="engine-tile-name">${s.name}</span>`;
+    }
+    const abClass = s.options ? ' has-ab' : '';
+    const pulpitClass = s.shape === 'hex' ? ' is-pulpit' : '';
+    html += `<div class="carriage-tile is-slot is-${s.kind}${abClass}${pulpitClass}" style="grid-column:${s.col} / ${colEnd}; grid-row:${s.row} / ${rowEnd}; --slot-accent:${s.accent};" data-slot-id="${s.id}" data-label="${s.name}" title="${s.name} — ${s.task}">${inner}</div>`;
   });
 
   // Render walkable floor on every uncovered cell.
@@ -10927,14 +10963,22 @@ function renderEngineFloor() {
   grid.innerHTML = html;
 
   if (legend) {
-    legend.innerHTML = L.slots.map(s => `
-      <div class="legend-row is-${s.kind}" style="--slot-accent:${s.accent};">
-        <div class="legend-icon">${s.icon}</div>
-        <div class="legend-text">
-          <div class="legend-name">${s.name}</div>
-          <div class="legend-task">${s.task}</div>
-        </div>
-      </div>`).join('');
+    legend.innerHTML = L.slots.map(s => {
+      const codeChip = s.code ? `<span class="legend-code">${s.code}</span>` : '';
+      let legendTask = s.task;
+      if (s.options && s.selected) {
+        const sel = s.options[s.selected];
+        const alt = s.options[s.selected === 'a' ? 'b' : 'a'];
+        legendTask = `<strong>${sel.icon} ${sel.name}</strong> (selected) &nbsp;·&nbsp; `
+          + `<span style="opacity:.5">${alt.icon} ${alt.name} (alt)</span>`;
+      }
+      return `<div class="legend-row is-${s.kind}" style="--slot-accent:${s.accent};">` +
+        `<div class="legend-icon">${s.shape === 'hex' ? s.code : s.icon}</div>` +
+        `<div class="legend-text">` +
+        `<div class="legend-name">${codeChip}${s.name}</div>` +
+        `<div class="legend-task">${legendTask}</div>` +
+        `</div></div>`;
+    }).join('');
   }
 }
 
