@@ -7524,8 +7524,61 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
       </details>
     </section>
 
-    <!-- PLACEHOLDER for sections 3-10 (added next stages) -->
-    <div id="engine-sections-rest"></div>
+    <!-- SECTION 3: FIT -->
+    <section class="cadence-section-card" id="fit" aria-labelledby="fitHeader">
+      <div class="cadence-section-header">
+        <h3 class="cadence-section-title" id="fitHeader">Fit</h3>
+        <p class="cadence-section-sub"><strong>Fit</strong> is your character&rsquo;s total modifier for a given task &mdash; skill, preparation, equipment, and support all stacked into one number before you roll.</p>
+      </div>
+      <div class="engine-section-card">Fit = Skill mod + License bonus + Trait modifiers + Gear/Prep + Assistant
+
+Skill mod    — floor(d20_mod / 2) + role_trained_bonus (0 or 1)
+License bonus — +1 if you hold the relevant discipline license ([MED]/[EOD]/[RCP])
+Trait mods   — trait cards specify which field they modify and under what condition
+Gear/Prep    — right tools or preparation ahead of time: +1
+Assistant    — crewmate actively helping you: +1 (their assist die)</div>
+      <p style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);line-height:1.6;margin-top:12px;">Fit ranges from <strong style="color:var(--gold2);">−2</strong> (untrained rookie in a crisis) to <strong style="color:var(--gold2);">+5</strong> (legendary specialist, peak conditions, full support). On a Threshold 9 task, Fit +3 means you only need a 6 on 2d6 for Success &mdash; comfortable odds. Fit +0 means rolling straight against the luck of the dice.</p>
+    </section>
+
+    <!-- SECTION 4: THRESHOLD -->
+    <section class="cadence-section-card" id="threshold" aria-labelledby="thresholdHeader">
+      <div class="cadence-section-header">
+        <h3 class="cadence-section-title" id="thresholdHeader">Threshold</h3>
+        <p class="cadence-section-sub"><strong>Threshold</strong> is the task&rsquo;s difficulty number. Set by the task card, always visible before you roll. Think of it as the target the dice and Fit need to reach.</p>
+      </div>
+      <table class="engine-bands-table" aria-label="Difficulty tiers">
+        <thead><tr><th>Difficulty</th><th>Threshold</th><th>What this looks like</th></tr></thead>
+        <tbody>
+          <tr><td>Easy</td><td><strong>7</strong></td><td>Routine maintenance, a path walked a hundred times</td></tr>
+          <tr><td>Normal</td><td><strong>9</strong></td><td>Standard field repair, competent work under mild pressure</td></tr>
+          <tr><td>Hard</td><td><strong>11</strong></td><td>Critical system under load, unfamiliar terrain at night</td></tr>
+          <tr><td>Very Hard</td><td><strong>13</strong></td><td>Jury-rigged fix mid-derailment, emergency surgery in a moving car</td></tr>
+          <tr><td>Heroic</td><td><strong>15</strong></td><td>One shot at a cascading boiler failure with borrowed tools</td></tr>
+        </tbody>
+      </table>
+      <p style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);line-height:1.6;margin-top:12px;">Most checks in a standard journey sit at 9 or 11. The base difficulty is modified by environment (+1/+2 for bad conditions) and time pressure (+1/+2 if the clock is tight) &mdash; both folded into the Threshold shown on the card before you roll. You are never surprised by a hidden modifier at resolution.</p>
+    </section>
+
+    <!-- SECTION 5: OUTCOME -->
+    <section class="cadence-section-card" id="outcome" aria-labelledby="outcomeHeader">
+      <div class="cadence-section-header">
+        <h3 class="cadence-section-title" id="outcomeHeader">Outcome &mdash; Four Fields, Not One</h3>
+        <p class="cadence-section-sub">Most games collapse a roll into one result: you succeed or fail. Apocalypse Express splits every roll into <strong>four separate fields</strong>, each tracked independently. Traits and gear can modify different fields independently &mdash; sometimes in opposite directions.</p>
+      </div>
+      <table class="engine-bands-table" aria-label="Outcome fields">
+        <thead><tr><th>Field</th><th>What it answers</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Resolution</strong></td><td>Which band did you land in? (CF / F / S / CS)</td></tr>
+          <tr><td><strong>Yield</strong></td><td>How much of the task&rsquo;s value did you get? (CS=125%, S=100%, F=50%, CF=0&ndash;25%)</td></tr>
+          <tr><td><strong>Duration</strong></td><td>How long did the task take? (set by task card, not by roll result &mdash; unless a trait targets it)</td></tr>
+          <tr><td><strong>Complication</strong></td><td>Did something extra go wrong (or unexpectedly right)?</td></tr>
+        </tbody>
+      </table>
+      <p style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);line-height:1.6;margin-top:12px;">Example: the <strong style="color:var(--gold2);">Methodical</strong> trait gives +1 Fit on routine tasks but reduces Yield by &times;0.75 on novel ones. These are two different fields &mdash; neither contaminates the other. A Methodical mechanic attempting a routine boiler check rolls better (Fit +1). The same mechanic on a novel emergency repair rolls normally but produces less (Yield 75%). Two conditions, two fields, no conflict.</p>
+    </section>
+
+    <!-- PLACEHOLDER for Part II + sections 6-10 -->
+    <div id="engine-sections-part2"></div>
 
   </div><!-- /.engine-altarpiece -->
 </section>
