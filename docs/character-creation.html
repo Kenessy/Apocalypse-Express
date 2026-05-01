@@ -10657,33 +10657,70 @@ const CARRIAGES = [
 const ENGINE_LAYOUT = {
   cols: 16,
   rows: 5,
-  // Off-area blocks. The carriage is a small coal-fired origin train: a
-  // big engine taking ~40% of the front-left, a smaller coal tender hut
-  // tucked right behind it, then a cramped living area on the right.
+  // Off-area blocks. Hellfire Boiler takes the front-left 7x5. The Reliquary
+  // (tender + PLUG storage cabinet) is tucked at the back-right corner.
   blocks: [
-    { id: 'engine',  col: 1, row: 1, span_col: 7, span_row: 5, kind: 'engine',  icon: '🚂', label: 'Engine block' },
-    { id: 'tender',  col: 8, row: 1, span_col: 2, span_row: 2, kind: 'tender',  icon: '', label: 'Sparkplug tender' }
+    { id: 'engine',    col: 1,  row: 1, span_col: 7, span_row: 5, kind: 'engine',    icon: '\u{1F682}', label: 'The Hellfire Boiler' },
+    { id: 'reliquary', col: 15, row: 1, span_col: 2, span_row: 2, kind: 'reliquary', icon: '\u2697', label: 'The Reliquary',
+      subStructure: { active: 1, storage: 3 } }
   ],
   // Two slot kinds, visually distinct:
-  //   • work    → required post (driver). Someone MUST be here for the train to run.
+  //   • work    → required post (The Pulpit). Someone MUST be here for the train to run.
   //   • install → empty fitting. Players slot recovered gear here (bed, shelf, bunk, etc).
   slots: [
-    { id: 'driver',          col: 11, row: 2, span_col: 1, span_row: 1, kind: 'work',
-      icon: '🎚', accent: '#d8b86a',
-      name: 'Driver post',
-      task: 'REQUIRED · fuel · throttle · brake · steer. Can be a PC or PAVNN.' },
-    { id: 'install-small-a', col: 14, row: 2, span_col: 1, span_row: 1, kind: 'install-small',
-      icon: '◻', accent: '#5fa3d4',
-      name: 'Small install slot',
-      task: 'Fits 1×1 gear (bed, shelf, locker, console). Found and unlocked.' },
-    { id: 'install-small-b', col: 11, row: 5, span_col: 1, span_row: 1, kind: 'install-small',
-      icon: '◻', accent: '#5fa3d4',
-      name: 'Small install slot',
-      task: 'Fits 1×1 gear (bed, shelf, locker, console). Found and unlocked.' },
-    { id: 'install-big',     col: 13, row: 4, span_col: 2, span_row: 2, kind: 'install-big',
-      icon: '◼', accent: '#9a7acc',
-      name: 'Big install slot',
-      task: 'Fits 2×2 gear (bunk, workbench, weapons rack). Found and unlocked.' }
+    { id: 'pulpit',          col: 8,  row: 2, span_col: 1, span_row: 1, kind: 'work',
+      shape: 'hex', code: 'A1',
+      icon: '\u{1F39A}', accent: '#d8b86a',
+      name: 'The Pulpit',
+      task: 'REQUIRED \u00b7 fuel \u00b7 throttle \u00b7 brake \u00b7 steer. Can be a PC or PAVNN.' },
+    { id: 'install-small-a', col: 14, row: 3, span_col: 1, span_row: 1, kind: 'install-small',
+      icon: '\u25fb', accent: '#5fa3d4',
+      name: 'The Tinker Wall',
+      task: 'Fits 1x1 gear. Found and unlocked.',
+      axis: 'Maintenance', selected: 'a',
+      options: {
+        a: { name: 'Toolkit & Boiler Kit', icon: '\u{1F527}',
+          effect: 'Driver post +1 Fit all phases \u00b7 1 free wear-repair/stop',
+          flavor: 'Hardened leather tool roll, brass rail, sigil-locked spare parts.',
+          acquisition: 'Any station \u00b7 5 LEV \u00b7 Any faction R1 starter' },
+        b: { name: "Engineer's Manual", icon: '\u{1F4D6}',
+          effect: '+1 phase grace every event \u00b7 any PC Assists (+1 Fit) regardless of position',
+          flavor: 'Old A-Tech manual, leather-bound, sigil-stamped, profanity-laced margins.',
+          acquisition: 'Rare \u2014 Concord Yards special-order \u00b7 30 LEV \u00b7 Cantos 7 reward' }
+      }
+    },
+    { id: 'install-small-b', col: 13, row: 5, span_col: 1, span_row: 1, kind: 'install-small',
+      icon: '\u25fb', accent: '#5fa3d4',
+      name: 'The Crew Niche',
+      task: 'Fits 1x1 gear. Found and unlocked.',
+      axis: 'Life', selected: 'a',
+      options: {
+        a: { name: 'Reinforced Bookshelf', icon: '\u{1F4DA}',
+          effect: 'Holds 4 TNY items or 1 pBL \u00b7 secured vs. vibration',
+          flavor: 'Brass-rail bookshelf, leather straps, sigil-buckled.',
+          acquisition: 'Any station \u00b7 8 LEV \u00b7 Workshop: TNK 7 + 3 LEV' },
+        b: { name: 'Tabletop Game Set', icon: '\u265f',
+          effect: '2 PCs assigned \u2192 +1 MOR (max 3) \u00b7 CF scatters pieces',
+          flavor: 'Ironwood folding board, brass corners, 9 carved bone/pearl/obsidian pieces.',
+          acquisition: 'Sundown Saloon network \u00b7 10-15 LEV \u00b7 Drifters R2 gift' }
+      }
+    },
+    { id: 'install-big',     col: 11, row: 2, span_col: 2, span_row: 2, kind: 'install-big',
+      icon: '\u25fc', accent: '#9a7acc',
+      name: 'The Apse',
+      task: 'Fits 2x2 gear. Found and unlocked.',
+      axis: 'Work', selected: 'a',
+      options: {
+        a: { name: 'Co-Pilot Cradle', icon: '\u{1F465}',
+          effect: '2 PCs at Driver \u00b7 built-in Assistant +1 Fit \u00b7 CF mitigation',
+          flavor: 'Twin brass-and-bone seats sharing a common throttle yoke.',
+          acquisition: 'Concord Yards \u00b7 50 LEV \u00b7 Cantos 4 reward path' },
+        b: { name: 'Fold-Down Bunk', icon: '\u{1F6CF}',
+          effect: 'Down: Rest recovery \u00b7 Up: 1x storage',
+          flavor: 'Brass-frame folding pallet, crimson canvas, sigil-burned leather.',
+          acquisition: 'Minor stations \u00b7 15-25 LEV \u00b7 TNK 9 + 5 LEV (Workshop)' }
+      }
+    }
   ]
 };
 
