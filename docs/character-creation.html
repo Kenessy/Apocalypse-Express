@@ -7455,8 +7455,78 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
 <!-- THE ENGINE — rules reference tab -->
 <section class="tab-panel" id="tab-motor">
   <div class="engine-altarpiece">
-    <!-- HERO + 10 SECTIONS (added in subsequent stages) -->
-    <div id="engine-hero"></div>
+
+    <!-- HERO -->
+    <div class="engine-hero" id="engine-hero" aria-labelledby="engineTabTitle">
+      <div class="cath-eyebrow">
+        <span class="ce-orn" aria-hidden="true"><svg><use href="#orn-arch-small"/></svg></span>
+        Reference &middot; the roll that runs the train
+      </div>
+      <h2 class="engine-hero-title" id="engineTabTitle">The Engine</h2>
+      <p class="engine-hero-lead">&ldquo;Every task, every journey, every event resolves through one grammar &mdash; roll two dice, add your Fit, compare to the Threshold; everything downstream is consequence.&rdquo;</p>
+      <p class="engine-hero-body">This tab is the mechanical grammar of the Apocalypse Express. One resolution system handles all task work: dispatch rolls, event responses, and journey outcomes all use the same 2d6+Fit vs Threshold structure with four result bands. The sections below walk through each piece in order &mdash; Roll, Fit, Threshold, Outcome, then how they chain through a full journey. Read once for orientation; return during play as a quick reference.</p>
+      <p style="margin-top:8px;"><a href="#worked-example" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--gold);letter-spacing:.10em;">See it all fire at once &rarr; Marlow&rsquo;s run</a></p>
+    </div>
+
+    <!-- SECTION 2: THE ROLL -->
+    <section class="cadence-section-card" id="roll" aria-labelledby="rollHeader">
+      <div class="cadence-section-header">
+        <div class="cath-eyebrow">
+          <span class="ce-orn" aria-hidden="true"><svg><use href="#orn-quatrefoil"/></svg></span>
+          Part I &middot; the grammar of resolution
+        </div>
+        <h3 class="cadence-section-title" id="rollHeader">The Roll</h3>
+        <p class="cadence-section-sub">Every check in the game follows the same structure: <strong>Roll 2d6, add your Fit. Compare the result to the Threshold.</strong> The four result bands are defined by the margin &mdash; how far your total lands above or below the Threshold.</p>
+      </div>
+      <table class="engine-bands-table" aria-label="Result bands">
+        <thead>
+          <tr><th>Band</th><th>Label</th><th>Margin</th></tr>
+        </thead>
+        <tbody>
+          <tr class="band-cs"><td><strong>Critical Success</strong></td><td><strong>CS</strong></td><td>Total &ge; Threshold + 3</td></tr>
+          <tr class="band-s"><td><strong>Success</strong></td><td><strong>S</strong></td><td>Total = Threshold to Threshold + 2</td></tr>
+          <tr class="band-f"><td><strong>Failure</strong></td><td><strong>F</strong></td><td>Total = Threshold &minus; 1 to Threshold &minus; 3</td></tr>
+          <tr class="band-cf"><td><strong>Critical Failure</strong></td><td><strong>CF</strong></td><td>Total &le; Threshold &minus; 4</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:14px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);line-height:1.6;">The task card displays everything you need before you touch the dice: your Fit, the Threshold, and the probability of each band. You can see your odds before committing. If a trait applies or a crewmate can assist, account for it now.</p>
+
+      <!-- PROBABILITY CALCULATOR WIDGET -->
+      <details class="engine-prob-widget">
+        <summary>&#x2699; Probability calculator &mdash; try any Fit &amp; Threshold</summary>
+        <div class="engine-prob-inner">
+          <div class="engine-prob-inputs">
+            <label>Fit <input type="number" id="engine-prob-fit" value="0" min="-5" max="10"></label>
+            <label>Threshold <input type="number" id="engine-prob-threshold" value="9" min="5" max="18"></label>
+          </div>
+          <div class="engine-prob-row">
+            <span class="engine-prob-band" style="color:#4caf80;">CS</span>
+            <div class="engine-prob-bar-wrap"><div class="engine-prob-bar" data-band="CS" style="width:3%"></div></div>
+            <span class="engine-prob-pct" data-band="CS">3%</span>
+          </div>
+          <div class="engine-prob-row">
+            <span class="engine-prob-band" style="color:#90c8f0;">S</span>
+            <div class="engine-prob-bar-wrap"><div class="engine-prob-bar" data-band="S" style="width:25%"></div></div>
+            <span class="engine-prob-pct" data-band="S">25%</span>
+          </div>
+          <div class="engine-prob-row">
+            <span class="engine-prob-band" style="color:#e0a030;">F</span>
+            <div class="engine-prob-bar-wrap"><div class="engine-prob-bar" data-band="F" style="width:44%"></div></div>
+            <span class="engine-prob-pct" data-band="F">44%</span>
+          </div>
+          <div class="engine-prob-row">
+            <span class="engine-prob-band" style="color:#e05050;">CF</span>
+            <div class="engine-prob-bar-wrap"><div class="engine-prob-bar" data-band="CF" style="width:28%"></div></div>
+            <span class="engine-prob-pct" data-band="CF">28%</span>
+          </div>
+          <div id="engine-prob-modal" class="engine-prob-modal">Modal outcome: Failure</div>
+        </div>
+      </details>
+    </section>
+
+    <!-- PLACEHOLDER for sections 3-10 (added next stages) -->
+    <div id="engine-sections-rest"></div>
+
   </div><!-- /.engine-altarpiece -->
 </section>
 
