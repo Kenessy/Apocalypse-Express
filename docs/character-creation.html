@@ -1692,6 +1692,7 @@ body {
   grid-template-columns: 130px 1fr;
   gap: 14px;
   align-items: start;
+  min-width: 0;
 }
 @media (max-width: 720px) {
   .tag-row { grid-template-columns: 1fr; gap: 6px; }
@@ -1717,13 +1718,14 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
+  min-width: 0;
 }
 
 .tag {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  height: 22px;
+  min-height: 22px;
   padding: 0 9px 0 7px;
   border-radius: 11px;
   font-family: 'IBM Plex Mono', monospace;
@@ -1731,9 +1733,10 @@ body {
   font-weight: 500;
   letter-spacing: 0.10em;
   text-transform: uppercase;
-  line-height: 1;
+  line-height: 1.25;
   border: 0.5px solid transparent;
-  white-space: nowrap;
+  white-space: normal;
+  max-width: 100%;
   transition: filter .18s, border-color .18s, background .18s;
   cursor: default;
 }
