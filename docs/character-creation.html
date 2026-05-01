@@ -5911,6 +5911,171 @@ body {
 .acquisition-card .efr-val em { color: rgba(140, 200, 240, 0.95); font-style: italic; }
 
 
+/* ═══════════════════════════════════════════════════════
+   CERT tab — altarpiece wrapper + stacked cert cards
+   ═══════════════════════════════════════════════════════ */
+.cert-altarpiece {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 32px 40px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* Hero block — cathedral header at top of cert panel */
+.cert-hero {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  padding: 28px 32px;
+  background: linear-gradient(135deg, rgba(201,156,90,.07), rgba(0,0,0,.25));
+  border: 0.5px solid rgba(201,156,90,.28);
+  border-radius: var(--r-card);
+}
+.cert-hero-title {
+  font-family: 'Cinzel', serif;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--gold2);
+  text-transform: uppercase;
+  margin: 0;
+}
+.cert-hero-lead {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--muted);
+  margin: 0;
+}
+
+/* Individual cert cards — full-width raised panels with stained-glass border */
+.cert-card {
+  background: rgba(0,0,0,.30);
+  border: 0.5px solid rgba(201,156,90,.32);
+  border-left: 3px solid rgba(201,156,90,.55);
+  border-radius: var(--r-card);
+  overflow: hidden;
+  transition: border-color 0.18s;
+}
+.cert-card:hover {
+  border-color: rgba(201,156,90,.65);
+  border-left-color: rgba(230,207,161,.80);
+}
+
+/* Card header */
+.cert-card-header {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding: 16px 24px 14px;
+  background: linear-gradient(90deg, rgba(201,156,90,.10) 0%, rgba(0,0,0,0) 60%);
+  border-bottom: 0.5px solid rgba(201,156,90,.20);
+}
+.cert-card-id {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0.75;
+  flex-shrink: 0;
+}
+.cert-card-name {
+  font-family: 'Cinzel', serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--gold2);
+  text-transform: uppercase;
+  margin: 0;
+}
+
+/* Card body — two-column grid on wide screens */
+.cert-card-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  padding: 0;
+}
+
+/* Individual labelled sections inside a card */
+.cert-card-section {
+  padding: 14px 20px 14px 24px;
+  border-bottom: 0.5px solid rgba(201,156,90,.10);
+}
+.cert-card-section:nth-child(odd) {
+  border-right: 0.5px solid rgba(201,156,90,.13);
+}
+.cert-card-section h4 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin: 0 0 7px;
+}
+.cert-card-section p,
+.cert-card-section code {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  line-height: 1.65;
+  color: var(--muted);
+}
+.cert-card-section code {
+  background: rgba(201,156,90,.10);
+  border: 0.5px solid rgba(201,156,90,.22);
+  border-radius: var(--r-tight);
+  padding: 1px 5px;
+  color: var(--gold);
+  font-size: 11px;
+}
+
+/* Acquisition list */
+.cert-acquisition-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.cert-acquisition-list li {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--muted);
+  padding-left: 14px;
+  position: relative;
+}
+.cert-acquisition-list li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: var(--gold);
+  opacity: 0.55;
+}
+
+/* Examples block — spans full width */
+.cert-examples {
+  grid-column: 1 / -1;
+  border-right: none !important;
+  background: rgba(201,156,90,.03);
+}
+
+/* Narrow viewport: single column */
+@media (max-width: 720px) {
+  .cert-altarpiece { padding: 20px 16px; gap: 16px; }
+  .cert-card-body { grid-template-columns: 1fr; }
+  .cert-card-section:nth-child(odd) { border-right: none; }
+  .cert-examples { grid-column: 1; }
+}
+
+
+
 /* ENGINE tab — altarpiece wrapper + part dividers */
 .engine-altarpiece {
   display: flex;
@@ -6718,6 +6883,7 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
   <button class="tab tab-reference" data-tab="cadence"><span class="num">∞</span>Chaos &amp; Harmony</button>
   <button class="tab tab-reference" data-tab="factions"><span class="num">§</span>Factions</button>
   <button class="tab tab-reference" data-tab="motor"><span class="num">⚙</span>The Engine</button>
+  <button class="tab tab-reference" data-tab="cert"><span class="num">✦</span>Certifications</button>
 </nav>
 
 <main>
@@ -8010,6 +8176,10 @@ The choices before the dice roll matter as much as the roll itself.</div>
 </section>
 
   </div><!-- /.engine-altarpiece -->
+</section>
+
+<section class="tab-panel" id="tab-cert">
+  <div class="cert-altarpiece"></div>
 </section>
 
 </main>
