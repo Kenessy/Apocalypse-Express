@@ -5271,18 +5271,20 @@ body {
 }
 /* Obsidian glass gloss — clean linear sweep (top-bright, bottom-darker).
    Avoids the per-tile spotlight effect that reads as "patchy" — instead each
-   tile shares the same uniform vertical gradient, like a flat polished surface
-   lit from above. Subtle contrast so the gloss feels like material, not paint. */
+   tile shares the same diagonal sweep (135 deg = light from upper-left at
+   ~45 deg, the classic / natural lighting direction). Bright top-left fades
+   through neutral mid to shadowed bottom-right — like polished obsidian lit
+   by a sun source above and to the left. */
 .carriage-tile.is-floor::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom,
-    rgba(255,255,255,0.12) 0%,
-    rgba(255,255,255,0.04) 25%,
+  background: linear-gradient(135deg,
+    rgba(255,255,255,0.14) 0%,
+    rgba(255,255,255,0.05) 28%,
     rgba(255,255,255,0) 50%,
-    rgba(0,0,0,0.08) 75%,
-    rgba(0,0,0,0.20) 100%);
+    rgba(0,0,0,0.08) 72%,
+    rgba(0,0,0,0.22) 100%);
   pointer-events: none;
   z-index: 1;
 }
