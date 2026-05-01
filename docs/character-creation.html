@@ -7658,8 +7658,110 @@ Assistant    — crewmate actively helping you: +1 (their assist die)</div>
       <p style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);line-height:1.6;margin-top:12px;"><strong style="color:var(--gold2);">Double-up:</strong> Two crew members can share a wake event, each spending 0.5 Rest blocks (round up to 1 if already at 0). The pair gains +1 Fit on the resolution roll. Two tired people cooperating can outperform one exhausted person working alone.</p>
     </section>
 
-    <!-- PLACEHOLDER for Part III + sections 9-10 -->
-    <div id="engine-sections-part3"></div>
+    <!-- PART III DIVIDER -->
+    <div class="engine-part-divider" id="part-synthesis">PART III &middot; SYNTHESIS</div>
+
+    <!-- SECTION 9: TRAITS -->
+    <section class="cadence-section-card" id="traits" aria-labelledby="traitsHeader">
+      <div class="cadence-section-header">
+        <h3 class="cadence-section-title" id="traitsHeader">Trait Integration</h3>
+        <p class="cadence-section-sub">Every character carries one or more <strong>Traits</strong> &mdash; personality qualities that mechanically interact with the four outcome fields. Traits don&rsquo;t just make you better or worse in general. Each trait card explicitly states which field it targets and under what condition.</p>
+      </div>
+      <div class="engine-section-card">TRAIT: Methodical
+On a ROUTINE task:  +1 Fit
+On a NOVEL task:    Yield x0.75</div>
+      <div class="engine-section-card" style="margin-top:8px;">TRAIT: Hyperfocus
+Before Phase 1, choose one phase.
+On the chosen phase:    +2 Fit
+On all other phases:    -1 Fit
+(Player declares phase before journey begins — no changing mid-run.)</div>
+      <div class="engine-section-card" style="margin-top:8px;">TRAIT: Service Intelligence (PAVNN)
+On a ROUTINE task:  +1 Fit · Duration x0.5
+On a NOVEL task:    -1 Fit · Duration x1.5</div>
+      <p style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);line-height:1.6;margin-top:12px;">When you pick your character&rsquo;s traits during creation, consider which fields each trait affects and how those interact with your intended role. A character primarily assigned to routine maintenance slots benefits enormously from Methodical or Service Intelligence. A character expected to handle novel crises will find those same traits actively detrimental. Traits are field-specific bets on how your character will be deployed.</p>
+    </section>
+
+    <!-- SECTION 10: WORKED EXAMPLE — Marlow's Medium Run -->
+    <section class="cadence-section-card" id="worked-example" aria-labelledby="workedExampleHeader">
+      <div class="cadence-section-header">
+        <div class="cath-eyebrow">
+          <span class="ce-orn" aria-hidden="true"><svg><use href="#orn-quatrefoil"/></svg></span>
+          First-read walkthrough &middot; every mechanic fires at least once
+        </div>
+        <h3 class="cadence-section-title" id="workedExampleHeader">Marlow&rsquo;s Medium Run</h3>
+        <p class="cadence-section-sub"><strong>Route:</strong> Ironveil Depot &rarr; Concord Yards. A medium freight run through open scrubland and a chronoshear seam. 4 phases, 8-segment clock.</p>
+      </div>
+
+      <table class="engine-bands-table" aria-label="Crew roster">
+        <thead><tr><th>Name</th><th>Role</th><th>Key Skill</th><th>License</th><th>Trait</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Marlow</strong></td><td>Driver (cab)</td><td>SYS +2 &rarr; Fit +1</td><td>[RCP] +1</td><td>Methodical</td></tr>
+          <tr><td><strong>Klara</strong></td><td>Bastion gunner (rear)</td><td>SLG +2 &rarr; Fit +1</td><td>[EOD] +1</td><td>Hyperfocus</td></tr>
+          <tr><td><strong>PAVNN</strong></td><td>Tender operator</td><td>&mdash;</td><td>&mdash;</td><td>Service Intelligence</td></tr>
+          <tr><td><strong>Doc</strong></td><td>Medic (galley/bunk)</td><td>PRY +1 &rarr; Fit +0</td><td>[MED] +1</td><td>Lazy</td></tr>
+        </tbody>
+      </table>
+
+      <h4 style="font-family:'Cinzel',serif;font-size:13px;color:var(--gold2);margin:18px 0 8px;">Phase 1 &mdash; Departure (Threshold 7, Routine)</h4>
+      <div class="engine-section-card">Marlow Fit +5:  SYS +1 · [RCP] +1 · Role-trained +1 · Methodical +1 (ROUTINE) · PAVNN assist +1
+Roll: 4+5=9, total 14. Margin +7. RESULT: CS (+2 clock) → 2/8 segments.</div>
+
+      <h4 style="font-family:'Cinzel',serif;font-size:13px;color:var(--gold2);margin:18px 0 8px;">Phase 2 &mdash; Cruise (Threshold 8, Routine)</h4>
+      <div class="engine-section-card">Marlow Fit +5:  same sources as Phase 1.
+Roll: 3+4=7, total 12. Margin +4. RESULT: S (+1 clock) → 3/8 segments.
+
+Note: A Success means 100% Yield — the train covered the distance, schedule intact.
+A CS would have given 125% (minor bonus). An F yields 50% — slower, something half-done.</div>
+
+      <h4 style="font-family:'Cinzel',serif;font-size:13px;color:var(--gold2);margin:18px 0 8px;">Mid-Journey Event: Boiler Stress (State-triggered, 02:47 AM)</h4>
+      <div class="engine-section-card">STAKE: Secondary loop running hot. Left alone, Phase 3 Threshold rises 11→13.
+CHOICES:
+  A) Wake Doc — TNK+[RCP] vs Th9, costs 1 Rest block from Doc
+  B) Send PAVNN — auto-resolve, boiler stable; PAVNN unavailable Phase 3
+  C) Push through — no cost, Phase 3 Threshold becomes 13
+
+CHOICE MADE: Option B (Send PAVNN)
+Consequence: Phase 3 Threshold stays at 11.
+Phase 3 Fit recalculated: Methodical -1 (NOVEL task), PAVNN assist -1 (OCCUPIED) → Fit +2</div>
+
+      <h4 style="font-family:'Cinzel',serif;font-size:13px;color:var(--gold2);margin:18px 0 8px;">Phase 3 &mdash; Hazard: Chronoshear Seam (Threshold 11, Novel)</h4>
+      <div class="engine-section-card">Marlow Fit +2:  SYS +1 · [RCP] +1 · Role-trained +1 · Methodical 0 (NOVEL) · PAVNN 0 (OCCUPIED)
+Roll: 2+3=5, total 7. Margin -4. RESULT: F (-1 clock, complication triggered) → 2/8 segments.
+
+Note: Failure ≠ zero progress. Yield 50% — the train got through the seam.
+It came through slower, with more wear, and the clock paid the price. The journey continues.</div>
+
+      <h4 style="font-family:'Cinzel',serif;font-size:13px;color:var(--gold2);margin:18px 0 8px;">Outcome-Triggered Event: Coupling Slack (05:42 AM)</h4>
+      <div class="engine-section-card">TRIGGER: Phase 3 F result → minor complication
+STAKE:   3mm slack in rear coupling. Not dangerous now; will become noise on approach.
+RESOLUTION: No roll. PAVNN (back from boiler) manually tensions the coupling.
+COST:    +0.5h on Phase 4 duration. No segment loss. No Rest spent.</div>
+
+      <h4 style="font-family:'Cinzel',serif;font-size:13px;color:var(--gold2);margin:18px 0 8px;">Phase 4 &mdash; Approach (Threshold 8, Routine)</h4>
+      <div class="engine-section-card">Marlow Fit +5:  PAVNN back, Methodical fires again (ROUTINE station approach).
+Roll: 6+5=11, total 16. Margin +8. RESULT: CS (+2 clock) → 4/8 segments.</div>
+
+      <h4 style="font-family:'Cinzel',serif;font-size:13px;color:var(--gold2);margin:18px 0 8px;">Journey Ladder &mdash; Final Tally</h4>
+      <table class="engine-bands-table" aria-label="Phase segment log">
+        <thead><tr><th>Phase</th><th>Outcome</th><th>Change</th><th>Running total</th></tr></thead>
+        <tbody>
+          <tr class="band-cs"><td>1 &mdash; Departure</td><td>CS</td><td>+2</td><td>2/8</td></tr>
+          <tr class="band-s"><td>2 &mdash; Cruise</td><td>S</td><td>+1</td><td>3/8</td></tr>
+          <tr class="band-f"><td>3 &mdash; Hazard</td><td>F</td><td>&minus;1</td><td>2/8</td></tr>
+          <tr class="band-cs"><td>4 &mdash; Approach</td><td>CS</td><td>+2</td><td>4/8</td></tr>
+        </tbody>
+      </table>
+      <div class="engine-section-card" style="margin-top:10px;">RESULT: 4/8 segments → ON TIME (50–74%) → PLUG cost ×1.0, no surcharge.
+The cargo arrives. The two-week jury-rig situation ends at 07:40 AM.
+
+Key takeaway: the pre-roll choice (Option B: stabilize boiler, lose PAVNN on Phase 3)
+meant Phase 3 Failure landed at Threshold 11, not 13. At Th13 with Fit+2, CF was the
+likely outcome: -2 segments and a more serious complication, possibly Rough Arrival tier.
+The choices before the dice roll matter as much as the roll itself.</div>
+    </section>
+
+  </div><!-- /.engine-altarpiece -->
+</section>
 
   </div><!-- /.engine-altarpiece -->
 </section>
