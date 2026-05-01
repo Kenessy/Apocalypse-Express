@@ -12797,11 +12797,13 @@ if (document.readyState === 'loading') {
     renderEngineFloor();
     initEngineProbWidget();
     renderCertCards();
+    renderStationCards();
   });
 } else {
   renderEngineFloor();
   initEngineProbWidget();
   renderCertCards();
+  renderStationCards();
 }
 
 // ═══════════════════════════════════════════════════════
@@ -12846,6 +12848,70 @@ function renderCertCards() {
 }
 
 // ═══════════════════════════════════════════════════════
+// STATION CARDS RENDERER
+// ═══════════════════════════════════════════════════════
+function renderStationCards() {
+  const container = document.getElementById('stationCardsContainer');
+  if (!container || container.hasChildNodes()) return; // only render once
+
+  const html = STATION_CARDS.map(card => {
+    // Cert tag pills — look up name from CERT_CATEGORIES
+    const certItems = card.cert_tags.map(t => {
+      const cat = (typeof CERT_CATEGORIES !== 'undefined')
+        ? CERT_CATEGORIES.find(x => x.id === t.id) : null;
+      const label = cat ? cat.name : t.id;
+      return `<li><span class="cert-tag-pill">${label}</span> — ${t.effect}</li>`;
+    }).join('\n          ');
+
+    const bonusItems = card.bonuses_available
+      .map(b => `<li>${b}</li>`).join('\n          ');
+
+    return `<article class="station-card station-card-${card.color}" id="station-${card.code}">
+  <header class="station-card-header">
+    <span class="station-card-swatch" aria-hidden="true"></span>
+    <div class="station-card-id">
+      <span class="station-card-code">${card.code}</span>
+      <span class="station-card-category">${card.category}</span>
+    </div>
+    <h3 class="station-card-name">${card.name}</h3>
+  </header>
+  <div class="station-card-body">
+    <div class="station-card-section">
+      <h4>Role</h4>
+      <p>${card.role}</p>
+    </div>
+    <div class="station-card-section">
+      <h4>Skills &middot; License</h4>
+      <p><strong>Skills:</strong> ${card.skills}</p>
+      <p><strong>License:</strong> ${card.license}</p>
+    </div>
+    <div class="station-card-section">
+      <h4>Cert tags</h4>
+      <ul>
+          ${certItems}
+      </ul>
+    </div>
+    <div class="station-card-section">
+      <h4>Who can be posted</h4>
+      <p>${card.who_can_post}</p>
+    </div>
+    <div class="station-card-section">
+      <h4>If empty / penalty</h4>
+      <p>${card.penalty}</p>
+    </div>
+    <div class="station-card-section">
+      <h4>Bonuses available</h4>
+      <ul>
+          ${bonusItems}
+      </ul>
+    </div>
+  </div>
+</article>`;
+  }).join('\n');
+  container.innerHTML = html;
+}
+
+// ═══════════════════════════════════════════════════════
 // TAB SWITCHING
 // ═══════════════════════════════════════════════════════
 document.getElementById('tabNav').addEventListener('click', e => {
@@ -12863,6 +12929,9 @@ document.getElementById('tabNav').addEventListener('click', e => {
   }
   if (tabId === 'cert') {
     renderCertCards();
+  }
+  if (tabId === 'carriage') {
+    renderStationCards();
   }
 });
 </script>
