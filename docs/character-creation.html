@@ -5353,6 +5353,35 @@ body {
   text-shadow: 0 0 4px rgba(255, 100, 40, 0.6);
 }
 /* Engine — big red-glowing centerpiece */
+/* Blocked-area procedural stained-glass — engine + Reliquary tile.
+   Mirrors floor-glass system but uses BLOCKED_TEMPLATES (engine-themed shards:
+   wheel/cross/bands/frame) and forces COLOR_SCHEMES[3] Dim. SVG sits behind
+   the block-label and any block-specific styling (e.g. engine bg image). */
+.carriage-block {
+  position: relative;
+  overflow: hidden;
+}
+.carriage-block > svg.blocked-glass {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  mix-blend-mode: multiply;
+  opacity: 0.85;
+}
+.carriage-block.is-reliquary > svg.blocked-glass {
+  /* No background image — blocked-glass IS the primary visual */
+  mix-blend-mode: normal;
+  opacity: 1;
+}
+.carriage-block .block-label,
+.carriage-block .reliquary-sub {
+  position: relative;
+  z-index: 2;
+}
+
 .carriage-block.is-engine {
   background:
     radial-gradient(ellipse at center, rgba(255, 80, 30, 0.40) 0%, rgba(74, 26, 20, 0.95) 60%, rgba(34, 12, 10, 1) 100%),
@@ -11734,6 +11763,114 @@ function _shardHighlight(pts) {
  * @param {number} c  Grid column (1-based)
  * @returns {string}  SVG element string
  */
+// ---------------------------------------------------------------------------
+// Blocked-area templates — engine-themed shard patterns for off-area blocks
+// (Hellfire Boiler engine, Reliquary tender). Visual vocabulary:
+//   • wheel  — center hub + 4 spokes radiating out (driving-wheel feel)
+//   • cross  — horizontal + vertical pipe bands meeting at center (manifold-cross)
+//   • bands  — 5 horizontal bands w/ thin gaps (stacked-pipe manifold)
+//   • frame  — corner trapezoids + inner square (boiler-face frame)
+// All forced to COLOR_SCHEMES[3] (Dim) and rendered with mix-blend-mode multiply
+// to read as "blocked / not-walkable" against the brighter floor cells.
+// ---------------------------------------------------------------------------
+
+const BLOCKED_TEMPLATES = [
+  {
+    name: 'wheel',
+    polygons: [
+      '35,35 65,35 65,65 35,65',
+      '0,0 100,0 65,35 35,35',
+      '100,0 100,100 65,65 65,35',
+      '100,100 0,100 35,65 65,65',
+      '0,100 0,0 35,35 35,65'
+    ],
+    leadingPaths: [
+      'M 35,35 L 65,35 L 65,65 L 35,65 Z',
+      'M 35,35 L 0,0',
+      'M 65,35 L 100,0',
+      'M 65,65 L 100,100',
+      'M 35,65 L 0,100'
+    ]
+  },
+  {
+    name: 'cross',
+    polygons: [
+      '0,0 35,0 35,35 0,35',
+      '65,0 100,0 100,35 65,35',
+      '0,65 35,65 35,100 0,100',
+      '65,65 100,65 100,100 65,100',
+      '35,35 65,35 65,65 35,65'
+    ],
+    leadingPaths: [
+      'M 35,0 L 35,100',
+      'M 65,0 L 65,100',
+      'M 0,35 L 100,35',
+      'M 0,65 L 100,65'
+    ]
+  },
+  {
+    name: 'bands',
+    polygons: [
+      '0,0 100,0 100,30 0,30',
+      '0,30 100,30 100,40 0,40',
+      '0,40 100,40 100,60 0,60',
+      '0,60 100,60 100,70 0,70',
+      '0,70 100,70 100,100 0,100'
+    ],
+    leadingPaths: [
+      'M 0,30 L 100,30',
+      'M 0,40 L 100,40',
+      'M 0,60 L 100,60',
+      'M 0,70 L 100,70'
+    ]
+  },
+  {
+    name: 'frame',
+    polygons: [
+      '0,0 100,0 80,20 20,20',
+      '100,0 100,100 80,80 80,20',
+      '100,100 0,100 20,80 80,80',
+      '0,100 0,0 20,20 20,80',
+      '20,20 80,20 80,80 20,80'
+    ],
+    leadingPaths: [
+      'M 20,20 L 80,20 L 80,80 L 20,80 Z'
+    ]
+  }
+];
+
+function buildBlockedStainedGlassSvg(span_col, span_row) {
+  const w = 100 * span_col;
+  const h = 100 * span_row;
+  const dimScheme = COLOR_SCHEMES[3];
+  let panels = '';
+  for (let r = 0; r < span_row; r++) {
+    for (let c = 0; c < span_col; c++) {
+      const seed = (r + 7) * 31 + (c + 11) * 17;
+      const tplIdx = seed % BLOCKED_TEMPLATES.length;
+      const template = BLOCKED_TEMPLATES[tplIdx];
+      const xOff = c * 100;
+      const yOff = r * 100;
+      for (let i = 0; i < template.polygons.length; i++) {
+        const pts = template.polygons[i].split(' ').map(p => {
+          const parts = p.split(',');
+          return (parseFloat(parts[0]) + xOff) + ',' + (parseFloat(parts[1]) + yOff);
+        }).join(' ');
+        const fill = dimScheme.colors[i % dimScheme.colors.length];
+        panels += '<polygon points="' + pts + '" fill="' + fill + '" opacity="' + dimScheme.opacity + '"/>';
+      }
+      for (let i = 0; i < template.leadingPaths.length; i++) {
+        const path = template.leadingPaths[i].replace(/(\d+(?:\.\d+)?),(\d+(?:\.\d+)?)/g, function(m, x, y) {
+          return (parseFloat(x) + xOff) + ',' + (parseFloat(y) + yOff);
+        });
+        panels += '<path d="' + path + '" stroke="var(--gold)" stroke-width="1.4" stroke-opacity="0.65" fill="none" stroke-linecap="round" stroke-linejoin="round"/>';
+      }
+    }
+  }
+  return '<svg class="blocked-glass" viewBox="0 0 ' + w + ' ' + h + '" preserveAspectRatio="none"' +
+    ' xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' + panels + '</svg>';
+}
+
 function buildStainedGlassSvg(r, c) {
   const seed = r * 31 + c * 17;
   const tplIdx = seed % 4;
@@ -11807,7 +11944,8 @@ function renderEngineFloor() {
     const subLabel = b.subStructure
       ? `<span class="reliquary-sub">${b.subStructure.active} active + ${b.subStructure.storage} storage</span>`
       : '';
-    html += `<div class="carriage-block is-${b.kind}" style="grid-column:${b.col} / ${colEnd}; grid-row:${b.row} / ${rowEnd};" data-icon="${b.icon}" role="img" aria-label="${b.label} · off-area"><span class="block-label">${b.label}</span>${subLabel}</div>`;
+    const blockedSvg = buildBlockedStainedGlassSvg(b.span_col, b.span_row);
+    html += `<div class="carriage-block is-${b.kind}" style="grid-column:${b.col} / ${colEnd}; grid-row:${b.row} / ${rowEnd};" data-icon="${b.icon}" role="img" aria-label="${b.label} · off-area">${blockedSvg}<span class="block-label">${b.label}</span>${subLabel}</div>`;
   });
 
   // Render each slot as one spanning element at its anchor cell.
