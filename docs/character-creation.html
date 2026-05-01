@@ -5253,8 +5253,9 @@ body {
   font-size: 16px;
   line-height: 1;
 }
-/* Procedural stained-glass floor — SVG injected via buildStainedGlassSvg().
-   Dark overlay via ::before sits on top of the SVG; overflow:hidden clips it. */
+/* Simplified floor — single-color glass tile (per-cell minor variance via SVG)
+   with a subtle gloss overlay. Reads as "walkable glass floor" without busy
+   shard patterns. The SVG provides the colored fill; ::before adds gloss. */
 .carriage-tile.is-floor {
   border-color: rgba(201,156,90,0.06);
   overflow: hidden;
@@ -5266,52 +5267,76 @@ body {
   height: 100%;
   pointer-events: none;
   display: block;
+  z-index: 0;
 }
+/* Glass gloss — subtle top highlight + bottom shadow for slight 3D sheen */
 .carriage-tile.is-floor::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(rgba(14, 12, 24, 0.55), rgba(14, 12, 24, 0.55));
+  background: linear-gradient(to bottom,
+    rgba(255,255,255,0.08) 0%,
+    rgba(255,255,255,0.02) 35%,
+    rgba(0,0,0,0.10) 75%,
+    rgba(0,0,0,0.18) 100%);
   pointer-events: none;
   z-index: 1;
 }
 .carriage-tile.is-floor::after {
-  /* Dot decoration replaced by procedural SVG */
   content: none;
 }
+
+/* Slot tiles — color-coded by role.
+   PURPLE = install location (color-code marks "update / equip here").
+   The code text (B1, C1, C2, A1) identifies which slot is which;
+   full A/B option details live in the legend below the floor plan. */
 .carriage-tile.is-slot {
-  background: radial-gradient(circle at center, color-mix(in srgb, var(--slot-accent, #c99c5a) 18%, #2a2128), #1a1118);
-  border: 1px solid color-mix(in srgb, var(--slot-accent, #c99c5a) 65%, transparent);
-  box-shadow: inset 0 0 6px color-mix(in srgb, var(--slot-accent, #c99c5a) 30%, transparent), 0 0 4px color-mix(in srgb, var(--slot-accent, #c99c5a) 20%, transparent);
-  cursor: help;
-  font-size: 18px;
-  z-index: 1;
-}
-/* Work slot — required post (driver). Solid look, brighter glow.
-   Visually says: 'someone must stand here for the train to run.' */
-.carriage-tile.is-slot.is-work {
-  background:
-    radial-gradient(circle at center, color-mix(in srgb, var(--slot-accent, #d8b86a) 35%, #2a2128), #1a1118);
-  border: 2px solid color-mix(in srgb, var(--slot-accent, #d8b86a) 85%, transparent);
+  background: linear-gradient(135deg, #4d2470, #3a1a4d);
+  border: 1px solid rgba(150, 100, 200, 0.55);
   box-shadow:
-    inset 0 0 10px color-mix(in srgb, var(--slot-accent, #d8b86a) 45%, transparent),
-    0 0 10px color-mix(in srgb, var(--slot-accent, #d8b86a) 35%, transparent);
-  font-size: 20px;
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.35),
+    0 0 6px rgba(120, 70, 180, 0.20);
+  cursor: help;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
-/* Install slots — empty fittings. Dashed border, lighter feel.
-   Visually says: 'put something here.' */
-.carriage-tile.is-slot.is-install-small,
-.carriage-tile.is-slot.is-install-big {
-  background:
-    repeating-linear-gradient(45deg,
-      color-mix(in srgb, var(--slot-accent, #5fa3d4) 12%, rgba(0,0,0,.40)) 0 5px,
-      rgba(0,0,0,.40) 5px 10px);
-  border: 1.5px dashed color-mix(in srgb, var(--slot-accent, #5fa3d4) 70%, transparent);
-  box-shadow: inset 0 0 4px color-mix(in srgb, var(--slot-accent, #5fa3d4) 25%, transparent);
-  opacity: .80;
+/* Slot-glass gloss — slightly brighter than floor (slots are interactive). */
+.carriage-tile.is-slot::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom,
+    rgba(255,255,255,0.14) 0%,
+    rgba(255,255,255,0.04) 40%,
+    rgba(0,0,0,0.10) 80%,
+    rgba(0,0,0,0.18) 100%);
+  pointer-events: none;
+  z-index: 0;
 }
-.carriage-tile.is-slot.is-install-big {
-  font-size: 28px;
+/* Slot code — large Cinzel identifier at center (e.g. "A1", "B1", "C1"). */
+.slot-code {
+  position: relative;
+  z-index: 3;
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.10em;
+  color: var(--gold2);
+  text-shadow: 0 0 6px rgba(0, 0, 0, 0.55);
+}
+/* Big install slot (Apse, 2×2): bigger code text. */
+.carriage-tile.is-slot.is-install-big .slot-code {
+  font-size: 22px;
+  letter-spacing: 0.14em;
+}
+/* Work slot (Pulpit) — keeps its hex outline; code lives inside the SVG.
+   The slot itself is purple like other slots for color-code consistency. */
+.carriage-tile.is-slot.is-work {
+  /* Same purple — color-code is unified for "active interaction location". */
 }
 .carriage-tile.is-slot::after {
   content: attr(data-label);
@@ -11601,6 +11626,7 @@ const ENGINE_LAYOUT = {
       name: 'The Pulpit',
       task: 'REQUIRED \u00b7 fuel \u00b7 throttle \u00b7 brake \u00b7 steer. Can be a PC or PAVNN.' },
     { id: 'install-small-a', col: 14, row: 3, span_col: 1, span_row: 1, kind: 'install-small',
+      code: 'C1',
       icon: '\u25fb', accent: '#5fa3d4',
       name: 'The Tinker Wall',
       task: 'Fits 1x1 gear. Found and unlocked.',
@@ -11617,6 +11643,7 @@ const ENGINE_LAYOUT = {
       }
     },
     { id: 'install-small-b', col: 13, row: 5, span_col: 1, span_row: 1, kind: 'install-small',
+      code: 'C2',
       icon: '\u25fb', accent: '#5fa3d4',
       name: 'The Crew Niche',
       task: 'Fits 1x1 gear. Found and unlocked.',
@@ -11633,6 +11660,7 @@ const ENGINE_LAYOUT = {
       }
     },
     { id: 'install-big',     col: 11, row: 2, span_col: 2, span_row: 2, kind: 'install-big',
+      code: 'B1',
       icon: '\u25fc', accent: '#9a7acc',
       name: 'The Apse',
       task: 'Fits 2x2 gear. Found and unlocked.',
@@ -11840,74 +11868,29 @@ const BLOCKED_TEMPLATES = [
 ];
 
 function buildBlockedStainedGlassSvg(span_col, span_row) {
+  // Simplified dark monochrome — communicates "blocked / not walkable".
+  // Single dark slate fill, no shards, no engine-themed shapes. Block-specific
+  // styling (e.g. the Hellfire Boiler image) sits on top via CSS bg-image.
   const w = 100 * span_col;
   const h = 100 * span_row;
-  const dimScheme = COLOR_SCHEMES[3];
-  let panels = '';
-  for (let r = 0; r < span_row; r++) {
-    for (let c = 0; c < span_col; c++) {
-      const seed = (r + 7) * 31 + (c + 11) * 17;
-      const tplIdx = seed % BLOCKED_TEMPLATES.length;
-      const template = BLOCKED_TEMPLATES[tplIdx];
-      const xOff = c * 100;
-      const yOff = r * 100;
-      for (let i = 0; i < template.polygons.length; i++) {
-        const pts = template.polygons[i].split(' ').map(p => {
-          const parts = p.split(',');
-          return (parseFloat(parts[0]) + xOff) + ',' + (parseFloat(parts[1]) + yOff);
-        }).join(' ');
-        const fill = dimScheme.colors[i % dimScheme.colors.length];
-        panels += '<polygon points="' + pts + '" fill="' + fill + '" opacity="' + dimScheme.opacity + '"/>';
-      }
-      for (let i = 0; i < template.leadingPaths.length; i++) {
-        const path = template.leadingPaths[i].replace(/(\d+(?:\.\d+)?),(\d+(?:\.\d+)?)/g, function(m, x, y) {
-          return (parseFloat(x) + xOff) + ',' + (parseFloat(y) + yOff);
-        });
-        panels += '<path d="' + path + '" stroke="var(--gold)" stroke-width="1.4" stroke-opacity="0.65" fill="none" stroke-linecap="round" stroke-linejoin="round"/>';
-      }
-    }
-  }
-  return '<svg class="blocked-glass" viewBox="0 0 ' + w + ' ' + h + '" preserveAspectRatio="none"' +
-    ' xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' + panels + '</svg>';
+  return '<svg class="blocked-glass" viewBox="0 0 ' + w + ' ' + h + '" preserveAspectRatio="none" ' +
+    'xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+    '<rect width="' + w + '" height="' + h + '" fill="hsl(280, 8%, 11%)"/>' +
+    '</svg>';
 }
 
 function buildStainedGlassSvg(r, c) {
+  // Simplified single-color glass tile with seed-based minor variance.
+  // No shards, no leading lines — clean monochrome blue-grey base, gloss
+  // overlay applied via CSS ::before for slight 3D glass effect.
   const seed = r * 31 + c * 17;
-  const tplIdx = seed % 4;
-  const colorIdx = (seed >> 2) % 4;
-  const template = SHARD_TEMPLATES[tplIdx];
-  const scheme   = COLOR_SCHEMES[colorIdx];
-
-  // Subtle focal-point variation: offset cx/cy +-8% based on seed
-  const cxOff = ((seed % 5) - 2) * 4;
-  const cyOff = (((seed >> 1) % 5) - 2) * 4;
-  const cx = 50 + cxOff;
-  const cy = 45 + cyOff;
-  const fy = 38 + cyOff;
-
-  const isDim = colorIdx === 3;
-  const stops = isDim ? BACKLIGHT_STOPS_DIM : BACKLIGHT_STOPS;
-
-  let polygons = '';
-  for (let i = 0; i < template.polygons.length; i++) {
-    const pts = template.polygons[i];
-    const fill = scheme.colors[i % scheme.colors.length];
-    polygons += '<polygon points="' + pts + '" fill="' + fill + '" opacity="' + scheme.opacity + '"/>';
-    polygons += _shardHighlight(pts);
-  }
-
-  let leads = '';
-  for (let i = 0; i < template.leadingPaths.length; i++) {
-    leads += '<path d="' + template.leadingPaths[i] +
-      '" stroke="var(--gold)" stroke-width="1.6" stroke-opacity="0.90" fill="none" stroke-linecap="round" stroke-linejoin="round"/>';
-  }
-
-  return '<svg class="floor-glass" viewBox="0 0 100 100" preserveAspectRatio="none"' +
-    ' xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
-    '<defs><radialGradient id="bg-' + r + '-' + c + '" cx="' + cx + '%" cy="' + cy +
-    '%" r="68%" fx="' + cx + '%" fy="' + fy + '%">' + stops + '</radialGradient></defs>' +
-    '<rect width="100" height="100" fill="url(#bg-' + r + '-' + c + ')"/>' +
-    polygons + leads + '</svg>';
+  const hueShift = ((seed % 5) - 2) * 5;            // ±10 deg
+  const lightShift = ((seed % 7) - 3) * 1.6;        // ±4.8%
+  const fill = 'hsl(' + (215 + hueShift) + ', 28%, ' + (19 + lightShift) + '%)';
+  return '<svg class="floor-glass" viewBox="0 0 100 100" preserveAspectRatio="none" ' +
+    'xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+    '<rect width="100" height="100" fill="' + fill + '"/>' +
+    '</svg>';
 }
 
 // ---------------------------------------------------------------------------
@@ -11960,25 +11943,11 @@ function renderEngineFloor() {
         `<text class="code" x="50" y="57" text-anchor="middle" dominant-baseline="middle">${s.code}</text>` +
         `</svg>`;
     } else if (s.options) {
-      // A/B install slot — axis label + two option sub-cards
-      const selKey = s.selected || 'a';
-      const unselKey = selKey === 'a' ? 'b' : 'a';
-      const optA = s.options.a;
-      const optB = s.options.b;
-      const cardA = `<div class="engine-slot-option ${selKey==='a'?'is-selected':'is-unselected'}">` +
-        `<span class="badge">A</span>` +
-        `<span class="slot-opt-icon">${optA.icon}</span>` +
-        `<span class="slot-opt-name">${optA.name}</span>` +
-        `<span class="slot-opt-effect">${optA.effect}</span>` +
-        `</div>`;
-      const cardB = `<div class="engine-slot-option ${selKey==='b'?'is-selected':'is-unselected'}">` +
-        `<span class="badge">B</span>` +
-        `<span class="slot-opt-icon">${optB.icon}</span>` +
-        `<span class="slot-opt-name">${optB.name}</span>` +
-        `<span class="slot-opt-effect">${optB.effect}</span>` +
-        `</div>`;
-      inner = `<div class="engine-axis-label">${s.axis}<span class="engine-slot-name">${s.name}</span></div>` +
-        `<div class="engine-slot-ab">${cardA}${cardB}</div>`;
+      // Simplified slot rendering — purple "install slot" panel with code text.
+      // A/B picker details (option names, effects, alternatives) live in the
+      // legend below the floor plan, not on the tile itself.
+      const code = s.code || '';
+      html += `<div class="carriage-tile is-slot is-${s.kind}${hexClass}" style="grid-column:${s.col} / ${colEnd}; grid-row:${s.row} / ${rowEnd}; --slot-accent:${s.accent};" data-slot-id="${s.id}" data-label="${s.name}" title="${s.name} — ${s.axis}: ${s.options.a.name} or ${s.options.b.name}"><span class="slot-code">${code}</span></div>`;
     } else {
       // Standard slot — icon + name label
       inner = `${s.icon}<span class="engine-tile-name">${s.name}</span>`;
