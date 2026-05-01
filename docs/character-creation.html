@@ -5269,23 +5269,20 @@ body {
   display: block;
   z-index: 0;
 }
-/* Obsidian glass gloss — strong top-left specular highlight (like polished
-   black stone or obsidian glass catching overhead light) + subtle bottom
-   shadow for depth. Color-neutral, professional, lets purple slots + the
-   engine image dominate the visual hierarchy. */
+/* Obsidian glass gloss — clean linear sweep (top-bright, bottom-darker).
+   Avoids the per-tile spotlight effect that reads as "patchy" — instead each
+   tile shares the same uniform vertical gradient, like a flat polished surface
+   lit from above. Subtle contrast so the gloss feels like material, not paint. */
 .carriage-tile.is-floor::before {
   content: '';
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(ellipse 65% 55% at 28% 18%,
-      rgba(255,255,255,0.24) 0%,
-      rgba(255,255,255,0.06) 35%,
-      transparent 55%),
-    linear-gradient(to bottom,
-      rgba(255,255,255,0.04) 0%,
-      transparent 30%,
-      rgba(0,0,0,0.32) 100%);
+  background: linear-gradient(to bottom,
+    rgba(255,255,255,0.12) 0%,
+    rgba(255,255,255,0.04) 25%,
+    rgba(255,255,255,0) 50%,
+    rgba(0,0,0,0.08) 75%,
+    rgba(0,0,0,0.20) 100%);
   pointer-events: none;
   z-index: 1;
 }
