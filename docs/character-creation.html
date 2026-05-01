@@ -5253,12 +5253,31 @@ body {
   font-size: 16px;
   line-height: 1;
 }
-.carriage-tile.is-floor::after {
+/* Procedural stained-glass floor — SVG injected via buildStainedGlassSvg().
+   Dark overlay via ::before sits on top of the SVG; overflow:hidden clips it. */
+.carriage-tile.is-floor {
+  border-color: rgba(201,156,90,0.06);
+  overflow: hidden;
+}
+.carriage-tile.is-floor > svg.floor-glass {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  display: block;
+}
+.carriage-tile.is-floor::before {
   content: '';
   position: absolute;
-  width: 3px; height: 3px;
-  border-radius: 50%;
-  background: rgba(201,156,90,.18);
+  inset: 0;
+  background: linear-gradient(rgba(14, 12, 24, 0.55), rgba(14, 12, 24, 0.55));
+  pointer-events: none;
+  z-index: 1;
+}
+.carriage-tile.is-floor::after {
+  /* Dot decoration replaced by procedural SVG */
+  content: none;
 }
 .carriage-tile.is-slot {
   background: radial-gradient(circle at center, color-mix(in srgb, var(--slot-accent, #c99c5a) 18%, #2a2128), #1a1118);
@@ -10668,6 +10687,159 @@ const ENGINE_LAYOUT = {
   ]
 };
 
+// ---------------------------------------------------------------------------
+// Procedural stained-glass floor — constants and builder (Phase 2 impl)
+// ---------------------------------------------------------------------------
+
+const SHARD_TEMPLATES = [
+  {
+    name: 'pinwheel',
+    polygons: [
+      '0,0 50,0 50,50 0,50',
+      '50,0 100,0 100,50 50,50',
+      '50,50 100,50 100,100 50,100',
+      '0,50 50,50 50,100 0,100'
+    ],
+    leadingPaths: [
+      'M 50,0 L 50,50',
+      'M 100,50 L 50,50',
+      'M 50,100 L 50,50',
+      'M 0,50 L 50,50'
+    ]
+  },
+  {
+    name: 'fold',
+    polygons: [
+      '0,0 50,0 0,50',
+      '0,50 50,100 0,100',
+      '50,0 100,0 100,100 50,100 0,50'
+    ],
+    leadingPaths: [
+      'M 50,0 L 0,50 L 50,100'
+    ]
+  },
+  {
+    name: 'fan',
+    polygons: [
+      '0,100 0,50 50,100',
+      '0,50 0,0 50,0 50,100',
+      '50,100 50,0 100,0 100,50 70,35',
+      '50,100 70,35 100,50',
+      '100,50 100,100 50,100'
+    ],
+    leadingPaths: [
+      'M 50,100 L 0,50',
+      'M 50,100 L 50,0',
+      'M 50,100 L 70,35',
+      'M 50,100 L 100,50'
+    ]
+  },
+  {
+    name: 'split',
+    polygons: [
+      '0,0 100,0 100,50 0,50',
+      '0,50 100,50 100,100 0,100'
+    ],
+    leadingPaths: [
+      'M 0,50 L 100,50'
+    ]
+  }
+];
+
+const COLOR_SCHEMES = [
+  { name: 'cool',  colors: ['#1d3370', '#2a4a8c', '#3a1a4d', '#4d2470', '#2a2128'], opacity: 0.76 },
+  { name: 'warm',  colors: ['#1d3370', '#5a2810', '#8c4818', '#b54a32', '#2a2128'], opacity: 0.72 },
+  { name: 'mixed', colors: ['#3a1a4d', '#1a4040', '#2a6060', '#5a2810', '#b8b0c6'], opacity: 0.70 },
+  { name: 'dim',   colors: ['#2a2128', '#3a2d3c', '#1d3370', '#3a1a4d', '#2a1a14'], opacity: 0.68 }
+];
+
+// Standard backlight stops (Schemes 0-2). Scheme 3 (dim) uses reduced opacity variant.
+const BACKLIGHT_STOPS = '<stop offset="0%"   stop-color="#ffe8a8" stop-opacity="0.55"/>' +
+  '<stop offset="30%"  stop-color="#ffc060" stop-opacity="0.30"/>' +
+  '<stop offset="65%"  stop-color="#c97820" stop-opacity="0.10"/>' +
+  '<stop offset="100%" stop-color="#8c4808" stop-opacity="0"/>';
+
+const BACKLIGHT_STOPS_DIM = '<stop offset="0%"   stop-color="#ffe8a8" stop-opacity="0.42"/>' +
+  '<stop offset="30%"  stop-color="#ffc060" stop-opacity="0.18"/>' +
+  '<stop offset="65%"  stop-color="#c97820" stop-opacity="0.06"/>' +
+  '<stop offset="100%" stop-color="#8c4808" stop-opacity="0"/>';
+
+/**
+ * Returns inner-shard highlight polylines for a shard polygon.
+ * Traces the 1-2 topmost edges (lowest Y midpoint, nearest to backlight
+ * focal point at fy=38%). Thin warm-white stroke at 0.28 opacity.
+ * @param {string} pts  Space-separated "x,y" pairs
+ * @returns {string}  SVG polyline element string(s)
+ */
+function _shardHighlight(pts) {
+  const verts = pts.trim().split(/\s+/).map(function(p) {
+    const parts = p.split(',');
+    return { x: Number(parts[0]), y: Number(parts[1]) };
+  });
+  if (verts.length < 2) return '';
+  const edges = [];
+  for (let i = 0; i < verts.length; i++) {
+    const a = verts[i];
+    const b = verts[(i + 1) % verts.length];
+    edges.push({ a: a, b: b, midY: (a.y + b.y) / 2 });
+  }
+  edges.sort(function(e1, e2) { return e1.midY - e2.midY; });
+  const topEdges = edges.slice(0, Math.min(2, edges.length));
+  return topEdges.map(function(e) {
+    return '<polyline points="' + e.a.x + ',' + e.a.y + ' ' + e.b.x + ',' + e.b.y +
+      '" stroke="#f8f5f0" stroke-width="0.6" stroke-opacity="0.28" fill="none"/>';
+  }).join('');
+}
+
+/**
+ * Builds a deterministic procedural stained-glass SVG for a floor cell.
+ * Template and color scheme are stable across re-renders (seed = r*31 + c*17).
+ * Backlight focal point is offset +-8% per seed to break grid symmetry.
+ * @param {number} r  Grid row (1-based)
+ * @param {number} c  Grid column (1-based)
+ * @returns {string}  SVG element string
+ */
+function buildStainedGlassSvg(r, c) {
+  const seed = r * 31 + c * 17;
+  const tplIdx = seed % 4;
+  const colorIdx = (seed >> 2) % 4;
+  const template = SHARD_TEMPLATES[tplIdx];
+  const scheme   = COLOR_SCHEMES[colorIdx];
+
+  // Subtle focal-point variation: offset cx/cy +-8% based on seed
+  const cxOff = ((seed % 5) - 2) * 4;
+  const cyOff = (((seed >> 1) % 5) - 2) * 4;
+  const cx = 50 + cxOff;
+  const cy = 45 + cyOff;
+  const fy = 38 + cyOff;
+
+  const isDim = colorIdx === 3;
+  const stops = isDim ? BACKLIGHT_STOPS_DIM : BACKLIGHT_STOPS;
+
+  let polygons = '';
+  for (let i = 0; i < template.polygons.length; i++) {
+    const pts = template.polygons[i];
+    const fill = scheme.colors[i % scheme.colors.length];
+    polygons += '<polygon points="' + pts + '" fill="' + fill + '" opacity="' + scheme.opacity + '"/>';
+    polygons += _shardHighlight(pts);
+  }
+
+  let leads = '';
+  for (let i = 0; i < template.leadingPaths.length; i++) {
+    leads += '<path d="' + template.leadingPaths[i] +
+      '" stroke="var(--gold)" stroke-width="1.6" stroke-opacity="0.90" fill="none" stroke-linecap="round" stroke-linejoin="round"/>';
+  }
+
+  return '<svg class="floor-glass" viewBox="0 0 100 100" preserveAspectRatio="none"' +
+    ' xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+    '<defs><radialGradient id="bg-' + r + '-' + c + '" cx="' + cx + '%" cy="' + cy +
+    '%" r="68%" fx="' + cx + '%" fy="' + fy + '%">' + stops + '</radialGradient></defs>' +
+    '<rect width="100" height="100" fill="url(#bg-' + r + '-' + c + ')"/>' +
+    polygons + leads + '</svg>';
+}
+
+// ---------------------------------------------------------------------------
+
 function renderEngineFloor() {
   const grid = document.getElementById('engineFloor');
   const legend = document.getElementById('engineLegend');
@@ -10712,7 +10884,7 @@ function renderEngineFloor() {
     for (let c = 1; c <= L.cols; c++) {
       const key = `${r},${c}`;
       if (covered.has(key)) continue;
-      html += `<div class="carriage-tile is-floor" style="grid-column:${c}; grid-row:${r};" aria-hidden="true"></div>`;
+      html += `<div class="carriage-tile is-floor" style="grid-column:${c}; grid-row:${r};" aria-hidden="true">${buildStainedGlassSvg(r, c)}</div>`;
     }
   }
   grid.innerHTML = html;
