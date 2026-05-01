@@ -11714,9 +11714,11 @@ const ENGINE_LAYOUT = {
   // Off-area blocks. Hellfire Boiler takes the front-left 7x5. The Reliquary
   // (tender + PLUG storage cabinet) is tucked at the back-right corner.
   blocks: [
-    { id: 'engine',    col: 1,  row: 1, span_col: 7, span_row: 5, kind: 'engine',    icon: '\u{1F682}', label: 'The Hellfire Boiler' },
+    { id: 'engine',    col: 1,  row: 1, span_col: 7, span_row: 5, kind: 'engine',    icon: '\u{1F682}', label: 'The Hellfire Boiler',
+      cert_tags: ['mech_eng', 'chemistry'] },
     { id: 'reliquary', col: 15, row: 1, span_col: 2, span_row: 2, kind: 'reliquary', icon: '\u2697', label: 'The Reliquary',
-      subStructure: { active: 1, storage: 3 } }
+      subStructure: { active: 1, storage: 3 },
+      cert_tags: ['mech_eng', 'chemistry'] }
   ],
   // Two slot kinds, visually distinct:
   //   • work    → required post (The Pulpit). Someone MUST be here for the train to run.
@@ -11726,11 +11728,13 @@ const ENGINE_LAYOUT = {
       shape: 'hex', code: 'A1',
       icon: '\u{1F39A}', accent: '#d8b86a',
       name: 'The Pulpit',
+      cert_tags: ['mech_eng', 'systems'],
       task: 'REQUIRED \u00b7 fuel \u00b7 throttle \u00b7 brake \u00b7 steer. Can be a PC or PAVNN.' },
     { id: 'install-small-a', col: 12, row: 2, span_col: 1, span_row: 1, kind: 'install-small',
       code: 'C1',
       icon: '\u25fb', accent: '#5fa3d4',
       name: 'The Tinker Wall',
+      cert_tags: ['mech_eng', 'salvage'],
       task: 'Fits 1x1 gear. Found and unlocked.',
       axis: 'Maintenance', selected: 'a',
       options: {
@@ -11748,6 +11752,7 @@ const ENGINE_LAYOUT = {
       code: 'C2',
       icon: '\u25fb', accent: '#5fa3d4',
       name: 'The Crew Niche',
+      cert_tags: [],
       task: 'Fits 1x1 gear. Found and unlocked.',
       axis: 'Life', selected: 'a',
       options: {
@@ -11765,6 +11770,7 @@ const ENGINE_LAYOUT = {
       code: 'B1',
       icon: '\u25fc', accent: '#9a7acc',
       name: 'The Apse',
+      cert_tags: ['mech_eng'],
       task: 'Fits 2x2 gear. Found and unlocked.',
       axis: 'Work', selected: 'a',
       options: {
