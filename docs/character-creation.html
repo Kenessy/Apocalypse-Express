@@ -12058,14 +12058,102 @@ const ENGINE_LAYOUT = {
 // that cert grants +1 Fit on the roll (anti-stack: 1× per category per roll).
 // ---------------------------------------------------------------------------
 const CERT_CATEGORIES = [
-  { id: 'mech_eng',     name: 'Mechanical Engineering',  scope: 'engines, gears, pipes, install-repair, mechanical systems' },
-  { id: 'medical',      name: 'Medical',                  scope: 'anatomy, surgery, triage, biology, body restoration' },
-  { id: 'demolitions',  name: 'Demolitions',              scope: 'explosives, breach, controlled destruction, sigil-lock breaking' },
-  { id: 'systems',      name: 'Systems / Electrical',     scope: 'wiring, computers, signal/comm, sensors, dispatch network' },
-  { id: 'chemistry',    name: 'Chemistry / Alchemy',      scope: 'substances, brewing, refinement, PLUG quality, αSync handling' },
-  { id: 'negotiation',  name: 'Negotiation / Diplomacy',  scope: 'social, faction, contracts, Lucifer-pact bargaining' },
-  { id: 'salvage',      name: 'Salvage / A-Tech',         scope: 'finding, identifying, recovering A-Tech / pre-Halt gear' },
-  { id: 'combat',       name: 'Combat / Tactics',         scope: 'military training, weapon expertise, ambush response, boarding' }
+  {
+    id: 'mech_eng',
+    name: 'Mechanical Engineering',
+    scope: 'engines, gears, pipes, install-repair, mechanical systems',
+    acquisition: [
+      'Workshop carriage downtime training (5 LEV + 8h + TNK 11)',
+      '\u03b1Sync R3 reward \u2014 gifted by an \u03b1Sync mech-officer',
+      'Pre-Halt mentor \u2014 rare NPC encounter (Cantos 4-7)',
+      'PAVNN holds this NPC-bound (factory-loaded \u03b1Sync upload)'
+    ],
+    examples: 'Common in \u03b1Sync-trained operators, Workshop apprentices, and pre-Halt railway veterans. PAVNN carries the Class III package, consistent with all standard MULE units.'
+  },
+  {
+    id: 'medical',
+    name: 'Medical',
+    scope: 'anatomy, surgery, triage, biology, body-restoration, [MED]-tagged work',
+    acquisition: [
+      'Doc starter \u2014 chosen at character creation (one of 3 starter certs)',
+      'Hospital-train route \u2014 2-week field rotation at a Sanitarium stop',
+      'Cantos 2 healer arc \u2014 Drowntown Basin scene rewards this on success',
+      'Field-medic mentor \u2014 found-NPC encounter (random table)'
+    ],
+    examples: 'Held by Doc characters, \u03b1Sync field medics, and travelling sanitarium-licensed healers. The license [MED] is required for safety-critical surgical work; this cert applies on top.'
+  },
+  {
+    id: 'demolitions',
+    name: 'Demolitions',
+    scope: 'explosives, breach, controlled destruction, sigil-lock breaking, [EOD]-tagged work',
+    acquisition: [
+      'Sabre defector \u2014 Cantos 1 (Gauntlet) reward path on hostile-Sabre route',
+      '\u03b1Sync R3 reward \u2014 gifted by demolitions division',
+      'Workshop downtime \u2014 TNK 13 + EOD parts + 12h',
+      'Field accident \u2014 survive a CF demolitions roll (rare!)'
+    ],
+    examples: 'Signature of EOD-licensed crew, Sabre-defectors, and rare Workshop tinkerers who learned the hard way.'
+  },
+  {
+    id: 'systems',
+    name: 'Systems / Electrical',
+    scope: 'wiring, computers, signal/comm, sensors, dispatch network',
+    acquisition: [
+      '\u03b1Sync R2 reward \u2014 Construct-uploaded standard package',
+      'Construct factory upload (ATA, ICARUS, etc.) \u2014 most Constructs have this baseline',
+      'Workshop training (8h + 4 LEV + TNK 9)',
+      'Telegram-train route \u2014 relay-station apprenticeship'
+    ],
+    examples: 'Universal among Constructs (factory-loaded). PCs commonly pick this up at \u03b1Sync orientation.'
+  },
+  {
+    id: 'chemistry',
+    name: 'Chemistry / Alchemy',
+    scope: 'substances, brewing, refinement, PLUG quality testing, \u03b1Sync component handling',
+    acquisition: [
+      '\u03b1Sync R3 reward \u2014 chemistry subdivision',
+      'Ration-depot apprenticeship (long-route trains carrying brewers)',
+      'Cantos 7 World Anchor reward (refining knowledge)',
+      'Workshop training (downtime + chemicals)'
+    ],
+    examples: 'Held by \u03b1Sync chemists, Sundown Saloon brewers, ration-depot quartermasters.'
+  },
+  {
+    id: 'negotiation',
+    name: 'Negotiation / Diplomacy',
+    scope: 'social, faction, contracts, Lucifer-pact bargaining, station-master parley',
+    acquisition: [
+      'Sundown Saloon mentor \u2014 long-stop NPC',
+      'Faction R3 reward (any major faction)',
+      'Cantos 5-6 social-arc beats',
+      'Lucifer-pact addendum (rare, Cantos 7+)'
+    ],
+    examples: 'Common among Drifter traders, station-masters, \u03b1Sync diplomats. PCs pick this up by spending downtime at the Saloon.'
+  },
+  {
+    id: 'salvage',
+    name: 'Salvage / A-Tech',
+    scope: 'finding, identifying, recovering A-Tech / pre-Halt gear and ruins',
+    acquisition: [
+      'Drifters R3 reward (Drifter scavengers teach this)',
+      'Workshop downtime \u2014 RDL 11 + STL 9 + 12h',
+      'Cantos 4 (Gauntlet finale) salvage-arc beat',
+      'Found-NPC mentor (Long-Hauler crews, ruin-explorers)'
+    ],
+    examples: 'Signature of Drifter scavengers, ruin-explorers, salvage-crews. PCs with this cert are valued for finding gear that others walk past.'
+  },
+  {
+    id: 'combat',
+    name: 'Combat / Tactics',
+    scope: 'military training, weapon expertise, ambush response, boarding action',
+    acquisition: [
+      'Sabre defector \u2014 Cantos 1 Gauntlet reward (hostile-Sabre encounter)',
+      '\u03b1Sync security division \u2014 R3 reward',
+      'Mercenary-train apprenticeship \u2014 paid downtime',
+      'Found-NPC mentor \u2014 combat veteran'
+    ],
+    examples: 'Held by Sabre-trained crew, \u03b1Sync security operatives, mercenary veterans. Stacks with [EOD] for breach work, but covers far more (positioning, weapons handling, etc.).'
+  }
 ];
 
 const SHARD_TEMPLATES = [
