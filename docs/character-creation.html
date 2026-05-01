@@ -99,8 +99,10 @@ body {
 /* ────────────────────────── TAB NAV ────────────────────────── */
 .tab-nav {
   display: flex;
-  gap: 0;
-  padding: 0 40px;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 40px 0;
   border-bottom: 0.5px solid rgba(201,156,90,.18);
   background: rgba(0,0,0,.18);
 }
@@ -7053,15 +7055,15 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
 </svg>
 
 <header class="title-bar">
-  <h1>Apocalypse Express — Character Creation</h1>
-  <p>Learn what kind of being you can become — and who&#39;ll ride the rails with you.</p>
+  <h1>Apocalypse Express — Character Creation Tutorial</h1>
+  <p>Read the laws of the Red Line. Learn what kind of being you can become — and who&#39;ll ride the rails with you.</p>
 </header>
 
 <nav class="tab-nav" id="tabNav">
-  <button class="tab active" data-tab="test"><span class="num">1</span>Body</button>
-  <button class="tab" data-tab="lelek"><span class="num">2</span>Soul</button>
-  <button class="tab" data-tab="szem"><span class="num">3</span>Personality</button>
-  <button class="tab" data-tab="vagon"><span class="num">4</span>Carriages</button>
+  <button class="tab active" data-tab="test"><span class="num">I</span>Body</button>
+  <button class="tab" data-tab="lelek"><span class="num">II</span>Soul</button>
+  <button class="tab" data-tab="szem"><span class="num">III</span>Personality</button>
+  <button class="tab" data-tab="vagon"><span class="num">IV</span>Carriages</button>
   <button class="tab tab-reference" data-tab="cadence"><span class="num">∞</span>Chaos &amp; Harmony</button>
   <button class="tab tab-reference" data-tab="factions"><span class="num">§</span>Factions</button>
   <button class="tab tab-reference" data-tab="motor"><span class="num">⚙</span>The Engine</button>
@@ -12983,7 +12985,7 @@ document.getElementById('tabNav').addEventListener('click', e => {
   if (tabId === 'cert') {
     renderCertCards();
   }
-  if (tabId === 'carriage') {
+  if (tabId === 'vagon') {
     renderStationCards();
   }
 });
