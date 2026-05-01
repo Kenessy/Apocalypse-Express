@@ -6105,6 +6105,20 @@ body {
 .station-card-green { border-left-color: rgba(80,180,100,0.4); }
 .station-card-red   { border-left-color: rgba(200,80,80,0.4); }
 
+.station-card-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--r-card);
+  object-fit: cover;
+  flex-shrink: 0;
+  margin-right: 12px;
+  border: 0.5px solid rgba(201,156,90,0.32);
+  box-shadow: 0 0 0 0.5px rgba(0,0,0,0.4), inset 0 0 0 0.5px rgba(255,255,255,0.06);
+}
+@media (min-width: 540px) {
+  .station-card-icon { width: 88px; height: 88px; }
+}
+.station-card.has-icon .station-card-header { padding-left: 14px; }
 .station-card-blue  .station-card-header { background: linear-gradient(90deg, rgba(42,74,140,.15) 0%, rgba(0,0,0,0) 60%); border-bottom-color: rgba(110,160,220,.15); }
 .station-card-purple .station-card-header { background: linear-gradient(90deg, rgba(77,36,112,.15) 0%, rgba(0,0,0,0) 60%); border-bottom-color: rgba(150,100,200,.15); }
 .station-card-green .station-card-header { background: linear-gradient(90deg, rgba(42,112,64,.15) 0%, rgba(0,0,0,0) 60%); border-bottom-color: rgba(80,180,100,.15); }
@@ -12229,6 +12243,7 @@ const STATION_CARDS = [
     name: 'The Pulpit',
     category: 'Workplace',
     color: 'blue',
+    icon: 'img/icons/workplace-pulpit.png',
     role: 'The driver post — hexagonal seat at the heart of the cab, beside the Hellfire Boiler. A character posted here drives the train: regulating PLUG flow, throttle, brakes, reading the rails. REQUIRED — without a posted driver, the Locomotive cannot move.',
     skills: 'SYS (full) · TNK (full) · RIG (half)',
     license: '[RCP] (Railcraft & Power) — strongly recommended; without it, Soft Disadvantage on Hazard phases',
@@ -12866,8 +12881,12 @@ function renderStationCards() {
     const bonusItems = card.bonuses_available
       .map(b => `<li>${b}</li>`).join('\n          ');
 
-    return `<article class="station-card station-card-${card.color}" id="station-${card.code}">
+    const iconHtml = card.icon
+      ? `<img class="station-card-icon" src="${card.icon}" alt="" aria-hidden="true" />`
+      : '';
+    return `<article class="station-card station-card-${card.color}${card.icon ? ' has-icon' : ''}" id="station-${card.code}">
   <header class="station-card-header">
+    ${iconHtml}
     <span class="station-card-swatch" aria-hidden="true"></span>
     <div class="station-card-id">
       <span class="station-card-code">${card.code}</span>
