@@ -7694,6 +7694,53 @@ Trait mods   — trait cards specify which field they modify and under what cond
 Gear/Prep    — right tools or preparation ahead of time: +1
 Assistant    — crewmate actively helping you: +1 (their assist die)</div>
       <p style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);line-height:1.6;margin-top:12px;">Fit ranges from <strong style="color:var(--gold2);">−2</strong> (untrained rookie in a crisis) to <strong style="color:var(--gold2);">+5</strong> (legendary specialist, peak conditions, full support). On a Threshold 9 task, Fit +3 means you only need a 6 on 2d6 for Success &mdash; comfortable odds. Fit +0 means rolling straight against the luck of the dice.</p>
+
+      <!-- CERTIFICATIONS SUBSECTION -->
+      <div class="cadence-section-header" style="margin-top:22px;">
+        <h4 class="cadence-section-title" style="font-size:15px;" id="certHeader">Certifications</h4>
+        <p class="cadence-section-sub"><strong>Certifications</strong> are broader than a license, narrower than &lsquo;general competence.&rsquo; A character trained in a profession (or, for NPCs, factory-loaded with knowledge) carries a <strong>CERT</strong>. There are 8 general cert categories in total.</p>
+      </div>
+      <div class="engine-section-card">CERTIFICATIONS — broader than a license, narrower than ‘general competence’
+A character who has trained in a profession (or, for NPCs, been factory-loaded
+with knowledge) carries a CERT. Certs are GENERAL categories (8 in total —
+see the table below). When a station/task is tagged with a matching category,
+a worker holding that cert grants +1 Fit on the roll.
+
+Certs stack with license, trait, gear, and assist — but only ONE +1 per
+category per roll (multiple workers with the same cert do not double-stack).
+
+Updated formula:
+  Fit = Skill mod + License bonus + Trait mods + Gear/Prep + Assistant + Cert bonus(es)
+
+Examples:
+  PAVNN’s αSync Mechanical Engineer cert → +1 at A1 Pulpit (mech_eng-tagged)
+    and on Hellfire Boiler events.
+  A PC with Medical training → +1 on triage events, emergency repair to bodies, etc.
+
+PCs cap at 2 active certs. NPCs may hold any number (factory-loaded).</div>
+
+      <p style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);line-height:1.6;margin-top:12px;">Certs are acquired through training arcs, faction rewards, or A-Tech factory provisioning. They are not skill scores &mdash; they do not improve. A cert either applies (+1) or it does not. Their value lies in matching the right worker to the right station.</p>
+
+      <h5 style="font-family:'Cinzel',serif;font-size:12px;color:var(--gold2);margin:16px 0 8px;letter-spacing:0.06em;">THE 8 CERT CATEGORIES</h5>
+      <table class="engine-bands-table" aria-label="Certification categories" style="margin-top:4px;">
+        <thead>
+          <tr>
+            <th style="width:24%;">Category</th>
+            <th style="width:12%;text-align:center;">Tag ID</th>
+            <th>Scope</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Mechanical Engineering</strong></td><td style="text-align:center;font-family:'IBM Plex Mono',monospace;font-size:11px;">mech_eng</td><td>engines, gears, pipes, install-repair, mechanical systems</td></tr>
+          <tr><td><strong>Medical</strong></td><td style="text-align:center;font-family:'IBM Plex Mono',monospace;font-size:11px;">medical</td><td>anatomy, surgery, triage, biology, body restoration</td></tr>
+          <tr><td><strong>Demolitions</strong></td><td style="text-align:center;font-family:'IBM Plex Mono',monospace;font-size:11px;">demolitions</td><td>explosives, breach, controlled destruction, sigil-lock breaking</td></tr>
+          <tr><td><strong>Systems / Electrical</strong></td><td style="text-align:center;font-family:'IBM Plex Mono',monospace;font-size:11px;">systems</td><td>wiring, computers, signal/comm, sensors, dispatch network</td></tr>
+          <tr><td><strong>Chemistry / Alchemy</strong></td><td style="text-align:center;font-family:'IBM Plex Mono',monospace;font-size:11px;">chemistry</td><td>substances, brewing, refinement, PLUG quality, αSync handling</td></tr>
+          <tr><td><strong>Negotiation / Diplomacy</strong></td><td style="text-align:center;font-family:'IBM Plex Mono',monospace;font-size:11px;">negotiation</td><td>social, faction, contracts, Lucifer-pact bargaining</td></tr>
+          <tr><td><strong>Salvage / A-Tech</strong></td><td style="text-align:center;font-family:'IBM Plex Mono',monospace;font-size:11px;">salvage</td><td>finding, identifying, recovering A-Tech / pre-Halt gear</td></tr>
+          <tr><td><strong>Combat / Tactics</strong></td><td style="text-align:center;font-family:'IBM Plex Mono',monospace;font-size:11px;">combat</td><td>military training, weapon expertise, ambush response, boarding</td></tr>
+        </tbody>
+      </table>
     </section>
 
     <!-- SECTION 4: THRESHOLD -->
