@@ -5674,6 +5674,30 @@ body {
   vertical-align: middle;
 }
 
+/* Cert tag pill — small gold-bordered chip displayed in legend rows */
+.cert-tag-pill {
+  display: inline-block;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold2);
+  background: rgba(201,156,90,0.08);
+  border: 0.5px solid rgba(201,156,90,0.55);
+  border-radius: 3px;
+  padding: 1px 5px;
+  margin-right: 4px;
+  margin-top: 4px;
+  vertical-align: middle;
+}
+.legend-cert-row {
+  margin-top: 4px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+}
+
 /* Tile name label — small Cinzel text in gold2 inside tiles */
 .engine-tile-name {
   display: block;
@@ -12160,11 +12184,21 @@ function renderEngineFloor() {
         legendTask = `<strong>${sel.icon} ${sel.name}</strong> (selected) &nbsp;·&nbsp; `
           + `<span style="opacity:.5">${alt.icon} ${alt.name} (alt)</span>`;
       }
+      const certPills = (s.cert_tags && s.cert_tags.length > 0)
+        ? `<div class="legend-cert-row">Cert tags: ` +
+          s.cert_tags.map(t => {
+            const cat = (typeof CERT_CATEGORIES !== 'undefined')
+              ? CERT_CATEGORIES.find(x => x.id === t) : null;
+            const label = cat ? cat.name.replace(/ \/ /g, '/') : t;
+            return `<span class="cert-tag-pill">${label}</span>`;
+          }).join('') + `</div>`
+        : '';
       return `<div class="legend-row is-${s.kind}" style="--slot-accent:${s.accent};">` +
         `<div class="legend-icon">${s.shape === 'hex' ? s.code : s.icon}</div>` +
         `<div class="legend-text">` +
         `<div class="legend-name">${codeChip}${s.name}</div>` +
         `<div class="legend-task">${legendTask}</div>` +
+        certPills +
         `</div></div>`;
     }).join('');
   }
