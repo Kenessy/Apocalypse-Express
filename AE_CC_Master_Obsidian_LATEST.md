@@ -519,3 +519,10 @@ Convert your starting gear into **Ballast (BL)** and **pocket items (pBL)** per 
 ## Appendix A — Reference Links (vault)
 - [[(Reference) 5e Baseline (SRD 5.1)]]  
 - [[Ancestry Layer - Soul Indices + Body Tags v2]]  
+- [[(Rule) 1. Revival]]
+- [[(Rule) Injuries]]
+- [[(Rule) 2. Skills & Postures]]
+- [[(Rule) 4. Simple Inventory]]
+- [[(Rule) Chaos and Harmony]]
+- [[(Rule) 8. Hardcore overlay]]
+- [[(Procedure) Immediate Action Zone]]
