@@ -5761,6 +5761,166 @@ body {
 .acquisition-card .efr-val strong { color: var(--gold2); }
 .acquisition-card .efr-val em { color: rgba(140, 200, 240, 0.95); font-style: italic; }
 
+
+/* ENGINE tab — altarpiece wrapper + part dividers */
+.engine-altarpiece {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 32px 40px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.engine-hero {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  padding: 28px 32px;
+  background: linear-gradient(135deg, rgba(201,156,90,.07), rgba(0,0,0,.25));
+  border: 0.5px solid rgba(201,156,90,.28);
+  border-radius: var(--r-card);
+}
+.engine-hero-title {
+  font-family: 'Cinzel', serif;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--gold2);
+  text-transform: uppercase;
+  margin: 0;
+}
+.engine-hero-lead {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 18px;
+  color: var(--gold);
+  line-height: 1.5;
+  margin: 0;
+}
+.engine-hero-body {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+.engine-section-card {
+  background: rgba(0,0,0,.25);
+  border: 0.5px solid rgba(201,156,90,.22);
+  border-radius: 6px;
+  padding: 16px 18px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--muted);
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+.engine-bands-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+}
+.engine-bands-table th {
+  text-align: left;
+  padding: 6px 10px;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold2);
+  border-bottom: 0.5px solid rgba(201,156,90,.25);
+}
+.engine-bands-table td {
+  padding: 8px 10px;
+  color: var(--muted);
+  border-bottom: 0.5px solid rgba(255,255,255,.04);
+}
+.engine-bands-table tr.band-cs td { border-left: 3px solid #4caf80; }
+.engine-bands-table tr.band-s  td { border-left: 3px solid #90c8f0; }
+.engine-bands-table tr.band-f  td { border-left: 3px solid #e0a030; }
+.engine-bands-table tr.band-cf td { border-left: 3px solid #e05050; }
+.engine-prob-widget {
+  margin-top: 18px;
+  border: 0.5px solid rgba(201,156,90,.22);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.engine-prob-widget summary {
+  padding: 10px 16px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold2);
+  cursor: pointer;
+  background: rgba(201,156,90,.07);
+}
+.engine-prob-inner {
+  padding: 16px 20px;
+  display: grid;
+  gap: 10px;
+}
+.engine-prob-inputs {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 6px;
+}
+.engine-prob-inputs label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--gold2);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.engine-prob-inputs input[type="number"] {
+  width: 56px;
+  background: rgba(0,0,0,.35);
+  border: 0.5px solid rgba(201,156,90,.35);
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  color: var(--gold2);
+  text-align: center;
+}
+.engine-prob-row {
+  display: grid;
+  grid-template-columns: 36px 1fr 50px;
+  align-items: center;
+  gap: 8px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+}
+.engine-prob-band { color: var(--gold2); font-weight: 700; }
+.engine-prob-bar-wrap { background: rgba(255,255,255,.06); border-radius: 2px; height: 10px; }
+.engine-prob-bar { height: 10px; border-radius: 2px; transition: width 0.2s ease; }
+.engine-prob-bar[data-band="CS"] { background: #4caf80; }
+.engine-prob-bar[data-band="S"]  { background: #90c8f0; }
+.engine-prob-bar[data-band="F"]  { background: #e0a030; }
+.engine-prob-bar[data-band="CF"] { background: #e05050; }
+.engine-prob-pct { color: var(--muted); text-align: right; }
+.engine-prob-modal { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--gold); margin-top: 4px; opacity: .80; }
+.engine-part-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 0 8px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  color: rgba(201,156,90,.65);
+}
+.engine-part-divider::before, .engine-part-divider::after {
+  content: '';
+  flex: 1;
+  height: 0.5px;
+  background: rgba(201,156,90,.25);
+}
+
 /* ───────── FOOTER ───────── */
 .foot {
   border-top: 0.5px solid rgba(201,156,90,.12);
@@ -6408,6 +6568,7 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
   <button class="tab" data-tab="vagon"><span class="num">4</span>Carriages</button>
   <button class="tab tab-reference" data-tab="cadence"><span class="num">∞</span>Chaos &amp; Harmony</button>
   <button class="tab tab-reference" data-tab="factions"><span class="num">§</span>Factions</button>
+  <button class="tab tab-reference" data-tab="motor"><span class="num">⚙</span>The Engine</button>
 </nav>
 
 <main>
@@ -7289,6 +7450,14 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
     </div>
 
   </div><!-- /.factions-altarpiece -->
+</section>
+
+<!-- THE ENGINE — rules reference tab -->
+<section class="tab-panel" id="tab-motor">
+  <div class="engine-altarpiece">
+    <!-- HERO + 10 SECTIONS (added in subsequent stages) -->
+    <div id="engine-hero"></div>
+  </div><!-- /.engine-altarpiece -->
 </section>
 
 </main>
