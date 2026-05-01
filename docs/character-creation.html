@@ -5356,6 +5356,7 @@ body {
 .carriage-block.is-engine {
   background:
     radial-gradient(ellipse at center, rgba(255, 80, 30, 0.40) 0%, rgba(74, 26, 20, 0.95) 60%, rgba(34, 12, 10, 1) 100%),
+    url('img/textures/hellfire-boiler.png') center/cover no-repeat,
     linear-gradient(135deg, #3a1810, #1d0c08);
   border: 2px solid #c46666;
   box-shadow: inset 0 0 22px rgba(255, 80, 30, 0.45), 0 0 14px rgba(196, 102, 102, 0.45);
@@ -6867,17 +6868,25 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
           Carriage 1 · the locomotive
         </div>
         <h3 class="cadence-section-title" id="engineHeader">🚂 Engine — top-down floor plan</h3>
-        <p class="cadence-section-sub">5 tiles tall × 16 tiles wide. A small origin steam train Lucifer rebuilt to burn <strong>Sparkplugs (PLUG)</strong> &mdash; soul-canisters that wake a Hellfire boiler. The <strong>engine block</strong> (7×5) and <strong>Sparkplug tender</strong> (2×2) take the front-left ~40% as off-area. Cramped right-side living quarters: <strong>1 Driver post</strong> (required) + <strong>3 install slots</strong> (2 small + 1 big) for gear players recover and unlock.</p>
+        <p class="cadence-section-sub">5 tiles tall × 16 tiles wide. A small origin steam train Lucifer rebuilt to burn <strong>Sparkplugs (PLUG)</strong> &mdash; soul-canisters that wake a Hellfire boiler. The <strong>Hellfire Boiler</strong> (7×5) dominates the front-left as off-area. The <strong>Reliquary</strong> (2×2) holds fuel at the back-right. Cramped cab floor in between: <strong>The Pulpit</strong> (driver post, required) + <strong>3 install slots</strong> &mdash; The Apse (2×2 · Work), The Tinker Wall (1×1 · Maintenance), The Crew Niche (1×1 · Life).</p>
         <div class="engine-fuel-rules">
           <div class="efr-row"><span class="efr-key">Cost / journey</span><span class="efr-val"><strong>1 PLUG</strong> short hop · <strong>2 PLUG</strong> medium · <strong>3 PLUG</strong> long haul</span></div>
           <div class="efr-row"><span class="efr-key">Driver fit</span><span class="efr-val">Methodical / Service Intelligence / Hyperfocus → <strong>−1 PLUG</strong> · Lazy / Impulsive / Adrenaline-junkie → <strong>+1 PLUG</strong></span></div>
-          <div class="efr-row"><span class="efr-key">Tender capacity</span><span class="efr-val"><strong>5 PLUG</strong> in the origin 2×2 hut · upgrades grow the off-area block</span></div>
+          <div class="efr-row"><span class="efr-key">Active chamber</span><span class="efr-val"><strong>1 PLUG</strong> actively burning in The Reliquary · burns at journey rate</span></div>
+          <div class="efr-row"><span class="efr-key">PLUG storage</span><span class="efr-val"><strong>3 extra canisters</strong> on Reliquary shelves (TNY weight each) · loaded/unloaded at stations</span></div>
+          <div class="efr-row"><span class="efr-key">Emergency swap</span><span class="efr-val">Mid-journey: <strong>1 phase action</strong> to transfer a shelf canister to active chamber if it runs dry</span></div>
           <div class="efr-row"><span class="efr-key">Empty</span><span class="efr-val">Train cannot move · triggers a <strong>refuel mission</strong> (Drift-zone soul-salvage / αSync trade / Lucifer bargain)</span></div>
-          <div class="efr-row"><span class="efr-key">Driver job</span><span class="efr-val">Pull a PLUG from tender, walk it to the firebox, <em>time the burn</em>, do not drop the canister</span></div>
+          <div class="efr-row"><span class="efr-key">Driver job</span><span class="efr-val">Pull a PLUG from The Reliquary, walk it to the firebox, <em>time the burn</em>, do not drop the canister</span></div>
+        </div>
+        <div class="engine-fuel-rules reliquary-panel">
+          <div class="efr-row"><span class="efr-key" style="color:var(--gold2);font-size:11px;">THE RELIQUARY</span><span class="efr-val" style="color:var(--gold2);">tender &middot; 2&times;2 &middot; back of carriage</span></div>
+          <div class="efr-row"><span class="efr-key">Active chamber</span><span class="efr-val"><strong>1 PLUG canister</strong> actively burning during journey &middot; burns at journey rate (1/2/3 PLUG per short/med/long)</span></div>
+          <div class="efr-row"><span class="efr-key">Storage shelves</span><span class="efr-val"><strong>3 extra canisters</strong> as cargo (TNY weight each) &middot; loaded/unloaded at stations &middot; mid-journey swap (1 phase action) refills active chamber if it runs dry</span></div>
+          <div class="efr-row"><span class="efr-key">Aesthetic</span><span class="efr-val"><em>Brass-and-leaded-glass cabinet, sigil-locked. Active chamber&rsquo;s round window glows hot through the haze; storage niches hold quiet, unlit canisters in leather cradles.</em></span></div>
         </div>
       </div>
       <div class="carriage-floor-wrap">
-        <div class="carriage-floor" id="engineFloor" role="img" aria-label="Engine carriage floor plan, 4 by 14 tile grid"></div>
+        <div class="carriage-floor" id="engineFloor" role="img" aria-label="The Locomotive floor plan, 5 by 16 tile grid"></div>
       </div>
       <div class="carriage-legend" id="engineLegend"></div>
     </section>
