@@ -8179,7 +8179,22 @@ The choices before the dice roll matter as much as the roll itself.</div>
 </section>
 
 <section class="tab-panel" id="tab-cert">
-  <div class="cert-altarpiece"></div>
+  <div class="cert-altarpiece" id="certAltarpiece">
+
+    <!-- HERO -->
+    <div class="cert-hero" aria-labelledby="certTabTitle">
+      <div class="cath-eyebrow">
+        <span class="ce-orn" aria-hidden="true"><svg><use href="#orn-arch-small"/></svg></span>
+        Reference &middot; trained skills &amp; factory uploads
+      </div>
+      <h2 class="cert-hero-title" id="certTabTitle">Certifications</h2>
+      <p class="cert-hero-lead">A Certification is a documented formal competence &mdash; broader than a single license tag, narrower than a general stat. Holding a cert grants +1 Fit on any roll whose station or event is tagged with that cert category. There are 8 cert categories; PCs may hold up to 2 active certs, while NPCs and Constructs may carry any number factory-loaded or earned through play.</p>
+    </div>
+
+    <!-- CERT CARDS — rendered by renderCertCards() on DOMContentLoaded -->
+    <div id="certCardsContainer"></div>
+
+  </div><!-- /.cert-altarpiece -->
 </section>
 
 </main>
@@ -12501,10 +12516,53 @@ if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', function() {
     renderEngineFloor();
     initEngineProbWidget();
+    renderCertCards();
   });
 } else {
   renderEngineFloor();
   initEngineProbWidget();
+  renderCertCards();
+}
+
+// ═══════════════════════════════════════════════════════
+// CERT CARDS RENDERER
+// ═══════════════════════════════════════════════════════
+function renderCertCards() {
+  const container = document.getElementById('certCardsContainer');
+  if (!container || container.hasChildNodes()) return; // only render once
+  const html = CERT_CATEGORIES.map(cat => {
+    const acqItems = cat.acquisition
+      ? cat.acquisition.map(a => `<li>${a}</li>`).join('\n          ')
+      : '<li>See GM for details</li>';
+    const examplesText = cat.examples || '';
+    return `<article class="cert-card" id="cert-${cat.id}">
+  <header class="cert-card-header">
+    <span class="cert-card-id">${cat.id}</span>
+    <h3 class="cert-card-name">${cat.name}</h3>
+  </header>
+  <div class="cert-card-body">
+    <div class="cert-card-section">
+      <h4>Scope</h4>
+      <p>${cat.scope}</p>
+    </div>
+    <div class="cert-card-section">
+      <h4>Effect</h4>
+      <p>+1 Fit at any station/event tagged with <code>${cat.id}</code>.</p>
+    </div>
+    <div class="cert-card-section">
+      <h4>How to acquire</h4>
+      <ul class="cert-acquisition-list">
+          ${acqItems}
+      </ul>
+    </div>
+    <div class="cert-card-section cert-examples">
+      <h4>Examples in play</h4>
+      <p>${examplesText}</p>
+    </div>
+  </div>
+</article>`;
+  }).join('\n');
+  container.innerHTML = html;
 }
 
 // ═══════════════════════════════════════════════════════
@@ -12522,6 +12580,9 @@ document.getElementById('tabNav').addEventListener('click', e => {
   if (tabId === 'lelek') {
     refreshSoulLayer();
     renderSideTrackPips();
+  }
+  if (tabId === 'cert') {
+    renderCertCards();
   }
 });
 </script>
