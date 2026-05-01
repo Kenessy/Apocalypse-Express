@@ -5230,6 +5230,70 @@ body {
 }
 .carriage-floor-wrap::before { top: 6px; }
 .carriage-floor-wrap::after  { bottom: 6px; }
+
+/* Color-code legend — visual key for the tile palette. Same 135deg gloss as
+   the tiles themselves so the swatches read as miniature versions of the
+   real surfaces, not abstract palette dots. */
+.color-key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 22px;
+  padding: 12px 16px;
+  margin-top: 12px;
+  background: rgba(0, 0, 0, 0.32);
+  border: 0.5px solid rgba(201,156,90,.16);
+  border-radius: 6px;
+}
+.key-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1 1 220px;
+  min-width: 200px;
+}
+.key-swatch {
+  position: relative;
+  width: 26px;
+  height: 26px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  overflow: hidden;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.35);
+}
+.key-swatch::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg,
+    rgba(255,255,255,0.16) 0%,
+    rgba(255,255,255,0.05) 28%,
+    rgba(255,255,255,0) 50%,
+    rgba(0,0,0,0.08) 72%,
+    rgba(0,0,0,0.22) 100%);
+  pointer-events: none;
+}
+.key-blue   .key-swatch { background: linear-gradient(135deg, #2a4a8c 0%, #1d3370 100%); border: 1px solid rgba(110, 160, 220, 0.55); }
+.key-purple .key-swatch { background: linear-gradient(135deg, #4d2470 0%, #3a1a4d 100%); border: 1px solid rgba(150, 100, 200, 0.55); }
+.key-green  .key-swatch { background: linear-gradient(135deg, #2a7040 0%, #1a4028 100%); border: 1px solid rgba(80, 180, 100, 0.55); }
+.key-red    .key-swatch { background: linear-gradient(135deg, #8c1d1d 0%, #4d0808 100%); border: 1px solid rgba(200, 80, 80, 0.55); }
+
+.key-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.key-label {
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.10em;
+  color: var(--gold2);
+}
+.key-desc {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  opacity: 0.85;
+}
 .carriage-floor {
   display: grid;
   grid-template-columns: repeat(16, minmax(36px, 1fr));
@@ -7109,6 +7173,37 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
       </div>
       <div class="carriage-floor-wrap">
         <div class="carriage-floor" id="engineFloor" role="img" aria-label="The Locomotive floor plan, 5 by 16 tile grid"></div>
+      </div>
+      <!-- Color-code legend — visual key matching the tile palette -->
+      <div class="color-key" aria-label="Tile color-code key">
+        <div class="key-item key-blue">
+          <span class="key-swatch" aria-hidden="true"></span>
+          <div class="key-text">
+            <div class="key-label">Workplace</div>
+            <div class="key-desc">where someone is posted &amp; performs duty (e.g. A1 the Pulpit)</div>
+          </div>
+        </div>
+        <div class="key-item key-purple">
+          <span class="key-swatch" aria-hidden="true"></span>
+          <div class="key-text">
+            <div class="key-label">Upgrade slot</div>
+            <div class="key-desc">where you fit installs / upgrades (B1 / C1 / C2)</div>
+          </div>
+        </div>
+        <div class="key-item key-green">
+          <span class="key-swatch" aria-hidden="true"></span>
+          <div class="key-text">
+            <div class="key-label">Built-in feature</div>
+            <div class="key-desc">permanent fixture of the carriage (the Reliquary)</div>
+          </div>
+        </div>
+        <div class="key-item key-red">
+          <span class="key-swatch" aria-hidden="true"></span>
+          <div class="key-text">
+            <div class="key-label">Off-limits</div>
+            <div class="key-desc">hazard / sealed zone, not walkable (the Hellfire Boiler)</div>
+          </div>
+        </div>
       </div>
       <div class="carriage-legend" id="engineLegend"></div>
     </section>
