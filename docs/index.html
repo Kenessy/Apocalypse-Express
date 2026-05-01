@@ -84,6 +84,34 @@ html, body {
 }
 .ae-nav-badge.has { opacity: 1; }
 
+.ae-page-link {
+  height: 36px;
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+  padding: 0 11px;
+  background: rgba(201,156,90,.07);
+  border: 1px solid rgba(201,156,90,.16);
+  border-radius: 5px;
+  color: var(--gold2);
+  text-decoration: none;
+  font: 500 10px/1 'IBM Plex Mono';
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  opacity: .78;
+  transition: background .2s, border-color .2s, opacity .2s, color .2s;
+}
+.ae-page-link:hover {
+  background: rgba(201,156,90,.13);
+  border-color: rgba(201,156,90,.28);
+  color: var(--gold2);
+  opacity: 1;
+}
+.ae-page-link svg {
+  width: 17px; height: 17px;
+  color: currentColor;
+  flex-shrink: 0;
+}
+.ae-page-link:focus-visible { outline: 1px solid rgba(201,156,90,.45); outline-offset: 2px; }
+
 /* tooltip */
 .ae-nav-btn::before {
   content: attr(data-tip);
@@ -942,6 +970,8 @@ html, body {
   .bc-seg.canto .bc-name, .bc-seg.episode .bc-name { display: none; }
   .bc-seg.canto .bc-label, .bc-seg.episode .bc-label { font-size: 9px; letter-spacing: .10em; }
   .tc-title { max-width: 100px; }
+  .ae-page-link { width: 36px; padding: 0; }
+  .ae-page-link span { display: none; }
 }
 
 /* ══ ACCESSIBILITY ══ */
@@ -2153,6 +2183,16 @@ html, body {
 
   <div class="topbar-right">
     <div class="ae-nav-btns" id="nav-btns">
+      <a class="ae-page-link" href="character-creation.html" aria-label="Open Character Creation Tutorial">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+          <path d="M9 8h6"/>
+          <path d="M9 12h4"/>
+          <path d="M15 16l2 2 3-4"/>
+        </svg>
+        <span>Creator</span>
+      </a>
 
       <!-- Storyline (active by default) -->
       <button class="ae-nav-btn active" data-tab="story" data-tip="storyline" aria-label="Storyline">

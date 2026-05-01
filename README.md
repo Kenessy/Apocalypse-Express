@@ -34,6 +34,7 @@ Apocalypse Express is a tabletop RPG campaign built on a D&D 5e (2014) foundatio
 ## Links
 
 - [Project site (GitHub Pages)](https://kenessy.github.io/Apocalypse-Express/)
+- [Character Creation Tutorial](https://kenessy.github.io/Apocalypse-Express/character-creation.html)
 - [Database](https://github.com/Kenessy/Apocalypse-Express/tree/main/Database)
 - [Player Rulebook](https://github.com/Kenessy/Apocalypse-Express/blob/main/Database/Compiled/Player%20Rulebook.md)
 - [GM Operations Manual](https://github.com/Kenessy/Apocalypse-Express/blob/main/Database/Compiled/GM%20Operations%20Manual.md)
