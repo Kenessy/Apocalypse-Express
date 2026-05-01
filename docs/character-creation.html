@@ -5402,6 +5402,34 @@ body {
   z-index: 0;
 }
 
+/* Slot background icon — when STATION_CARDS supplies an icon, render as a
+   background-image layer behind the slot-code text. Icon dominates the tile;
+   slot-code becomes a small corner badge for cross-reference with the legend. */
+.carriage-tile.is-slot .slot-bg-icon {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 0;
+  border-radius: inherit;
+}
+.carriage-tile.is-slot.has-icon .slot-code {
+  position: absolute;
+  top: 3px;
+  left: 4px;
+  font-size: 9px;
+  letter-spacing: 0.10em;
+  padding: 1px 6px;
+  border-radius: 3px;
+  background: rgba(0,0,0,0.55);
+  z-index: 3;
+}
+.carriage-tile.is-slot.has-icon::before {
+  /* Soften the diagonal gloss so it doesn't wash out the icon's detail */
+  opacity: 0.55;
+}
+
 /* Slot code — large Cinzel identifier at center (e.g. "A1", "B1", "C1"). */
 .slot-code {
   position: relative;
@@ -12729,7 +12757,13 @@ function renderEngineFloor() {
     const tooltip = s.options
       ? `${s.name} — ${s.axis}: ${s.options.a.name} or ${s.options.b.name}`
       : `${s.name} — ${s.task}`;
-    html += `<div class="carriage-tile is-slot is-${s.kind}" style="grid-column:${s.col} / ${colEnd}; grid-row:${s.row} / ${rowEnd};" data-slot-id="${s.id}" data-label="${s.name}" title="${tooltip}"><span class="slot-code">${code}</span></div>`;
+    const stationCard = (typeof STATION_CARDS !== 'undefined')
+      ? STATION_CARDS.find(x => x.code === code) : null;
+    const slotIcon = stationCard && stationCard.icon ? stationCard.icon : null;
+    const iconHtml = slotIcon
+      ? `<div class="slot-bg-icon" style="background-image: url('${slotIcon}')"></div>` : '';
+    const hasIconClass = slotIcon ? ' has-icon' : '';
+    html += `<div class="carriage-tile is-slot is-${s.kind}${hasIconClass}" style="grid-column:${s.col} / ${colEnd}; grid-row:${s.row} / ${rowEnd};" data-slot-id="${s.id}" data-label="${s.name}" title="${tooltip}">${iconHtml}<span class="slot-code">${code}</span></div>`;
   });
 
   // Render walkable floor on every uncovered cell.
