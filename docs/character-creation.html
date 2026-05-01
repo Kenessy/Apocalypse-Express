@@ -7577,8 +7577,89 @@ Assistant    — crewmate actively helping you: +1 (their assist die)</div>
       <p style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);line-height:1.6;margin-top:12px;">Example: the <strong style="color:var(--gold2);">Methodical</strong> trait gives +1 Fit on routine tasks but reduces Yield by &times;0.75 on novel ones. These are two different fields &mdash; neither contaminates the other. A Methodical mechanic attempting a routine boiler check rolls better (Fit +1). The same mechanic on a novel emergency repair rolls normally but produces less (Yield 75%). Two conditions, two fields, no conflict.</p>
     </section>
 
-    <!-- PLACEHOLDER for Part II + sections 6-10 -->
-    <div id="engine-sections-part2"></div>
+    <!-- PART II DIVIDER -->
+    <div class="engine-part-divider" id="part-world">PART II &middot; THE WORLD IN MOTION</div>
+
+    <!-- SECTION 6: DISPATCH -->
+    <section class="cadence-section-card" id="dispatch" aria-labelledby="dispatchHeader">
+      <div class="cadence-section-header">
+        <h3 class="cadence-section-title" id="dispatchHeader">Dispatch &amp; the Journey Clock</h3>
+        <p class="cadence-section-sub">A single roll covers one task in one moment. <strong>Dispatch</strong> wraps a whole journey&rsquo;s worth of work into a structured sequence of rolls, aggregating their results into a single outcome for the journey via the <strong>Journey Clock</strong>.</p>
+      </div>
+      <table class="engine-bands-table" aria-label="Journey lengths">
+        <thead><tr><th>Journey</th><th>Phases</th><th>Clock segments</th></tr></thead>
+        <tbody>
+          <tr><td>Short</td><td>1&ndash;2</td><td>4</td></tr>
+          <tr><td>Medium</td><td>3&ndash;4</td><td>8</td></tr>
+          <tr><td>Long</td><td>5</td><td>12</td></tr>
+        </tbody>
+      </table>
+      <table class="engine-bands-table" style="margin-top:12px;" aria-label="Clock movement per phase result">
+        <thead><tr><th>Phase result</th><th>Clock movement</th></tr></thead>
+        <tbody>
+          <tr class="band-cs"><td>CS</td><td>+2 segments</td></tr>
+          <tr class="band-s"><td>S</td><td>+1 segment</td></tr>
+          <tr class="band-f"><td>F</td><td>0 (or &minus;1 on a hazard phase)</td></tr>
+          <tr class="band-cf"><td>CF</td><td>&minus;2 segments + complication triggers</td></tr>
+        </tbody>
+      </table>
+      <table class="engine-bands-table" style="margin-top:12px;" aria-label="Journey outcome ladder">
+        <thead><tr><th>Clock fill</th><th>Journey result</th><th>Effect</th></tr></thead>
+        <tbody>
+          <tr><td>75&ndash;100%</td><td><strong>Smooth run</strong></td><td>PLUG cost &times;0.5, +1 minor reward</td></tr>
+          <tr><td>50&ndash;74%</td><td><strong>On time</strong></td><td>PLUG cost at base rate, no extras</td></tr>
+          <tr><td>25&ndash;49%</td><td><strong>Rough arrival</strong></td><td>PLUG cost &times;1.5, 1 minor wear on installs</td></tr>
+          <tr><td>0&ndash;24%</td><td><strong>Limped in</strong></td><td>PLUG cost &times;2, major complication on arrival</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- SECTION 7: EVENTS -->
+    <section class="cadence-section-card" id="events" aria-labelledby="eventsHeader">
+      <div class="cadence-section-header">
+        <h3 class="cadence-section-title" id="eventsHeader">Events</h3>
+        <p class="cadence-section-sub">Events are interruptions that fire during a journey &mdash; things that demand the crew&rsquo;s attention <em>now</em>, while the train is moving and the clock is ticking. They fire from four sources.</p>
+      </div>
+      <table class="engine-bands-table" aria-label="Event trigger sources">
+        <thead><tr><th>Trigger</th><th>What fires it</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Authored/Scripted</strong></td><td>GM wrote it into the journey as a narrative beat &mdash; fires at a set moment regardless of rolls</td></tr>
+          <tr><td><strong>Outcome-triggered</strong></td><td>F or CF result automatically triggers an event; the failure woke something up</td></tr>
+          <tr><td><strong>State-triggered</strong></td><td>PLUG reserves drop below threshold, fauna pressure peaks, install wear crosses a limit</td></tr>
+          <tr><td><strong>Random</strong></td><td>1-in-6 chance per phase; lower stakes, keeps the run unpredictable</td></tr>
+        </tbody>
+      </table>
+      <p style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);line-height:1.6;margin-top:12px;">Every event card has: <strong style="color:var(--gold2);">Title</strong> &middot; <strong style="color:var(--gold2);">Trigger</strong> (why it fired) &middot; <strong style="color:var(--gold2);">Stake</strong> (what&rsquo;s at risk if ignored) &middot; <strong style="color:var(--gold2);">Choices</strong> (2&ndash;4 options, each listing cost + optional roll + outcome). See Marlow&rsquo;s run for three live event examples: Boiler Stress (state), Stowaway (scripted), Chronoshear Flare (random).</p>
+    </section>
+
+    <!-- SECTION 8: REST -->
+    <section class="cadence-section-card" id="rest" aria-labelledby="restHeader">
+      <div class="cadence-section-header">
+        <h3 class="cadence-section-title" id="restHeader">Rest</h3>
+        <p class="cadence-section-sub">Every PC on the crew starts each journey with a <strong>Rest pool</strong> &mdash; a recovery reserve that represents their capacity to be woken mid-journey without burning out.</p>
+      </div>
+      <table class="engine-bands-table" aria-label="Rest pool by journey length">
+        <thead><tr><th>Journey</th><th>Rest blocks per PC</th></tr></thead>
+        <tbody>
+          <tr><td>Short</td><td>1</td></tr>
+          <tr><td>Medium</td><td>2</td></tr>
+          <tr><td>Long</td><td>3</td></tr>
+        </tbody>
+      </table>
+      <table class="engine-bands-table" style="margin-top:12px;" aria-label="Rest degradation table">
+        <thead><tr><th>Rest state</th><th>Effect</th></tr></thead>
+        <tbody>
+          <tr><td>Rest 1+ available</td><td>No penalty</td></tr>
+          <tr><td>Rest 0 (last block spent)</td><td>&minus;1 Fit for the rest of the journey</td></tr>
+          <tr><td>Rest &minus;1 (woken a second time)</td><td>&minus;2 Fit, CF chance increases on their rolls</td></tr>
+          <tr><td>Rest below &minus;1</td><td>PC cannot be assigned to additional tasks except mandatory events</td></tr>
+        </tbody>
+      </table>
+      <p style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);line-height:1.6;margin-top:12px;"><strong style="color:var(--gold2);">Double-up:</strong> Two crew members can share a wake event, each spending 0.5 Rest blocks (round up to 1 if already at 0). The pair gains +1 Fit on the resolution roll. Two tired people cooperating can outperform one exhausted person working alone.</p>
+    </section>
+
+    <!-- PLACEHOLDER for Part III + sections 9-10 -->
+    <div id="engine-sections-part3"></div>
 
   </div><!-- /.engine-altarpiece -->
 </section>
