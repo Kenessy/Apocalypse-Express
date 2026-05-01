@@ -11644,10 +11644,49 @@ function renderEngineFloor() {
   }
 }
 
+function initEngineProbWidget() {
+  const fitInput = document.getElementById('engine-prob-fit');
+  const thInput = document.getElementById('engine-prob-threshold');
+  if (!fitInput || !thInput) return;
+  // 2d6 distribution: index 2..12 -> frequency 1..6..1
+  const freq = [0,0,1,2,3,4,5,6,5,4,3,2,1];
+  function recompute() {
+    const fit = +fitInput.value || 0;
+    const th = +thInput.value || 9;
+    const counts = { CF: 0, F: 0, S: 0, CS: 0 };
+    for (let s = 2; s <= 12; s++) {
+      const m = s + fit - th;
+      if (m >= 3) counts.CS += freq[s];
+      else if (m >= 0) counts.S += freq[s];
+      else if (m >= -3) counts.F += freq[s];
+      else counts.CF += freq[s];
+    }
+    const total = 36;
+    for (const band of ['CF', 'F', 'S', 'CS']) {
+      const pct = Math.round((counts[band] / total) * 100);
+      const bar = document.querySelector('.engine-prob-bar[data-band="' + band + '"]');
+      const pctEl = document.querySelector('.engine-prob-pct[data-band="' + band + '"]');
+      if (bar) bar.style.width = pct + '%';
+      if (pctEl) pctEl.textContent = pct + '%';
+    }
+    const modal = ['CF','F','S','CS'].reduce(function(a,b){ return counts[a] >= counts[b] ? a : b; });
+    const modalLabel = { CF: 'Critical Failure', F: 'Failure', S: 'Success', CS: 'Critical Success' }[modal];
+    const modalEl = document.getElementById('engine-prob-modal');
+    if (modalEl) modalEl.textContent = 'Modal outcome: ' + modalLabel;
+  }
+  fitInput.addEventListener('input', recompute);
+  thInput.addEventListener('input', recompute);
+  recompute();
+}
+
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', renderEngineFloor);
+  document.addEventListener('DOMContentLoaded', function() {
+    renderEngineFloor();
+    initEngineProbWidget();
+  });
 } else {
   renderEngineFloor();
+  initEngineProbWidget();
 }
 
 // ═══════════════════════════════════════════════════════
