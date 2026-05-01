@@ -11947,7 +11947,7 @@ function renderEngineFloor() {
       // A/B picker details (option names, effects, alternatives) live in the
       // legend below the floor plan, not on the tile itself.
       const code = s.code || '';
-      html += `<div class="carriage-tile is-slot is-${s.kind}${hexClass}" style="grid-column:${s.col} / ${colEnd}; grid-row:${s.row} / ${rowEnd}; --slot-accent:${s.accent};" data-slot-id="${s.id}" data-label="${s.name}" title="${s.name} — ${s.axis}: ${s.options.a.name} or ${s.options.b.name}"><span class="slot-code">${code}</span></div>`;
+      inner = `<span class="slot-code">${code}</span>`;
     } else {
       // Standard slot — icon + name label
       inner = `${s.icon}<span class="engine-tile-name">${s.name}</span>`;
