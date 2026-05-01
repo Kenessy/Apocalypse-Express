@@ -11785,6 +11785,23 @@ const ENGINE_LAYOUT = {
 // Procedural stained-glass floor — constants and builder (Phase 2 impl)
 // ---------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------
+// CERT_CATEGORIES — 8 general certification categories for the Cert mechanic.
+// PCs cap at 2 active certs. NPCs may hold any number (factory-loaded).
+// When a station/task is tagged with a matching cert_tag, a worker holding
+// that cert grants +1 Fit on the roll (anti-stack: 1× per category per roll).
+// ---------------------------------------------------------------------------
+const CERT_CATEGORIES = [
+  { id: 'mech_eng',     name: 'Mechanical Engineering',  scope: 'engines, gears, pipes, install-repair, mechanical systems' },
+  { id: 'medical',      name: 'Medical',                  scope: 'anatomy, surgery, triage, biology, body restoration' },
+  { id: 'demolitions',  name: 'Demolitions',              scope: 'explosives, breach, controlled destruction, sigil-lock breaking' },
+  { id: 'systems',      name: 'Systems / Electrical',     scope: 'wiring, computers, signal/comm, sensors, dispatch network' },
+  { id: 'chemistry',    name: 'Chemistry / Alchemy',      scope: 'substances, brewing, refinement, PLUG quality, αSync handling' },
+  { id: 'negotiation',  name: 'Negotiation / Diplomacy',  scope: 'social, faction, contracts, Lucifer-pact bargaining' },
+  { id: 'salvage',      name: 'Salvage / A-Tech',         scope: 'finding, identifying, recovering A-Tech / pre-Halt gear' },
+  { id: 'combat',       name: 'Combat / Tactics',         scope: 'military training, weapon expertise, ambush response, boarding' }
+];
+
 const SHARD_TEMPLATES = [
   {
     name: 'pinwheel',
