@@ -7538,7 +7538,20 @@ body > *:not(.icon-defs):not(.cathedral-defs) { position: relative; z-index: 1; 
       <div class="carriage-legend" id="engineLegend"></div>
     </section>
 
-    <!-- ACQUISITION ATLAS — where each engine install can be found -->
+    <!-- STATION CARDS — what each cab tile is for (rendered by renderStationCards()) -->
+    <section class="carriage-section station-cards-section" aria-labelledby="stationCardsHeader">
+      <div class="cadence-section-header">
+        <div class="cath-eyebrow">
+          <span class="ce-orn" aria-hidden="true"><svg><use href="#orn-quatrefoil"/></svg></span>
+          Locomotive &middot; stations &amp; blocks
+        </div>
+        <h3 class="cadence-section-title" id="stationCardsHeader">What goes where</h3>
+        <p class="cadence-section-sub">Each tile on the floor plan maps to a card below — describing what the station is for, who can be posted there, which skills and certifications grant bonuses, and what mechanically rides on it.</p>
+      </div>
+      <div id="stationCardsContainer" class="station-cards-container"></div>
+    </section>
+
+        <!-- ACQUISITION ATLAS — where each engine install can be found -->
     <section class="carriage-section acquisition-atlas" id="acquisitionAtlas" aria-labelledby="acquisitionAtlasHeader">
       <div class="cadence-section-header">
         <div class="cath-eyebrow">
