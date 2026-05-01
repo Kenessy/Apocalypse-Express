@@ -6076,6 +6076,146 @@ body {
 
 
 
+/* ═══════════════════════════════════════════════════════
+   STATION CARDS — Locomotive cab stations + blocks
+   ═══════════════════════════════════════════════════════ */
+
+.station-cards-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 0 0 8px;
+}
+
+.station-card {
+  background: rgba(0,0,0,.30);
+  border: 0.5px solid rgba(201,156,90,.22);
+  border-left: 3px solid rgba(201,156,90,.45);
+  border-radius: var(--r-card);
+  overflow: hidden;
+  transition: border-color 0.18s;
+}
+.station-card:hover {
+  border-color: rgba(201,156,90,.45);
+}
+
+/* Color variants — left border + header gradient */
+.station-card-blue  { border-left-color: rgba(110,160,220,0.4); }
+.station-card-purple { border-left-color: rgba(150,100,200,0.4); }
+.station-card-green { border-left-color: rgba(80,180,100,0.4); }
+.station-card-red   { border-left-color: rgba(200,80,80,0.4); }
+
+.station-card-blue  .station-card-header { background: linear-gradient(90deg, rgba(42,74,140,.15) 0%, rgba(0,0,0,0) 60%); border-bottom-color: rgba(110,160,220,.15); }
+.station-card-purple .station-card-header { background: linear-gradient(90deg, rgba(77,36,112,.15) 0%, rgba(0,0,0,0) 60%); border-bottom-color: rgba(150,100,200,.15); }
+.station-card-green .station-card-header { background: linear-gradient(90deg, rgba(42,112,64,.15) 0%, rgba(0,0,0,0) 60%); border-bottom-color: rgba(80,180,100,.15); }
+.station-card-red   .station-card-header { background: linear-gradient(90deg, rgba(140,29,29,.15) 0%, rgba(0,0,0,0) 60%); border-bottom-color: rgba(200,80,80,.15); }
+
+/* Card header */
+.station-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 24px 12px;
+  border-bottom: 0.5px solid rgba(201,156,90,.15);
+}
+
+/* Colored swatch dot */
+.station-card-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.station-card-blue  .station-card-swatch { background: #2a4a8c; }
+.station-card-purple .station-card-swatch { background: #4d2470; }
+.station-card-green .station-card-swatch { background: #2a7040; }
+.station-card-red   .station-card-swatch { background: #8c1d1d; }
+
+/* Code + category stacked label */
+.station-card-id {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex-shrink: 0;
+}
+.station-card-code {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.station-card-category {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  opacity: 0.7;
+}
+
+/* Station name — right side of header */
+.station-card-name {
+  font-family: 'Cinzel', serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--gold2);
+  text-transform: uppercase;
+  margin: 0;
+  flex: 1;
+}
+
+/* Card body — two-column grid */
+.station-card-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  padding: 0;
+}
+
+/* Individual labelled sections */
+.station-card-section {
+  padding: 12px 18px 12px 22px;
+  border-bottom: 0.5px solid rgba(201,156,90,.08);
+}
+.station-card-section:nth-child(odd) {
+  border-right: 0.5px solid rgba(201,156,90,.10);
+}
+.station-card-section h4 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin: 0 0 6px;
+  opacity: 0.8;
+}
+.station-card-section p,
+.station-card-section li {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--muted);
+  margin: 0;
+}
+.station-card-section ul {
+  padding-left: 14px;
+  margin: 0;
+}
+.station-card-section li {
+  margin-bottom: 3px;
+}
+
+/* Narrow viewport: single column */
+@media (max-width: 720px) {
+  .station-card-body { grid-template-columns: 1fr; }
+  .station-card-section:nth-child(odd) { border-right: none; }
+}
+
 /* ENGINE tab — altarpiece wrapper + part dividers */
 .engine-altarpiece {
   display: flex;
@@ -12067,6 +12207,133 @@ const ENGINE_LAYOUT = {
 // ---------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------
+// STATION_CARDS — 6 Locomotive cab stations / blocks (4 slots + 2 built-ins).
+// Used by renderStationCards() to populate the Carriages tab station-cards section.
+// ---------------------------------------------------------------------------
+const STATION_CARDS = [
+  {
+    code: 'A1',
+    name: 'The Pulpit',
+    category: 'Workplace',
+    color: 'blue',
+    role: 'The driver post — hexagonal seat at the heart of the cab, beside the Hellfire Boiler. A character posted here drives the train: regulating PLUG flow, throttle, brakes, reading the rails. REQUIRED — without a posted driver, the Locomotive cannot move.',
+    skills: 'SYS (full) · TNK (full) · RIG (half)',
+    license: '[RCP] (Railcraft & Power) — strongly recommended; without it, Soft Disadvantage on Hazard phases',
+    cert_tags: [
+      { id: 'mech_eng', effect: '+1 Fit on all driver rolls' },
+      { id: 'systems', effect: '+1 Fit on instrument/comm-heavy phases (Cruise, Approach)' }
+    ],
+    who_can_post: 'Any PC · PAVNN (Service Intelligence trait makes it routine-efficient) · NPC engineer with appropriate license',
+    penalty: 'Train cannot move under its own power. If the driver leaves mid-journey, the clock drops to 0 next phase, the train auto-stops, possible derailment roll if at speed.',
+    bonuses_available: [
+      '+1 Fit · Toolkit &amp; Boiler Kit installed at C1',
+      '+1 Fit · PAVNN assisting from Reliquary (routine phases only)',
+      '+1 Fit · Co-Pilot Cradle installed at B1 + 2nd PC seated',
+      '+1 Fit · Methodical / Hyperfocus / Service Intelligence traits',
+      '+1 Fit · matching cert (mech_eng or systems)'
+    ]
+  },
+  {
+    code: 'B1',
+    name: 'The Apse',
+    category: 'Upgrade slot',
+    color: 'purple',
+    role: 'The big 2×2 install slot — the deep alcove near the back-right corner of the cab. Holds large-form gear that shapes the journey itself.',
+    skills: 'install-specific — Co-Pilot uses SYS for assistant work; Bunk is passive (no skill required)',
+    license: 'no license required for installation; Co-Pilot Cradle benefits from [RCP] for the second seat',
+    cert_tags: [
+      { id: 'mech_eng', effect: '+1 Fit on installation / repair rolls when work is needed at this slot' }
+    ],
+    who_can_post: 'Whichever install is here determines: Co-Pilot Cradle = 2nd driver seat (PC posted); Fold-Down Bunk = sleeping crew (PC sleeping during off-duty)',
+    penalty: 'No penalty for empty — install slots can be unfilled. The slot just provides no bonus.',
+    bonuses_available: [
+      'Option A · Co-Pilot Cradle: +1 Fit Assistant on every Driver phase, CF mitigation (1× per journey, 1 Rest cost)',
+      'Option B · Fold-Down Bunk: PC may sleep here for Rest recovery (varies by motion / noise); 1× storage when folded up',
+      'Acquisition: Concord Yards 50 LEV · αSync R3 reward · Cantos 4 wreck salvage · or Workshop craft TNK 9'
+    ]
+  },
+  {
+    code: 'C1',
+    name: 'The Tinker Wall',
+    category: 'Upgrade slot',
+    color: 'purple',
+    role: 'Small 1×1 install slot on the wall above the corridor. Wall-mounted gear — tools, manuals, instruments.',
+    skills: 'install-specific (Toolkit gives passive +1; Manual provides event grace)',
+    license: 'no license required',
+    cert_tags: [
+      { id: 'mech_eng', effect: '+1 Fit on Toolkit-related repairs' },
+      { id: 'salvage', effect: '+1 Fit when looking up unfamiliar gear via the Manual' }
+    ],
+    who_can_post: 'No PC posted here — passive gear slot',
+    penalty: 'No penalty for empty.',
+    bonuses_available: [
+      'Option A · Toolkit &amp; Boiler Kit: passive +1 Fit on all Driver phases · 1 free wear-repair per station stop',
+      'Option B · Engineer’s Manual: passive +1 phase grace on every event · any PC may Assist on event rolls regardless of position',
+      'Acquisition: Any station 5 LEV · TNK 7 craft · Faction R1 starter (Toolkit) · Concord 30 LEV · αSync R2 reward · Cantos 7 (Manual)'
+    ]
+  },
+  {
+    code: 'C2',
+    name: 'The Crew Niche',
+    category: 'Upgrade slot',
+    color: 'purple',
+    role: 'Small 1×1 install slot on the wall below the corridor. The crew’s personal corner — quartermaster’s shelf, off-duty space.',
+    skills: 'install-specific (Bookshelf is passive storage; Tabletop requires 2 PCs)',
+    license: 'no license required',
+    cert_tags: [
+      { id: 'salvage', effect: '+1 Fit on inventory management (Bookshelf)' },
+      { id: 'negotiation', effect: '+1 Fit on Tabletop’s social events' }
+    ],
+    who_can_post: 'No PC permanently posted — slot used by 2 PCs simultaneously when Tabletop is active',
+    penalty: 'No penalty for empty.',
+    bonuses_available: [
+      'Option A · Reinforced Bookshelf: holds 4 TNY items or 1 pBL · secured against journey vibration · CF causes 1 random item check',
+      'Option B · Tabletop Game Set: 2 PCs assigned during a phase grant +1 MOR (max 3) · CF scatters pieces (1 phase reset)',
+      'Acquisition: Any station 8 LEV · TNK 7 craft (Bookshelf); Sundown Saloon 10-15 LEV · Drifters R2 (Tabletop)'
+    ]
+  },
+  {
+    code: 'tender',
+    name: 'The Reliquary',
+    category: 'Built-in feature',
+    color: 'green',
+    role: 'The 2×2 fuel tender at the back-top of the cab. NOT an install slot — permanent fixture of the carriage. Dual function: active fuel chamber + 3 PLUG storage shelves.',
+    skills: 'PAVNN typically operates here (Service Intelligence trait); requires no skilled hands for routine fuel handling',
+    license: '[RCP] for any actual repair work, but routine fuel transfer is auto-resolved',
+    cert_tags: [
+      { id: 'mech_eng', effect: '+1 Fit when assisting Driver from this position' },
+      { id: 'chemistry', effect: '+1 Fit on PLUG quality testing or contamination events' }
+    ],
+    who_can_post: 'PAVNN (the Construct MULE) most commonly stationed here · any PC for emergency fuel-shift mid-journey',
+    penalty: 'No penalty for empty during routine cruising — automated fuel feed. PCs at Reliquary contribute as Driver assistants.',
+    bonuses_available: [
+      'Active fuel chamber: 1 PLUG canister actively burning, journey rate (1/2/3 PLUG short/med/long)',
+      'Storage shelves: 3 extra PLUG canisters as cargo (TNY weight each)',
+      'Mid-journey swap: 1 phase action to refill active chamber from storage',
+      'PAVNN here: +1 Fit Assistant to Driver (Service Intelligence routine bonus)'
+    ]
+  },
+  {
+    code: 'engine',
+    name: 'The Hellfire Boiler',
+    category: 'Off-limits',
+    color: 'red',
+    role: 'The 7×5 furnace block taking up nearly half the cab. The engine itself — a Hellfire boiler running on PLUG-distilled souls. NOT walkable, NOT a station. Workers do not enter the boiler.',
+    skills: 'no PC stationed; events that fire FROM the boiler test crew skills at adjacent stations',
+    license: '[RCP] for any direct intervention (rare, story-only)',
+    cert_tags: [
+      { id: 'mech_eng', effect: '+1 Fit on Boiler Stress events resolved at adjacent stations' },
+      { id: 'chemistry', effect: '+1 Fit on PLUG-quality / soul-canister events' }
+    ],
+    who_can_post: 'NONE — off-limits zone. Heat, hellfire, pressure, lethal. Boiler events trigger work AT ADJACENT stations.',
+    penalty: 'PC entering an active Hellfire Boiler suffers Major injury automatic. Story-event only.',
+    bonuses_available: [
+      'Boiler events fire from this block: Boiler Stress (state-trigger PLUG &lt;20%), Boiler Spike (CF outcome), Pressure Vent (random)',
+      'These events resolve AT A1 Pulpit or Reliquary, not at the boiler itself'
+    ]
+  }
+];
+
 // CERT_CATEGORIES — 8 general certification categories for the Cert mechanic.
 // PCs cap at 2 active certs. NPCs may hold any number (factory-loaded).
 // When a station/task is tagged with a matching cert_tag, a worker holding
