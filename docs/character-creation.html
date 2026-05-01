@@ -5292,12 +5292,14 @@ body {
   content: none;
 }
 
-/* Slot tiles — color-coded by role.
-   PURPLE = install location (color-code marks "update / equip here").
-   The code text (B1, C1, C2, A1) identifies which slot is which;
-   full A/B option details live in the legend below the floor plan. */
+/* Slot tiles — color-coded by ROLE.
+   The code text (A1, B1, C1, C2) identifies which slot is which;
+   full A/B option details live in the legend below the floor plan.
+   All slot tiles share a common gloss + size; only the base color shifts. */
+
+/* Default slot = PURPLE (install / upgrade locations: B1 Apse, C1, C2). */
 .carriage-tile.is-slot {
-  background: linear-gradient(135deg, #4d2470, #3a1a4d);
+  background: linear-gradient(135deg, #4d2470 0%, #3a1a4d 100%);
   border: 1px solid rgba(150, 100, 200, 0.55);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.15),
@@ -5310,19 +5312,32 @@ body {
   justify-content: center;
   overflow: hidden;
 }
-/* Slot-glass gloss — slightly brighter than floor (slots are interactive). */
+
+/* Work slot (Pulpit, A1) = BLUE. Drops the hex SVG; just blue tile + A1 code. */
+.carriage-tile.is-slot.is-work {
+  background: linear-gradient(135deg, #2a4a8c 0%, #1d3370 100%);
+  border: 1px solid rgba(110, 160, 220, 0.55);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.35),
+    0 0 8px rgba(80, 130, 200, 0.28);
+}
+
+/* Diagonal 135deg gloss — same as floor, applied uniformly to all slots. */
 .carriage-tile.is-slot::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom,
-    rgba(255,255,255,0.14) 0%,
-    rgba(255,255,255,0.04) 40%,
-    rgba(0,0,0,0.10) 80%,
-    rgba(0,0,0,0.18) 100%);
+  background: linear-gradient(135deg,
+    rgba(255,255,255,0.16) 0%,
+    rgba(255,255,255,0.05) 28%,
+    rgba(255,255,255,0) 50%,
+    rgba(0,0,0,0.08) 72%,
+    rgba(0,0,0,0.22) 100%);
   pointer-events: none;
   z-index: 0;
 }
+
 /* Slot code — large Cinzel identifier at center (e.g. "A1", "B1", "C1"). */
 .slot-code {
   position: relative;
@@ -5334,15 +5349,10 @@ body {
   color: var(--gold2);
   text-shadow: 0 0 6px rgba(0, 0, 0, 0.55);
 }
-/* Big install slot (Apse, 2×2): bigger code text. */
+/* Big install slot (Apse B1, 2×2): bigger code text. */
 .carriage-tile.is-slot.is-install-big .slot-code {
   font-size: 22px;
   letter-spacing: 0.14em;
-}
-/* Work slot (Pulpit) — keeps its hex outline; code lives inside the SVG.
-   The slot itself is purple like other slots for color-code consistency. */
-.carriage-tile.is-slot.is-work {
-  /* Same purple — color-code is unified for "active interaction location". */
 }
 .carriage-tile.is-slot::after {
   content: attr(data-label);
@@ -5414,23 +5424,13 @@ body {
 }
 
 .carriage-block.is-engine {
-  background:
-    radial-gradient(ellipse at center, rgba(255, 80, 30, 0.40) 0%, rgba(74, 26, 20, 0.95) 60%, rgba(34, 12, 10, 1) 100%),
-    url('img/textures/hellfire-boiler.png') center/cover no-repeat,
-    linear-gradient(135deg, #3a1810, #1d0c08);
-  border: 2px solid #c46666;
-  box-shadow: inset 0 0 22px rgba(255, 80, 30, 0.45), 0 0 14px rgba(196, 102, 102, 0.45);
-}
-.carriage-block.is-engine::before { font-size: 48px; }
-.carriage-block.is-engine::after {
-  content: '';
-  position: absolute; inset: 8px; border-radius: 2px;
-  background:
-    radial-gradient(circle at 15% 15%, rgba(255, 180, 100, 0.30) 0 2px, transparent 3px),
-    radial-gradient(circle at 85% 15%, rgba(255, 180, 100, 0.30) 0 2px, transparent 3px),
-    radial-gradient(circle at 15% 85%, rgba(255, 180, 100, 0.30) 0 2px, transparent 3px),
-    radial-gradient(circle at 85% 85%, rgba(255, 180, 100, 0.30) 0 2px, transparent 3px);
-  pointer-events: none;
+  /* RED tiles — Hellfire Boiler / OFF-LIMITS. Color-coded as forbidden zone. */
+  background: linear-gradient(135deg, #8c1d1d 0%, #4d0808 100%);
+  border: 2px solid rgba(200, 80, 80, 0.55);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.10),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.40),
+    0 0 12px rgba(180, 60, 60, 0.30);
 }
 /* Sparkplug tender — small dark hut storing PLUG canisters.
    Uses the canonical Sparkplug icon (semi-translucent cylinder with
@@ -5536,12 +5536,13 @@ body {
 
 /* The Reliquary — brass-and-leaded-glass cabinet at the back of The Locomotive. */
 .carriage-block.is-reliquary {
-  background:
-    radial-gradient(circle at 35% 40%, rgba(210, 140, 40, 0.30) 0 30%, transparent 55%),
-    linear-gradient(135deg, #2a2018, #18110a);
-  border: 1.5px solid rgba(201,156,90,.65);
-  box-shadow: inset 0 0 14px rgba(210, 140, 40, 0.25), inset 0 0 6px rgba(0,0,0,0.7),
-              0 0 10px rgba(201, 156, 90, 0.20);
+  /* GREEN tiles — Reliquary / built-in feature. Color-coded as installed cargo. */
+  background: linear-gradient(135deg, #2a7040 0%, #1a4028 100%);
+  border: 2px solid rgba(80, 180, 100, 0.55);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.10),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.40),
+    0 0 12px rgba(60, 160, 80, 0.30);
 }
 .carriage-block.is-reliquary::before {
   content: attr(data-icon);
@@ -11933,34 +11934,26 @@ function renderEngineFloor() {
     const subLabel = b.subStructure
       ? `<span class="reliquary-sub">${b.subStructure.active} active + ${b.subStructure.storage} storage</span>`
       : '';
-    const blockedSvg = buildBlockedStainedGlassSvg(b.span_col, b.span_row);
-    html += `<div class="carriage-block is-${b.kind}" style="grid-column:${b.col} / ${colEnd}; grid-row:${b.row} / ${rowEnd};" data-icon="${b.icon}" role="img" aria-label="${b.label} · off-area">${blockedSvg}<span class="block-label">${b.label}</span>${subLabel}</div>`;
+    // Blocks are color-coded via CSS (.is-engine red, .is-reliquary green).
+    // No per-tile SVG — single colored gradient + diagonal gloss, label on top.
+    html += `<div class="carriage-block is-${b.kind}" style="grid-column:${b.col} / ${colEnd}; grid-row:${b.row} / ${rowEnd};" data-icon="${b.icon}" role="img" aria-label="${b.label} · off-area"><span class="block-label">${b.label}</span>${subLabel}</div>`;
   });
 
   // Render each slot as one spanning element at its anchor cell.
   L.slots.forEach(s => {
     const colEnd = s.col + s.span_col;
     const rowEnd = s.row + s.span_row;
-    let inner = '';
-    if (s.shape === 'hex') {
-      // Pulpit — outline hexagon with alphanumeric code inside
-      inner = `<svg class="pulpit-hex" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">` +
-        `<polygon class="frame" points="50,2 95,26 95,74 50,98 5,74 5,26"/>` +
-        `<text class="code" x="50" y="57" text-anchor="middle" dominant-baseline="middle">${s.code}</text>` +
-        `</svg>`;
-    } else if (s.options) {
-      // Simplified slot rendering — purple "install slot" panel with code text.
-      // A/B picker details (option names, effects, alternatives) live in the
-      // legend below the floor plan, not on the tile itself.
-      const code = s.code || '';
-      inner = `<span class="slot-code">${code}</span>`;
-    } else {
-      // Standard slot — icon + name label
-      inner = `${s.icon}<span class="engine-tile-name">${s.name}</span>`;
-    }
-    const abClass = s.options ? ' has-ab' : '';
-    const pulpitClass = s.shape === 'hex' ? ' is-pulpit' : '';
-    html += `<div class="carriage-tile is-slot is-${s.kind}${abClass}${pulpitClass}" style="grid-column:${s.col} / ${colEnd}; grid-row:${s.row} / ${rowEnd}; --slot-accent:${s.accent};" data-slot-id="${s.id}" data-label="${s.name}" title="${s.name} — ${s.task}">${inner}</div>`;
+    // Unified slot rendering — color-coded by .is-${s.kind} CSS rule.
+    //   is-work          → blue   (Pulpit, A1)
+    //   is-install-small → purple (Tinker Wall C1, Crew Niche C2)
+    //   is-install-big   → purple (Apse B1)
+    // All slots show their alphanumeric code centered; A/B option details
+    // live in the legend below the floor plan.
+    const code = s.code || '';
+    const tooltip = s.options
+      ? `${s.name} — ${s.axis}: ${s.options.a.name} or ${s.options.b.name}`
+      : `${s.name} — ${s.task}`;
+    html += `<div class="carriage-tile is-slot is-${s.kind}" style="grid-column:${s.col} / ${colEnd}; grid-row:${s.row} / ${rowEnd};" data-slot-id="${s.id}" data-label="${s.name}" title="${tooltip}"><span class="slot-code">${code}</span></div>`;
   });
 
   // Render walkable floor on every uncovered cell.
