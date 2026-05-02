@@ -1,3 +1,5 @@
 # Sundown Saloon integration trigger
 
-This file intentionally triggers `.github/workflows/patch-sundown-carriage.yml` after the workflow exists on `main`.
+Trigger updated after workflow path fix.
+
+Timestamp marker: 2026-05-02-sundown-v2
