@@ -101,8 +101,8 @@ body {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 8px;
-  padding: 8px 40px 0;
+  gap: 4px;
+  padding: 6px 28px 0;
   border-bottom: 0.5px solid rgba(201,156,90,.18);
   background: rgba(0,0,0,.18);
 }
@@ -114,8 +114,8 @@ body {
   font-family: 'IBM Plex Mono', monospace;
   font-size: var(--fs-label);
   font-weight: 500;
-  letter-spacing: 0.05em;
-  padding: 14px 22px;
+  letter-spacing: 0.04em;
+  padding: 13px 16px;
   cursor: pointer;
   transition: color .2s, border-color .2s, background .2s;
   text-transform: uppercase;
@@ -140,6 +140,29 @@ body {
   font-weight: 600;
 }
 .tab.disabled .num { color: var(--dim); }
+
+@media (max-width: 720px) {
+  .title-bar {
+    padding: 24px 40px 18px;
+  }
+  .title-bar h1 {
+    font-size: 30px;
+    line-height: 1.18;
+    letter-spacing: 0.06em;
+  }
+  .title-bar p {
+    font-size: 13px;
+    line-height: 1.55;
+  }
+  .tab-nav {
+    gap: 8px 10px;
+    padding: 8px 40px 18px;
+  }
+  .tab {
+    font-size: 12px;
+    padding: 12px 14px;
+  }
+}
 
 /* ────────────────────────── PANELS ────────────────────────── */
 .tab-panel {
