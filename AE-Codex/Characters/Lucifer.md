@@ -36,7 +36,7 @@ Lucifer has three useful story modes. The distinction is not about how dramatic 
 
 **A5 Sundown Saloon:** The scene is still an **audience with Lucifer**, and it should feel fully present at the table. However, the latest lock means this does **not** require a normal physical body standing behind the bar. The Saloon can stage him as a total-room apparition, backed by the Train / pact-space / Hell-contact machinery.
 
-**Design consequence:** The Sundown Saloon is important because it is the Train's pact-theater and social front room, not because it is the only place Lucifer can appear.
+**Design consequence:** The Sundown Saloon is important because it is the Train's pact-theater, social front room, and **mirror-rich apparition theatre**, not because it is the only place Lucifer can appear.
 
 ---
 
@@ -57,6 +57,10 @@ Lucifer has three useful story modes. The distinction is not about how dramatic 
 ### 3. Apparition / perceptual projection
 
 **Where:** Anywhere Lucifer can reach a target's perception. Mirrors and reflective surfaces are preferred framing devices, especially on the Train, but they are not required by the metaphysics.
+
+**Mirror affordance:** reflective surfaces make the apparition easier to stage, aim, and justify in fiction. They give Lucifer an image-channel the human mind already expects to behave strangely: doubled space, wrong angles, eye contact from impossible places, and reflections that do not match the room. A mirror is not a power source, but it is an excellent **perceptual handle**.
+
+**Sundown Saloon advantage:** the Saloon has many mirrors, polished bottles, glasses, windows, brass rails, and dark glossy surfaces. This makes it the easiest and most natural place for Lucifer to show hallucination-like scenes, overlays, chess-table images, contract echoes, old-death flashes, or impossible views without the players asking why his presence can anchor there.
 
 **Who sees:** Whoever Lucifer includes. Default for player-facing checkpoint scenes: **the PCs see him, bystanders do not**. Cicero, PAVNN, or other agents can be included if the scene wants them to participate.
 
@@ -95,7 +99,8 @@ After B1, Lucifer becomes a semi-regular companion. His appearances are usually 
 This model solves several structural problems:
 
 - **Lucifer can appear anywhere without physically arriving.** He is not blocked by carriage location, distance, or mundane line-of-sight when he is only editing perception.
-- **The Train and Saloon stay important for story, not logistics.** The Sundown Saloon is a pact-stage, social engine, and infernal lounge. It does not need to be the only place he can manifest.
+- **The Train and Saloon stay important for story, not logistics.** The Sundown Saloon is a pact-stage, social engine, infernal lounge, and mirror-rich apparition theatre. It does not need to be the only place he can manifest.
+- **Reflective surfaces explain why the Saloon is his best room.** Mirrors do not grant the power, but they make the hallucination legible, elegant, and easier to aim.
 - **The Orb still requires delivery.** A perceptual apparition cannot carry the Orb. If the final plan requires a physical receiver, the party must still bring the Orb to the fixed avatar / ritual site.
 - **Cicero and PAVNN scenes are flexible.** Lucifer can include them or exclude them from the projection, scene by scene.
 - **Bystander logic stays clean.** Ordinary observers can see nothing while the players speak with Lucifer, unless Lucifer deliberately includes them.
@@ -156,7 +161,7 @@ See [`../Cosmology/Overreach.md → "The cardinal rule"`](../Cosmology/Overreach
 - Avatar persistence: does the physical puppet persist between chapters, or only manifest at story-gate moments?
 - Voice and speech pattern for recurring apparition check-ins.
 - Real-form vs avatar vs apparition visual differences.
-- Whether the Sundown Saloon is merely the best pact-stage, or also has a stable Hell-contact threshold for other uses.
+- Whether the Sundown Saloon also has a stable Hell-contact threshold for non-apparition purposes, beyond being the best mirror-rich pact-stage.
 
 ---
 
