@@ -1,95 +1,104 @@
 ---
 type: character
 status: locked-core
-last_updated: 2026-04-25
+last_updated: 2026-05-03
 ---
 
 # Lucifer
 
-> The patron, the architect, the trickster. The being who paused the apocalypse, planted the spark in humanity, commissioned Cicero's manuscript, and runs the Apocalypse Express. The campaign's primary cosmic force — neither pure villain nor pure ally.
+> The patron, the architect, the trickster. The being who paused the apocalypse, planted the spark in humanity, commissioned Cicero's manuscript, and runs the Apocalypse Express. The campaign's primary cosmic force: neither pure villain nor pure ally.
 
 ---
 
-## The three presence modes — LOCKED
+## Presence model — LOCKED 2026-05-03
 
-Lucifer manifests in **three distinct modes**, each with its own location, audience, and mechanical rules. *[T1: Daniel 2026-04-25]*
+### Core clarification
+
+Lucifer does **not** need to physically appear in a place to be perceived there. Most campaign appearances are **apparitions**: he distorts the target's perception, attention, and world-model so they experience him as standing there, speaking there, touching a glass, leaning on a bar, playing chess in a reflection, or walking beside them.
+
+This is not a normal hologram and not a standard illusion projected into space. It is a **direct perceptual edit** applied to selected observers.
+
+**Practical table rule:** if Lucifer appears outside a scene that explicitly says he is physically embodied, treat him as **nonphysical**. He can be seen, heard, conversed with, and emotionally present, but he does not have a normal body in the room.
+
+---
+
+## The three presence modes
+
+Lucifer has three useful story modes. The distinction is not about how dramatic the scene feels. It is about whether he is physically there.
 
 ### 1. Real form
 
-**Where:** Hell ("odalent"). Also accessible **on the Apocalypse Express train**, specifically at the Sundown Saloon (A5) — the train (or at least that car) is Hell-adjacent metaphysically, allowing his real form to be present there.
+**Where:** Hell proper, or spaces that are explicitly framed as direct Hell-contact.
 
-**Who sees:** Anyone present.
+**Who sees:** Anyone Lucifer permits to experience the scene. In Hell proper, this can be everyone present.
 
-**Mechanics:** Fully embodied. Real interaction. This is **Lucifer himself**.
+**Mechanics:** This is Lucifer himself, not an Earth-body. He is not operating under normal mortal physical rules.
 
-**Players first encounter this mode in A5.** *[T1: Database/Scene A5 + Daniel 2026-04-25]*
+**A5 Sundown Saloon:** The scene is still an **audience with Lucifer**, and it should feel fully present at the table. However, the latest lock means this does **not** require a normal physical body standing behind the bar. The Saloon can stage him as a total-room apparition, backed by the Train / pact-space / Hell-contact machinery.
 
----
-
-### 2. Avatar (real-world body)
-
-**Where:** The real world (Earth), at **one fixed location**.
-
-**Who sees:** Everyone in proximity (visible to all, not players-only).
-
-**Mechanics:** A puppet body (*"bábu a játékpályán"*). Physical, can act in the world. **Cannot teleport.** Restricted to wherever the avatar is positioned.
-
-**Implication for climax:** The Orb has to be **manually delivered** to wherever the avatar stands — the avatar can't move to the players, so the players must move to it. This is why the climax happens at a fixed stage (mountaintop / broken bridge). *[T1: Daniel 2026-04-25]*
-
-**First materialization:** Likely **Canto 7 (The World Anchor)** — the brainstorm doc says "Lucifer materializes for the first time" at the chain-melt, and "Heaven notices" (`heaven_attention=True`). This matches: avatar manifesting on the surface = visible to celestials = doctrine triggers escalation. *[T1 inferred from Daniel 2026-04-25 + T2 Obsidian Canto 7]*
-
-> [!todo] OPEN
-> Confirm: is Canto 7 chain-melt the avatar's *first* physical manifestation, or just an intermittent appearance? Does the avatar persist between chapters, or only manifest at specific moments?
+**Design consequence:** The Sundown Saloon is important because it is the Train's pact-theater and social front room, not because it is the only place Lucifer can appear.
 
 ---
 
-### 3. Hologram (mirror-projection) — LOCKED 2026-04-25
+### 2. Avatar, physical puppet body
 
-**Where:** Anywhere there's a mirror or mirror-like reflective surface. **Heavily anchored to the train** as his main hangout space.
+**Where:** The real world, only when a scene explicitly establishes a physical avatar.
 
-**Who sees:** **Only the players.** Bystanders see nothing. *[T1: Daniel 2026-04-25]*
+**Who sees:** Everyone in proximity, because the avatar is physically present.
 
-**Mechanics:** Illusion. Lucifer projects into the players' minds an image of himself appearing in the surface. Mirror-anchoring is the channel. He cannot be detected by non-player observers.
+**Mechanics:** A puppet body, a piece on the board. It can act in the world but does not have Lucifer's full freedom. If used, it is fixed by location and cannot freely teleport.
 
-**Lucifer's general capability:** he can create illusions and deceive anyone with them. The mirror-projection is a specific use of that broader power, restricted to player-eyes for narrative checkpoints.
+**Implication for climax:** If the climax still uses a physical avatar, the Orb must be manually delivered to the fixed stage where that avatar stands. The apparition mode does not solve physical delivery. Lucifer can make himself seen anywhere, but he cannot make a nonphysical apparition carry the Orb.
 
-#### First hologram appearance — B1 Chapel of Second Chances
+**Canto 7 note:** The World Anchor chain-melt may be the first physical surface manifestation if the chapter still wants Heaven to notice a true avatar event. This remains a strong option, but it should be marked explicitly as physical if used.
 
-**The first time Lucifer manifests via hologram is at the end of the prelude:** *[T1: Daniel 2026-04-25]*
+---
 
-1. Players sign Lucifer's pact in A5 (Sundown Saloon, real form encounter on the train)
-2. They step through the mirror/gate from the train into the real world
-3. They wake in their new printed bodies in the chapel (B1)
-4. **Lucifer appears via hologram in the chapel mirror** — briefs them on their situation, restates the mission, gives the practical instructions for the road ahead
-5. He disappears
+### 3. Apparition / perceptual projection
 
-This is the player's **first encounter with hologram-mode Lucifer**, and the moment they realize that the man from A5 isn't *gone* — he's just shifted modes.
+**Where:** Anywhere Lucifer can reach a target's perception. Mirrors and reflective surfaces are preferred framing devices, especially on the Train, but they are not required by the metaphysics.
 
-#### Recurring pattern across the campaign — semi-regular companion
+**Who sees:** Whoever Lucifer includes. Default for player-facing checkpoint scenes: **the PCs see him, bystanders do not**. Cicero, PAVNN, or other agents can be included if the scene wants them to participate.
 
-After B1, Lucifer becomes a **semi-regular hologram companion** on the Apocalypse Express. He appears periodically through reflective surfaces, mostly inside the train. The function is **information delivery + atmospheric presence**, not high-stakes confrontation. *[T1: Daniel 2026-04-25]*
+**Mechanics:** Lucifer edits perception rather than occupying the room. The target experiences a coherent visual and auditory presence. He may appear to drink coffee, polish a glass, play chess, or handle a contract, but his apparition is not physically manipulating matter by hand.
+
+**Physical effects:** If a scene contains a physical effect while Lucifer is appearing nonphysically, the effect comes through another channel: the Train, the pact, a prepared mechanism, a proxy, or Hell-contact physics. The apparent gesture may still be Lucifer's theatrical interface.
+
+#### First apparition appearance — B1 Chapel of Second Chances
+
+The first post-pact apparition is at **B1 Chapel of Second Chances**:
+
+1. PCs sign Lucifer's pact in A5.
+2. They step through the mirror / gate toward the real world.
+3. They wake in their new printed bodies in the chapel.
+4. Lucifer appears as an apparition, often through or near a mirror, and briefs them.
+5. He disappears.
+
+This teaches the players that the man from A5 did not leave the story. He simply changed presentation mode.
+
+#### Recurring pattern across the campaign
+
+After B1, Lucifer becomes a semi-regular companion. His appearances are usually low-pressure, domestic, and almost comfortable. The function is information delivery, atmosphere, temptation, and long-term familiarity.
 
 **Characteristic recurring scenes:**
 
-- **Chess in the mirror** with **Cicero** or **PAVNN** — Lucifer shows up as a reflection playing chess against one of his commissioned agents. Either side can be the player to watch. Diegetic foreshadow: the chess metaphor literally manifests at the visual level, in front of the players, throughout the campaign.
-- **Domestic intimacy** — Lucifer **sipping coffee**, smiling, reading something light. **Cosy, alulreagáló**. The deliberate normalcy is what makes the climax retrospectively chilling: he was always relaxed because everything was already going his way.
-- **Brief info-drops** — drops a line, a hint, a clarification, then is gone before they can press him for more.
+- **Chess in the mirror** with Cicero or PAVNN. Lucifer can include them in the perception if they are meant to consciously participate, or exclude them if the scene wants a haunting player-only tableau.
+- **Domestic intimacy.** Coffee, a clean glass, a book, a faint smile. Cosy, underplayed, unnervingly normal.
+- **Brief info-drops.** He gives one useful line, one beautiful lie-shaped truth, or one warning, then leaves before the party can fully interrogate him.
 
-**Tonal note:** the recurring holograms should feel **welcome and familiar**, like a houseguest who's been around forever. The horror of the climax monologue lands harder when contrasted with hundreds of hours of the players seeing Lucifer be **comfortable** in their presence. *[T1: Daniel 2026-04-25]*
-
-> [!todo] OPEN — Q18 (NEW)
-> When Lucifer's hologram appears interacting with Cicero or PAVNN (chess-in-mirror scenes), **do Cicero and PAVNN see him too** (as commissioned agents privy to his presence), or do the players see them looking at a mirror that the players ALONE see Lucifer in? Different implications for whether Cicero/PAVNN are conscious participants in the chess metaphor or unwitting subjects of it.
+**Tonal note:** the recurring apparitions should feel welcome and familiar. The climax lands harder if the party has spent the campaign seeing Lucifer as a calm houseguest rather than a constant monster.
 
 ---
 
 ## Why this matters
 
-The three-mode system answers structural problems that earlier design left ambiguous:
+This model solves several structural problems:
 
-- **A5 Sundown Saloon "in person" vs "Lucifer can't reach Earth":** A5 is on the train = Hell-adjacent, so real-form Lucifer can be there. He cannot leave Hell into the real world *as real form* — only as avatar/hologram.
-- **Why players must deliver the Orb:** the avatar at the climax can't teleport. Players bring it to him. This grounds the "go to where the world comes apart" pact-objective from A5.
-- **Why Canto 7 is "first materialization" yet A5 already had Lucifer:** A5 = real form on Hell-adjacent space; Canto 7 = avatar's first surface manifestation. Different modes, both true.
-- **Why hologram appearances feel uncanny but Lucifer never seems "really there":** he isn't — only the player-eyes see, and it's an illusion projected into their minds.
+- **Lucifer can appear anywhere without physically arriving.** He is not blocked by carriage location, distance, or mundane line-of-sight when he is only editing perception.
+- **The Train and Saloon stay important for story, not logistics.** The Sundown Saloon is a pact-stage, social engine, and infernal lounge. It does not need to be the only place he can manifest.
+- **The Orb still requires delivery.** A perceptual apparition cannot carry the Orb. If the final plan requires a physical receiver, the party must still bring the Orb to the fixed avatar / ritual site.
+- **Cicero and PAVNN scenes are flexible.** Lucifer can include them or exclude them from the projection, scene by scene.
+- **Bystander logic stays clean.** Ordinary observers can see nothing while the players speak with Lucifer, unless Lucifer deliberately includes them.
 
 ---
 
@@ -97,7 +106,7 @@ The three-mode system answers structural problems that earlier design left ambig
 
 ### He gave humanity the Spark
 
-Lucifer is the **source of human life** — the divine spark that animates humanity is his gift. *[T1: Daniel 2026-04-25]*
+Lucifer is the **source of human life**. The divine spark that animates humanity is his gift. *[T1: Daniel 2026-04-25]*
 
 > *"I gave him [God] the spark to create life, human life — the ember that fans the flame. The single idea of rebellion, of standing up against their own creator, the idea of 'being better than what came before'."* *[T1 candidate from brainstorm canvas alt-monologue, cosmologically confirmed]*
 
@@ -105,7 +114,7 @@ The spark manifests physically as **hellfire** in this world, which fuels the tr
 
 ### He paused the apocalypse
 
-Lucifer stepped onto the fabric of reality and activated the **chrono machine** (his device) to pause time, blocking both the atomic and divine apocalypses from completing. The pause requires his continuous effort to maintain. *[T1: Database/Scene B1 + Daniel 2026-04-25]*
+Lucifer stepped onto the fabric of reality and activated the **chrono machine** to pause time, blocking both the atomic and divine apocalypses from completing. The pause requires his continuous effort to maintain. *[T1: Database/Scene B1 + Daniel 2026-04-25]*
 
 See [`../Cosmology/PausedApocalypse.md`](../Cosmology/PausedApocalypse.md).
 
@@ -119,22 +128,22 @@ See [`Cicero.md → "Pact with Lucifer"`](Cicero.md#pact-with-lucifer).
 
 *[T1: Daniel 2026-04-26]*
 
-Lucifer is **a collector of pacts**, not just Cicero's patron. He had **multiple pacts with aSync employees** before the Pause (which is how he learned the activation phrases for A-Tech / aSync robots — they told him in exchange for whatever he offered them). Plausibly: similar pacts with other corporate figures, scientists, military personnel, etc.
+Lucifer is **a collector of pacts**, not just Cicero's patron. He had **multiple pacts with aSync employees** before the Pause. This is how he learned activation phrases for A-Tech / aSync robots: they told him in exchange for whatever he offered them.
 
-This expands the divine-ignore loophole's impact: Lucifer didn't just operate in God's blind spot to plant Cicero, scavenge the AI Core, and grab PAVNN. He **infiltrated Earth's corporate / technical / cultural fabric for years** through one-on-one pacts with talented souls, **harvesting know-how, codes, access**, contacts. The pact-collector is a **systemic operator**, not a singular schemer.
+This expands the divine-ignore loophole's impact. Lucifer did not just operate in God's blind spot to plant Cicero, scavenge the AI Core, and grab PAVNN. He infiltrated Earth's corporate, technical, and cultural fabric for years through one-on-one pacts with talented souls, harvesting know-how, codes, access, and contacts.
 
 > [!todo] OPEN
-> What other named pact-holders exist (former aSync employees, etc.)? Could the players encounter any in B-arc, alive or dead? Could a pact-holder be one of the surface NPCs they meet?
+> What other named pact-holders exist? Could the players encounter any in B-arc, alive or dead? Could a pact-holder be one of the surface NPCs they meet?
 
 ### He must not be caught lying
 
 **REFRAMED 2026-04-25** based on the Overreach cosmology.
 
-Lucifer **must not be caught lying** — operational constraint at the 9th-rank tier, not physical inability. Getting caught cheating at this tier is fatal. He honours every contract he signs **because cheating openly would expose him**. But he speaks with **clever wording** that lets listeners misunderstand without his being technically untrue — this is the **player's craft of plausible deniability**. *[T1: Database/Scene A5 quote + Daniel 2026-04-25 reframing]*
+Lucifer **must not be caught lying**. This is an operational constraint at the 9th-rank tier, not a physical inability. Getting caught cheating at this tier is fatal. He honours every contract he signs because cheating openly would expose him. But he speaks with clever wording that lets listeners misunderstand without his being technically untrue.
 
 > *"I do not forge and I do not amend; I only honour what is freely given."* *[T1: Database/Scene A5]*
 
-The same applies to Cicero's "they cannot lie" rule, the new-hellfire reveal (technically "hellfire" is accurate), and every contract Lucifer makes. Discoverable lies = exposure = loss of the seat. Hence the operational discipline.
+The same applies to Cicero's "they cannot lie" rule, the new-hellfire reveal, and every contract Lucifer makes. Discoverable lies mean exposure. Exposure means loss of the seat.
 
 See [`../Cosmology/Overreach.md → "The cardinal rule"`](../Cosmology/Overreach.md#the-cardinal-rule--never-get-caught-cheating).
 
@@ -144,15 +153,13 @@ See [`../Cosmology/Overreach.md → "The cardinal rule"`](../Cosmology/Overreach
 
 > [!todo] See [../Questions.md](../Questions.md) for the question backlog.
 
-- **First hologram appearance — when?** (likely late prelude or early Chapter 1)
-- **Frequency of hologram appearances** through the campaign
-- **Avatar persistence** — between chapters, or only at story-gate moments
-- **Voice and speech pattern** for Lucifer specifically — A5 dialogue exists, climax monologue draft exists, but his recurring-NPC voice (for hologram check-ins, etc.) is not yet fully characterised
-- **Real-form vs avatar visual differences** — are they identical-looking, or does the avatar have tells (a flicker, a wrongness)?
-- **Why does the train have a Hell-adjacent car (Sundown Saloon)** at all? Is the whole train Hell-adjacent, or just specific cars?
+- Avatar persistence: does the physical puppet persist between chapters, or only manifest at story-gate moments?
+- Voice and speech pattern for recurring apparition check-ins.
+- Real-form vs avatar vs apparition visual differences.
+- Whether the Sundown Saloon is merely the best pact-stage, or also has a stable Hell-contact threshold for other uses.
 
 ---
 
 ## Workshop reference
 
-Climax monologue verbatim (Hungarian + analysis): [`../../Workshop/Climax/LuciferMonologue.md`](../../Workshop/Climax/LuciferMonologue.md). Full climax architecture (currently being revisited in light of new chapter structure): [`../../Workshop/Climax/OVERVIEW.md`](../../Workshop/Climax/OVERVIEW.md).
+Climax monologue verbatim (Hungarian + analysis): [`../../Workshop/Climax/LuciferMonologue.md`](../../Workshop/Climax/LuciferMonologue.md). Full climax architecture: [`../../Workshop/Climax/OVERVIEW.md`](../../Workshop/Climax/OVERVIEW.md).
