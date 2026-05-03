@@ -16,11 +16,13 @@
 > - **Sundown Saloon**  
 > - **AI Core / IT Carriage** — physically attached, but **offline / dormant** for the first stretch; it is not yet an active helper voice.  
 >  
+> **AI Core activation lock:** The AI Core does **not** come online in B5. It requires a **starter / activation code** obtained later through a quest in the first canto / first book, roughly around the middle of Chapter 1. The exact quest location is still flexible.  
+>  
 > **Story job:**  
 > - Pay off the Offboarder as the front-door guard to something important.  
 > - Give the party their first real control over the rail infrastructure.  
 > - Let them attach / arrange the required starter carriages behind the locomotive.  
-> - Establish the **AI Core carriage** as part of the main train from departure, while keeping it inactive until a later activation scene.  
+> - Establish the **AI Core carriage** as part of the main train from departure, while keeping it inactive until the party earns its starter code later in Chapter 1.  
 > - Make the Apocalypse Express feel like a physical train in a real rail yard, not an abstract menu.  
 > - End with the train assembled and ready to depart, triggering Lucifer's next apparition beat.
 >  
@@ -34,7 +36,7 @@
 > **Tone:**  
 > - Industrial control-room puzzle after a horror turret scene.  
 > - Dusty corporate rail infrastructure, frozen warning lights, old A-Tech panels, and heavy mechanical movements waking for the first time since the Halt.  
-> - The AI Core carriage should feel important but asleep: a sealed server-car / IT carriage with dead screens, locked racks, and dormant status lights.
+> - The AI Core carriage should feel important but asleep: a sealed server-car / IT carriage with dead screens, locked racks, dormant status lights, and a clear sense that it is waiting for something the party does not yet have.
 
 ---
 
@@ -120,13 +122,14 @@ Main Locomotive / Engine
 
 - **Main Locomotive / Engine** — the hellfire-powered chassis that lets the party move through the Halt.  
 - **Sundown Saloon** — the train's social / pact / mirror-rich apparition carriage. It is already part of the starting train, not a later unlock.  
-- **AI Core / IT Carriage** — a sealed server-car / control-intelligence carriage. It is physically coupled at departure, but **offline** for the first N scenes / first stretch of play. It should not become an active advice machine immediately.
+- **AI Core / IT Carriage** — a sealed server-car / control-intelligence carriage. It is physically coupled at departure, but **offline** for the first stretch of play. It cannot be activated until the party later obtains a **starter / activation code** through an authored Chapter 1 quest.
 
 > [!tip] **GM — AI Core state at departure**  
 > - Screens are dark or stuck on boot text.  
 > - Speakers crackle but do not form speech.  
+> - Some panels can show locked prompts such as `STARTER CODE REQUIRED`, `BOOT AUTHORITY MISSING`, or `ASYNC CORE: SEALED`.  
 > - PAVNN may recognize the carriage as aSync / A-Tech computational infrastructure, but cannot wake it alone.  
-> - Treat activation as a future scene / milestone, not a B5 solve condition.
+> - Treat activation as a later quest payoff, not a B5 solve condition.
 
 > [!tip] **GM — Keep it tangible**  
 > - Carriages should feel like objects on rails: heavy, delayed, clanking, sometimes misaligned.  
@@ -153,6 +156,7 @@ Good PAVNN assists:
 PAVNN should **not**:
 
 - Wake the AI Core alone.  
+- Provide the starter / activation code.  
 - Give the players full admin access.  
 - Choose the whole train assembly plan for them.
 
@@ -177,7 +181,7 @@ Possible complications:
 - A crane moves too far and blocks a different track.  
 - A switch jams and needs a manual yard run.  
 - A loud movement wakes a deeper station subsystem.  
-- The AI Core / IT carriage couples successfully but with a fault marker, delayed boot, or damaged cable.  
+- The AI Core / IT carriage couples successfully but with a fault marker, damaged cable, or stronger later activation requirement.  
 - Someone takes a Minor Injury from yard machinery or a bad climb.  
 - Supplies from B3 can be consumed to stabilize, patch, wedge, insulate, or power a workaround.
 
@@ -198,6 +202,7 @@ Possible complications:
 > - The party has accessed the main control room.  
 > - The starting consist is coupled: **Main Locomotive + Sundown Saloon + AI Core / IT Carriage**.  
 > - The AI Core carriage is **onboard but offline**.  
+> - The AI Core still requires a later **starter / activation code** quest before it can come online.  
 > - The departure route is clear enough to leave the station.  
 > - The Apocalypse Express feels awake or nearly awake.  
 > - Trigger the next beat: **Lucifer appears again** as an apparition when the party is ready to depart.
@@ -210,6 +215,7 @@ starting_consist_coupled = true
 sundown_saloon_attached = true
 ai_core_carriage_attached = true
 ai_core_online = false
+ai_core_starter_code_obtained = false
 ae_departure_route_open = true
 ```
 
