@@ -1,7 +1,7 @@
 ---
 type: campaign-outline
 status: seed — partial canon
-last_updated: 2026-04-25
+last_updated: 2026-05-03
 ---
 
 # Cantos — campaign outline
@@ -22,7 +22,7 @@ last_updated: 2026-04-25
 | A4 Gossip Car & Golden Tickets | `Database/40_Scenes/(Scene) A4` | Tickets discovered, social beat |
 | A5 Sundown Saloon | `Database/40_Scenes/(Scene) A5` | Lucifer's pitch, sign the pact, Orb mission set |
 | B1 Chapel of Second Chances | `Database/40_Scenes/(Scene) B1` | Revival in printed bodies, Lucifer briefing |
-| B2 Chapel of the Second Dawn | `Database/40_Scenes/(Scene) B2` | Storage room puzzle, exit toward the AE |
+| B2 Chapel of the Second Dawn | `Database/40_Scenes/(Scene) B2` | Storage room puzzle, optional greenhouse-side route, exit toward the AE |
 
 **Chapters** = the actual campaign that happens AFTER the prelude. Sketched in the brainstorm canvas (working/canon names) with parallel earlier Obsidian planning docs (alt names + early structure):
 
@@ -52,7 +52,13 @@ last_updated: 2026-04-25
 
 **Goal:** Secure the Apocalypse Express, fuel it, install the Orb. *[T2: Obsidian/Canto 1 v1.7 planning doc]*
 
-**Critical path (planning):** Station (Offboarder set-piece) → Dam Complex → Ruins/Tunnel Entrance → Tunnels/Temple (Orb retrieval) → Mount Orb in AE locomotive. *[T2: Obsidian/Canto 1 v1.7]*
+**Locked on-ramp from B2:** After the chapel, the party can go straight toward the A-Tech station as the main route. Before that, they may optionally detour into a side-route around old greenhouses / greenhouse-like structures as a sidequest. This is **not** a blocker to the Station; it is optional prep / exploration. *[T1: Daniel 2026-05-03]*
+
+**Station setup:** The party goes to the **A-Tech station** to get the Apocalypse Express. The first station obstacle is the **Offboarder auto-turret / automated station defense** set-piece. *[T1: Daniel 2026-05-03]*
+
+**Early Station sequence:** A-Tech station arrival → Offboarder auto-turret set-piece → main locomotive access → carriage/puzzle layer → departure. When the party is ready to leave with the train, Lucifer appears to them again as a follow-up apparition / briefing beat. *[T1: Daniel 2026-05-03]*
+
+**Critical path (planning):** Chapel exit → optional greenhouse sidequest → A-Tech Station (Offboarder auto-turret set-piece) → main locomotive + carriage puzzles → departure with Lucifer apparition → Dam Complex → Ruins/Tunnel Entrance → Tunnels/Temple (Orb retrieval) → Mount Orb in AE locomotive. *[T1: Daniel 2026-05-03 + T2: Obsidian/Canto 1 v1.7]*
 
 **Exit condition:** `orb_installed=True` AND `ae_ready=Fueled` *[T2]*
 
