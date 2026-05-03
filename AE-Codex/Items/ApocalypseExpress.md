@@ -1,8 +1,8 @@
 ---
 type: item-and-character
 status: locked-core
-last_updated: 2026-04-26
-related: [Orb.md, ../Cosmology/Substrate.md, ../Cosmology/PausedApocalypse.md, ../Characters/Lucifer.md, ../Characters/Cicero.md]
+last_updated: 2026-05-03
+related: [Orb.md, ../Cosmology/Substrate.md, ../Cosmology/PausedApocalypse.md, ../Characters/Lucifer.md, ../Characters/Cicero.md, ../Characters/AICore.md]
 ---
 
 # The Apocalypse Express
@@ -21,6 +21,29 @@ related: [Orb.md, ../Cosmology/Substrate.md, ../Cosmology/PausedApocalypse.md, .
 - **Rebuilt by Lucifer** to solve the Pause's engineering problem
 - **Reinforced boiler** designed to hold a Hell-derived hellfire spark
 - Otherwise: standard rolling stock — locomotive + carriages added over time (the carriages players accumulate during the campaign — armory, medbay, storage, etc.)
+
+---
+
+## Starting consist — LOCKED 2026-05-03
+
+When the party first secures the Apocalypse Express at the A-Tech station and departs, the starting consist is:
+
+```text
+Main Locomotive / Engine
++ Sundown Saloon
++ AI Core / IT Carriage
+```
+
+**Main Locomotive / Engine**  
+The hellfire-powered body that makes movement through the Halt possible.
+
+**Sundown Saloon**  
+The starting social / pact / mirror-rich apparition carriage. It is not a later unlock. It leaves the A-Tech station with the party.
+
+**AI Core / IT Carriage**  
+A sealed server-car / computational carriage that leaves with the party from the start, but begins **offline / dormant**. It is physically part of the main train, but does not become an active onboard intelligence until a later activation scene or milestone.
+
+**Design note:** this keeps the AI Core foundational to the train without letting it dominate the earliest sessions as an all-purpose advice machine.
 
 ---
 
@@ -91,12 +114,14 @@ The framing image: **a fireproof bullet hurtling with you through the disintegra
 
 ## Hell-adjacency of certain cars
 
-The train has **specific cars that are Hell-adjacent** — the Sundown Saloon (A5) is the canonical one. *[T1: Database/Scene A5 + previous lock]*
+The train has **specific cars that are Hell-adjacent** — the Sundown Saloon is the canonical one. *[T1: Database/Scene A5 + previous lock]*
+
+This now primarily matters because the Saloon is the train's pact-theater and mirror-rich apparition room. Lucifer can appear elsewhere by perceptual projection, but the Saloon's mirrors, glass, bottle walls, polished railings, and dark reflective surfaces make it his easiest and most elegant stage.
 
 This makes sense if:
 - The train's hellfire-bubble extends inward as well as outward
 - Cars closer to the boiler / more saturated with hellfire become more Hell-adjacent
-- The Sundown Saloon car is **deeply saturated** — perhaps deliberately built to be a meeting space between Lucifer's real-form (Hell-side) and his guests (Earth-side)
+- The Sundown Saloon car is **deeply saturated** — deliberately built as a meeting space, pact room, and infernal lounge
 
 > [!todo] OPEN
 > Are ALL cars partially Hell-adjacent (just to varying degrees), or is it specific cars only? Is the locomotive itself Hell-adjacent (it's where the spark lives)? Are some cars more Earth-rooted (e.g., the medbay needs Earth-physics)?
@@ -155,6 +180,7 @@ Given its concept-loyalty nature, the GM can lean on:
 ## Cross-references
 
 - [Items/Orb.md](Orb.md) — mounted in the locomotive end of Chapter 1; expands the train's safe-zone
+- [Characters/AICore.md](../Characters/AICore.md) — the starting offline IT carriage
 - [Cosmology/Substrate.md](../Cosmology/Substrate.md) — hellfire and the spark; the structural symmetry
 - [Cosmology/PausedApocalypse.md](../Cosmology/PausedApocalypse.md) — why standard engines fail in the Pause
 - [Characters/Lucifer.md](../Characters/Lucifer.md) — the steward, the whisperer, the guest in his own creation
