@@ -56,9 +56,21 @@ last_updated: 2026-05-03
 
 **Station setup:** The party goes to the **A-Tech station** to get the Apocalypse Express. The first station obstacle is the **Offboarder auto-turret / automated station defense** set-piece. Locked form: **multi-path set-piece + horror safety-system**. The turret is not just combat and not a password puzzle; it is an old A-Tech platform protocol still removing "unauthorized boarders/offboarders." See `Database/40_Scenes/(Scene) B4 A-Tech Station Offboarder Turret.md`. *[T1: Daniel 2026-05-03]*
 
-**Early Station sequence:** A-Tech station arrival → Offboarder auto-turret set-piece → main locomotive access → AI Core transport/dock layer → carriage/puzzle layer → departure. When the party is ready to leave with the train, Lucifer appears to them again as a follow-up apparition / briefing beat. *[T1: Daniel 2026-05-03]*
+**Control room / departure setup:** After the Offboarder, the party reaches the station's **main control room**. From there they operate the turntable, rail switches, cranes / mover systems, couplers, and departure locks. This is where they assemble the starting train. See `Database/40_Scenes/(Scene) B5 A-Tech Station Control Room.md`. *[T1: Daniel 2026-05-03]*
 
-**Critical path (planning):** Chapel exit → optional greenhouse sidequest → A-Tech Station (Offboarder auto-turret set-piece) → main locomotive + AI Core dock + carriage puzzles → departure with Lucifer apparition → Dam Complex → Ruins/Tunnel Entrance → Tunnels/Temple (Orb retrieval) → Mount Orb in AE locomotive. *[T1: Daniel 2026-05-03 + T2: Obsidian/Canto 1 v1.7]*
+**Starting train consist at first departure:**
+
+```text
+Main Locomotive / Engine
++ Sundown Saloon
++ AI Core / IT Carriage
+```
+
+The **AI Core / IT Carriage** is physically part of the main train from the moment the party leaves the A-Tech station, but it begins **offline / dormant** for the first stretch. It comes online later, in a future scene / milestone. *[T1: Daniel 2026-05-03]*
+
+**Early Station sequence:** A-Tech station arrival → Offboarder auto-turret set-piece → main control room / turntable → starting consist assembly → departure. When the party is ready to leave with the train, Lucifer appears to them again as a follow-up apparition / briefing beat. *[T1: Daniel 2026-05-03]*
+
+**Critical path (planning):** Chapel exit → optional greenhouse sidequest → A-Tech Station (Offboarder auto-turret set-piece) → main locomotive + Sundown Saloon + offline AI Core / IT carriage assembly → departure with Lucifer apparition → Dam Complex → Ruins/Tunnel Entrance → Tunnels/Temple (Orb retrieval) → Mount Orb in AE locomotive. *[T1: Daniel 2026-05-03 + T2: Obsidian/Canto 1 v1.7]*
 
 **Exit condition:** `orb_installed=True` AND `ae_ready=Fueled` *[T2]*
 
