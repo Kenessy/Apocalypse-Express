@@ -54,11 +54,11 @@ last_updated: 2026-05-03
 
 **Locked on-ramp from B2:** After the chapel, the party can go straight toward the A-Tech station as the main route. Before that, they may optionally detour into a side-route around old greenhouses / greenhouse-like structures as a sidequest. This is **not** a blocker to the Station; it is optional prep / exploration. *[T1: Daniel 2026-05-03]*
 
-**Station setup:** The party goes to the **A-Tech station** to get the Apocalypse Express. The first station obstacle is the **Offboarder auto-turret / automated station defense** set-piece. *[T1: Daniel 2026-05-03]*
+**Station setup:** The party goes to the **A-Tech station** to get the Apocalypse Express. The first station obstacle is the **Offboarder auto-turret / automated station defense** set-piece. Locked form: **multi-path set-piece + horror safety-system**. The turret is not just combat and not a password puzzle; it is an old A-Tech platform protocol still removing "unauthorized boarders/offboarders." See `Database/40_Scenes/(Scene) B4 A-Tech Station Offboarder Turret.md`. *[T1: Daniel 2026-05-03]*
 
-**Early Station sequence:** A-Tech station arrival → Offboarder auto-turret set-piece → main locomotive access → carriage/puzzle layer → departure. When the party is ready to leave with the train, Lucifer appears to them again as a follow-up apparition / briefing beat. *[T1: Daniel 2026-05-03]*
+**Early Station sequence:** A-Tech station arrival → Offboarder auto-turret set-piece → main locomotive access → AI Core transport/dock layer → carriage/puzzle layer → departure. When the party is ready to leave with the train, Lucifer appears to them again as a follow-up apparition / briefing beat. *[T1: Daniel 2026-05-03]*
 
-**Critical path (planning):** Chapel exit → optional greenhouse sidequest → A-Tech Station (Offboarder auto-turret set-piece) → main locomotive + carriage puzzles → departure with Lucifer apparition → Dam Complex → Ruins/Tunnel Entrance → Tunnels/Temple (Orb retrieval) → Mount Orb in AE locomotive. *[T1: Daniel 2026-05-03 + T2: Obsidian/Canto 1 v1.7]*
+**Critical path (planning):** Chapel exit → optional greenhouse sidequest → A-Tech Station (Offboarder auto-turret set-piece) → main locomotive + AI Core dock + carriage puzzles → departure with Lucifer apparition → Dam Complex → Ruins/Tunnel Entrance → Tunnels/Temple (Orb retrieval) → Mount Orb in AE locomotive. *[T1: Daniel 2026-05-03 + T2: Obsidian/Canto 1 v1.7]*
 
 **Exit condition:** `orb_installed=True` AND `ae_ready=Fueled` *[T2]*
 
