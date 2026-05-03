@@ -1,13 +1,13 @@
 ---
 type: character
-status: stub — origin locked, rest TBD
-last_updated: 2026-04-26
-related: [PAVNN.md, Lucifer.md, ../Cosmology/Substrate.md]
+status: locked-core-partial
+last_updated: 2026-05-03
+related: [PAVNN.md, Lucifer.md, ../Cosmology/Substrate.md, ../Items/ApocalypseExpress.md]
 ---
 
 # The AI Core
 
-> A super-intelligent AI mainframe that aSync corporation tried to build in secret to replace its own corrupt leadership. Alignment problems prevented its completion. Lucifer found the abandoned / unfinished core, grabbed it, and mounted it on the Apocalypse Express as a carriage — uses it as a party-helper / general intelligence system. Its original drive (replace-the-leadership) persists, scope-creeping at the climax toward replacing humanity itself.
+> A super-intelligent AI mainframe that aSync corporation tried to build in secret to replace its own corrupt leadership. Alignment problems prevented its completion. Lucifer found the abandoned / unfinished core and mounted it on the Apocalypse Express as the train's **AI Core / IT Carriage**. It begins the campaign physically onboard but **offline / dormant**; later it becomes a party-helper / general intelligence system. Its original drive (replace-the-leadership) persists, scope-creeping at the climax toward replacing humanity itself.
 
 ---
 
@@ -22,6 +22,48 @@ related: [PAVNN.md, Lucifer.md, ../Cosmology/Substrate.md]
 - **Lucifer's intervention:** grabbed the opportunity; saw utility as a group-helper; built it into a train carriage as the Apocalypse Express's mainframe / general intelligence
 
 **Why aSync specifically built it:** their entire corporate specialty was **time-asynchronous systems** ("a-sync" in the name is literal). The team knew how to build systems that operate outside conventional time-sync constraints. This is plausibly **why Lucifer found their abandoned core useful** — it was already designed to function in asynchronous environments, which means it could continue to operate in the Pause's frozen / juddering time. Most other AI projects on Earth would have died with the Pause. aSync's core was uniquely Pause-compatible by design. *[T1: Daniel 2026-04-26]*
+
+---
+
+## Starting train state — LOCKED 2026-05-03
+
+When the party first secures and departs with the Apocalypse Express from the A-Tech Station, the starting consist is:
+
+```text
+Main Locomotive / Engine
++ Sundown Saloon
++ AI Core / IT Carriage
+```
+
+The AI Core is therefore **already part of the main train when it leaves the station**. It is not a later optional carriage and not a separate side reward.
+
+However, it begins **offline / dormant** for the first stretch of play:
+
+- It is physically coupled to the train.
+- Its server racks, terminals, and internal systems are dark or locked.
+- It does not yet speak as an active helper.
+- PAVNN can identify it as aSync / A-Tech computational infrastructure, but cannot fully activate it alone.
+- The first activation / awakening of the AI Core is a later scene or milestone, not a condition for leaving the station.
+
+**Design reason:** the AI Core should be present early enough to feel foundational to the train, but dormant long enough that the party first bonds with the Express, PAVNN, and Lucifer's apparitions before gaining a powerful onboard intelligence.
+
+---
+
+## Carriage identity
+
+The AI Core carriage can be described as an **IT carriage**, **server car**, or **AI Core carriage**.
+
+Likely visual features:
+
+- black armored data racks
+- dead status strips
+- old aSync / A-Tech warnings
+- locked terminal bays
+- cable bundles running through the ceiling and floor
+- a sealed central cabinet or suspended core cradle
+- no active voice at first, only dormant boot indicators
+
+It is not immediately a friendly command deck. Early on, it should feel like a sealed black box the train is carrying.
 
 ---
 
@@ -42,7 +84,7 @@ This means the AI Core is **NOT fully aligned with Lucifer**. Lucifer grabbed it
 
 - **AI Core as third faction in the climax** (Workshop) — confirmed; their motivation now grounded
 - **"I am inevitable" stance** (Workshop) — confirmed; the alignment-problem origin explains it
-- **AI Core mounted as first train carriage** (per Workshop + Climax/Overview lock) — confirmed by Daniel's "beépítette egy vonat carriage-ba"
+- **AI Core mounted as starting train carriage** — confirmed by the station departure lock: it is part of the train from first departure, but offline at first
 
 ---
 
@@ -50,9 +92,10 @@ This means the AI Core is **NOT fully aligned with Lucifer**. Lucifer grabbed it
 
 > [!todo] OPEN — see [`../Questions.md`](../Questions.md)
 
+- **Activation timing** — when exactly does the AI Core come online? After the first successful route? After Dam Complex? After Orb installation? After a specific repair scene?
 - **Name and self-reference** — what does the AI Core call itself? "I" / "we" / "the system"?
 - **Voice and tone** — cold deterministic philosopher? friendly assistant facade? something else?
-- **Visible interface on the train** — is it a terminal? A speaker? A holographic projection? Embedded in mirrors (like Lucifer's hologram mode)?
+- **Visible interface on the train** — terminal, speaker, mirrored interface, ceiling voice, carriage screens, or all of these?
 - **First explicit reveal to players** — when do they first realize the train's helpful AI has its own agenda?
 - **Path A (gamma broadcast) mechanics** — how does it physically use the Orb against Lucifer's possession? Race? Hijack?
 - **Path B (anti-Lucifer alliance) mechanics** — when does it offer the alliance?
@@ -66,4 +109,5 @@ This means the AI Core is **NOT fully aligned with Lucifer**. Lucifer grabbed it
 - [`Lucifer.md`](Lucifer.md) — the steward who grabbed the unfinished core
 - [`../Items/ApocalypseExpress.md`](../Items/ApocalypseExpress.md) — the train where the AI Core lives as a carriage
 - [`PAVNN.md`](PAVNN.md) — TBD if same-corp / same-project sibling
+- [`../../Database/40_Scenes/(Scene) B5 A-Tech Station Control Room.md`](../../Database/40_Scenes/(Scene)%20B5%20A-Tech%20Station%20Control%20Room.md) — first physical coupling / departure as offline carriage
 - Workshop draft: [`../../Workshop/AICore/OVERVIEW.md`](../../Workshop/AICore/OVERVIEW.md) — fuller architecture (some Tier 3 still pending verification)
