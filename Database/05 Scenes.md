@@ -10,3 +10,4 @@
 - [[Database/40_Scenes/(Scene) B2 Chapel of the Second Dawn]]
 - [[Database/40_Scenes/(Scene) B3 Greenhouse Supply Run]]
 - [[Database/40_Scenes/(Scene) B4 A-Tech Station Offboarder Turret]]
+- [[Database/40_Scenes/(Scene) B5 A-Tech Station Control Room]]
