@@ -66,17 +66,20 @@ Main Locomotive / Engine
 + AI Core / IT Carriage
 ```
 
-The **AI Core / IT Carriage** is physically part of the main train from the moment the party leaves the A-Tech station, but it begins **offline / dormant** for the first stretch. It comes online later, in a future scene / milestone. *[T1: Daniel 2026-05-03]*
+The **AI Core / IT Carriage** is physically part of the main train from the moment the party leaves the A-Tech station, but it begins **offline / dormant** for the first stretch. It does **not** come online at departure and cannot be activated by PAVNN alone. It requires a **starter / activation code** obtained later through an authored quest in Chapter 1, roughly around the middle of the first canto / first book. The exact location is still flexible. *[T1: Daniel 2026-05-03]*
 
 **Early Station sequence:** A-Tech station arrival → Offboarder auto-turret set-piece → main control room / turntable → starting consist assembly → departure. When the party is ready to leave with the train, Lucifer appears to them again as a follow-up apparition / briefing beat. *[T1: Daniel 2026-05-03]*
 
-**Critical path (planning):** Chapel exit → optional greenhouse sidequest → A-Tech Station (Offboarder auto-turret set-piece) → main locomotive + Sundown Saloon + offline AI Core / IT carriage assembly → departure with Lucifer apparition → Dam Complex → Ruins/Tunnel Entrance → Tunnels/Temple (Orb retrieval) → Mount Orb in AE locomotive. *[T1: Daniel 2026-05-03 + T2: Obsidian/Canto 1 v1.7]*
+**Critical path (planning):** Chapel exit → optional greenhouse sidequest → A-Tech Station (Offboarder auto-turret set-piece) → main locomotive + Sundown Saloon + offline AI Core / IT carriage assembly → departure with Lucifer apparition → Dam Complex → starter-code quest somewhere in mid-Chapter 1 (location TBD) → AI Core activation → Ruins/Tunnel Entrance → Tunnels/Temple (Orb retrieval) → Mount Orb in AE locomotive. *[T1: Daniel 2026-05-03 + T2: Obsidian/Canto 1 v1.7]*
 
 **Exit condition:** `orb_installed=True` AND `ae_ready=Fueled` *[T2]*
 
 **Daniel's framing:** *"első nagy arc / könyv sok mini locationnel"* — first big arc/book with many mini-locations. *[T1: Daniel 2026-04-25]*
 
 **This means: the Orb is acquired and mounted in Chapter 1. NOT in the climax.** *[corrects earlier Workshop assumption — climax design needs revisiting]*
+
+> [!todo] OPEN — AI Core starter-code placement
+> Pin down where the party gets the starter / activation code. Current candidates: Dam Complex, an A-Tech/aSync control annex, a ruined contractor cache, a tunnel prelude node, or a Temple-adjacent tech shrine. It should be around the middle of Chapter 1: late enough that the party experiences the train without the AI voice, early enough that the AI Core becomes part of the first book.
 
 > [!todo] DEFERRED
 > Daniel: *"még messze van"*. Don't over-design until actively being built. Obsidian planning doc has lots of sketched detail (Kassad / Sorrel / Voss NPCs, evidence cards, flag dependencies, set pieces) — preserved for reference but not extracted into Codex until Daniel reactivates this chapter.
