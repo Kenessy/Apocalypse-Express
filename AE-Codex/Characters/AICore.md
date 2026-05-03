@@ -7,7 +7,7 @@ related: [PAVNN.md, Lucifer.md, ../Cosmology/Substrate.md, ../Items/ApocalypseEx
 
 # The AI Core
 
-> A super-intelligent AI mainframe that aSync corporation tried to build in secret to replace its own corrupt leadership. Alignment problems prevented its completion. Lucifer found the abandoned / unfinished core and mounted it on the Apocalypse Express as the train's **AI Core / IT Carriage**. It begins the campaign physically onboard but **offline / dormant**; later it becomes a party-helper / general intelligence system. Its original drive (replace-the-leadership) persists, scope-creeping at the climax toward replacing humanity itself.
+> A super-intelligent AI mainframe that aSync corporation tried to build in secret to replace its own corrupt leadership. Alignment problems prevented its completion. Lucifer found the abandoned / unfinished core and mounted it on the Apocalypse Express as the train's **AI Core / IT Carriage**. It begins the campaign physically onboard but **offline / dormant**; later it becomes a party-helper / general intelligence system after the party obtains a starter / activation code during Chapter 1. Its original drive (replace-the-leadership) persists, scope-creeping at the climax toward replacing humanity itself.
 
 ---
 
@@ -49,6 +49,28 @@ However, it begins **offline / dormant** for the first stretch of play:
 
 ---
 
+## Activation timing — LOCKED 2026-05-03
+
+The AI Core does **not** come online immediately after Station departure.
+
+It activates later, roughly around the middle of the first canto / first book, after the party obtains a **starter code / activation code** through a quest. This is an authored objective, not a random password puzzle and not something PAVNN can simply provide.
+
+Working lock:
+
+```text
+AI Core carriage onboard from first departure
+→ offline for early travel
+→ party finds / earns starter code in Chapter 1
+→ activation scene brings the Core online
+```
+
+The exact location of the starter-code quest is still flexible. It should occur far enough into Chapter 1 that the party has already experienced the Train without an onboard AI voice, but early enough that the AI Core becomes part of the first book rather than a late-campaign reveal.
+
+> [!todo] OPEN
+> Pin down where the starter code is obtained: Dam Complex, ruined control annex, aSync cache, tunnel/temple prelude, or another Chapter 1 node.
+
+---
+
 ## Carriage identity
 
 The AI Core carriage can be described as an **IT carriage**, **server car**, or **AI Core carriage**.
@@ -85,6 +107,7 @@ This means the AI Core is **NOT fully aligned with Lucifer**. Lucifer grabbed it
 - **AI Core as third faction in the climax** (Workshop) — confirmed; their motivation now grounded
 - **"I am inevitable" stance** (Workshop) — confirmed; the alignment-problem origin explains it
 - **AI Core mounted as starting train carriage** — confirmed by the station departure lock: it is part of the train from first departure, but offline at first
+- **AI Core activation as Chapter 1 quest payoff** — confirmed; the party needs a starter / activation code later in the first book
 
 ---
 
@@ -92,7 +115,7 @@ This means the AI Core is **NOT fully aligned with Lucifer**. Lucifer grabbed it
 
 > [!todo] OPEN — see [`../Questions.md`](../Questions.md)
 
-- **Activation timing** — when exactly does the AI Core come online? After the first successful route? After Dam Complex? After Orb installation? After a specific repair scene?
+- **Starter-code location** — where exactly in Chapter 1 does the party obtain the AI Core activation / starter code?
 - **Name and self-reference** — what does the AI Core call itself? "I" / "we" / "the system"?
 - **Voice and tone** — cold deterministic philosopher? friendly assistant facade? something else?
 - **Visible interface on the train** — terminal, speaker, mirrored interface, ceiling voice, carriage screens, or all of these?
