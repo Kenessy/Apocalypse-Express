@@ -1,0 +1,78 @@
+{
+  "schema": "apocalypse-express.private-asset-checkpoint-index.v1",
+  "asset_id": "ae.tile.memory.amethyst_bloom_cloud_05.v1",
+  "display_name": "Amethyst Bloom Cloud Memory 05",
+  "pipeline_status": "ART_RUNTIME_SHOWCASE_AND_REMOTE_RECOVERY_VERIFIED",
+  "classification": {
+    "showcase_class": "memory_tile",
+    "navigation_class": "impassable",
+    "map_role": "unique_path_memory_tile_unplaced",
+    "height_role": "vertical_landmark"
+  },
+  "memory_reservation": {
+    "reservation_id": "MEMORY_TBD_05",
+    "exact_runtime_cell": null,
+    "map_00_placed": false,
+    "memory_budget_consumed": false,
+    "surface_anchor_expected": false
+  },
+  "narrative_boundary": {
+    "locked_read": "Mushroom-cloud-shaped detonations or phenomena appeared across the world.",
+    "open_questions": [
+      "final card copy",
+      "nuclear, magical, celestial or divine cause",
+      "whether the bloom is literally biological"
+    ]
+  },
+  "authoring_master": {
+    "triangles": 500000,
+    "canonical_glb_sha256": "1D202E48FE5E60E6352CBAB2168AF63CBF08CB20947F6435A75298FE63FA3C68",
+    "base_color_resolution": [8192, 8192],
+    "normal_resolution": [8192, 8192],
+    "orm_resolution": [4096, 4096],
+    "emission": false,
+    "closed_two_manifold": false,
+    "topology_boundary_edges": 0,
+    "topology_nonmanifold_edges": 6,
+    "khronos_findings": {
+      "errors": 0,
+      "warnings": 0,
+      "infos": 0,
+      "hints": 0
+    },
+    "blender_readback": "PASS"
+  },
+  "runtime": {
+    "resolution": [128, 128],
+    "sha256": "8DF2DDC5CC4A4AEEAAB90724E10E92885D69F4601A188560C88B616B5BF845FB",
+    "master72_visible_colors": 21,
+    "binary_alpha": true,
+    "dithering": "none",
+    "godot_import_and_sprite2d_assignment": "PASS"
+  },
+  "showcase": {
+    "standard_rig": "STANDARD_SHOWCASE_BAKE_V1/R7_role_balanced",
+    "render_sha256": "865C6A16536891E4793E14F7399B135D3A0A8C2B6E6145DAD0644DA0F5E4E7E5",
+    "validation": "PASS",
+    "tile_records": 28,
+    "art_ready_path_memories": 4,
+    "html_cards": 37
+  },
+  "validation": {
+    "targeted_package_checks": "55/55 PASS",
+    "remote_checkpoint_internal_files": "288/288 PASS",
+    "remote_checkpoint_internal_bytes": 1828999279
+  },
+  "private_release": {
+    "repository": "Gradient19/Apocalypse-Express",
+    "tag": "asset-checkpoint-amethyst-bloom-cloud-memory-v001-20260828",
+    "url": "https://github.com/Gradient19/Apocalypse-Express/releases/tag/asset-checkpoint-amethyst-bloom-cloud-memory-v001-20260828",
+    "archive_name": "Apocalypse_Express_Amethyst_Bloom_Cloud_Memory_v001_checkpoint_20260828.zip",
+    "archive_bytes": 1522033073,
+    "archive_sha256": "1DE0F58840A66C9482408145A42B3749B1BBBEBC1ADE514D76A5F5743547A238",
+    "server_digest_match": true,
+    "fresh_s_only_download_match": true,
+    "fresh_extraction_internal_verification": true
+  },
+  "claim_boundary": "This verifies the authoring master, locked showcase render, deterministic Master72 runtime, Godot import, catalog/showcase integration, unplaced Memory reservation, and private recovery path. It does not verify a final Map 00 cell, final card copy, final causation, or player completion."
+}
